@@ -307,7 +307,7 @@ body {
 .project-summary h3 {
   align-self: center;
   margin: 0;
-  font-size: 36px;
+  font-size: 26px;
   font-weight: 700;
   line-height: 1.16;
   letter-spacing: 0;
@@ -318,7 +318,7 @@ body {
   display: grid;
   gap: 12px;
   max-width: 430px;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1.15;
   letter-spacing: 0;
 }
@@ -328,13 +328,13 @@ body {
 }
 
 .summary-copy strong {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .keyword-badges {
   position: absolute;
   top: 12px;
-  left: 12px;
+  left: 16px;
   z-index: 4;
   display: flex;
   flex-wrap: wrap;
@@ -343,13 +343,13 @@ body {
 
 .keyword-badges span {
   display: inline-flex;
-  min-height: 28px;
+  min-height: 26px;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 8px;
   border: 1px solid #020508;
   border-radius: 999px;
   color: #020508;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0;

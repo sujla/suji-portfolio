@@ -20,7 +20,7 @@ export const projects = [
       "Resulted in production time from 2 weeks to 20 minutes",
     ],
     keyColor: "#17ff2b",
-    image: "./assets/store-guide-main.svg",
+    image: "./assets/store-guide-main.png",
   },
   {
     slug: "article-studio",
@@ -34,7 +34,7 @@ export const projects = [
       "<strong>Led UX/UI Design</strong><br /><strong>Planned Data Structure</strong>",
       "Resulted in production time from 2 weeks to 20 minutes",
     ],
-    keyColor: "#ff8422",
-    image: "./assets/article-studio-main.svg",
+    keyColor: "#FF9924",
+    image: "./assets/article-studio-main.png",
   },
 ];
