@@ -61,15 +61,14 @@ body {
   left: 14px;
   z-index: 20;
   display: block;
-  width: 58px;
-  height: 40px;
+  width: 56px;
+  height: 39px;
 }
 
 .site-mark-image {
   position: absolute;
   inset: 0;
-  width: 58px;
-  height: 40px;
+  width: 56px;
   object-fit: contain;
   transition: opacity 220ms ease;
 }
@@ -85,7 +84,7 @@ body {
 
 .theme-toggle {
   position: fixed;
-  top: 16px;
+  top: 14px;
   right: 14px;
   z-index: 30;
   display: grid;
