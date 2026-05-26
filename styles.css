@@ -1,5 +1,5 @@
 :root {
-  --bg: #121212;
+  --bg: #181818;
   --text: #f7f8f5;
   --surface: #202326;
   --muted: rgba(247, 248, 245, 0.42);
@@ -15,7 +15,7 @@
   --side-width: clamp(170px, 16.2vw, 300px);
   --rail-width: clamp(96px, 10vw, 170px);
   --section-padding-y: clamp(36px, 5svh, 64px);
-  --summary-height: clamp(220px, 27svh, 300px);
+  --summary-height: clamp(180px, 25svh, 300px);
 }
 
 :root[data-theme="light"] {
@@ -57,7 +57,7 @@ body {
 
 .site-mark {
   position: fixed;
-  top: 24px;
+  top: 20px;
   left: 14px;
   z-index: 20;
   display: block;
@@ -231,7 +231,7 @@ body {
   border-radius: 36px;
   overflow: hidden;
   background: var(--surface);
-  box-shadow: 0 4px 48px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.08);
   justify-self: center;
   transition:
     width 420ms ease,
@@ -260,7 +260,7 @@ body {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   height: var(--summary-height);
   padding: clamp(36px, 4.6svh, 56px) clamp(48px, 5vw, 86px);
   border-radius: 28px;
@@ -307,8 +307,8 @@ body {
 .project-summary h3 {
   align-self: center;
   margin: 0;
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 500;
   line-height: 1.16;
   letter-spacing: 0;
 }
@@ -316,15 +316,35 @@ body {
 .summary-copy {
   align-self: center;
   display: grid;
-  gap: 12px;
-  max-width: 430px;
+  max-width: 480px;
   font-size: 15px;
   line-height: 1.15;
   letter-spacing: 0;
 }
 
 .summary-copy p {
+  margin: 0 0 8px;
+}
+
+.summary-copy p:last-of-type {
+  margin-bottom: 12px;
+}
+
+.summary-copy ul {
   margin: 0;
+  padding-left: 1.1em;
+}
+
+.summary-copy li {
+  padding-left: 0.1em;
+}
+
+.summary-copy li + li {
+  margin-top: 8px;
+}
+
+.summary-copy li::marker {
+  font-size: 0.72em;
 }
 
 .summary-copy strong {
@@ -333,17 +353,17 @@ body {
 
 .keyword-badges {
   position: absolute;
-  top: 12px;
-  left: 16px;
+  left: 22px;
+  bottom: 15px;
   z-index: 4;
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 6px;
 }
 
 .keyword-badges span {
   display: inline-flex;
-  min-height: 26px;
+  min-height: 24px;
   align-items: center;
   padding: 0 8px;
   border: 1px solid #020508;
@@ -478,7 +498,7 @@ body {
   }
 
   .site-mark {
-    top: 18px;
+    top: 16px;
     left: 20px;
   }
 

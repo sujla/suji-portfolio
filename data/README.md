@@ -12,8 +12,11 @@ Project fields:
   sideTitle: "Left Meta|Line Two",
   brief: [
     "Brief paragraph",
-    "<strong>Contribution</strong>",
     "Result paragraph",
+  ],
+  contribution: [
+    "Contribution item",
+    "Contribution item",
   ],
   keyColor: "#17ff2b",
   image: "./assets/project-image.png"

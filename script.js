@@ -62,6 +62,11 @@ const renderProjects = () => {
               <h3 id="${titleId}">${project.title.split("|").join("<br />")}</h3>
               <div class="summary-copy">
                 ${project.brief.map((line) => `<p>${line}</p>`).join("")}
+                ${
+                  project.contribution?.length
+                    ? `<ul>${project.contribution.map((item) => `<li>${item}</li>`).join("")}</ul>`
+                    : ""
+                }
               </div>
             </div>
           </article>

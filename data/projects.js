@@ -15,11 +15,14 @@ export const projects = [
     title: "Olive Young|Store Guide",
     sideTitle: "Store Guide|UX/UI Renewal",
     brief: [
-      "Revamped an internal tool for non-tech content creators",
-      "<strong>Led UX/UI Design</strong><br /><strong>Planned Data Structure</strong>",
-      "Resulted in production time from 2 weeks to 20 minutes",
     ],
-    keyColor: "#17ff2b",
+    contribution: [
+      "Revamped an internal tool for non-tech content creators",
+      "Led UX/UI Design",
+      "Resulted in production time from 2 weeks to 20 minutes",
+      "Planned Data Structure",
+    ],
+    keyColor: "#3AFE40",
     image: "./assets/store-guide-main.png",
   },
   {
@@ -30,11 +33,14 @@ export const projects = [
     title: "Article Studio",
     sideTitle: "Article Studio",
     brief: [
-      "Revamped an internal tool for non-tech content creators",
-      "<strong>Led UX/UI Design</strong><br /><strong>Planned Data Structure</strong>",
-      "Resulted in production time from 2 weeks to 20 minutes",
     ],
-    keyColor: "#FF9924",
+    contribution: [
+      "Revamped an internal tool for non-tech content creators",
+      "Led UX/UI Design",
+      "Resulted in production time from 2 weeks to 20 minutes",
+      "Planned Data Structure",
+    ],
+    keyColor: "#FFA250",
     image: "./assets/article-studio-main.png",
   },
 ];
