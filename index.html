@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suji Kweon Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-mark" aria-label="Suji Kweon's Portfolio Site">
+      <img class="site-mark-image site-mark-image-dark" src="./assets/site-mark-dark.svg" alt="" aria-hidden="true" />
+      <img class="site-mark-image site-mark-image-light" src="./assets/site-mark-light.svg" alt="" aria-hidden="true" />
+    </header>
+
+    <button class="theme-toggle" type="button" aria-label="Toggle dark and light mode" aria-pressed="false">
+      <span class="theme-icon theme-icon-light" aria-hidden="true">☼</span>
+      <span class="theme-icon theme-icon-dark" aria-hidden="true">☾</span>
+    </button>
+
+    <nav class="year-rail" aria-label="Project years" data-year-rail></nav>
+
+    <aside class="fixed-project-meta" aria-label="Focused project">
+      <p data-side-number>01</p>
+      <h4 data-side-title>Store Guide<br />UX/UI Renewal</h4>
+    </aside>
+
+    <aside class="project-counter" aria-label="Project progress">
+      <span data-current-project>01</span>
+      <span class="counter-line"></span>
+      <span data-total-projects>06</span>
+    </aside>
+
+    <main class="portfolio-shell" data-project-list></main>
+
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
