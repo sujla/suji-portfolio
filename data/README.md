@@ -19,6 +19,10 @@ Project fields:
     "Contribution item",
   ],
   keyColor: "#17ff2b",
+  mediaShadow: {
+    dark: "0 48px 130px rgba(0, 149, 5, 0.32), 0 8px 48px rgba(0, 0, 0, 0.08)",
+    light: "0 48px 130px rgba(0, 149, 5, 0.18), 0 8px 48px rgba(0, 0, 0, 0.06)",
+  },
   image: "./assets/project-image.png"
 }
 ```

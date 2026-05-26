@@ -30,6 +30,9 @@ const getYearWindow = (activeYear) => {
 
 const getPlainTitle = (title) => title.split("|").join(" ");
 
+const getMediaShadow = (project, theme) =>
+  project.mediaShadow?.[theme] || "0 8px 48px rgba(0, 0, 0, 0.08)";
+
 const renderProjects = () => {
   totalProjects.textContent = padProjectNumber(projectSettings.totalProjectCount);
 
@@ -47,7 +50,11 @@ const renderProjects = () => {
           data-project="${project.number}"
           data-year="${project.year}"
           data-title="${project.sideTitle}"
-          style="--project-color: ${project.keyColor}"
+          style="
+            --project-color: ${project.keyColor};
+            --project-media-shadow-dark: ${getMediaShadow(project, "dark")};
+            --project-media-shadow-light: ${getMediaShadow(project, "light")};
+          "
           aria-labelledby="${titleId}"
         >
           <article class="project-card">

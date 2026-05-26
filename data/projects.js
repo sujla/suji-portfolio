@@ -23,6 +23,10 @@ export const projects = [
       "Planned Data Structure",
     ],
     keyColor: "#3AFE40",
+    mediaShadow: {
+      dark: "0 48px 130px rgba(8, 63, 10, 0.12), 0 8px 48px rgba(0, 0, 0, 0.08)",
+      light: "0 48px 130px rgba(0, 149, 5, 0.18), 0 8px 48px rgba(0, 0, 0, 0.06)",
+    },
     image: "./assets/store-guide-main.png",
   },
   {
@@ -41,6 +45,10 @@ export const projects = [
       "Planned Data Structure",
     ],
     keyColor: "#FFA250",
+    mediaShadow: {
+      dark: "0 48px 130px rgba(82, 43, 9, 0.3), 0 8px 48px rgba(0, 0, 0, 0.08)",
+      light: "0 48px 130px rgba(255, 133, 26, 0.12), 0 8px 48px rgba(0, 0, 0, 0.06)",
+    },
     image: "./assets/article-studio-main.png",
   },
 ];

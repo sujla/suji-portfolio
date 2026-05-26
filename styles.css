@@ -31,6 +31,14 @@
   --card-text: #020508;
 }
 
+:root[data-theme="dark"] .project-section {
+  --project-media-shadow: var(--project-media-shadow-dark, 0 8px 48px rgba(0, 0, 0, 0.08));
+}
+
+:root[data-theme="light"] .project-section {
+  --project-media-shadow: var(--project-media-shadow-light, 0 8px 48px rgba(0, 0, 0, 0.06));
+}
+
 * {
   box-sizing: border-box;
 }
@@ -230,7 +238,7 @@ body {
   border-radius: 36px;
   overflow: hidden;
   background: var(--surface);
-  box-shadow: 0 48px 130px rgba(0, 149, 5, 0.32), 0 8px 48px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--project-media-shadow);
   justify-self: center;
   transition:
     width 420ms ease,
