@@ -6,7 +6,7 @@
   --line: rgba(247, 248, 245, 0.34);
   --rail-muted: rgba(247, 248, 245, 0.2);
   --counter-muted: rgba(247, 248, 245, 0.46);
-  --toggle-bg: rgba(247, 248, 245, 0.08);
+  --toggle-bg: rgba(247, 248, 245, 0.07);
   --toggle-knob: rgba(247, 248, 245, 0.12);
   --card-text: #020508;
   --green: #17ff2b;
@@ -26,8 +26,8 @@
   --line: rgba(2, 5, 8, 0.3);
   --rail-muted: rgba(2, 5, 8, 0.18);
   --counter-muted: rgba(2, 5, 8, 0.46);
-  --toggle-bg: rgba(2, 5, 8, 0.08);
-  --toggle-knob: rgba(255, 255, 255, 0.88);
+  --toggle-bg: rgba(2, 5, 8, 0.06);
+  --toggle-knob: rgba(255, 255, 255, 0.8);
   --card-text: #020508;
 }
 
@@ -85,13 +85,13 @@ body {
 
 .theme-toggle {
   position: fixed;
-  top: 18px;
-  right: 16px;
+  top: 16px;
+  right: 14px;
   z-index: 30;
   display: grid;
-  grid-template-columns: 40px 36px;
+  grid-template-columns: 32px 2px 32px;
   align-items: center;
-  height: 44px;
+  height: 40px;
   border: 0;
   border-radius: 999px;
   background: var(--toggle-bg);
@@ -106,8 +106,8 @@ body {
   position: absolute;
   top: 4px;
   left: 4px;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
   background: var(--toggle-knob);
   transition:
@@ -117,7 +117,7 @@ body {
 }
 
 :root[data-theme="dark"] .theme-toggle::before {
-  transform: translateX(42px);
+  transform: translateX(38px);
 }
 
 .theme-icon {
@@ -125,20 +125,39 @@ body {
   z-index: 1;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
-  color: var(--muted);
-  font-family: "Host Grotesk", "Helvetica Neue", sans-serif;
-  font-size: 26px;
-  font-weight: 400;
-  line-height: 1;
-  margin-left: -2px;
-  transition: color 260ms ease;
+  width: 32px;
+  height: 32px;
+  opacity: 0.48;
+  transition: opacity 260ms ease;
 }
 
-:root[data-theme="light"] .theme-icon-light,
-:root[data-theme="dark"] .theme-icon-dark {
-  color: var(--text);
+.theme-icon-sun {
+  transform: translate(-2px, 0px);
+}
+
+.theme-icon-moon {
+  transform: translate(2px, 0px);
+}
+
+:root[data-theme="light"] .theme-icon-sun,
+:root[data-theme="dark"] .theme-icon-moon {
+  opacity: 1;
+}
+
+.theme-icon-image {
+  display: block;
+  grid-area: 1 / 1;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+:root[data-theme="dark"] .theme-icon-image-dark,
+:root[data-theme="light"] .theme-icon-image-light {
+  opacity: 1;
 }
 
 .portfolio-shell {
@@ -343,7 +362,7 @@ body {
 
 .year-rail {
   position: fixed;
-  right: 24px;
+  right: 14px;
   top: 50%;
   z-index: 20;
   display: grid;
@@ -376,7 +395,7 @@ body {
 }
 
 .year-rail a::after {
-  width: 20px;
+  width: 16px;
   height: 1px;
   background: currentColor;
   content: "";
@@ -387,7 +406,7 @@ body {
 }
 
 .year-rail a[aria-current="true"]::after {
-  width: 20px;
+  width: 16px;
   height: 2px;
 }
 

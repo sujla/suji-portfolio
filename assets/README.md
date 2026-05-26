@@ -10,3 +10,10 @@ Theme logo files:
 
 - `site-mark-dark.svg`
 - `site-mark-light.svg`
+
+Theme toggle icon files:
+
+- `theme-toggle-sun-dark.svg`
+- `theme-toggle-sun-light.svg`
+- `theme-toggle-moon-dark.svg`
+- `theme-toggle-moon-light.svg`
