@@ -177,7 +177,7 @@ body {
 
 .fixed-project-meta {
   position: fixed;
-  top: 50%;
+  top: 48%;
   left: 24px;
   z-index: 20;
   width: var(--side-width);
@@ -197,7 +197,7 @@ body {
 }
 
 .fixed-project-meta p {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   font-family: "Host Grotesk", "Helvetica Neue", sans-serif;
   font-size: 16px;
   line-height: 1;
@@ -207,9 +207,8 @@ body {
   margin: 0;
   font-size: 16px;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.45;
   letter-spacing: 0;
-  margin-bottom: 24px;
 }
 
 .project-card {
@@ -231,7 +230,7 @@ body {
   border-radius: 36px;
   overflow: hidden;
   background: var(--surface);
-  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 48px 130px rgba(0, 149, 5, 0.32), 0 8px 48px rgba(0, 0, 0, 0.08);
   justify-self: center;
   transition:
     width 420ms ease,
@@ -260,10 +259,11 @@ body {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1.2fr 2fr;
   height: var(--summary-height);
-  padding: clamp(36px, 4.6svh, 56px) clamp(48px, 5vw, 86px);
+  padding: clamp(32px, 5svh, 32px) clamp(24px, 1.5vw, 24px);
   border-radius: 28px;
+  gap: 20px;
   color: var(--card-text);
   overflow: hidden;
   transition:
@@ -306,10 +306,11 @@ body {
 
 .project-summary h3 {
   align-self: center;
-  margin: 0;
+  text-align: center;
+  margin: 0 0 1px;
   font-size: 24px;
   font-weight: 500;
-  line-height: 1.16;
+  line-height: 1.3;
   letter-spacing: 0;
 }
 
@@ -331,7 +332,7 @@ body {
 }
 
 .summary-copy ul {
-  margin: 0;
+  margin: 0 0 1px;
   padding-left: 1.1em;
 }
 
@@ -366,17 +367,25 @@ body {
   min-height: 24px;
   align-items: center;
   padding: 0 8px;
-  border: 1px solid #020508;
   border-radius: 999px;
-  color: #020508;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  background: rgba(66, 66, 66, 0.16);
+  box-shadow:
+    inset 1px 1px 0px -0.3px rgba(255, 255, 255, 0.5),
+    inset 0 0 5px 1.5px rgba(0, 0, 0, 0.28);
+  -webkit-box-shadow:
+    inset 1px 1px 0px -0.3px rgba(255, 255, 255, 0.5),
+    inset 0 0 5px 1.5px rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(4px) saturate(1.35);
+  -webkit-backdrop-filter: blur(4px) saturate(1.35);
 }
 
-.project-summary,
-.keyword-badges span {
+.project-summary {
   background: var(--project-color);
 }
 
@@ -578,7 +587,7 @@ body {
   .keyword-badges span {
     min-height: 30px;
     padding-inline: 10px;
-    border-width: 2px;
+    border-width: 1px;
     font-size: 16px;
   }
 

@@ -12,8 +12,8 @@ export const projects = [
     number: "01",
     year: 2024,
     keywords: ["E-commerce", "Online-to-Offline"],
-    title: "Olive Young|Store Guide",
-    sideTitle: "Store Guide|UX/UI Renewal",
+    title: "OliveYoung Store|Renewal",
+    sideTitle: "OliveYoung Store|UX/UI Renewal",
     brief: [
     ],
     contribution: [
@@ -31,7 +31,7 @@ export const projects = [
     year: 2023,
     keywords: ["Internal Tool", "Modular System"],
     title: "Article Studio",
-    sideTitle: "Article Studio",
+    sideTitle: "OliveYoung|Internal Tool Revamp",
     brief: [
     ],
     contribution: [
