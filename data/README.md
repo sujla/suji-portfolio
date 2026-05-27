@@ -28,3 +28,10 @@ Project fields:
 ```
 
 If `image` is empty, the page renders a blank placeholder. Add project images to `assets/`.
+
+Project detail URLs are generated from `title` and point to standalone folders in `projects/`.
+
+Example: `OliveYoung Store|Renewal` becomes `projects/oliveyoung-store-renewal/`.
+If multiple projects share the same title, the project number is appended to avoid duplicate URLs.
+
+Each detail page is a separate editable file at `projects/{project-title}/index.html`.

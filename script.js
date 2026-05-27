@@ -33,6 +33,22 @@ const getPlainTitle = (title) => title.split("|").join(" ");
 const getMediaShadow = (project, theme) =>
   project.mediaShadow?.[theme] || "0 8px 48px rgba(0, 0, 0, 0.08)";
 
+const getProjectTitleSlug = (title) =>
+  getPlainTitle(title)
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const getProjectDetailSlug = (project) => {
+  const titleSlug = getProjectTitleSlug(project.title);
+  const titleSlugCount = projects.filter((item) => getProjectTitleSlug(item.title) === titleSlug).length;
+
+  return titleSlugCount > 1 ? `${titleSlug}-${project.number}` : titleSlug;
+};
+
+const getProjectDetailHref = (project) => `./projects/${getProjectDetailSlug(project)}/`;
+
 const renderProjects = () => {
   totalProjects.textContent = padProjectNumber(projectSettings.totalProjectCount);
 
@@ -57,7 +73,7 @@ const renderProjects = () => {
           "
           aria-labelledby="${titleId}"
         >
-          <article class="project-card">
+          <a class="project-card project-link" href="${getProjectDetailHref(project)}" aria-label="${getPlainTitle(project.title)} project detail">
             <figure class="project-media">
               <div class="keyword-badges" aria-label="Keywords">
                 ${project.keywords.map((keyword) => `<span>${keyword}</span>`).join("")}
@@ -76,7 +92,7 @@ const renderProjects = () => {
                 }
               </div>
             </div>
-          </article>
+          </a>
         </section>
       `;
     })
