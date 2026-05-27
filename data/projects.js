@@ -51,4 +51,26 @@ export const projects = [
     },
     image: "./assets/article-studio-main.png",
   },
+  {
+    slug: "cta-enhancement",
+    number: "03",
+    year: 2023,
+    keywords: ["Internal Tool", "Modular System"],
+    title: "Article Studio",
+    sideTitle: "OliveYoung|Internal Tool Revamp",
+    brief: [
+    ],
+    contribution: [
+      "Revamped an internal tool for non-tech content creators",
+      "Led UX/UI Design",
+      "Resulted in production time from 2 weeks to 20 minutes",
+      "Planned Data Structure",
+    ],
+    keyColor: "#FFA250",
+    mediaShadow: {
+      dark: "0 48px 130px rgba(82, 43, 9, 0.3), 0 8px 48px rgba(0, 0, 0, 0.08)",
+      light: "0 48px 130px rgba(255, 133, 26, 0.12), 0 8px 48px rgba(0, 0, 0, 0.06)",
+    },
+    image: "",
+  },
 ];
