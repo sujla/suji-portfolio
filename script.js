@@ -10,15 +10,27 @@ const sideTitle = document.querySelector("[data-side-title]");
 const yearRail = document.querySelector("[data-year-rail]");
 const themeToggle = document.querySelector(".theme-toggle");
 const root = document.documentElement;
+const lastProjectStorageKey = "portfolio-last-project-slug";
+
+const getSessionItem = (key) => {
+  try {
+    return window.sessionStorage?.getItem(key) || "";
+  } catch {
+    return "";
+  }
+};
+
+const setSessionItem = (key, value) => {
+  try {
+    window.sessionStorage?.setItem(key, value);
+  } catch {
+    // Storage can be unavailable in some privacy or embedded browser contexts.
+  }
+};
 
 const padProjectNumber = (value) => String(value).padStart(2, "0");
 
 const yearLabel = (year) => `'${String(year).slice(-2)}`;
-
-const getProjectHrefByYear = (year, fallbackSlug) => {
-  const project = projects.find((item) => item.year === year);
-  return `#${project?.slug || fallbackSlug}`;
-};
 
 const getYearWindow = (activeYear) => {
   const { start, end } = projectSettings.yearRange;
@@ -41,6 +53,8 @@ const getProjectTitleSlug = (title) =>
     .replace(/^-+|-+$/g, "");
 
 const getProjectDetailSlug = (project) => {
+  if (project.detailSlug) return project.detailSlug;
+
   const titleSlug = getProjectTitleSlug(project.title);
   const titleSlugCount = projects.filter((item) => getProjectTitleSlug(item.title) === titleSlug).length;
 
@@ -68,6 +82,7 @@ const renderProjects = () => {
           data-title="${project.sideTitle}"
           style="
             --project-color: ${project.keyColor};
+            --project-sub-color: ${project.subColor || project.keyColor};
             --project-media-shadow-dark: ${getMediaShadow(project, "dark")};
             --project-media-shadow-light: ${getMediaShadow(project, "light")};
           "
@@ -105,9 +120,9 @@ const renderYearRail = (activeProject) => {
       const isActive = year === activeProject.year;
 
       return `
-        <a href="${getProjectHrefByYear(year, activeProject.slug)}" data-year="${year}" ${
+        <span class="year-rail-item" data-year="${year}" ${
           isActive ? 'aria-current="true"' : ""
-        }>${yearLabel(year)}</a>
+        }>${yearLabel(year)}</span>
       `;
     })
     .join("");
@@ -138,6 +153,9 @@ const setActiveProject = (index) => {
   sideNumber.textContent = project.number;
   sideTitle.innerHTML = project.sideTitle.split("|").join("<br />");
   counterLine.style.setProperty("--progress", `${fill}%`);
+  root.style.setProperty("--active-project-color", project.keyColor);
+  root.style.setProperty("--active-project-sub-color", project.subColor || project.keyColor);
+  setSessionItem(lastProjectStorageKey, project.slug);
   renderYearRail(project);
 };
 
@@ -179,6 +197,22 @@ const preferredTheme = localStorage.getItem("portfolio-theme") || "dark";
 renderProjects();
 sections = [...document.querySelectorAll("[data-project]")];
 applyTheme(preferredTheme);
+
+const restoreLastProject = () => {
+  const hashSlug = window.location.hash ? window.location.hash.slice(1) : "";
+  const savedSlug = hashSlug || getSessionItem(lastProjectStorageKey);
+  const targetSection = savedSlug ? document.getElementById(savedSlug) : null;
+
+  if (hashSlug) {
+    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+  }
+
+  if (!targetSection) return;
+
+  targetSection.scrollIntoView({ block: "center", behavior: "auto" });
+};
+
+restoreLastProject();
 
 themeToggle.addEventListener("click", () => {
   applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
