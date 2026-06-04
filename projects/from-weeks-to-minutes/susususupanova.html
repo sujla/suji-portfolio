@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ko" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <script>
+      (() => {
+        try {
+          const theme = localStorage.getItem("portfolio-theme");
+          if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+        } catch {}
+      })();
+    </script>
+    <title>Suji Kweon</title>
+    <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../detail-styles.css" />
+  </head>
+  <body class="detail-page" data-project-slug="article-studio">
+    <nav class="detail-gnb" aria-label="Project navigation"></nav>
+
+    <main class="detail-shell detail-shell--store-guide">
+      <section class="detail-content-section">
+        <nav class="detail-toc" aria-label="Project sections">
+          <ul>
+            <li><a href="#project-overview" aria-current="true"><span class="detail-toc-label">Project Overview</span></a></li>
+            <li><a href="#problems"><span class="detail-toc-label">Problems</span></a></li>
+            <li><a href="#users-needs"><span class="detail-toc-label">Affected Users</span></a></li>
+            <li><a href="#business-opportunity"><span class="detail-toc-label">Business Opportunity</span></a></li>
+            <li><a href="#goal"><span class="detail-toc-label">UX Goal</span></a></li>
+            <li><a href="#solutions"><span class="detail-toc-label">Solutions</span></a></li>
+            <li><a href="#key-metrics"><span class="detail-toc-label">Key Metrics</span></a></li>
+            <li><a href="#results"><span class="detail-toc-label">Results</span></a></li>
+          </ul>
+        </nav>
+
+        <div class="detail-content-col">
+          <div class="detail-content" aria-label="Project summary" id="project-overview">
+            <figure class="detail-media">
+              <img class="detail-image" src="../../assets/cta-enh-main.png" alt="Store Finder Renewal - Main image: showing mobile screens on multiple devices" />
+            </figure>
+            <section class="mgrl-48 pdt-24 pdb-24 gap-20">
+              <div class="detail-overview-heading">
+                <h2>Project Overview</h2>
+                <p class="detail-project-meta">
+                  <span class="strong">@ CJ Olive Young, Inc.</span>
+                  <span class="strong">2025</span>
+                </p>
+              </div>
+              <div class="detail-project-overview">
+                <section>
+                  <h4>Contributions</h4>
+                  <ul data-contribution-list></ul>
+                </section>
+                <section>
+                  <h4>Platform</h4>
+                  <ul>
+                    <li>Mobile &amp; PC Web</li>
+                  </ul>
+                </section>
+                <section>
+                  <h4>Worked with</h4>
+                  <ul>
+                    <li>Product, Engineering, and Store Operations teams</li>
+                  </ul>
+                </section>
+              </div>
+            </section>
+          </div>
+          <div class="detail-content" aria-label="Problems" id="problems">
+            <div class="mgrl-48 gap-20">
+              <h2>Problems</h2>
+              <div class="detail-body-props max-width-680 detail-problem-intro">
+                <p><strong class="strong">Olive Young had strong digital and physical store businesses, but the connection between the two did not fully support how customers shop across channels.</strong></p>
+                <p>When customers found a product online, they could not easily confirm whether it was available at a nearby store or eligible for pickup. The existing store finder was closer to a static store information page than a shopping tool, making store discovery, inventory checks, and pickup decisions feel fragmented.</p>
+              </div>
+            </div>
+            <figure class="body-image-frame">
+              <img class="body-image" src="../../assets/store-finder-renewal-problems.png" alt="Store Finder Renewal - Problem image" />
+            </figure>
+            <div class="mgrl-48 gap-20">
+              <div>
+                <h4 class="why-matter-heading">Why It Mattered to the Business</h4>
+                <p class="why-matter-copy">This created avoidable business friction that a better digital experience could have reduced:</p>
+              </div>
+              <div class="why-matter-list">
+                <p><strong class="strong why-matter-item">1. High-intent customers could drop off before purchase.</strong></p>
+                <p><strong class="strong why-matter-item">2. Store staff absorbed repetitive inventory-check calls during daily operations.</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="detail-content pdt-24" aria-label="Affected Users" id="users-needs">
+            <div>
+              <div class="mgrl-48 gap-8">
+                <h2>Affected Users</h2>
+                <p>This fragmented experience created friction for two key user groups:</p>
+              </div>
+              <div class="affected-user-cards is-customer-active pdb-24" aria-label="Affected users">
+                <figure class="affected-user-card affected-user-card--customers">
+                  <div class="affected-user-card-image">
+                    <img src="../../assets/store-finder-renewal-customers.png" alt="" />
+                    <video class="affected-user-card-video" muted loop playsinline preload="metadata">
+                      <source src="../../assets/store-finder-renewal-customers-hover.mp4" type="video/mp4" />
+                    </video>
+                    <span class="affected-user-image-name">Customers</span>
+                  </div>
+                  <figcaption class="affected-user-card-copy">
+                    <h4>
+                      <span class="affected-user-name">Customers</span>
+                      <span class="affected-user-card-detail"> — needed a faster way to:</span>
+                    </h4>
+                    <ul class="affected-user-card-detail">
+                      <li>Find nearby stores based on location</li>
+                      <li>Check store-level product availability</li>
+                      <li>Move from product interest to store visit or pickup with confidence</li>
+                    </ul>
+                  </figcaption>
+                </figure>
+                <figure class="affected-user-card affected-user-card--staff">
+                  <div class="affected-user-card-image">
+                    <img src="../../assets/store-finder-renewal-staff.png" alt="" />
+                    <video class="affected-user-card-video" muted loop playsinline preload="metadata">
+                      <source src="../../assets/store-finder-renewal-staff-hover.mp4" type="video/mp4" />
+                    </video>
+                    <span class="affected-user-image-name">Store staff</span>
+                  </div>
+                  <figcaption class="affected-user-card-copy">
+                    <h4>
+                      <span class="affected-user-name">Store staff</span>
+                      <span class="affected-user-card-detail"> — needed a more efficient way to:</span>
+                    </h4>
+                    <ul class="affected-user-card-detail">
+                      <li>Reduce repetitive inventory-check calls</li>
+                      <li>Avoid interruptions during store operations</li>
+                      <li>Support customers without manually bridging digital information gaps</li>
+                    </ul>
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+          <div class="detail-content pdt-24" aria-label="Business Opportunity" id="business-opportunity">
+            <div>
+              <div class="mgrl-48 gap-20">
+                <h2>Business Opportunity</h2>
+                <div class="detail-body-props">
+                  <p>We saw the store finder as more than a utility feature.<br/>By redesigning it around store availability, product discovery, and pickup, it could become a business-driving touchpoint.</p>
+                </div>
+              </div>
+              <div class="opportunity-cards pdt-24 pdb-24" aria-label="Business opportunity cards">
+                <article class="opportunity-card opportunity-card-demand">
+                  <div class="opportunity-card-media">
+                    <img src="../../assets/store-finder-renewal-biz01.png" alt="" />
+                    <video class="opportunity-card-video" muted loop playsinline preload="metadata">
+                      <source src="../../assets/store-finder-renewal-biz01-hover.mp4" type="video/mp4" />
+                    </video>
+                  </div>
+                  <div class="opportunity-card-copy">
+                    <h4>Capture high-intent demand</h4>
+                    <p>Help customers confirm nearby product availability before purchase intent drops.</p>
+                  </div>
+                </article>
+                <article class="opportunity-card opportunity-card-pickup">
+                  <div class="opportunity-card-media">
+                    <img src="../../assets/store-finder-renewal-biz02.png" alt="" />
+                    <video class="opportunity-card-video" muted loop playsinline preload="metadata">
+                      <source src="../../assets/store-finder-renewal-biz02-hover.mp4" type="video/mp4" />
+                    </video>
+                  </div>
+                  <div class="opportunity-card-copy">
+                    <h4>Turn availability into pickup</h4>
+                    <p>Convert confirmed availability into a clear pickup order path.</p>
+                  </div>
+                </article>
+                <article class="opportunity-card opportunity-card-inquiry">
+                  <div class="opportunity-card-media">
+                    <img src="../../assets/store-finder-renewal-biz03.png" alt="" />
+                    <video class="opportunity-card-video" muted loop playsinline preload="metadata">
+                      <source src="../../assets/store-finder-renewal-biz03-hover.mp4" type="video/mp4" />
+                    </video>
+                  </div>
+                  <div class="opportunity-card-copy">
+                    <h4>Reduce store inquiry load</h4>
+                    <p>Reduce repetitive availability calls by making inventory easier to check digitally.</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <div class="detail-content" aria-label="Goal" id="goal">
+            <div class="mgrl-48 pdt-24 gap-20">
+              <h2>UX Goal</h2>
+              <div class="detail-body-props">
+                <p class="goal strong">Create a map-based store finder that completes the shopping journey by connecting product interest to nearby store availability and pickup.</p>
+              </div>
+            </div>
+            <section class="ux-goal-cards pdb-24" aria-label="UX Goal journey cards">
+              <div class="ux-goal-card-grid">
+                <article class="ux-goal-card ux-goal-card--product">
+                  <span class="ux-goal-card-rail ux-goal-card-rail--product" aria-hidden="true">
+                    <span class="ux-goal-card-rail-node ux-goal-card-rail-node--1"></span>
+                    <span class="ux-goal-card-rail-node ux-goal-card-rail-node--2"></span>
+                  </span>
+                  <div class="ux-goal-card-content">
+                    <span class="ux-goal-card-badge">Use Case 01</span>
+                    <h4>Product-first Journey</h4>
+                    <p>Users discover a product online and need it today.</p>
+                    <ul class="ux-goal-card-list">
+                      <li>
+                        1. Browse online
+                      </li>
+                      <li>
+                        2. Search products
+                      </li>
+                    </ul>
+                  </div>
+                </article>
+                <article class="ux-goal-card ux-goal-card--store">
+                  <span class="ux-goal-card-rail ux-goal-card-rail--store" aria-hidden="true">
+                    <span class="ux-goal-card-rail-node ux-goal-card-rail-node--1"></span>
+                    <span class="ux-goal-card-rail-node ux-goal-card-rail-node--2"></span>
+                  </span>
+                  <div class="ux-goal-card-content">
+                    <span class="ux-goal-card-badge">Use Case 02</span>
+                    <h4>Store-first Journey</h4>
+                    <p>Users think of a nearby store and want to see what's available.</p>
+                    <ul class="ux-goal-card-list">
+                      <li>
+                        1. Find a nearby store
+                      </li>
+                      <li>
+                        2. Search products in store
+                      </li>
+                    </ul>
+                  </div>
+                </article>
+                <article class="ux-goal-card ux-goal-card--finder">
+                  <span class="ux-goal-card-rail ux-goal-card-rail--finder" aria-hidden="true">
+                    <span class="ux-goal-card-rail-node ux-goal-card-rail-node--1"></span>
+                    <span class="ux-goal-card-rail-node ux-goal-card-rail-node--2"></span>
+                    <span class="ux-goal-card-rail-node ux-goal-card-rail-node--3"></span>
+                    <span class="ux-goal-card-rail-node ux-goal-card-rail-node--4"></span>
+                  </span>
+                  <div class="ux-goal-card-content">
+                    <h4>Two Use Cases,<br/>One Store Finder</h4>
+                    <ul class="ux-goal-card-list ux-goal-card-list--finder">
+                      <li>
+                        3. Check store-level availability
+                      </li>
+                      <li>
+                        4. See nearby stores on the map
+                      </li>
+                      <li>
+                        5. Choose the option and place a pickup order
+                      </li>
+                      <li>
+                        6. Visit the store with confidence!
+                      </li>
+                    </ul>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+          <div class="detail-content" aria-label="Solutions" id="solutions">
+            <div class="mgrl-48 pdt-24 pdb-24 gap-20">
+              <h2>Solutions</h2>
+              <div class="detail-body-props">
+                <p>To meet both the business and UX goals, we redesigned the store finder around three key improvements: location-based discovery, clearer inventory information, and a faster path to pickup.</p>
+              </div>
+            </div>
+          </div>
+          <div class="detail-content" aria-label="Key Metrics" id="key-metrics">
+            <div class="mgrl-48 gap-20">
+              <h2>Key Metrics</h2>
+              <div class="detail-body-props">
+                <p>Olive Young had strong digital and physical store businesses, but <strong class="strong">the connection between the digital and physical store did not fully support how customers shop across channels.</strong></p>
+                <p>When customers found a product online, they could not easily confirm whether it was available at a nearby store or eligible for pickup. The existing store finder was closer to a static store information page than a shopping tool, making store discovery, inventory checks, and pickup decisions feel fragmented.</p>
+              </div>
+            </div>
+          </div>
+          <div class="detail-content" aria-label="Results" id="results">
+            <div class="mgrl-48 gap-20">
+              <h2>Results</h2>
+              <div class="detail-body-props">
+                <p>Olive Young had strong digital and physical store businesses, but <strong class="strong">the connection between the digital and physical store did not fully support how customers shop across channels.</strong></p>
+                <p>When customers found a product online, they could not easily confirm whether it was available at a nearby store or eligible for pickup. The existing store finder was closer to a static store information page than a shopping tool, making store discovery, inventory checks, and pickup decisions feel fragmented.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <script type="module" src="../../detail.js?v=detail-ux-goal-cards"></script>
+  </body>
+</html>

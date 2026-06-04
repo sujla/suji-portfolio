@@ -16,6 +16,8 @@ export const projects = [
     title: "Nearby Stores,|Right Products",
     sideTitle: "Map-based|Store Finder Renewal",
     brief: [
+      "This project aimed to transform Olive Young’s static store finder into a map-based shopping tool.",
+      "The goal was to help customers connect product interest to nearby store availability and pickup, reducing friction between digital browsing and physical store purchase."
     ],
     contribution: [
       "Turned a static store page into a map-based finder",
@@ -27,7 +29,7 @@ export const projects = [
     subColor: "#00DE07",
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
-      light: "0 80px 130px rgba(0, 176, 6, 0.28), 0 32px 72px rgba(0, 0, 0, 0.06)",
+      light: "0 80px 130px rgba(0, 176, 6, 0.22), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
     image: "./assets/store-guide-main.png",
   },
@@ -48,7 +50,7 @@ export const projects = [
       "Increased page conversion by 321.3%",
     ],
     keyColor: "#87F88B",
-    subColor: "#00DE07",
+    subColor: "#89D98C",
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(49, 49, 49, 0.3), 0 32px 72px rgba(0, 0, 0, 0.06)",
