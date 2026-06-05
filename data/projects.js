@@ -10,6 +10,7 @@ export const projects = [
   {
     slug: "store-guide",
     detailSlug: "nearby-stores-right-products",
+    wip: false,
     number: "01",
     year: 2024,
     keywords: ["E-commerce", "Discovery Optimization", "Map-based UX"],
@@ -36,7 +37,8 @@ export const projects = [
   {
     slug: "cta-enhancement",
     detailSlug: "converting-intent-into-pickup",
-    number: "02 🚧",
+    wip: true,
+    number: "02",
     year: 2025,
     keywords: ["E-commerce", "Data-driven Design", "Conversion Optimization"],
     title: "Converting Intent|into Pickup",
@@ -62,7 +64,8 @@ export const projects = [
   {
     slug: "article-studio",
     detailSlug: "from-weeks-to-minutes",
-    number: "03 🚧",
+    wip: true,
+    number: "03",
     year: 2023,
     keywords: ["Workflow Automation", "Modular System"],
     title: "From Weeks|to Minutes",

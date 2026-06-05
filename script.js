@@ -6,6 +6,7 @@ const totalProjects = document.querySelector("[data-total-projects]");
 const counterLine = document.querySelector(".counter-line");
 const sideMeta = document.querySelector(".fixed-project-meta");
 const sideNumber = document.querySelector("[data-side-number]");
+const sideWip = document.querySelector("[data-side-wip]");
 const sideTitle = document.querySelector("[data-side-title]");
 const yearRail = document.querySelector("[data-year-rail]");
 const themeToggle = document.querySelector(".theme-toggle");
@@ -150,6 +151,7 @@ const setActiveProject = (index) => {
   animateFixedUi();
   currentProject.textContent = project.number;
   sideNumber.textContent = project.number;
+  sideWip.textContent = project.wip ? "🚧" : "";
   sideTitle.innerHTML = project.sideTitle.split("|").join("<br />");
   counterLine.style.setProperty("--progress", `${fill}%`);
   root.style.setProperty("--active-project-color", project.keyColor);
