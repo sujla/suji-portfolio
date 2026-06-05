@@ -191,7 +191,7 @@ const applyTheme = (theme) => {
   localStorage.setItem("portfolio-theme", theme);
 };
 
-const preferredTheme = localStorage.getItem("portfolio-theme") || "dark";
+const preferredTheme = localStorage.getItem("portfolio-theme") || "light";
 
 renderProjects();
 sections = [...document.querySelectorAll("[data-project]")];

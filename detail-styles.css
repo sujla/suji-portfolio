@@ -39,12 +39,14 @@ html.detail-root.is-overview-snapping {
   top: 0;
   left: 0;
   right: 0;
-  isolation: isolate;
+  padding-top: clamp(8px, 1.55vw, 10px);
+  padding-bottom: clamp(9px, 1.65vw, 11px);
+  padding-left: clamp(6px, 1vw, 14px);
+  padding-right: clamp(8px, 1.2vw, 14px);
   z-index: 30;
   display: grid;
   grid-template-columns: 46px 1fr auto;
   align-items: center;
-  padding: 10px 14px 11px;
   border-bottom: 1px solid var(--line);
   background: transparent;
   pointer-events: none;
@@ -104,8 +106,8 @@ html.detail-root.is-overview-snapping {
 
 .detail-back-icon svg {
   display: block;
-  width: 26px;
-  height: 26px;
+  width: clamp(22px, 3.9vw, 26px);
+  height: clamp(22px, 3.9vw, 26px);
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5;
@@ -138,20 +140,14 @@ html.detail-root.is-overview-snapping {
   --project-sub-color: rgba(98, 254, 103, 0.18);
 }
 
-.detail-back {
-  width: fit-content;
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: none;
-}
-
 .detail-header {
   display: grid;
   gap: 12px;
 }
 
 .detail-title-section {
+  position: relative;
+  z-index: 1;
   display: grid;
   align-items: end;
   width: 100vw;
@@ -164,20 +160,23 @@ html.detail-root.is-overview-snapping {
   display: grid;
   width: min(100%, 1156px);
   margin: 0 auto;
-  padding: 150px 48px 104px;
+  padding-top: clamp(110px, 13vw, 150px);
+  padding-bottom: clamp(64px, 8.8vw, 100px);
+  padding-left: clamp(28px, 4vw, 48px);
+  padding-right: clamp(28px, 4vw, 48px);
   box-sizing: border-box;
 }
 
 .detail-header p {
-  margin: 0 0 0 2px;
+  margin: 0 0 0 3px;
   font-family: "Host Grotesk", "Helvetica Neue", sans-serif;
-  font-size: 18px;
+  font-size: clamp(16px, 2.3vw, 18px);
   font-weight: 700;
 }
 
 .detail-header h1 {
   max-width: 980px;
-  margin: 0 0 16px;
+  margin: 16px 0 12px;
   font-size: 68px;
   font-weight: 700;
   line-height: 1.05;
@@ -191,14 +190,14 @@ html.detail-root.is-overview-snapping {
 
 .detail-keywords span {
   display: inline-flex;
-  min-height: 28px;
+  min-height: clamp(25px, 3.9vw ,28px);
   align-items: center;
   padding: 0 10px;
   border: 1px solid #020508;
   border-radius: 999px;
   background: var(--project-color, var(--active-project-color));
   color: var(--card-text);
-  font-size: 14px;
+  font-size: clamp(13px, 1.9vw ,14px);
   font-weight: 500;
 }
 
@@ -206,14 +205,14 @@ html.detail-root.is-overview-snapping {
   display: grid;
   max-width: 680px;
   gap: 12px;
-  margin: 16px 0 0 2px;
+  margin: 24px 0 0 2px;
 }
 
 .detail-header-brief p {
   margin: 0;
   color: var(--text);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-size: clamp(14px, 3vw ,15px);
   font-weight: 400;
   line-height: 1.42;
 }
@@ -278,7 +277,7 @@ html.detail-root.is-overview-snapping {
 .detail-toc {
   align-self: start;
   position: sticky;
-  top: 18px;
+  top: 32px;
   min-width: 0;
   padding: 0;
 }
@@ -398,7 +397,7 @@ html.detail-root.is-overview-snapping {
 .detail-content p {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 15px;
+  font-size: clamp(14px, 3vw ,15px);
   font-weight: 400;
   line-height: 1.45;
 }
@@ -410,7 +409,7 @@ html.detail-root.is-overview-snapping {
 .detail-content h2 {
   margin: 0 0 6px;
   color: var(--text);
-  font-size: 36px;
+  font-size: clamp(32px, 5vw, 36px);
   font-weight: 700;
   line-height: 1;
 }
@@ -418,14 +417,163 @@ html.detail-root.is-overview-snapping {
 .detail-content-col h4 {
   margin: 0 0 8px;
   color: var(--text);
-  font-size: 18px;
+  font-size: clamp(16px, 3vw, 18px);
   font-weight: 500;
   line-height: 1.2;
 }
 
+.detail-coming-soon-page {
+  height: 100svh;
+  overflow: hidden;
+}
+
+html.detail-coming-soon-root {
+  overflow: hidden;
+}
+
+.detail-coming-soon-page .detail-shell {
+  height: 100svh;
+  overflow: visible;
+}
+
+.detail-coming-soon-page .detail-toc {
+  display: none;
+}
+
+.detail-coming-soon-page .detail-content-section {
+  display: block;
+  height: 100%;
+}
+
+.detail-coming-soon-page .detail-content-col {
+  height: 100%;
+  border-left: 0;
+}
+
+.detail-coming-soon-page #project-overview {
+  height: 65svh;
+  overflow: hidden;
+}
+
+.detail-coming-soon-page .detail-coming-soon-panel {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 35;
+  display: grid;
+  height: 100svh;
+  min-height: 240px;
+  padding: 0;
+  place-items: end center;
+  background: none;
+  pointer-events: none;
+}
+
+.detail-coming-soon-page .detail-coming-soon-panel::before {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  height: 100svh;
+  min-height: 240px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--bg) 8%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 40%, transparent) 34%,
+    color-mix(in srgb, var(--bg) 100%, transparent) 78%,
+    var(--bg) 100%
+  );
+  pointer-events: none;
+  content: "";
+}
+
+.detail-tape-canvas {
+  --tape-thickness: 140px;
+  --tape-color: var(--active-project-color);
+  --tape-pattern-image: url("assets/tape-design.svg");
+  --tape-pattern-opacity: 1;
+  --tape-pattern-scale: 1;
+  position: fixed;
+  inset: 0;
+  z-index: 26;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+.detail-coming-soon-inner {
+  position: fixed;
+  right: 24px;
+  bottom: 80px;
+  left: 24px;
+  z-index: 40;
+  display: grid;
+  /* width: min(100%, 1156px); */
+  margin: 0 auto;
+  gap: 18px;
+  justify-items: center;
+  text-align: center;
+  pointer-events: auto;
+}
+
+.detail-coming-soon-inner h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(28px, 5vw, 32px);
+  font-weight: 700;
+  line-height: 0.95;
+}
+
+.detail-coming-soon-inner p {
+  max-width: 340px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: clamp(14px, 2vw, 15px);
+  line-height: 1.5;
+}
+
+.detail-coming-soon-buttons {
+  display: flex;
+  gap: clamp(8px, 1vw, 12px);
+}
+
+.detail-coming-soon-button {
+  display: inline-grid;
+  min-height: 42px;
+  margin-top: 12px;
+  padding: 0 18px;
+  place-items: center;
+  background: var(--text);
+  color: var(--bg);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.detail-coming-soon-button:hover {
+  transform: translateY(-2px);
+}
+
+.button-sub {
+  border: 1px solid var(--text);
+  color: var(--text);
+  background: var(--bg);
+  border-radius: 999px;
+  font-weight: 500;
+}
+
 .detail-overview-heading {
   display: grid;
-  margin-top: 8px;
+  margin-top: 12px;
   gap: 10px;
 }
 
@@ -434,7 +582,7 @@ html.detail-root.is-overview-snapping {
   flex-wrap: wrap;
   gap: 32px;
   margin: 0;
-  font-size: 15px;
+  font-size: clamp(14px, 3vw, 15px);
 }
 
 .strong {
@@ -509,7 +657,7 @@ html.detail-root.is-overview-snapping {
 
 .affected-user-cards {
   --affected-card-gap: 12px;
-  --affected-card-height: 436px;
+  --affected-card-height: 516px;
   --affected-copy-height: 136px;
   --affected-card-expanded: 72%;
   --affected-card-collapsed: 28%;
@@ -539,9 +687,9 @@ html.detail-root.is-overview-snapping {
 .affected-user-card {
   display: grid;
   gap: 8px;
-  grid-template-rows: minmax(clamp(260px, 32vw, 420px), 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   flex: 0 0 calc(50% - (var(--affected-card-gap) / 2));
-  height: auto;
+  height: var(--affected-card-height);
   min-width: 0;
   margin: 0;
   overflow: visible;
@@ -614,7 +762,15 @@ html.detail-root.is-overview-snapping {
   opacity: 0;
 }
 
+.affected-user-card.has-hover-video.is-scroll-video-active .affected-user-card-image img {
+  opacity: 0;
+}
+
 .affected-user-card.has-hover-video.is-video-hovering .affected-user-card-video {
+  opacity: 1;
+}
+
+.affected-user-card.has-hover-video.is-scroll-video-active .affected-user-card-video {
   opacity: 1;
 }
 
@@ -834,20 +990,18 @@ ul.affected-user-card-detail {
   box-shadow: 0 0 0 rgba(0, 0, 0, 0);
 }
 
-.ux-goal-card--finder {
-  grid-column: 1 / -1;
-  background:
-    url("assets/store-finder-renewal-ux-goal-img.png") right -1% bottom -14% / 405px auto no-repeat,
-    var(--ux-goal-bg);
-}
-
 .ux-goal-card-content {
   position: relative;
   z-index: 1;
   display: grid;
-  align-content: start;
-  gap: 6px;
+  align-content: space-between;
+  min-height: 285px;
   padding: 38px 32px 40px 60px;
+}
+
+.ux-goal-card-content > div {
+  display: grid;
+  gap: 6px;
 }
 
 .ux-goal-card-badge {
@@ -856,7 +1010,7 @@ ul.affected-user-card-detail {
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.1);
   color: var(--ux-goal-text-primary);
-  font-size: 13px;
+  font-size: clamp(11px, 1.7vw, 12px);
   font-weight: 500;
   letter-spacing: 0.5px;
   opacity: 0.8;
@@ -881,9 +1035,9 @@ ul.affected-user-card-detail {
 }
 
 .ux-goal-card p {
-  margin: 0 0 30px 2px;
+  margin: 0 0 0 2px;
   color: var(--ux-goal-text-secondary);
-  font-size: 15px;
+  font-size: clamp(14px, 3vw ,15px);
   font-weight: 400;
   line-height: 1.42;
   max-width: 240px;
@@ -891,7 +1045,7 @@ ul.affected-user-card-detail {
 
 .ux-goal-card-list {
   display: grid;
-  gap: 28px;
+  gap: 16px;
   margin: 0;
   padding: 0 0 0 3px !important;
   color: var(--ux-goal-text-secondary);
@@ -928,8 +1082,8 @@ ul.affected-user-card-detail {
   left: 32px;
   width: 1px;
   background: var(--ux-goal-line);
-  --ux-goal-rail-node-1-top: 64%;
-  --ux-goal-rail-node-2-top: 81.5%;
+  --ux-goal-rail-node-1-top: 66%;
+  --ux-goal-rail-node-2-top: 80.5%;
   --ux-goal-rail-node-3-top: 52%;
   --ux-goal-rail-node-4-top: 86%;
 }
@@ -967,7 +1121,7 @@ ul.affected-user-card-detail {
     color-mix(in srgb, var(--ux-goal-line) 0%, transparent) 6%,
     color-mix(in srgb, var(--ux-goal-line) 30%, transparent) 40%,
     color-mix(in srgb, var(--ux-goal-line) 70%, transparent) 88%,
-    color-mix(in srgb, var(--ux-goal-green) 80%, transparent) 100%
+    color-mix(in srgb, var(--ux-goal-green) 60%, transparent) 100%
   );
   color: var(--ux-goal-green);
 }
@@ -978,7 +1132,7 @@ ul.affected-user-card-detail {
     color-mix(in srgb, var(--ux-goal-line) 0%, transparent) 6%,
     color-mix(in srgb, var(--ux-goal-line) 30%, transparent) 40%,
     color-mix(in srgb, var(--ux-goal-line) 70%, transparent) 88%,
-    color-mix(in srgb, var(--ux-goal-green) 60%, transparent) 100%
+    color-mix(in srgb, var(--ux-goal-green) 54%, transparent) 100%
   );
   color: var(--ux-goal-text-primary);
 }
@@ -994,13 +1148,22 @@ ul.affected-user-card-detail {
   color: var(--ux-goal-green);
 }
 
+.ux-goal-card--finder {
+  grid-column: 1 / -1;
+  background:
+    url("assets/store-finder-renewal-ux-goal-img.png") right -1% bottom 18% / 405px auto no-repeat,
+    var(--ux-goal-bg);
+}
+
 .ux-goal-card--finder .ux-goal-card-content {
-  padding-top: 90px;
+  padding-top: 108px;
   padding-bottom: 54px;
+  min-height: 430px;
+  align-content: start;
 }
 
 .ux-goal-card--finder .ux-goal-card-content h4{
-  margin: 0 0 24px 3px;
+  margin: 0 0 32px 3px;
   color: var(--ux-goal-green);
   opacity: 0.9;
 }
@@ -1008,10 +1171,10 @@ ul.affected-user-card-detail {
 .ux-goal-card--finder .ux-goal-card-rail {
   top: 0;
   bottom: 0;
-  --ux-goal-rail-node-1-top: 44.5%;
+  --ux-goal-rail-node-1-top: 47.5%;
   --ux-goal-rail-node-2-top: 57%;
-  --ux-goal-rail-node-3-top: 70%;
-  --ux-goal-rail-node-4-top: 83%;
+  --ux-goal-rail-node-3-top: 66.5%;
+  --ux-goal-rail-node-4-top: 76%;
 }
 
 .ux-goal-card--finder .ux-goal-card-rail-node {
@@ -1062,8 +1225,8 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .ux-goal-card--finder {
-    background-size: auto, 360px auto, auto;
-    background-position: center, right 32% center, center;
+    background-size: 50% auto;
+    background-position: right 1% center;
   }
 }
 
@@ -1073,34 +1236,91 @@ html.detail-root.is-theme-switching-lines::before {
     border-left: 0;
   }
 
-  .detail-title-section {
-    min-height: 0;
-  }
-
-  .detail-title-inner {
-    min-height: 300px;
-    padding: 96px 20px 44px;
-  }
-
-  .detail-header {
-    gap: 18px;
-  }
-
   .detail-header h1 {
-    font-size: clamp(46px, 13vw, 64px);
+    font-size: clamp(40px, 9vw, 64px);
   }
 
   .detail-media {
-    aspect-ratio: 4 / 3;
-    border-radius: 0 20px 20px 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 0;
   }
 
   .detail-content-col {
-    padding: 40px 20px 56px;
+    padding: 0;
+  }
+
+  .detail-content {
+    padding: 0 0 74px;
+  }
+
+  .body-image-frame {
+    padding: 0 28px;
+  }
+
+  .why-matter-list {
+    margin-bottom: 24px;
+  }
+
+  .affected-user-cards {
+    flex-direction: column;
+    gap: calc(var(--affected-card-gap) + 8px);
+    margin: 30px 28px 16px;
+  }
+
+  .affected-user-cards.is-customer-active .affected-user-card:first-child,
+  .affected-user-cards.is-customer-active .affected-user-card:last-child,
+  .affected-user-cards.is-staff-active .affected-user-card:first-child,
+  .affected-user-cards.is-staff-active .affected-user-card:last-child {
+    flex-basis: auto;
+  }
+
+  .affected-user-card {
+    flex-basis: auto;
+    height: auto;
+    min-height: 0;
+  }
+
+  .affected-user-card-image {
+    aspect-ratio: 2 / 1;
+  }
+
+  .affected-user-cards.is-customer-active .affected-user-card:last-child .affected-user-card-image,
+  .affected-user-cards.is-staff-active .affected-user-card:first-child .affected-user-card-image {
+    grid-row: 1;
+  }
+
+  .affected-user-card:not(:hover):not(.is-scroll-video-active) .affected-user-card-image img {
+    filter: grayscale(1);
+  }
+
+  .affected-user-card:hover .affected-user-card-image img,
+  .affected-user-card.is-scroll-video-active .affected-user-card-image img {
+    filter: none;
+  }
+
+  .affected-user-card-image::after,
+  .affected-user-cards.is-customer-active .affected-user-card:last-child .affected-user-card-image::after,
+  .affected-user-cards.is-staff-active .affected-user-card:first-child .affected-user-card-image::after {
+    opacity: 0;
+  }
+
+  .affected-user-image-name {
+    display: none;
+  }
+
+  .affected-user-cards.is-customer-active .affected-user-card:last-child .affected-user-card-copy,
+  .affected-user-cards.is-staff-active .affected-user-card:first-child .affected-user-card-copy {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .opportunity-cards {
+    margin: 14px 28px;
   }
 
   .ux-goal-cards {
-    margin: 8px 0 0;
+    margin: 8px 28px 0;
   }
 
   .ux-goal-card,
@@ -1108,29 +1328,224 @@ html.detail-root.is-theme-switching-lines::before {
     min-height: 0;
   }
 
-  .ux-goal-card-content {
-    padding: 48px 28px 44px 92px;
+  .ux-goal-card--finder {
+    background-size: 410px auto;
+    background-position: right -6% center;
   }
 
-  .ux-goal-card-rail,
-  .ux-goal-card--finder::before,
-  .ux-goal-card--store::after {
-    left: 52px;
+  .ux-goal-card-content {
+    padding: 42px 28px 41px 50px;
+  }
+
+  .ux-goal-card-grid {
+    gap: 4px;
+  }
+
+  .ux-goal-card-rail, .ux-goal-card--finder::before, .ux-goal-card--store::after {
+    left: 28px;
+    --ux-goal-rail-node-1-top: 66.5%;
+    --ux-goal-rail-node-2-top: 80.5%;
+  }
+
+  .ux-goal-card--finder .ux-goal-card-rail {
+    --ux-goal-rail-node-1-top: 47.3%;
+    --ux-goal-rail-node-2-top: 56.3%;
+    --ux-goal-rail-node-3-top: 66%;
+    --ux-goal-rail-node-4-top: 75%;
+  }
+
+  .ux-goal-card-list li {
+    font-size: 15px;
+  }
+
+  .mgrl-48 {
+    margin-left: 36px;
+    margin-right: 36px;
+  }
+}
+
+
+@media (max-width: 760px) {
+  .ux-goal-cards {
+    margin: 0 4px;
   }
 
   .ux-goal-card--finder {
-    background-size: auto, 300px auto, auto;
-    background-position: center, right -72px center, center;
+    min-height: 748px;
+    background-size: max(60%, 435px) auto;
+    background-position: right bottom 4%;
+  }
+
+  .ux-goal-card-rail, .ux-goal-card--finder::before, .ux-goal-card--store::after {
+    left: 24px;
+    --ux-goal-rail-node-1-top: 60%;
+    --ux-goal-rail-node-2-top: 77.5%;
+  }
+
+  .ux-goal-card--finder .ux-goal-card-rail {
+    --ux-goal-rail-node-1-top: 22%;
+    --ux-goal-rail-node-2-top: 27.3%;
+    --ux-goal-rail-node-3-top: 32.5%;
+    --ux-goal-rail-node-4-top: 37.6%;
+  }
+
+  .ux-goal-card-rail--finder {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ux-goal-green) 60%, transparent) 0%,
+      color-mix(in srgb, var(--ux-goal-green) 90%, transparent) 20%,
+      color-mix(in srgb, var(--ux-goal-green) 100%, transparent) 40%,
+      color-mix(in srgb, var(--ux-goal-green) 30%, transparent) 50%,
+      color-mix(in srgb, var(--ux-goal-line) 0%, transparent) 100%
+    );
+    color: var(--ux-goal-green);
+  }
+
+  .ux-goal-card--finder .ux-goal-card-content {
+    padding-top: 76px;
+    padding-bottom: 462px;
+  }
+
+  .ux-goal-card-content {
+    min-height: 226px;
+    padding: 38px 16px 36px 44px;
+  }
+
+  .ux-goal-card-content > div {
+    gap: 3px;
+  }
+
+  .ux-goal-card h4 {
+    font-size: 19px;
+  }
+
+  .mgrl-48 {
+    margin-left: 28px;
+    margin-right: 28px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+}
+
+@media (max-width: 530px) {
+  .detail-header {
+    gap: 20px;
+  }
+
+  .detail-header h1 {
+    margin: 6px 0 0;
+  }
+  
+  .detail-keywords {
+    gap: 6px;
+  }
+
+  .detail-header-brief {
+    margin: 16px 0 0 2px;
+  }
+
+  .detail-media {
+    aspect-ratio: 4 / 3;
+    border-radius: 0;
+  }
+
+  .body-image-frame {
+    padding: 0 16px;
   }
 
   .affected-user-cards {
-    flex-direction: column;
+    --affected-card-gap: 10px;
+    margin-right: 16px;
+    margin-left: 16px;
   }
 
-  .affected-user-card {
-    flex-basis: auto;
-    height: auto;
-    min-height: 0;
+  .affected-user-card-copy {
+    padding: 16px 18px;
+    border-radius: 14px;
+  }
+
+  .opportunity-cards {
+    margin: 8px 16px;
+  }
+
+  .ux-goal-cards {
+    margin: 0;
+  }
+
+  .ux-goal-card {
+    border-radius: 0;
+  }
+
+  .ux-goal-card h4 {
+    font-size: 18px;
+    max-width: 160px;
+  }
+
+  .ux-goal-card-list li {
+    font-size: 14px;
+  }
+
+  .ux-goal-card-grid {
+    gap: 0;
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+
+  .ux-goal-card-rail, .ux-goal-card--finder::before, .ux-goal-card--store::after {
+    left: 20px;
+    --ux-goal-rail-node-1-top: 64%;
+    --ux-goal-rail-node-2-top: 79.5%;
+  }
+
+  .ux-goal-card--finder {
+    background-size: 390px auto;
+    background-position: right -40% bottom 5%;
+  }
+
+  .ux-goal-card--finder .ux-goal-card-rail {
+    --ux-goal-rail-node-1-top: 26%;
+    --ux-goal-rail-node-2-top: 31.3%;
+    --ux-goal-rail-node-3-top: 36.5%;
+    --ux-goal-rail-node-4-top: 41.6%;
+  }
+
+  .ux-goal-card--finder .ux-goal-card-content {
+    padding-top: 110px;
+    padding-bottom: 462px;
+  }
+
+  .ux-goal-card--finder::before {
+    width: 45.2%;
+    background-image: url("assets/ux-goal-finder-rail-mo.svg");
+    aspect-ratio: 228 / 90;
+  }
+
+  .ux-goal-card--finder .ux-goal-card-content h4 {
+    margin: 0 0 0 3px;
+  }
+
+  .ux-goal-card-content {
+    align-content: start;
+    gap: 30px;
+    padding: 42px 0;
+    margin-left: 36px;
+    height: 248px;
+  }
+
+  .mgrl-48 {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 330px) {
+  html,
+  body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: clip;
   }
 }
 

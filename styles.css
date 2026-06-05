@@ -648,7 +648,7 @@ body {
 
 }
 
-@media (max-width: 520px) {
+@media (max-width: 530px) {
   :root {
     --summary-height: clamp(240px, 34svh, 300px);
   }

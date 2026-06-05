@@ -36,12 +36,14 @@ export const projects = [
   {
     slug: "cta-enhancement",
     detailSlug: "converting-intent-into-pickup",
-    number: "02",
+    number: "02 🚧",
     year: 2025,
     keywords: ["E-commerce", "Data-driven Design", "Conversion Optimization"],
     title: "Converting Intent|into Pickup",
     sideTitle: "Pickup Order UX Enhancement",
     brief: [
+      "This data-driven enhancement focused on customers with clear purchase intent who needed a clearer final step toward pickup.",
+      "By clarifying pickup CTAs and actions by store availability, the goal was to convert purchase intent into pickup more quickly and confidently."
     ],
     contribution: [
       "Identified friction after product decision",
@@ -60,7 +62,7 @@ export const projects = [
   {
     slug: "article-studio",
     detailSlug: "from-weeks-to-minutes",
-    number: "03",
+    number: "03 🚧",
     year: 2023,
     keywords: ["Workflow Automation", "Modular System"],
     title: "From Weeks|to Minutes",

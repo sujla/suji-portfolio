@@ -28,7 +28,7 @@ const renderDetailNav = () => {
   detailNav.innerHTML = `
     <a class="detail-back-icon" href="../../index.html" aria-label="Back to main">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10.6667 5L4 12L10.6667 19M4 12L20 12" stroke="{currentColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10.6667 5L4 12L10.6667 19M4 12L20 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </a>
     <span class="detail-nav-spacer" aria-hidden="true"></span>
@@ -119,6 +119,311 @@ const renderContributions = () => {
 
 renderContributions();
 
+const setupComingSoonTape = () => {
+  if (!document.body.classList.contains("detail-coming-soon-page")) return;
+
+  const desktopPointer = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 360px)");
+  const isIpadLike = navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+  const isMobileDevice = /Android|iPad|iPhone|iPod/i.test(navigator.userAgent) || isIpadLike;
+  const maxSegments = 40;
+  const minGestureDistance = 120;
+  const minAngleDelta = 0.22;
+  const tapeCooldown = 320;
+  const tapeDrawDuration = 600;
+  const edgeBleed = 240;
+  let canvas;
+  let context;
+  let deviceScale = 1;
+  let lastPoint;
+  let lastTapeAngle;
+  let lastTapeTime = 0;
+  let animationFrame;
+  let segments = [];
+  let tapePatternImage;
+  let tapePatternSource = "";
+
+  const canUseTape = () => desktopPointer.matches && !isMobileDevice;
+
+  const removeTape = () => {
+    lastPoint = null;
+    lastTapeAngle = undefined;
+    lastTapeTime = 0;
+    segments = [];
+    window.cancelAnimationFrame(animationFrame);
+    canvas?.remove();
+    canvas = null;
+    context = null;
+  };
+
+  const getImageSource = (value) => {
+    const trimmedValue = value?.trim();
+
+    if (!trimmedValue || trimmedValue === "none") return "";
+
+    const urlMatch = trimmedValue.match(/^url\((['"]?)(.*?)\1\)$/);
+
+    return urlMatch ? urlMatch[2] : "";
+  };
+
+  const syncTapePatternImage = (source) => {
+    if (!source) {
+      tapePatternSource = "";
+      tapePatternImage = undefined;
+      return;
+    }
+
+    if (!source || source === tapePatternSource) return;
+
+    tapePatternSource = source;
+    tapePatternImage = new Image();
+    tapePatternImage.decoding = "async";
+    tapePatternImage.onload = () => redrawTape();
+    tapePatternImage.src = new URL(source, import.meta.url).href;
+  };
+
+  const getTapeSettings = () => {
+    const style = canvas ? window.getComputedStyle(canvas) : null;
+    const thickness = Number.parseFloat(style?.getPropertyValue("--tape-thickness")) || 64;
+    const patternSource = getImageSource(style?.getPropertyValue("--tape-pattern-image"));
+
+    syncTapePatternImage(patternSource);
+
+    return {
+      thickness,
+      color: style?.getPropertyValue("--tape-color").trim() || "rgb(60, 60, 60)",
+      patternOpacity: Number.parseFloat(style?.getPropertyValue("--tape-pattern-opacity")) || 1,
+      patternScale: Number.parseFloat(style?.getPropertyValue("--tape-pattern-scale")) || 1,
+    };
+  };
+
+  const getAngleDelta = (fromAngle, toAngle) => Math.abs(Math.atan2(
+    Math.sin(toAngle - fromAngle),
+    Math.cos(toAngle - fromAngle),
+  ));
+
+  const easeOutCubic = (value) => 1 - ((1 - value) ** 3);
+
+  const drawTapeSegment = (segment, now = performance.now()) => {
+    if (!context) return;
+
+    const settings = getTapeSettings();
+    const halfThickness = settings.thickness / 2;
+    const tornInset = Math.min(settings.thickness * 0.18, 28);
+    const endNoise = segment.noise;
+    const progress = Math.min((now - segment.createdAt) / tapeDrawDuration, 1);
+    const visibleLength = Math.max(segment.length * easeOutCubic(progress), settings.thickness * 0.32);
+
+    context.save();
+    context.translate(segment.x, segment.y);
+    context.rotate(segment.angle);
+
+    context.beginPath();
+    context.moveTo(endNoise.startTop, -halfThickness);
+    context.lineTo(visibleLength - tornInset + endNoise.endTop, -halfThickness);
+    context.lineTo(visibleLength + endNoise.endMid, -halfThickness * 0.18);
+    context.lineTo(visibleLength - tornInset + endNoise.endBottom, halfThickness);
+    context.lineTo(endNoise.startBottom, halfThickness);
+    context.lineTo(endNoise.startMid, halfThickness * 0.12);
+    context.closePath();
+    context.fillStyle = settings.color;
+    context.fill();
+
+    if (tapePatternImage?.complete && tapePatternImage.naturalWidth) {
+      const patternWidth = tapePatternImage.naturalWidth * settings.patternScale;
+      const patternHeight = tapePatternImage.naturalHeight * settings.patternScale;
+
+      if (!patternWidth || !patternHeight) {
+        context.restore();
+        return;
+      }
+
+      context.save();
+      context.clip();
+      context.globalAlpha = settings.patternOpacity;
+
+      for (let x = 0; x < visibleLength; x += patternWidth) {
+        for (let y = -halfThickness; y < halfThickness; y += patternHeight) {
+          context.drawImage(tapePatternImage, x, y, patternWidth, patternHeight);
+        }
+      }
+
+      context.restore();
+    }
+
+    context.restore();
+  };
+
+  const redrawTape = (now = performance.now()) => {
+    if (!context || !canvas) return;
+
+    context.clearRect(0, 0, canvas.width / deviceScale, canvas.height / deviceScale);
+    segments.forEach((segment) => drawTapeSegment(segment, now));
+  };
+
+  const queueRedraw = () => {
+    window.cancelAnimationFrame(animationFrame);
+    animationFrame = window.requestAnimationFrame((now) => {
+      redrawTape(now);
+
+      if (segments.some((segment) => now - segment.createdAt < tapeDrawDuration)) {
+        queueRedraw();
+      }
+    });
+  };
+
+  const resizeCanvas = () => {
+    if (!canvas) return;
+
+    deviceScale = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.ceil(window.innerWidth * deviceScale);
+    canvas.height = Math.ceil(window.innerHeight * deviceScale);
+    context = canvas.getContext("2d");
+    context.setTransform(deviceScale, 0, 0, deviceScale, 0, 0);
+    redrawTape();
+  };
+
+  const ensureCanvas = () => {
+    if (canvas) return canvas;
+
+    canvas = document.createElement("canvas");
+    canvas.className = "detail-tape-canvas";
+    canvas.setAttribute("aria-hidden", "true");
+    document.body.append(canvas);
+    resizeCanvas();
+
+    return canvas;
+  };
+
+  const createNoise = () => ({
+    startTop: Math.random() * 10 - 4,
+    startMid: Math.random() * 12 - 6,
+    startBottom: Math.random() * 10 - 4,
+    endTop: Math.random() * 14 - 7,
+    endMid: Math.random() * 18 - 9,
+    endBottom: Math.random() * 14 - 7,
+  });
+
+  const getViewportTapeLine = (point, angle) => {
+    const directionX = Math.cos(angle);
+    const directionY = Math.sin(angle);
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const intersections = [];
+
+    const addIntersection = (t) => {
+      const x = point.x + directionX * t;
+      const y = point.y + directionY * t;
+
+      if (x >= -1 && x <= viewportWidth + 1 && y >= -1 && y <= viewportHeight + 1) {
+        intersections.push(t);
+      }
+    };
+
+    if (Math.abs(directionX) > 0.001) {
+      addIntersection((0 - point.x) / directionX);
+      addIntersection((viewportWidth - point.x) / directionX);
+    }
+
+    if (Math.abs(directionY) > 0.001) {
+      addIntersection((0 - point.y) / directionY);
+      addIntersection((viewportHeight - point.y) / directionY);
+    }
+
+    if (intersections.length < 2) {
+      const fallbackLength = Math.hypot(viewportWidth, viewportHeight) + edgeBleed * 2;
+
+      return {
+        x: point.x - directionX * (fallbackLength / 2),
+        y: point.y - directionY * (fallbackLength / 2),
+        length: fallbackLength,
+        angle,
+      };
+    }
+
+    const startT = Math.min(...intersections) - edgeBleed;
+    const endT = Math.max(...intersections) + edgeBleed;
+
+    return {
+      x: point.x + directionX * startT,
+      y: point.y + directionY * startT,
+      length: endT - startT,
+      angle,
+    };
+  };
+
+  const addTapeSegment = (from, to) => {
+    const distanceX = to.x - from.x;
+    const distanceY = to.y - from.y;
+    const distance = Math.hypot(distanceX, distanceY);
+
+    if (distance < minGestureDistance) return false;
+
+    const angle = Math.atan2(distanceY, distanceX);
+    const now = performance.now();
+
+    if (now - lastTapeTime < tapeCooldown) return false;
+    if (lastTapeAngle !== undefined && getAngleDelta(lastTapeAngle, angle) < minAngleDelta) return false;
+
+    ensureCanvas();
+
+    const tapeLine = getViewportTapeLine(to, angle);
+    const segment = {
+      x: tapeLine.x,
+      y: tapeLine.y,
+      length: tapeLine.length,
+      angle: tapeLine.angle,
+      noise: createNoise(),
+      createdAt: now,
+    };
+
+    segments.push(segment);
+    lastTapeAngle = angle;
+    lastTapeTime = now;
+
+    if (segments.length > maxSegments) {
+      segments.shift();
+    }
+
+    queueRedraw();
+
+    return true;
+  };
+
+  const handlePointerMove = (event) => {
+    if (!canUseTape() || event.pointerType !== "mouse") return;
+
+    const currentPoint = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+
+    if (!lastPoint) {
+      lastPoint = currentPoint;
+      return;
+    }
+
+    if (addTapeSegment(lastPoint, currentPoint)) {
+      lastPoint = currentPoint;
+    }
+  };
+
+  const syncTapeAvailability = () => {
+    if (!canUseTape()) removeTape();
+  };
+
+  window.addEventListener("pointermove", handlePointerMove, { passive: true });
+  window.addEventListener("pointerleave", () => {
+    lastPoint = null;
+  });
+  window.addEventListener("blur", () => {
+    lastPoint = null;
+  });
+  window.addEventListener("resize", resizeCanvas);
+  desktopPointer.addEventListener("change", syncTapeAvailability);
+};
+
+setupComingSoonTape();
+
 const themeToggle = document.querySelector(".theme-toggle");
 
 if (currentProject) {
@@ -187,19 +492,75 @@ const syncActiveToc = () => {
 };
 
 const setupAffectedUserVideos = () => {
+  const mobileVideoMedia = window.matchMedia("(max-width: 920px)");
+  const videoCards = [];
+  let activeScrollVideo;
+  const mobileLoopDelay = 200;
+
+  const isAffectedVideoActive = (card) =>
+    card.classList.contains("is-video-hovering") || card.classList.contains("is-scroll-video-active");
+
+  const clearVideoLoopTimer = (item) => {
+    window.clearTimeout(item.loopTimer);
+    item.loopTimer = undefined;
+  };
+
+  const configureVideoLoop = (item) => {
+    const { card, video } = item;
+
+    clearVideoLoopTimer(item);
+
+    if (!mobileVideoMedia.matches) {
+      video.loop = true;
+      video.onended = null;
+      return;
+    }
+
+    video.loop = false;
+    video.onended = () => {
+      clearVideoLoopTimer(item);
+      item.loopTimer = window.setTimeout(() => {
+        if (!mobileVideoMedia.matches || !isAffectedVideoActive(card)) return;
+
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      }, mobileLoopDelay);
+    };
+  };
+
+  const playAffectedVideo = (item, className) => {
+    const { card, video } = item;
+
+    configureVideoLoop(item);
+    card.classList.add(className);
+    if (video.ended) video.currentTime = 0;
+    video.play().catch(() => {});
+  };
+
+  const stopVideo = (item, className) => {
+    const { card, video } = item;
+
+    card.classList.remove(className);
+    if (isAffectedVideoActive(card)) return;
+
+    clearVideoLoopTimer(item);
+    video.onended = null;
+    video.loop = true;
+    video.pause();
+    video.currentTime = 0;
+  };
+
   document.querySelectorAll(".affected-user-card-video").forEach((video) => {
     const card = video.closest(".affected-user-card");
     if (!card) return;
 
     video.loop = true;
     let videoLeaveTimer;
+    const videoItem = { card, loopTimer: undefined, video };
+    videoCards.push(videoItem);
 
     const markVideoReady = () => {
       card.classList.add("has-hover-video");
-    };
-
-    const playVideo = () => {
-      video.play().catch(() => {});
     };
 
     if (video.readyState >= 2) {
@@ -216,20 +577,68 @@ const setupAffectedUserVideos = () => {
       if (!card.classList.contains("has-hover-video")) return;
 
       window.clearTimeout(videoLeaveTimer);
-      card.classList.add("is-video-hovering");
-      if (video.ended) video.currentTime = 0;
-      playVideo();
+      playAffectedVideo(videoItem, "is-video-hovering");
     });
 
     card.addEventListener("pointerleave", () => {
       window.clearTimeout(videoLeaveTimer);
       videoLeaveTimer = window.setTimeout(() => {
-        card.classList.remove("is-video-hovering");
-        video.pause();
-        video.currentTime = 0;
+        stopVideo(videoItem, "is-video-hovering");
       }, 160);
     });
   });
+
+  if (!videoCards.length) return;
+
+  const syncScrollVideo = () => {
+    if (!mobileVideoMedia.matches) {
+      if (activeScrollVideo) {
+        stopVideo(activeScrollVideo, "is-scroll-video-active");
+        activeScrollVideo = undefined;
+      }
+      return;
+    }
+
+    const viewportCenter = window.innerHeight * 0.5;
+    let nextScrollVideo;
+    let closestDistance = Infinity;
+
+    videoCards.forEach((item) => {
+      const rect = item.card.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight * 0.76 && rect.bottom > window.innerHeight * 0.24;
+      if (!isVisible) return;
+
+      const cardCenter = rect.top + rect.height * 0.5;
+      const distance = Math.abs(cardCenter - viewportCenter);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        nextScrollVideo = item;
+      }
+    });
+
+    if (nextScrollVideo === activeScrollVideo) return;
+
+    if (activeScrollVideo) {
+      stopVideo(activeScrollVideo, "is-scroll-video-active");
+    }
+
+    activeScrollVideo = nextScrollVideo;
+
+    if (activeScrollVideo?.card.classList.contains("has-hover-video")) {
+      activeScrollVideo.video.currentTime = 0;
+      playAffectedVideo(activeScrollVideo, "is-scroll-video-active");
+    }
+  };
+
+  videoCards.forEach(({ video }) => {
+    video.addEventListener("loadeddata", syncScrollVideo);
+    video.addEventListener("canplay", syncScrollVideo);
+  });
+
+  window.addEventListener("scroll", syncScrollVideo, { passive: true });
+  window.addEventListener("resize", syncScrollVideo);
+  mobileVideoMedia.addEventListener?.("change", syncScrollVideo);
+  syncScrollVideo();
 };
 
 const setupAffectedUserActiveState = () => {
@@ -516,7 +925,7 @@ const handleInitialKeyboardSnap = (event) => {
   triggerProjectOverviewSnap(event);
 };
 
-applyTheme(localStorage.getItem("portfolio-theme") || "dark");
+applyTheme(localStorage.getItem("portfolio-theme") || "light");
 setupAffectedUserActiveState();
 setupAffectedUserVideos();
 setupOpportunityCards();
