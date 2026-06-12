@@ -90,13 +90,17 @@ html.detail-root.is-overview-snapping {
 }
 
 .detail-back-icon {
-  position: relative;
-  z-index: 1;
+  --detail-back-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.6667 5L4 12L10.6667 19M4 12L20 12' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+  position: fixed;
+  top: calc(clamp(8px, 1.55vw, 10px) + 4px);
+  left: clamp(6px, 1vw, 14px);
+  z-index: 29;
   display: grid;
   width: 46px;
   height: 32px;
   place-items: center;
-  color: var(--text);
+  color: #fff;
   font-size: 26px;
   font-weight: 600;
   line-height: 1;
@@ -104,7 +108,25 @@ html.detail-root.is-overview-snapping {
   pointer-events: auto;
 }
 
+.detail-back-icon::before {
+  grid-area: 1 / 1;
+  display: none;
+  width: clamp(22px, 3.9vw, 26px);
+  height: clamp(22px, 3.9vw, 26px);
+  pointer-events: none;
+  content: "";
+}
+
+.detail-nav-back-slot {
+  position: relative;
+  z-index: 1;
+  width: 46px;
+  height: 32px;
+  pointer-events: none;
+}
+
 .detail-back-icon svg {
+  grid-area: 1 / 1;
   display: block;
   width: clamp(22px, 3.9vw, 26px);
   height: clamp(22px, 3.9vw, 26px);
@@ -113,6 +135,25 @@ html.detail-root.is-overview-snapping {
   stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+@supports ((backdrop-filter: invert(1)) or (-webkit-backdrop-filter: invert(1))) {
+  .detail-back-icon {
+    color: transparent;
+  }
+
+  .detail-back-icon::before {
+    display: block;
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: invert(1) contrast(1.08);
+    -webkit-backdrop-filter: invert(1) contrast(1.08);
+    mask: var(--detail-back-icon-mask) center / contain no-repeat;
+    -webkit-mask: var(--detail-back-icon-mask) center / contain no-repeat;
+  }
+
+  .detail-back-icon svg {
+    opacity: 0;
+  }
 }
 
 .detail-nav-spacer {
@@ -1228,6 +1269,7 @@ html.detail-root.is-theme-switching-lines::before {
     background-size: 50% auto;
     background-position: right 1% center;
   }
+
 }
 
 @media (max-width: 920px) {
