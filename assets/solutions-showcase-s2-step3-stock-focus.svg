@@ -1,0 +1,16 @@
+<svg width="390" height="790" viewBox="0 0 390 790" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="790" rx="46" fill="#fff"/>
+  <text x="50" y="39" fill="#101418" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700">9:41</text>
+  <text x="196" y="77" text-anchor="middle" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Store Stock</text>
+  <path d="M28 75h18m-18 0 10-10m-10 10 10 10" stroke="#15191D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="28" y="130" width="334" height="260" rx="28" fill="#F4F5F6"/>
+  <text x="58" y="180" fill="#54C700" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Available now</text>
+  <text x="58" y="238" fill="#111518" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Gangnam</text>
+  <text x="58" y="278" fill="#111518" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Station</text>
+  <text x="58" y="324" fill="#68717A" font-family="Arial, Helvetica, sans-serif" font-size="15">3 items left - Pickup available today</text>
+  <rect x="58" y="426" width="274" height="54" rx="27" fill="#111518"/>
+  <text x="195" y="460" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Choose this store</text>
+  <rect x="28" y="530" width="334" height="1" fill="#E7EAEE"/>
+  <text x="28" y="577" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Why it helps</text>
+  <text x="28" y="609" fill="#737B85" font-family="Arial, Helvetica, sans-serif" font-size="14">Users can compare stock before starting pickup.</text>
+</svg>

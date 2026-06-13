@@ -1,0 +1,23 @@
+<svg width="390" height="790" viewBox="0 0 390 790" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="790" rx="46" fill="#fff"/>
+  <text x="50" y="39" fill="#101418" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700">9:41</text>
+  <text x="196" y="77" text-anchor="middle" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Olive Young Store</text>
+  <path d="M28 75h18m-18 0 10-10m-10 10 10 10" stroke="#15191D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="22" y="103" width="302" height="38" rx="19" fill="#F0F1F4"/>
+  <text x="42" y="127" fill="#98A0AA" font-family="Arial, Helvetica, sans-serif" font-size="13">Myeongdong</text>
+  <g transform="translate(-58 142) scale(1.22)">
+    <rect width="420" height="540" fill="#E6EAF0"/>
+    <path d="M0 302 134 236 252 260 420 172" stroke="#CED5DE" stroke-width="22"/>
+    <path d="M260 0 282 180 420 288" stroke="#D4D9E0" stroke-width="20"/>
+    <path d="M0 96h420M0 204h420M0 392h420M88 0v540M182 0v540M330 0v540" stroke="#D4DAE2" stroke-width="4"/>
+    <path d="M310 0h110v540H260c34-76 38-136 16-202-20-60-2-120 44-178 31-40 28-88-10-160z" fill="#CDECD5"/>
+    <rect x="130" y="206" width="168" height="32" rx="16" fill="#F2FFD5" filter="url(#shadow)"/>
+    <text x="152" y="228" fill="#111518" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Myeongdong Time Walk</text>
+    <rect x="196" y="244" width="168" height="36" rx="18" fill="#54C700" filter="url(#shadow)"/>
+    <text x="220" y="268" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Myeongdong Town</text>
+    <rect x="154" y="336" width="160" height="32" rx="16" fill="#F2FFD5" filter="url(#shadow)"/>
+    <text x="178" y="358" fill="#111518" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Myeongdong Branch</text>
+    <circle cx="292" cy="284" r="12" fill="#FF443F"/>
+  </g>
+  <defs><filter id="shadow" x="-20%" y="-30%" width="140%" height="180%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#020508" flood-opacity=".18"/></filter></defs>
+</svg>

@@ -839,10 +839,20 @@ const setupSolutionsShowcase = () => {
   const solutionsSection = document.getElementById("solutions");
   const stepsPerSolution = 3;
   const totalSteps = panels.length * stepsPerSolution;
+  const boundaryExitScrollThreshold = 1380;
   let activeIndex = 0;
+  let armedBoundaryMessage = "";
+  let boundaryScrollDistance = 0;
+  let boundaryToastTimeout;
   let touchStartYForShowcase;
 
   if (!frame || !scrollport || !panels.length || totalSteps <= 1) return;
+
+  const boundaryToast = document.createElement("div");
+  boundaryToast.className = "solutions-showcase-toast";
+  boundaryToast.setAttribute("role", "status");
+  boundaryToast.setAttribute("aria-live", "polite");
+  frame.append(boundaryToast);
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const isExpanded = () => showcase.classList.contains("is-expanded");
@@ -871,17 +881,11 @@ const setupSolutionsShowcase = () => {
     return clamp((window.scrollY - start) / (end - start), 0, 1);
   };
 
-  const syncActiveStep = () => {
-    const { end } = getScrollRange();
-    const nextIndex = clamp(Math.round(getShowcaseProgress() * (totalSteps - 1)), 0, totalSteps - 1);
+  const setActiveStep = (nextIndex) => {
     const activeSolutionIndex = Math.floor(nextIndex / stepsPerSolution);
     const activeStepIndex = nextIndex % stepsPerSolution;
 
     activeIndex = nextIndex;
-    const exitProgress = clamp((window.scrollY - end) / getExitScrollDistance(), 0, 1);
-    const exitDistance = frame.offsetHeight + getStickyTop() + 96;
-    solutionsSection?.style.setProperty("--solutions-exit-y", `${Math.round(exitDistance * -exitProgress)}px`);
-
     panels.forEach((panel, panelIndex) => {
       const panelIsActive = panelIndex === activeSolutionIndex;
 
@@ -902,6 +906,17 @@ const setupSolutionsShowcase = () => {
     });
   };
 
+  const syncActiveStep = () => {
+    const { end } = getScrollRange();
+    const nextIndex = clamp(Math.round(getShowcaseProgress() * (totalSteps - 1)), 0, totalSteps - 1);
+
+    const exitProgress = clamp((window.scrollY - end) / getExitScrollDistance(), 0, 1);
+    const exitDistance = frame.offsetHeight + getStickyTop() + 96;
+    solutionsSection?.style.setProperty("--solutions-exit-y", `${Math.round(exitDistance * -exitProgress)}px`);
+
+    setActiveStep(nextIndex);
+  };
+
   const scrollToStep = (index, behavior = "auto") => {
     const { start, end } = getScrollRange();
     const progress = clamp(index, 0, totalSteps - 1) / (totalSteps - 1);
@@ -912,7 +927,24 @@ const setupSolutionsShowcase = () => {
     });
   };
 
+  const hideBoundaryToast = () => {
+    window.clearTimeout(boundaryToastTimeout);
+    boundaryToastTimeout = undefined;
+    boundaryToast.classList.remove("is-visible");
+  };
+
+  const showBoundaryToast = (message) => {
+    boundaryToast.textContent = message;
+    boundaryToast.classList.toggle("is-bottom", message === "You've reached the bottom");
+    boundaryToast.classList.add("is-visible");
+    window.clearTimeout(boundaryToastTimeout);
+    boundaryToastTimeout = window.setTimeout(hideBoundaryToast, 1200);
+  };
+
   const closeShowcase = ({ focusTrigger = true } = {}) => {
+    armedBoundaryMessage = "";
+    boundaryScrollDistance = 0;
+    hideBoundaryToast();
     showcase.classList.remove("is-expanded");
     root.classList.remove("is-solutions-modal-open");
     frame.removeAttribute("role");
@@ -924,6 +956,10 @@ const setupSolutionsShowcase = () => {
   };
 
   const openShowcase = () => {
+    armedBoundaryMessage = "";
+    boundaryScrollDistance = 0;
+    hideBoundaryToast();
+    scrollToStep(0);
     showcase.classList.add("is-expanded");
     root.classList.add("is-solutions-modal-open");
     frame.setAttribute("role", "dialog");
@@ -932,14 +968,44 @@ const setupSolutionsShowcase = () => {
 
     window.requestAnimationFrame(() => {
       syncActiveStep();
-      closeButton?.focus({ preventScroll: true });
+      setActiveStep(0);
     });
   };
 
-  const shouldCloseExpandedShowcase = (deltaY) =>
-    isExpanded() && deltaY > 0 && activeIndex >= totalSteps - 1;
+  const getBoundaryExitMessage = (deltaY) => {
+    if (!isExpanded()) return "";
+    if (deltaY < 0 && activeIndex <= 0) return "You've reached the top";
+    if (deltaY > 0 && activeIndex >= totalSteps - 1) return "You've reached the bottom";
+
+    return "";
+  };
+
+  const handleBoundaryExit = (message, deltaY) => {
+    const scrollDistance = Math.abs(deltaY);
+
+    if (armedBoundaryMessage !== message) {
+      armedBoundaryMessage = message;
+      boundaryScrollDistance = 0;
+      showBoundaryToast(message);
+      return;
+    }
+
+    boundaryScrollDistance += scrollDistance;
+
+    if (boundaryScrollDistance < boundaryExitScrollThreshold) {
+      showBoundaryToast(message);
+      return;
+    }
+
+    closeShowcase({ focusTrigger: false });
+  };
 
   openButton?.addEventListener("click", openShowcase);
+  frame.addEventListener("click", (event) => {
+    if (isExpanded() || event.target.closest("[data-solutions-close]")) return;
+
+    openShowcase();
+  });
   closeButton?.addEventListener("click", () => closeShowcase());
 
   window.addEventListener("scroll", syncActiveStep, { passive: true });
@@ -947,11 +1013,17 @@ const setupSolutionsShowcase = () => {
   window.addEventListener(
     "wheel",
     (event) => {
-      if (!shouldCloseExpandedShowcase(event.deltaY)) return;
+      const boundaryMessage = getBoundaryExitMessage(event.deltaY);
+      if (!boundaryMessage) {
+        armedBoundaryMessage = "";
+        boundaryScrollDistance = 0;
+        return;
+      }
 
-      closeShowcase({ focusTrigger: false });
+      event.preventDefault();
+      handleBoundaryExit(boundaryMessage, event.deltaY);
     },
-    { passive: true },
+    { passive: false },
   );
 
   window.addEventListener(
@@ -967,12 +1039,26 @@ const setupSolutionsShowcase = () => {
     (event) => {
       const touchY = event.touches?.[0]?.clientY || touchStartYForShowcase;
       const deltaY = touchStartYForShowcase - touchY;
-      if (!shouldCloseExpandedShowcase(deltaY)) return;
+      touchStartYForShowcase = touchY;
+      const boundaryMessage = getBoundaryExitMessage(deltaY);
+      if (!boundaryMessage) {
+        armedBoundaryMessage = "";
+        boundaryScrollDistance = 0;
+        return;
+      }
 
-      closeShowcase({ focusTrigger: false });
+      event.preventDefault();
+      handleBoundaryExit(boundaryMessage, deltaY);
     },
-    { passive: true },
+    { passive: false },
   );
+
+  window.addEventListener("keydown", (event) => {
+    if (!["Escape", "Esc"].includes(event.key) || !isExpanded()) return;
+
+    event.preventDefault();
+    closeShowcase();
+  });
 
   frame.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && isExpanded()) {

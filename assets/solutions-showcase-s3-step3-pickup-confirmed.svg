@@ -1,0 +1,12 @@
+<svg width="390" height="790" viewBox="0 0 390 790" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="790" rx="46" fill="#fff"/>
+  <text x="50" y="39" fill="#101418" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700">9:41</text>
+  <circle cx="195" cy="294" r="42" fill="#54C700"/>
+  <path d="m176 293 13 14 27-30" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="195" y="386" text-anchor="middle" fill="#111518" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">Pickup order</text>
+  <text x="195" y="424" text-anchor="middle" fill="#111518" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">confirmed</text>
+  <text x="195" y="470" text-anchor="middle" fill="#68717A" font-family="Arial, Helvetica, sans-serif" font-size="15">Visit Gangnam Station after receiving</text>
+  <text x="195" y="494" text-anchor="middle" fill="#68717A" font-family="Arial, Helvetica, sans-serif" font-size="15">your ready notification.</text>
+  <rect x="58" y="565" width="274" height="54" rx="27" fill="#111518"/>
+  <text x="195" y="599" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">View pickup details</text>
+</svg>

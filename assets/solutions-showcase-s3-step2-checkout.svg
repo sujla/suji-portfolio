@@ -1,0 +1,18 @@
+<svg width="390" height="790" viewBox="0 0 390 790" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="790" rx="46" fill="#fff"/>
+  <text x="50" y="39" fill="#101418" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700">9:41</text>
+  <text x="196" y="77" text-anchor="middle" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Checkout</text>
+  <path d="M28 75h18m-18 0 10-10m-10 10 10 10" stroke="#15191D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="28" y="138" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700">Pickup summary</text>
+  <rect x="28" y="182" width="334" height="1" fill="#E7EAEE"/>
+  <text x="28" y="230" fill="#69717A" font-family="Arial, Helvetica, sans-serif" font-size="15">Pickup store</text>
+  <text x="334" y="230" text-anchor="end" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Gangnam Station</text>
+  <rect x="28" y="258" width="334" height="1" fill="#E7EAEE"/>
+  <text x="28" y="306" fill="#69717A" font-family="Arial, Helvetica, sans-serif" font-size="15">Pickup time</text>
+  <text x="334" y="306" text-anchor="end" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Today</text>
+  <rect x="28" y="334" width="334" height="1" fill="#E7EAEE"/>
+  <text x="28" y="382" fill="#69717A" font-family="Arial, Helvetica, sans-serif" font-size="15">Stock status</text>
+  <text x="334" y="382" text-anchor="end" fill="#54C700" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Available</text>
+  <rect x="28" y="478" width="334" height="54" rx="27" fill="#111518"/>
+  <text x="195" y="512" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Place pickup order</text>
+</svg>

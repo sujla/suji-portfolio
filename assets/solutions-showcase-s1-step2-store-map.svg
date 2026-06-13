@@ -1,0 +1,29 @@
+<svg width="390" height="790" viewBox="0 0 390 790" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="790" rx="46" fill="#fff"/>
+  <text x="50" y="39" fill="#101418" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700">9:41</text>
+  <text x="196" y="77" text-anchor="middle" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Olive Young Store</text>
+  <path d="M28 75h18m-18 0 10-10m-10 10 10 10" stroke="#15191D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M338 83V69l10-8 10 8v14h-20z" stroke="#15191D" stroke-width="2.2" stroke-linejoin="round"/>
+  <rect x="22" y="103" width="302" height="38" rx="19" fill="#F0F1F4"/>
+  <text x="42" y="127" fill="#98A0AA" font-family="Arial, Helvetica, sans-serif" font-size="13">Enter store or area name</text>
+  <circle cx="292" cy="122" r="8" stroke="#111518" stroke-width="2"/>
+  <path d="m298 128 8 8" stroke="#111518" stroke-width="2" stroke-linecap="round"/>
+  <g transform="translate(0 151)">
+    <rect width="390" height="639" fill="#E6EAF0"/>
+    <path d="M0 350 120 280 230 302 390 220" stroke="#CED5DE" stroke-width="22"/>
+    <path d="M240 0 262 190 390 310" stroke="#D4D9E0" stroke-width="20"/>
+    <path d="M0 105h390M0 205h390M0 430h390M72 0v639M160 0v639M310 0v639" stroke="#D4DAE2" stroke-width="4"/>
+    <path d="M290 0h100v639H250c36-78 42-143 20-214-18-59-4-118 42-180 33-46 28-126-22-245z" fill="#CDECD5"/>
+    <rect x="92" y="190" width="158" height="28" rx="14" fill="#F2FFD5" filter="url(#shadow)"/>
+    <text x="110" y="209" fill="#111518" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">Myeongdong Time Walk</text>
+    <rect x="154" y="230" width="150" height="32" rx="16" fill="#54C700" filter="url(#shadow)"/>
+    <text x="174" y="252" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700">Myeongdong Town</text>
+    <rect x="112" y="312" width="146" height="28" rx="14" fill="#F2FFD5" filter="url(#shadow)"/>
+    <text x="132" y="331" fill="#111518" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">Myeongdong Branch</text>
+    <circle cx="236" cy="259" r="9" fill="#FF443F"/>
+    <rect x="52" y="492" width="286" height="86" rx="16" fill="#fff" filter="url(#shadow)"/>
+    <text x="76" y="527" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Myeongdong Town</text>
+    <text x="76" y="553" fill="#737B85" font-family="Arial, Helvetica, sans-serif" font-size="12">0.06mi - Pickup Available</text>
+  </g>
+  <defs><filter id="shadow" x="-20%" y="-30%" width="140%" height="180%"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#020508" flood-opacity=".18"/></filter></defs>
+</svg>

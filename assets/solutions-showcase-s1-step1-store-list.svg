@@ -1,0 +1,38 @@
+<svg width="390" height="790" viewBox="0 0 390 790" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="390" height="790" rx="46" fill="#fff"/>
+  <text x="50" y="39" fill="#101418" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700">9:41</text>
+  <text x="192" y="77" text-anchor="middle" fill="#15191D" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">Store Info</text>
+  <path d="M28 75h18m-18 0 10-10m-10 10 10 10" stroke="#15191D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M338 67h18v19h-18zM344 67v-6h6v6" stroke="#15191D" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="0" y="102" width="390" height="1" fill="#E7EAEE"/>
+  <text x="28" y="132" fill="#111518" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700">Search by store</text>
+  <text x="162" y="132" fill="#7C8490" font-family="Arial, Helvetica, sans-serif" font-size="15">Search by area</text>
+  <text x="278" y="132" fill="#7C8490" font-family="Arial, Helvetica, sans-serif" font-size="15">Favorites</text>
+  <rect x="28" y="151" width="334" height="42" rx="21" stroke="#BBC2CA" stroke-width="1.5"/>
+  <text x="48" y="177" fill="#A0A7B0" font-family="Arial, Helvetica, sans-serif" font-size="13">Enter store name or address</text>
+  <circle cx="326" cy="172" r="10" stroke="#7A828B" stroke-width="2"/>
+  <path d="m333 179 10 10" stroke="#7A828B" stroke-width="2" stroke-linecap="round"/>
+  <text x="28" y="226" fill="#89919A" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="700">Total search results: 1,351</text>
+  <rect x="28" y="248" width="334" height="34" rx="4" fill="#F0F1F4"/>
+  <text x="42" y="270" fill="#A0A7B0" font-family="Arial, Helvetica, sans-serif" font-size="11">Actual operating hours may vary by store.</text>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="28" y="333" fill="#22272D" font-size="15" font-weight="700">Kyobo Book Centre Hapjeong</text>
+    <text x="28" y="358" fill="#59616A" font-size="13">14, World Cup-ro 1-gil, Mapo-gu, Seoul</text>
+    <text x="58" y="390" fill="#89919A" font-size="12">02-521-9094</text>
+    <circle cx="323" cy="386" r="7" fill="#86C451"/>
+    <text x="335" y="390" fill="#22272D" font-size="12">Open</text>
+    <path d="m334 317 6 12 13 2-9 9 2 13-12-6-12 6 2-13-9-9 13-2 6-12z" stroke="#9AA1A9" stroke-width="1.5"/>
+    <text x="28" y="455" fill="#22272D" font-size="15" font-weight="700">Mecenatpolis Branch</text>
+    <text x="28" y="480" fill="#59616A" font-size="13">45, Yanghwa-ro, Mapo-gu, Seoul</text>
+    <text x="58" y="512" fill="#89919A" font-size="12">02-597-5290</text>
+    <circle cx="323" cy="508" r="7" fill="#86C451"/>
+    <text x="335" y="512" fill="#22272D" font-size="12">Open</text>
+    <path d="m334 439 6 12 13 2-9 9 2 13-12-6-12 6 2-13-9-9 13-2 6-12z" stroke="#9AA1A9" stroke-width="1.5"/>
+    <text x="28" y="577" fill="#22272D" font-size="15" font-weight="700">Hapjeong Cafe Street Branch</text>
+    <text x="28" y="602" fill="#59616A" font-size="13">13, Dongmak-ro, Mapo-gu, Seoul</text>
+    <text x="58" y="634" fill="#89919A" font-size="12">02-588-8399</text>
+    <circle cx="323" cy="630" r="7" fill="#86C451"/>
+    <text x="335" y="634" fill="#22272D" font-size="12">Open</text>
+    <path d="m334 561 6 12 13 2-9 9 2 13-12-6-12 6 2-13-9-9 13-2 6-12z" stroke="#9AA1A9" stroke-width="1.5"/>
+  </g>
+</svg>
