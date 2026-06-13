@@ -839,11 +839,11 @@ const setupSolutionsShowcase = () => {
   const solutionsSection = document.getElementById("solutions");
   const stepsPerSolution = 3;
   const totalSteps = panels.length * stepsPerSolution;
-  const boundaryExitScrollThreshold = 1000;
+  const boundaryExitLockDuration = 650;
   const modalStepScrollThreshold = 180;
   let activeIndex = 0;
   let armedBoundaryMessage = "";
-  let boundaryScrollDistance = 0;
+  let boundaryArmedAt = 0;
   let modalStepScrollDistance = 0;
   let restoreScrollBehaviorFrame;
   let storedScrollBehavior = "";
@@ -985,7 +985,7 @@ const setupSolutionsShowcase = () => {
     const closingIndex = activeIndex;
 
     armedBoundaryMessage = "";
-    boundaryScrollDistance = 0;
+    boundaryArmedAt = 0;
     modalStepScrollDistance = 0;
     hideBoundaryToast();
     setActiveStep(closingIndex);
@@ -1002,7 +1002,7 @@ const setupSolutionsShowcase = () => {
 
   const openShowcase = () => {
     armedBoundaryMessage = "";
-    boundaryScrollDistance = 0;
+    boundaryArmedAt = 0;
     modalStepScrollDistance = 0;
     hideBoundaryToast();
     syncActiveStep();
@@ -1027,19 +1027,17 @@ const setupSolutionsShowcase = () => {
     return "";
   };
 
-  const handleBoundaryExit = (message, deltaY) => {
-    const scrollDistance = Math.abs(deltaY);
+  const handleBoundaryExit = (message) => {
+    const now = window.performance.now();
 
     if (armedBoundaryMessage !== message) {
       armedBoundaryMessage = message;
-      boundaryScrollDistance = 0;
+      boundaryArmedAt = now;
       showBoundaryToast(message);
       return;
     }
 
-    boundaryScrollDistance += scrollDistance;
-
-    if (boundaryScrollDistance < boundaryExitScrollThreshold) {
+    if (now - boundaryArmedAt < boundaryExitLockDuration) {
       showBoundaryToast(message);
       return;
     }
@@ -1052,12 +1050,12 @@ const setupSolutionsShowcase = () => {
 
     if (boundaryMessage) {
       modalStepScrollDistance = 0;
-      handleBoundaryExit(boundaryMessage, deltaY);
+      handleBoundaryExit(boundaryMessage);
       return;
     }
 
     armedBoundaryMessage = "";
-    boundaryScrollDistance = 0;
+    boundaryArmedAt = 0;
     hideBoundaryToast();
     modalStepScrollDistance += deltaY;
 
@@ -1138,7 +1136,7 @@ const setupSolutionsShowcase = () => {
         return;
       }
 
-      handleBoundaryExit("You've reached the top", boundaryExitScrollThreshold);
+      handleBoundaryExit("You've reached the top");
       return;
     }
 
@@ -1147,7 +1145,7 @@ const setupSolutionsShowcase = () => {
       return;
     }
 
-    handleBoundaryExit("You've reached the bottom", boundaryExitScrollThreshold);
+    handleBoundaryExit("You've reached the bottom");
   });
 
   window.addEventListener("resize", () => {
