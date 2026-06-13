@@ -839,10 +839,14 @@ const setupSolutionsShowcase = () => {
   const solutionsSection = document.getElementById("solutions");
   const stepsPerSolution = 3;
   const totalSteps = panels.length * stepsPerSolution;
-  const boundaryExitScrollThreshold = 1380;
+  const boundaryExitScrollThreshold = 1000;
+  const modalStepScrollThreshold = 180;
   let activeIndex = 0;
   let armedBoundaryMessage = "";
   let boundaryScrollDistance = 0;
+  let modalStepScrollDistance = 0;
+  let restoreScrollBehaviorFrame;
+  let storedScrollBehavior = "";
   let boundaryToastTimeout;
   let touchStartYForShowcase;
 
@@ -873,6 +877,16 @@ const setupSolutionsShowcase = () => {
       end: Math.max(start + 1, end),
       start,
     };
+  };
+
+  const getCollapsedScrollRange = () => {
+    const wasExpanded = isExpanded();
+
+    if (wasExpanded) showcase.classList.remove("is-expanded");
+    const scrollRange = getScrollRange();
+    if (wasExpanded) showcase.classList.add("is-expanded");
+
+    return scrollRange;
   };
 
   const getShowcaseProgress = () => {
@@ -917,14 +931,40 @@ const setupSolutionsShowcase = () => {
     setActiveStep(nextIndex);
   };
 
-  const scrollToStep = (index, behavior = "auto") => {
-    const { start, end } = getScrollRange();
+  const jumpToScrollTop = (top) => {
+    window.cancelAnimationFrame(restoreScrollBehaviorFrame);
+    if (restoreScrollBehaviorFrame === undefined) storedScrollBehavior = root.style.scrollBehavior;
+
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(0, top);
+    restoreScrollBehaviorFrame = window.requestAnimationFrame(() => {
+      root.style.scrollBehavior = storedScrollBehavior;
+      restoreScrollBehaviorFrame = undefined;
+      storedScrollBehavior = "";
+    });
+  };
+
+  const scrollToStep = (index, behavior = "instant", scrollRange = getScrollRange()) => {
+    const { start, end } = scrollRange;
     const progress = clamp(index, 0, totalSteps - 1) / (totalSteps - 1);
+    const top = start + (end - start) * progress;
+
+    if (behavior === "instant") {
+      jumpToScrollTop(top);
+      return;
+    }
 
     window.scrollTo({
-      top: start + (end - start) * progress,
+      top,
       behavior,
     });
+  };
+
+  const setExpandedActiveStep = (index) => {
+    const nextIndex = clamp(index, 0, totalSteps - 1);
+
+    setActiveStep(nextIndex);
+    if (isExpanded()) scrollToStep(nextIndex, "instant", getCollapsedScrollRange());
   };
 
   const hideBoundaryToast = () => {
@@ -942,15 +982,20 @@ const setupSolutionsShowcase = () => {
   };
 
   const closeShowcase = ({ focusTrigger = true } = {}) => {
+    const closingIndex = activeIndex;
+
     armedBoundaryMessage = "";
     boundaryScrollDistance = 0;
+    modalStepScrollDistance = 0;
     hideBoundaryToast();
+    setActiveStep(closingIndex);
     showcase.classList.remove("is-expanded");
     root.classList.remove("is-solutions-modal-open");
+    scrollToStep(closingIndex);
+    setActiveStep(closingIndex);
     frame.removeAttribute("role");
     frame.removeAttribute("aria-modal");
     openButton?.setAttribute("aria-expanded", "false");
-    window.requestAnimationFrame(syncActiveStep);
 
     if (focusTrigger) openButton?.focus({ preventScroll: true });
   };
@@ -958,8 +1003,11 @@ const setupSolutionsShowcase = () => {
   const openShowcase = () => {
     armedBoundaryMessage = "";
     boundaryScrollDistance = 0;
+    modalStepScrollDistance = 0;
     hideBoundaryToast();
-    scrollToStep(0);
+    syncActiveStep();
+    const openingIndex = activeIndex;
+
     showcase.classList.add("is-expanded");
     root.classList.add("is-solutions-modal-open");
     frame.setAttribute("role", "dialog");
@@ -967,8 +1015,7 @@ const setupSolutionsShowcase = () => {
     openButton?.setAttribute("aria-expanded", "true");
 
     window.requestAnimationFrame(() => {
-      syncActiveStep();
-      setActiveStep(0);
+      setExpandedActiveStep(openingIndex);
     });
   };
 
@@ -1000,6 +1047,27 @@ const setupSolutionsShowcase = () => {
     closeShowcase({ focusTrigger: false });
   };
 
+  const handleExpandedScroll = (deltaY) => {
+    const boundaryMessage = getBoundaryExitMessage(deltaY);
+
+    if (boundaryMessage) {
+      modalStepScrollDistance = 0;
+      handleBoundaryExit(boundaryMessage, deltaY);
+      return;
+    }
+
+    armedBoundaryMessage = "";
+    boundaryScrollDistance = 0;
+    hideBoundaryToast();
+    modalStepScrollDistance += deltaY;
+
+    if (Math.abs(modalStepScrollDistance) < modalStepScrollThreshold) return;
+
+    const stepDirection = modalStepScrollDistance > 0 ? 1 : -1;
+    modalStepScrollDistance = 0;
+    setExpandedActiveStep(activeIndex + stepDirection);
+  };
+
   openButton?.addEventListener("click", openShowcase);
   frame.addEventListener("click", (event) => {
     if (isExpanded() || event.target.closest("[data-solutions-close]")) return;
@@ -1008,20 +1076,21 @@ const setupSolutionsShowcase = () => {
   });
   closeButton?.addEventListener("click", () => closeShowcase());
 
-  window.addEventListener("scroll", syncActiveStep, { passive: true });
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!isExpanded()) syncActiveStep();
+    },
+    { passive: true },
+  );
 
   window.addEventListener(
     "wheel",
     (event) => {
-      const boundaryMessage = getBoundaryExitMessage(event.deltaY);
-      if (!boundaryMessage) {
-        armedBoundaryMessage = "";
-        boundaryScrollDistance = 0;
-        return;
-      }
+      if (!isExpanded()) return;
 
       event.preventDefault();
-      handleBoundaryExit(boundaryMessage, event.deltaY);
+      handleExpandedScroll(event.deltaY);
     },
     { passive: false },
   );
@@ -1040,42 +1109,45 @@ const setupSolutionsShowcase = () => {
       const touchY = event.touches?.[0]?.clientY || touchStartYForShowcase;
       const deltaY = touchStartYForShowcase - touchY;
       touchStartYForShowcase = touchY;
-      const boundaryMessage = getBoundaryExitMessage(deltaY);
-      if (!boundaryMessage) {
-        armedBoundaryMessage = "";
-        boundaryScrollDistance = 0;
-        return;
-      }
+      if (!isExpanded()) return;
 
       event.preventDefault();
-      handleBoundaryExit(boundaryMessage, deltaY);
+      handleExpandedScroll(deltaY);
     },
     { passive: false },
   );
 
   window.addEventListener("keydown", (event) => {
-    if (!["Escape", "Esc"].includes(event.key) || !isExpanded()) return;
+    if (!isExpanded() || event.defaultPrevented) return;
 
-    event.preventDefault();
-    closeShowcase();
-  });
-
-  frame.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && isExpanded()) {
+      event.preventDefault();
       closeShowcase();
       return;
     }
 
+    const backwardKeys = ["ArrowUp", "PageUp"];
     const forwardKeys = ["ArrowDown", "PageDown", " ", "Spacebar"];
-    if (!forwardKeys.includes(event.key)) return;
+    if (![...backwardKeys, ...forwardKeys].includes(event.key)) return;
 
-    if (activeIndex < totalSteps - 1) {
-      event.preventDefault();
-      scrollToStep(activeIndex + 1, "smooth");
+    event.preventDefault();
+
+    if (backwardKeys.includes(event.key)) {
+      if (activeIndex > 0) {
+        setExpandedActiveStep(activeIndex - 1);
+        return;
+      }
+
+      handleBoundaryExit("You've reached the top", boundaryExitScrollThreshold);
       return;
     }
 
-    closeShowcase({ focusTrigger: false });
+    if (activeIndex < totalSteps - 1) {
+      setExpandedActiveStep(activeIndex + 1);
+      return;
+    }
+
+    handleBoundaryExit("You've reached the bottom", boundaryExitScrollThreshold);
   });
 
   window.addEventListener("resize", () => {
