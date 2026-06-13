@@ -827,6 +827,181 @@ const setupOpportunityCards = () => {
   });
 };
 
+const setupSolutionsShowcase = () => {
+  const showcase = document.querySelector("[data-solutions-showcase]");
+  if (!showcase) return;
+
+  const frame = showcase.querySelector("[data-solutions-frame]");
+  const scrollport = showcase.querySelector("[data-solutions-scroll]");
+  const openButton = showcase.querySelector("[data-solutions-open]");
+  const closeButton = showcase.querySelector("[data-solutions-close]");
+  const panels = [...showcase.querySelectorAll("[data-solution-panel]")];
+  const solutionsSection = document.getElementById("solutions");
+  const stepsPerSolution = 3;
+  const totalSteps = panels.length * stepsPerSolution;
+  let activeIndex = 0;
+  let touchStartYForShowcase;
+
+  if (!frame || !scrollport || !panels.length || totalSteps <= 1) return;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  const isExpanded = () => showcase.classList.contains("is-expanded");
+
+  const getDocumentTop = (target) => target.getBoundingClientRect().top + window.scrollY;
+  const getStickyTop = () => Number.parseFloat(getComputedStyle(frame).top) || 0;
+  const getScrollStartOffset = () =>
+    Number.parseFloat(getComputedStyle(showcase).getPropertyValue("--solutions-scroll-start-offset")) || 0;
+  const getExitScrollDistance = () =>
+    Number.parseFloat(getComputedStyle(showcase).getPropertyValue("--solutions-exit-scroll-distance")) || 420;
+  const getScrollRange = () => {
+    const showcaseTop = getDocumentTop(showcase);
+    const stickyTop = getStickyTop();
+    const start = showcaseTop - stickyTop - getScrollStartOffset();
+    const end = showcaseTop + showcase.offsetHeight - frame.offsetHeight - stickyTop;
+
+    return {
+      end: Math.max(start + 1, end),
+      start,
+    };
+  };
+
+  const getShowcaseProgress = () => {
+    const { start, end } = getScrollRange();
+
+    return clamp((window.scrollY - start) / (end - start), 0, 1);
+  };
+
+  const syncActiveStep = () => {
+    const { end } = getScrollRange();
+    const nextIndex = clamp(Math.round(getShowcaseProgress() * (totalSteps - 1)), 0, totalSteps - 1);
+    const activeSolutionIndex = Math.floor(nextIndex / stepsPerSolution);
+    const activeStepIndex = nextIndex % stepsPerSolution;
+
+    activeIndex = nextIndex;
+    const exitProgress = clamp((window.scrollY - end) / getExitScrollDistance(), 0, 1);
+    const exitDistance = frame.offsetHeight + getStickyTop() + 96;
+    solutionsSection?.style.setProperty("--solutions-exit-y", `${Math.round(exitDistance * -exitProgress)}px`);
+
+    panels.forEach((panel, panelIndex) => {
+      const panelIsActive = panelIndex === activeSolutionIndex;
+
+      panel.classList.toggle("is-active", panelIsActive);
+      panel.dataset.activeStep = String(panelIsActive ? activeStepIndex : 0);
+      panel.querySelectorAll("[data-solution-step]").forEach((step) => {
+        step.classList.toggle(
+          "is-active",
+          panelIsActive && Number(step.dataset.stepIndex) === activeStepIndex,
+        );
+      });
+      panel.querySelectorAll("[data-phone-screen]").forEach((screen) => {
+        screen.classList.toggle(
+          "is-active",
+          panelIsActive && Number(screen.dataset.stepIndex) === activeStepIndex,
+        );
+      });
+    });
+  };
+
+  const scrollToStep = (index, behavior = "auto") => {
+    const { start, end } = getScrollRange();
+    const progress = clamp(index, 0, totalSteps - 1) / (totalSteps - 1);
+
+    window.scrollTo({
+      top: start + (end - start) * progress,
+      behavior,
+    });
+  };
+
+  const closeShowcase = ({ focusTrigger = true } = {}) => {
+    showcase.classList.remove("is-expanded");
+    root.classList.remove("is-solutions-modal-open");
+    frame.removeAttribute("role");
+    frame.removeAttribute("aria-modal");
+    openButton?.setAttribute("aria-expanded", "false");
+    window.requestAnimationFrame(syncActiveStep);
+
+    if (focusTrigger) openButton?.focus({ preventScroll: true });
+  };
+
+  const openShowcase = () => {
+    showcase.classList.add("is-expanded");
+    root.classList.add("is-solutions-modal-open");
+    frame.setAttribute("role", "dialog");
+    frame.setAttribute("aria-modal", "true");
+    openButton?.setAttribute("aria-expanded", "true");
+
+    window.requestAnimationFrame(() => {
+      syncActiveStep();
+      closeButton?.focus({ preventScroll: true });
+    });
+  };
+
+  const shouldCloseExpandedShowcase = (deltaY) =>
+    isExpanded() && deltaY > 0 && activeIndex >= totalSteps - 1;
+
+  openButton?.addEventListener("click", openShowcase);
+  closeButton?.addEventListener("click", () => closeShowcase());
+
+  window.addEventListener("scroll", syncActiveStep, { passive: true });
+
+  window.addEventListener(
+    "wheel",
+    (event) => {
+      if (!shouldCloseExpandedShowcase(event.deltaY)) return;
+
+      closeShowcase({ focusTrigger: false });
+    },
+    { passive: true },
+  );
+
+  window.addEventListener(
+    "touchstart",
+    (event) => {
+      touchStartYForShowcase = event.touches?.[0]?.clientY || 0;
+    },
+    { passive: true },
+  );
+
+  window.addEventListener(
+    "touchmove",
+    (event) => {
+      const touchY = event.touches?.[0]?.clientY || touchStartYForShowcase;
+      const deltaY = touchStartYForShowcase - touchY;
+      if (!shouldCloseExpandedShowcase(deltaY)) return;
+
+      closeShowcase({ focusTrigger: false });
+    },
+    { passive: true },
+  );
+
+  frame.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && isExpanded()) {
+      closeShowcase();
+      return;
+    }
+
+    const forwardKeys = ["ArrowDown", "PageDown", " ", "Spacebar"];
+    if (!forwardKeys.includes(event.key)) return;
+
+    if (activeIndex < totalSteps - 1) {
+      event.preventDefault();
+      scrollToStep(activeIndex + 1, "smooth");
+      return;
+    }
+
+    closeShowcase({ focusTrigger: false });
+  });
+
+  window.addEventListener("resize", () => {
+    window.requestAnimationFrame(() => {
+      scrollToStep(activeIndex);
+      syncActiveStep();
+    });
+  });
+
+  syncActiveStep();
+};
+
 const getProjectOverviewTarget = () => document.getElementById("project-overview");
 const overviewSnapOffset = 0;
 
@@ -937,6 +1112,7 @@ applyTheme(localStorage.getItem("portfolio-theme") || "light");
 setupAffectedUserActiveState();
 setupAffectedUserVideos();
 setupOpportunityCards();
+setupSolutionsShowcase();
 syncDetailNav();
 syncActiveToc();
 
