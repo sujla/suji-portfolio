@@ -20,7 +20,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../../styles.css?v=solutions-modal-lock" />
-    <link rel="stylesheet" href="../../detail-styles.css?v=solutions-modal-lock" />
+    <link rel="stylesheet" href="../../detail-styles.css?v=showcase-step-divider" />
   </head>
   <body class="detail-page" data-project-slug="store-guide">
     <nav class="detail-gnb" aria-label="Project navigation"></nav>
@@ -282,31 +282,30 @@
               <section class="solutions-showcase" data-solutions-showcase aria-label="Solutions walkthrough">
                 <div class="solutions-showcase-frame" data-solutions-frame>
                   <button class="solutions-showcase-control solutions-showcase-open" type="button" data-solutions-open aria-label="Expand solutions walkthrough">
-                    <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M9 4H4V9M4 4L10 10M15 20H20V15M20 20L14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <span class="solutions-showcase-control-icon" aria-hidden="true"></span>
                   </button>
                   <button class="solutions-showcase-control solutions-showcase-close" type="button" data-solutions-close aria-label="Close solutions walkthrough">
-                    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M5 5L19 19M19 5L5 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                    <span class="solutions-showcase-control-icon" aria-hidden="true"></span>
                   </button>
                   <div class="solutions-showcase-scroll" data-solutions-scroll>
                     <div class="solutions-showcase-stage">
                       <article class="solutions-showcase-panel is-active" data-solution-panel data-solution-index="0" data-active-step="0">
                         <div class="solutions-showcase-copy">
-                          <span class="solutions-showcase-number">1</span>
+                          <span class="solutions-showcase-number">1.</span>
                           <h3>Map-first<br/>Store Discovery</h3>
                           <div class="solutions-showcase-steps">
                             <div class="solutions-showcase-step is-active" data-solution-step data-step-index="0">
+                              <span class="solutions-showcase-step-divider" aria-hidden="true"></span>
                               <h4>What Users Needed :</h4>
                               <p>Customers needed a faster way to find nearby stores based on their location.</p>
                             </div>
                             <div class="solutions-showcase-step" data-solution-step data-step-index="1">
+                              <span class="solutions-showcase-step-divider" aria-hidden="true"></span>
                               <h4>What We Changed :</h4>
                               <p>Replaced the static text-based store list with a map-first experience.</p>
                             </div>
                             <div class="solutions-showcase-step" data-solution-step data-step-index="2">
+                              <span class="solutions-showcase-step-divider" aria-hidden="true"></span>
                               <h4>Solution I</h4>
                               <p>Helped users quickly explore nearby stores or search for a specific store.</p>
                             </div>
@@ -315,7 +314,7 @@
                         <div class="solutions-phone-stage" aria-hidden="true">
                           <div class="solutions-phone">
                             <div class="solutions-phone-screen-stack">
-                              <img class="solutions-phone-screen is-active" data-phone-screen data-step-index="0" src="../../assets/solutions-showcase-s1-step1-store-list.svg" alt="">
+                              <img class="solutions-phone-screen is-active" data-phone-screen data-step-index="0" src="../../assets/solutions-showcase-s1-step1-store-list.png" alt="">
                               <img class="solutions-phone-screen" data-phone-screen data-step-index="1" src="../../assets/solutions-showcase-s1-step2-store-map.svg" alt="">
                               <img class="solutions-phone-screen" data-phone-screen data-step-index="2" src="../../assets/solutions-showcase-s1-step3-store-map-zoom.svg" alt="">
                             </div>
@@ -329,14 +328,17 @@
                           <h3>Store-level<br/>Stock Visibility</h3>
                           <div class="solutions-showcase-steps">
                             <div class="solutions-showcase-step is-active" data-solution-step data-step-index="0">
+                              <span class="solutions-showcase-step-divider" aria-hidden="true"></span>
                               <h4>What Users Needed :</h4>
                               <p>Customers wanted to know whether a product was available before visiting a store.</p>
                             </div>
                             <div class="solutions-showcase-step" data-solution-step data-step-index="1">
+                              <span class="solutions-showcase-step-divider" aria-hidden="true"></span>
                               <h4>What We Changed :</h4>
                               <p>Added store-by-store availability states directly into the product flow.</p>
                             </div>
                             <div class="solutions-showcase-step" data-solution-step data-step-index="2">
+                              <span class="solutions-showcase-step-divider" aria-hidden="true"></span>
                               <h4>Solution II</h4>
                               <p>Made nearby inventory easier to compare with clear stock and pickup labels.</p>
                             </div>
@@ -359,14 +361,17 @@
                           <h3>Faster<br/>Pickup Decision</h3>
                           <div class="solutions-showcase-steps">
                             <div class="solutions-showcase-step is-active" data-solution-step data-step-index="0">
+                              <span class="solutions-showcase-step-divider" aria-hidden="true"></span>
                               <h4>What Users Needed :</h4>
                               <p>Shoppers needed confidence that the chosen store could complete their pickup order.</p>
                             </div>
                             <div class="solutions-showcase-step" data-solution-step data-step-index="1">
+                              <span class="solutions-showcase-step-divider" aria-hidden="true"></span>
                               <h4>What We Changed :</h4>
                               <p>Connected store selection, availability, and pickup actions in one decision flow.</p>
                             </div>
                             <div class="solutions-showcase-step" data-solution-step data-step-index="2">
+                              <span class="solutions-showcase-step-divider" aria-hidden="true"></span>
                               <h4>Solution III</h4>
                               <p>Reduced the path from discovery to pickup so users could order and visit with confidence.</p>
                             </div>
@@ -403,6 +408,6 @@
       </section>
 
     </main>
-    <script type="module" src="../../detail.js?v=solutions-modal-boundary-lock"></script>
+    <script type="module" src="../../detail.js?v=toc-jump-rise"></script>
   </body>
 </html>

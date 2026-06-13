@@ -1264,6 +1264,25 @@ const handleInitialKeyboardSnap = (event) => {
   triggerProjectOverviewSnap(event);
 };
 
+const jumpToTocTarget = (target) => {
+  const previousScrollBehavior = root.style.scrollBehavior;
+
+  root.style.scrollBehavior = "auto";
+  target.scrollIntoView({ block: "start", behavior: "auto" });
+  document.querySelectorAll(".is-toc-jump-revealing").forEach((element) => {
+    element.classList.remove("is-toc-jump-revealing");
+  });
+  target.classList.remove("is-toc-jump-revealing");
+  void target.offsetHeight;
+  target.classList.add("is-toc-jump-revealing");
+  window.setTimeout(() => {
+    target.classList.remove("is-toc-jump-revealing");
+  }, 620);
+  window.requestAnimationFrame(() => {
+    root.style.scrollBehavior = previousScrollBehavior;
+  });
+};
+
 applyTheme(localStorage.getItem("portfolio-theme") || "light");
 setupAffectedUserActiveState();
 setupAffectedUserVideos();
@@ -1287,7 +1306,7 @@ tocLinks.forEach((link) => {
     if (!id || !target) return;
 
     setActiveToc(id);
-    target.scrollIntoView({ block: "start", behavior: "smooth" });
+    jumpToTocTarget(target);
   });
 });
 
