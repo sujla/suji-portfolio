@@ -1272,7 +1272,6 @@ ul.affected-user-card-detail {
   --solutions-scroll-steps: 8;
   --solutions-step-distance: 560px;
   --solutions-scroll-start-offset: 0px;
-  --solutions-exit-scroll-distance: 420px;
 
   position: relative;
   height: calc(var(--solutions-frame-height) + (var(--solutions-step-distance) * var(--solutions-scroll-steps)));
@@ -1297,7 +1296,7 @@ ul.affected-user-card-detail {
   align-self: start;
   top: 38px;
   z-index: 4;
-  transform: translate3d(0, var(--solutions-exit-y, 0px), 0);
+  transform: translate3d(0, var(--solutions-copy-exit-y, 0px), 0);
   will-change: transform;
 }
 
@@ -1315,8 +1314,6 @@ ul.affected-user-card-detail {
   color: var(--solutions-text);
   margin: 0 32px;
   box-shadow: none;
-  transform: translate3d(0, var(--solutions-exit-y, 0px), 0);
-  will-change: transform;
   transition:
     border-radius 260ms cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -1329,7 +1326,7 @@ ul.affected-user-card-detail {
 
 .solutions-showcase:not(.is-expanded) .solutions-showcase-frame:hover {
   box-shadow: 0 32px 56px rgba(2, 5, 8, 0.08);
-  transform: translate3d(0, calc(var(--solutions-exit-y, 0px) - 2px), 0);
+  transform: translate3d(0, -2px, 0);
 }
 
 .solutions-showcase.is-expanded .solutions-showcase-frame {

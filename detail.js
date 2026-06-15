@@ -832,11 +832,11 @@ const setupSolutionsShowcase = () => {
   if (!showcase) return;
 
   const frame = showcase.querySelector("[data-solutions-frame]");
+  const stickyArea = showcase.closest(".solutions-sticky-area");
   const scrollport = showcase.querySelector("[data-solutions-scroll]");
   const openButton = showcase.querySelector("[data-solutions-open]");
   const closeButton = showcase.querySelector("[data-solutions-close]");
   const panels = [...showcase.querySelectorAll("[data-solution-panel]")];
-  const solutionsSection = document.getElementById("solutions");
   const stepsPerSolution = 3;
   const totalSteps = panels.length * stepsPerSolution;
   const boundaryExitLockDuration = 650;
@@ -865,8 +865,6 @@ const setupSolutionsShowcase = () => {
   const getStickyTop = () => Number.parseFloat(getComputedStyle(frame).top) || 0;
   const getScrollStartOffset = () =>
     Number.parseFloat(getComputedStyle(showcase).getPropertyValue("--solutions-scroll-start-offset")) || 0;
-  const getExitScrollDistance = () =>
-    Number.parseFloat(getComputedStyle(showcase).getPropertyValue("--solutions-exit-scroll-distance")) || 420;
   const getScrollRange = () => {
     const showcaseTop = getDocumentTop(showcase);
     const stickyTop = getStickyTop();
@@ -923,11 +921,9 @@ const setupSolutionsShowcase = () => {
   const syncActiveStep = () => {
     const { end } = getScrollRange();
     const nextIndex = clamp(Math.round(getShowcaseProgress() * (totalSteps - 1)), 0, totalSteps - 1);
+    const copyExitY = Math.min(0, end - window.scrollY);
 
-    const exitProgress = clamp((window.scrollY - end) / getExitScrollDistance(), 0, 1);
-    const exitDistance = frame.offsetHeight + getStickyTop() + 96;
-    solutionsSection?.style.setProperty("--solutions-exit-y", `${Math.round(exitDistance * -exitProgress)}px`);
-
+    stickyArea?.style.setProperty("--solutions-copy-exit-y", `${Math.round(copyExitY)}px`);
     setActiveStep(nextIndex);
   };
 
