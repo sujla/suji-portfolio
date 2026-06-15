@@ -12,6 +12,9 @@ const yearRail = document.querySelector("[data-year-rail]");
 const themeToggle = document.querySelector(".theme-toggle");
 const root = document.documentElement;
 const lastProjectStorageKey = "portfolio-last-project-slug";
+const projectTransitionDuration = 760;
+const projectTransitionMargin = 12;
+let projectTransitionInProgress = false;
 
 const getSessionItem = (key) => {
   try {
@@ -63,6 +66,128 @@ const getProjectDetailSlug = (project) => {
 };
 
 const getProjectDetailHref = (project) => `./projects/${getProjectDetailSlug(project)}/`;
+
+const isPlainNavigationClick = (event, link) =>
+  event.button === 0 &&
+  !event.defaultPrevented &&
+  !event.metaKey &&
+  !event.ctrlKey &&
+  !event.shiftKey &&
+  !event.altKey &&
+  !link.target &&
+  !link.hasAttribute("download");
+
+const getTransitionTargetRect = () => ({
+  top: projectTransitionMargin,
+  left: projectTransitionMargin,
+  width: window.innerWidth - projectTransitionMargin * 2,
+  height: window.innerHeight - projectTransitionMargin * 2,
+});
+
+const createProjectTransitionClone = (card) => {
+  const rect = card.getBoundingClientRect();
+  const targetRect = getTransitionTargetRect();
+  const computedStyle = window.getComputedStyle(card);
+  const projectStyle = window.getComputedStyle(card.closest(".project-section"));
+  const mediaStyle = window.getComputedStyle(card.querySelector(".project-media"));
+  const summary = card.querySelector(".project-summary");
+  const gap = Number.parseFloat(computedStyle.rowGap || computedStyle.gap) || 0;
+  const summaryHeight = summary?.getBoundingClientRect().height || 0;
+  const targetMediaHeight = Math.max(0, targetRect.height - summaryHeight - gap);
+  const layer = document.createElement("div");
+  const cardClone = card.cloneNode(true);
+
+  cardClone.classList.add("project-transition-card");
+  cardClone.removeAttribute("href");
+  cardClone.removeAttribute("aria-label");
+  cardClone.setAttribute("aria-hidden", "true");
+  Object.assign(cardClone.style, {
+    top: `${rect.top}px`,
+    left: `${rect.left}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    gap: computedStyle.gap,
+    gridTemplateRows: computedStyle.gridTemplateRows,
+    maxHeight: "none",
+  });
+  cardClone.style.setProperty("--project-color", projectStyle.getPropertyValue("--project-color"));
+  cardClone.style.setProperty("--project-sub-color", projectStyle.getPropertyValue("--project-sub-color"));
+  cardClone.style.setProperty("--project-media-shadow", mediaStyle.boxShadow);
+
+  layer.className = "project-transition-layer";
+  layer.append(cardClone);
+  document.body.append(layer);
+
+  return {
+    cardClone,
+    targetRect,
+    targetGridTemplateRows: `${targetMediaHeight}px ${summaryHeight}px`,
+  };
+};
+
+const runProjectTransition = (link) => {
+  if (projectTransitionInProgress) return;
+
+  const section = link.closest(".project-section");
+
+  if (!section) {
+    window.location.href = link.href;
+    return;
+  }
+
+  projectTransitionInProgress = true;
+  section.classList.add("is-transition-source");
+  document.body.classList.add("is-project-transitioning");
+  document.documentElement.classList.add("is-project-transitioning");
+
+  const { cardClone, targetRect, targetGridTemplateRows } = createProjectTransitionClone(link);
+
+  cardClone.animate(
+    [
+      {
+        top: cardClone.style.top,
+        left: cardClone.style.left,
+        width: cardClone.style.width,
+        height: cardClone.style.height,
+        gridTemplateRows: cardClone.style.gridTemplateRows,
+        opacity: 1,
+        offset: 0,
+      },
+      {
+        opacity: 1,
+        offset: 0.9,
+      },
+      {
+        top: `${targetRect.top}px`,
+        left: `${targetRect.left}px`,
+        width: `${targetRect.width}px`,
+        height: `${targetRect.height}px`,
+        gridTemplateRows: targetGridTemplateRows,
+        opacity: 0,
+        offset: 1,
+      },
+    ],
+    {
+      duration: projectTransitionDuration,
+      easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+      fill: "forwards",
+    },
+  );
+
+  window.setTimeout(() => {
+    window.location.href = link.href;
+  }, projectTransitionDuration - 120);
+};
+
+const resetProjectTransition = () => {
+  projectTransitionInProgress = false;
+  document.documentElement.classList.remove("is-project-transitioning");
+  document.body.classList.remove("is-project-transitioning");
+  document.querySelectorAll(".project-transition-layer").forEach((layer) => layer.remove());
+  document.querySelectorAll(".is-transition-source").forEach((section) => {
+    section.classList.remove("is-transition-source");
+  });
+};
 
 const renderProjects = () => {
   totalProjects.textContent = padProjectNumber(projectSettings.totalProjectCount);
@@ -219,6 +344,16 @@ themeToggle.addEventListener("click", () => {
   applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
 });
 
+projectList.addEventListener("click", (event) => {
+  const link = event.target.closest(".project-link");
+
+  if (!link || !projectList.contains(link) || !isPlainNavigationClick(event, link)) return;
+
+  event.preventDefault();
+  runProjectTransition(link);
+});
+
 window.addEventListener("scroll", requestProjectUpdate, { passive: true });
 window.addEventListener("resize", requestProjectUpdate);
+window.addEventListener("pageshow", resetProjectTransition);
 updateFocusedProject();
