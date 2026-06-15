@@ -14,8 +14,8 @@ export const projects = [
     number: "01",
     year: 2024,
     keywords: ["E-commerce", "Discovery Optimization", "Map-based UX"],
-    title: "Nearby Stores,|Right Products",
-    sideTitle: "Map-based|Store Finder Renewal",
+    title: "Nearby Stores, |Right Products",
+    sideTitle: "Map-based |Store Finder Renewal",
     brief: [
       "This project aimed to transform Olive Young’s static store finder into a map-based shopping tool.",
       "The goal was to help customers connect product interest to nearby store availability and pickup, reducing friction between digital browsing and physical store purchase."
@@ -41,7 +41,7 @@ export const projects = [
     number: "02",
     year: 2025,
     keywords: ["E-commerce", "Data-driven Design", "Conversion Optimization"],
-    title: "Converting Intent|into Pickup",
+    title: "Converting Intent |into Pickup",
     sideTitle: "Pickup Order UX Enhancement",
     brief: [
       "This data-driven enhancement focused on customers with clear purchase intent who needed a clearer final step toward pickup.",
@@ -68,7 +68,7 @@ export const projects = [
     number: "03",
     year: 2023,
     keywords: ["Workflow Automation", "Modular System"],
-    title: "From Weeks|to Minutes",
+    title: "From Weeks |to Minutes",
     sideTitle: "Internal Editorial Tool Revamp",
     brief: [
     ],
