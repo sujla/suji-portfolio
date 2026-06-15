@@ -12,7 +12,7 @@ html.detail-root.is-overview-snapping {
 }
 
 :root[data-theme="dark"] body.detail-page ::selection {
-  background: rgba(247, 248, 245, 0.08);
+  background: rgba(247, 248, 245, 0.1);
   color: var(--text);
 }
 
