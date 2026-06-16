@@ -21,6 +21,10 @@ html.detail-root.is-overview-snapping {
   color: var(--text);
 }
 
+li::marker {
+  font-size: 0.72em;
+}
+
 .detail-page {
   min-height: 100svh;
   padding: 0;
@@ -443,7 +447,7 @@ html.detail-root.is-overview-snapping {
 
 .gap-20 {
   display: grid;
-  gap: 20px;
+  gap: clamp(14px, 3vw, 20px);
 }
 
 .max-width-680 {
@@ -452,7 +456,7 @@ html.detail-root.is-overview-snapping {
 
 .detail-content ul {
   margin: 0;
-  padding-left: 1.1em;
+  padding-left: 0.83em;
 }
 
 .detail-content ul,
@@ -689,28 +693,25 @@ html.detail-coming-soon-root {
 .why-matter-heading {
   display: inline-block;
   margin: 0;
-  color: var(--text);
+  color: var(--red) !important;
   font-size: 20px !important;
-}
-
-.warning-icon-rect {
-  transform: translate(-2px, 6px);
-}
-
-.why-matter-copy {
-  margin-top: 16px;
 }
 
 .why-matter-list {
   display: grid;
+  margin: -22px 40px 24px;
   gap: 6px;
-  margin-left: 2px;
-  margin-bottom: 8px;
+  padding: 24px 28px;
+  border-radius: 24px;
+  background-color: var(--red-bg);
+}
+
+.why-matter-list li {
+  padding-left: 2px;
 }
 
 .why-matter-item {
-  padding: 1px 18px;
-  border-left: 3px solid var(--red);
+  padding-bottom: 4px;
 }
 
 /* Affected users */
@@ -876,7 +877,7 @@ html.detail-coming-soon-root {
   align-self: end;
   padding: 20px 24px;
   overflow: visible;
-  border-radius: 18px;
+  border-radius: 20px;
   background: var(--surface);
   transform: translateY(0);
   transition:
@@ -1853,7 +1854,7 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .why-matter-list {
-    margin-bottom: 24px;
+    margin: -22px 28px 24px;
   }
 
   .affected-user-cards {
@@ -2025,8 +2026,8 @@ html.detail-root.is-theme-switching-lines::before {
 
   .opportunity-card {
     display: grid;
-    grid-template-columns: minmax(150px, 36%) minmax(0, 1fr);
-    gap: 24px;
+    grid-template-columns: minmax(120px, 36%) minmax(0, 1fr);
+    gap: clamp(16px, 4vw, 24px);
     align-items: center;
     padding: 8px 14px 8px 8px;
   }
@@ -2038,7 +2039,6 @@ html.detail-root.is-theme-switching-lines::before {
 
   .opportunity-card-media {
     height: 100%;
-    min-height: 150px;
     aspect-ratio: 1.2 / 1;
   }
 
@@ -2228,6 +2228,14 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 530px) {
+  .detail-content {
+    padding: 0 0 100px;
+  }
+
+  .detail-overview-heading {
+    margin-top: 18px;
+  }
+
   .detail-header {
     gap: 20px;
   }
@@ -2250,22 +2258,33 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .body-image-frame {
-    padding: 0 16px;
+    padding: 0 14px;
+  }
+
+  .why-matter-list {
+    margin: -28px 14px 24px;
+    padding: 19px 22px 18px;
+    border-radius: 20px;
   }
 
   .affected-user-cards {
-    --affected-card-gap: 10px;
-    margin-right: 16px;
-    margin-left: 16px;
+    --affected-card-gap: 12px;
+    margin-right: 14px;
+    margin-left: 14px;
   }
 
   .affected-user-card-copy {
-    padding: 16px 18px;
-    border-radius: 14px;
+    padding: 18px 20px;
   }
 
   .opportunity-cards {
-    margin: 8px 16px;
+    margin: 8px 14px;
+    gap: 8px;
+  }
+
+  .opportunity-card-media {
+    height: 100%;
+    aspect-ratio: 1 / 1;
   }
 
   .ux-goal-cards {
@@ -2318,6 +2337,9 @@ html.detail-root.is-theme-switching-lines::before {
   .ux-goal-card-grid {
     gap: 0;
     grid-template-columns: 0.9fr 1.1fr;
+    margin: -6px 4px 4px;
+    border-radius: 20px;
+    overflow: hidden;
   }
 
   .ux-goal-card-rail, .ux-goal-card--finder::before, .ux-goal-card--store::after {
@@ -2327,8 +2349,8 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .ux-goal-card--finder {
-    background-size: 390px auto;
-    background-position: right -40% bottom 5%;
+    background-size: 370px auto;
+    background-position: right -40% bottom 7%;
   }
 
   .ux-goal-card--finder .ux-goal-card-rail {
@@ -2362,8 +2384,8 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .mgrl-48 {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 24px;
+    margin-right: 24px;
   }
 
   .detail-coming-soon-inner h2 {

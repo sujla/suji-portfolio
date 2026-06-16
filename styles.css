@@ -14,7 +14,7 @@
   --green: #17ff2b;
   --orange: #ff8422;
   --red: #EE6D6D;
-  --red-bg: rgba(223, 109, 109, 0.5);
+  --red-bg: rgba(223, 109, 109, 0.18);
   --active-project-color: var(--green);
   --active-project-sub-color: rgba(23, 255, 43, 0.18);
   --stage-width: min(64vw, 1090px);
@@ -42,8 +42,8 @@
   --toggle-knob: rgba(255, 255, 255, 0.8);
   --card-text: #020508;
   --gnb-bg: rgba(231, 231, 230, 0.2);
-  --red: #FF6D6D;
-  --red-bg: rgba(223, 78, 78, 0.08);
+  --red: #f04b4b;
+  --red-bg: rgba(223, 78, 78, 0.12);
   --scrollbar-thumb: #020508;
   --scrollbar-thumb-hover: #181818;
 }
@@ -835,8 +835,8 @@ body.is-project-transitioning .is-transition-source .project-card {
   .project-summary {
     grid-template-columns: 1fr;
     height: auto;
-    gap: 16px;
-    padding: 22px 28px 25px;
+    gap: 14px;
+    padding: 20px 48px 22px 26px;
   }
 
   .project-summary h3 {
@@ -848,12 +848,39 @@ body.is-project-transitioning .is-transition-source .project-card {
     display: none;
   }
 
+  .project-summary::after {
+    display: block;
+    position: absolute;
+    top: 21px;
+    right: 18px;
+    width: 24px;
+    height: 24px;
+    background: #020508;
+    mask: url("assets/arrow_right.svg") center / contain no-repeat;
+    -webkit-mask: url("assets/arrow_right.svg") center / contain no-repeat;
+    animation: summary-arrow-nudge 1.9s ease-in-out infinite;
+    content: "";
+  }
+
+  @keyframes summary-arrow-nudge {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(4px);
+    }
+  }
+
   .summary-copy {
-    align-self: left;
+    position: relative;
+    width: auto;
+    max-width: none;
   }
 
   .summary-copy ul {
-    padding-left: 0.8em;
+    padding-left: 0.7em;
   }
 
   .summary-copy li + li {
