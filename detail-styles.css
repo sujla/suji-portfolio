@@ -1749,20 +1749,16 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 1024px) {
+  .detail-title-inner {
+    width: min(100%, 920px);
+  }
+
   .detail-shell {
     max-width: 920px;
   }
 
-  .detail-toc {
-    display: none;
-  }
-
   .detail-content-section {
-    grid-template-columns: 1fr;
-  }
-
-  .detail-content-col {
-    border-left: 0;
+    grid-template-columns: 200px minmax(0, 1fr);
   }
 
   .ux-goal-card--finder {
@@ -1789,7 +1785,7 @@ html.detail-root.is-theme-switching-lines::before {
 
 }
 
-@media (max-height: 800px) and (min-width: 761px) {
+@media (max-height: 920px) and (min-width: 761px) {
   .solutions-showcase.is-expanded .solutions-showcase-panel {
     gap: clamp(48px, 8vw, 108px);
     padding: 76px clamp(74px, 10vw, 132px) 54px clamp(96px, 13vw, 164px);
@@ -1832,6 +1828,14 @@ html.detail-root.is-theme-switching-lines::before {
     border-left: 0;
   }
 
+  .detail-toc {
+    display: none;
+  }
+
+  .detail-content-section {
+    grid-template-columns: 1fr;
+  }
+
   .detail-header h1 {
     font-size: clamp(40px, 9vw, 64px);
   }
@@ -1843,6 +1847,7 @@ html.detail-root.is-theme-switching-lines::before {
 
   .detail-content-col {
     padding: 0;
+    border-left: 0;
   }
 
   .detail-content {
@@ -2269,7 +2274,6 @@ html.detail-root.is-theme-switching-lines::before {
 
   .affected-user-cards {
     --affected-card-gap: 12px;
-    margin-right: 14px;
     margin-left: 14px;
   }
 
