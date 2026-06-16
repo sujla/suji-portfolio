@@ -14,8 +14,12 @@ const themeToggle = document.querySelector(".theme-toggle");
 const root = document.documentElement;
 const lastProjectStorageKey = "portfolio-last-project-slug";
 const projectTransitionDuration = 760;
-const projectTransitionMargin = 12;
+const desktopProjectTransitionMargin = 12;
+const mobileProjectTransitionMargin = 8;
+const mobileProjectMedia = window.matchMedia("(max-width: 600px)");
 let projectTransitionInProgress = false;
+let mobileProjectViewportHeight = 0;
+let lastViewportWidth = 0;
 
 const getSessionItem = (key) => {
   try {
@@ -78,12 +82,19 @@ const isPlainNavigationClick = (event, link) =>
   !link.target &&
   !link.hasAttribute("download");
 
-const getTransitionTargetRect = () => ({
-  top: projectTransitionMargin,
-  left: projectTransitionMargin,
-  width: window.innerWidth - projectTransitionMargin * 2,
-  height: window.innerHeight - projectTransitionMargin * 2,
-});
+const getProjectTransitionMargin = () =>
+  window.matchMedia("(max-width: 600px)").matches ? mobileProjectTransitionMargin : desktopProjectTransitionMargin;
+
+const getTransitionTargetRect = () => {
+  const projectTransitionMargin = getProjectTransitionMargin();
+
+  return {
+    top: projectTransitionMargin,
+    left: projectTransitionMargin,
+    width: window.innerWidth - projectTransitionMargin * 2,
+    height: window.innerHeight - projectTransitionMargin * 2,
+  };
+};
 
 const createProjectTransitionClone = (card) => {
   const rect = card.getBoundingClientRect();
@@ -267,6 +278,31 @@ const animateFixedUi = () => {
 let sections = [];
 let activeIndex = -1;
 
+const syncMobileProjectViewport = ({ force = false } = {}) => {
+  if (!mobileProjectMedia.matches) {
+    if (mobileProjectViewportHeight) {
+      root.style.removeProperty("--mobile-project-viewport");
+      mobileProjectViewportHeight = 0;
+      lastViewportWidth = 0;
+    }
+    return;
+  }
+
+  const nextViewportWidth = window.innerWidth;
+
+  if (!force && mobileProjectViewportHeight && nextViewportWidth === lastViewportWidth) return;
+
+  mobileProjectViewportHeight = window.innerHeight;
+  lastViewportWidth = nextViewportWidth;
+  root.style.setProperty("--mobile-project-viewport", `${mobileProjectViewportHeight}px`);
+};
+
+const getMobileFocusedProjectIndex = () => {
+  const sectionHeight = sections[0]?.offsetHeight || mobileProjectViewportHeight || window.innerHeight;
+
+  return Math.min(Math.max(Math.round(window.scrollY / sectionHeight), 0), sections.length - 1);
+};
+
 const setActiveProject = (index) => {
   if (index === activeIndex || index < 0) return;
 
@@ -288,15 +324,17 @@ const setActiveProject = (index) => {
 };
 
 const updateFocusedProject = () => {
-  const viewportCenter = window.innerHeight / 2;
-  const nextIndex = sections
-    .map((section, index) => {
-      const rect = section.getBoundingClientRect();
-      const sectionCenter = rect.top + rect.height / 2;
+  const nextIndex = mobileProjectMedia.matches
+    ? getMobileFocusedProjectIndex()
+    : sections
+        .map((section, index) => {
+          const rect = section.getBoundingClientRect();
+          const sectionCenter = rect.top + rect.height / 2;
+          const viewportCenter = window.innerHeight / 2;
 
-      return { index, distance: Math.abs(sectionCenter - viewportCenter) };
-    })
-    .sort((a, b) => a.distance - b.distance)[0]?.index;
+          return { index, distance: Math.abs(sectionCenter - viewportCenter) };
+        })
+        .sort((a, b) => a.distance - b.distance)[0]?.index;
 
   sections.forEach((section, index) => {
     const isActive = index === nextIndex;
@@ -325,6 +363,7 @@ const preferredTheme = localStorage.getItem("portfolio-theme") || "light";
 
 renderProjects();
 sections = [...document.querySelectorAll("[data-project]")];
+syncMobileProjectViewport({ force: true });
 applyTheme(preferredTheme);
 
 const restoreLastProject = () => {
@@ -357,6 +396,13 @@ projectList.addEventListener("click", (event) => {
 });
 
 window.addEventListener("scroll", requestProjectUpdate, { passive: true });
-window.addEventListener("resize", requestProjectUpdate);
+window.addEventListener("resize", () => {
+  syncMobileProjectViewport();
+  requestProjectUpdate();
+});
+mobileProjectMedia.addEventListener?.("change", () => {
+  syncMobileProjectViewport({ force: true });
+  requestProjectUpdate();
+});
 window.addEventListener("pageshow", resetProjectTransition);
 updateFocusedProject();

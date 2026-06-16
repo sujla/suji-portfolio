@@ -695,6 +695,8 @@ const setupOpportunityCards = () => {
     let pointerInside = false;
     const endHoldDelay = 400;
     const hoverLoopDelay = 1000;
+    const compactCardsMedia = window.matchMedia("(max-width: 760px)");
+    const isCompactCards = () => compactCardsMedia.matches;
 
     const clearSequenceTimer = () => {
       window.clearTimeout(sequenceTimer);
@@ -731,6 +733,8 @@ const setupOpportunityCards = () => {
     };
 
     const playCardVideo = (card, { sequence = false } = {}) => {
+      if (isCompactCards() && !sequence) return;
+
       const video = card.querySelector(".opportunity-card-video");
       if (!video) return;
 
@@ -811,6 +815,8 @@ const setupOpportunityCards = () => {
 
     cards.forEach((card, index) => {
       card.addEventListener("mouseenter", () => {
+        if (isCompactCards()) return;
+
         pointerInside = true;
         activeIndex = index;
         clearSequenceTimer();
@@ -820,8 +826,16 @@ const setupOpportunityCards = () => {
 
     container.addEventListener("mouseleave", () => {
       pointerInside = false;
-      cards.forEach(stopCardVideo);
+      if (!isCompactCards()) cards.forEach(stopCardVideo);
+
       playSequence(activeIndex + 1);
+    });
+
+    compactCardsMedia.addEventListener("change", () => {
+      pointerInside = false;
+      clearSequenceTimer();
+      cards.forEach(stopCardVideo);
+      playSequence(activeIndex);
     });
 
     playSequence(0);

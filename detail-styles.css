@@ -34,6 +34,11 @@ html.detail-root.is-overview-snapping {
   right: auto;
 }
 
+.detail-page .theme-toggle:focus-visible {
+  outline-color: var(--line);
+  box-shadow: none;
+}
+
 .detail-gnb {
   position: fixed;
   top: 0;
@@ -203,8 +208,8 @@ html.detail-root.is-overview-snapping {
   margin: 0 auto;
   padding-top: clamp(110px, 13vw, 150px);
   padding-bottom: clamp(64px, 8.8vw, 100px);
-  padding-left: clamp(28px, 4vw, 48px);
-  padding-right: clamp(28px, 4vw, 48px);
+  padding-left: clamp(24px, 4vw, 48px);
+  padding-right: clamp(24px, 4vw, 48px);
   box-sizing: border-box;
 }
 
@@ -565,7 +570,7 @@ html.detail-coming-soon-root {
 .detail-coming-soon-inner {
   position: fixed;
   right: 24px;
-  bottom: 80px;
+  bottom: clamp(64px, 8vw, 80px);
   left: 24px;
   z-index: 40;
   display: grid;
@@ -580,7 +585,7 @@ html.detail-coming-soon-root {
 .detail-coming-soon-inner h2 {
   margin: 0;
   color: var(--text);
-  font-size: clamp(28px, 5vw, 32px);
+  font-size: clamp(25px, 5vw, 32px);
   font-weight: 700;
   line-height: 0.95;
 }
@@ -2014,6 +2019,33 @@ html.detail-root.is-theme-switching-lines::before {
 
 
 @media (max-width: 760px) {
+  .opportunity-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .opportunity-card {
+    display: grid;
+    grid-template-columns: minmax(150px, 36%) minmax(0, 1fr);
+    gap: 24px;
+    align-items: center;
+    padding: 8px 14px 8px 8px;
+  }
+
+  .opportunity-card:hover {
+    box-shadow: none;
+    transform: translateY(0);
+  }
+
+  .opportunity-card-media {
+    height: 100%;
+    min-height: 150px;
+    aspect-ratio: 1.2 / 1;
+  }
+
+  .opportunity-card-copy {
+    padding: 0;
+  }
+
   .ux-goal-cards {
     margin: 0 4px;
   }
@@ -2332,6 +2364,10 @@ html.detail-root.is-theme-switching-lines::before {
   .mgrl-48 {
     margin-left: 20px;
     margin-right: 20px;
+  }
+
+  .detail-coming-soon-inner h2 {
+    margin: 12px 0 0;
   }
 }
 
