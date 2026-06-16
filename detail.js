@@ -11,6 +11,7 @@ let overviewSnapTriggered = false;
 let overviewSnapAnimating = false;
 let touchStartY = 0;
 const lastProjectStorageKey = "portfolio-last-project-slug";
+const canUseOverviewSnap = window.matchMedia("(hover: hover) and (pointer: fine)");
 
 const setSessionItem = (key, value) => {
   try {
@@ -1146,7 +1147,17 @@ const setupSolutionsShowcase = () => {
 
   window.addEventListener("resize", () => {
     window.requestAnimationFrame(() => {
-      scrollToStep(activeIndex);
+      if (isExpanded()) {
+        scrollToStep(activeIndex);
+        syncActiveStep();
+        return;
+      }
+
+      const { start, end } = getScrollRange();
+      const viewportBuffer = window.innerHeight * 0.25;
+      const isInShowcaseRange = window.scrollY >= start - viewportBuffer && window.scrollY <= end + viewportBuffer;
+
+      if (isInShowcaseRange) scrollToStep(activeIndex);
       syncActiveStep();
     });
   });
@@ -1208,7 +1219,7 @@ const animateToProjectOverview = () => {
 
 const shouldSnapToProjectOverview = (deltaY) => {
   const target = getProjectOverviewTarget();
-  if (!target || overviewSnapTriggered || deltaY <= 0) return false;
+  if (!canUseOverviewSnap.matches || !target || overviewSnapTriggered || deltaY <= 0) return false;
 
   const targetY = getOverviewScrollY();
   const hasRoomToSnap = window.scrollY < targetY - 24;

@@ -299,9 +299,10 @@ const updateFocusedProject = () => {
     .sort((a, b) => a.distance - b.distance)[0]?.index;
 
   sections.forEach((section, index) => {
-    section.classList.toggle("is-active", index === nextIndex);
-    section.classList.toggle("is-past", index < nextIndex);
-    section.classList.toggle("is-future", index > nextIndex);
+    const isActive = index === nextIndex;
+
+    section.classList.toggle("is-active", isActive);
+    section.classList.toggle("is-inactive", !isActive);
   });
 
   setActiveProject(nextIndex);
