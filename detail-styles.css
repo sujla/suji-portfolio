@@ -450,10 +450,6 @@ li::marker {
   gap: clamp(14px, 3vw, 20px);
 }
 
-.max-width-680 {
-  max-width: 680px;
-}
-
 .detail-content ul {
   margin: 0;
   padding-left: 0.83em;
