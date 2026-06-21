@@ -1025,7 +1025,7 @@ ul.affected-user-card-detail {
 .goal {
   font-size: 16px;
   line-height: 1.5 !important;
-  padding: 1px 20px;
+  padding: 0 18px;
   border-left: 3px solid var(--active-project-sub-color);
   margin: 4px 2px 8px !important;
 }
@@ -1060,7 +1060,7 @@ ul.affected-user-card-detail {
   z-index: 1;
   display: grid;
   align-content: space-between;
-  min-height: 285px;
+  min-height: 238px;
   padding: 38px 32px 40px 60px;
 }
 
@@ -1097,15 +1097,6 @@ ul.affected-user-card-detail {
 
 .ux-goal-card--store h4 {
   color: var(--ux-goal-text-primary);
-}
-
-.ux-goal-card p {
-  margin: 0 0 0 2px;
-  color: var(--ux-goal-text-secondary);
-  font-size: clamp(14px, 3vw ,15px);
-  font-weight: 400;
-  line-height: 1.42;
-  max-width: 240px;
 }
 
 .ux-goal-card-list {
@@ -1147,8 +1138,8 @@ ul.affected-user-card-detail {
   left: 32px;
   width: 1px;
   background: var(--ux-goal-line);
-  --ux-goal-rail-node-1-top: 66%;
-  --ux-goal-rail-node-2-top: 80.5%;
+  --ux-goal-rail-node-1-top: 59.6%;
+  --ux-goal-rail-node-2-top: 76.5%;
   --ux-goal-rail-node-3-top: 52%;
   --ux-goal-rail-node-4-top: 86%;
 }
@@ -1258,6 +1249,84 @@ ul.affected-user-card-detail {
   background: url("assets/ux-goal-finder-rail.svg") 0 0 / 100% 100% no-repeat;
   pointer-events: none;
   content: "";
+}
+
+/* Design explorations */
+.design-exploration-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 68px;
+  margin: 28px 40px 40px;
+}
+
+.design-exploration-card {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+}
+
+.design-exploration-card h3 {
+  margin: 0 8px 8px;
+  font-size: clamp(18px, 3vw, 22px);
+}
+
+.design-exploration-media {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  padding: clamp(18px, 3vw, 26px);
+  max-height: 400px;
+  overflow: hidden;
+  place-items: center;
+  border-radius: 20px;
+  background: var(--surface);
+}
+
+.design-exploration-media img {
+  display: block;
+  width: min(100%, 190px);
+  height: auto;
+  filter: drop-shadow(0 18px 26px rgba(2, 5, 8, 0.12));
+}
+
+.design-exploration-copy {
+  display: grid;
+  gap: 10px;
+  height: auto;
+  max-height: none;
+  min-height: 0;
+  align-self: end;
+  margin: 0;
+  padding: 24px 32px;
+  overflow: visible;
+  border-radius: 20px;
+  background: var(--surface);
+  transform: translateY(0);
+  transition:
+    opacity 280ms ease,
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.design-exploration-copy h4 {
+  margin: 0;
+  min-width: 0;
+}
+
+.design-exploration-copy ol {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding-left: 1.1em;
+  list-style: decimal;
+}
+
+.design-exploration-copy li {
+  padding-left: 2px;
+  color: var(--text-secondary);
+}
+
+.design-exploration-copy li::marker {
+  font-size: 0.98em;
 }
 
 /* Solutions showcase: section + scroll range */
@@ -1916,6 +1985,11 @@ html.detail-root.is-theme-switching-lines::before {
     margin: 14px 28px;
   }
 
+  .design-exploration-grid {
+    margin-right: 28px;
+    margin-left: 28px;
+  }
+
   .ux-goal-cards {
     margin: 8px 28px 0;
   }
@@ -2021,6 +2095,23 @@ html.detail-root.is-theme-switching-lines::before {
 
 
 @media (max-width: 760px) {
+  .design-exploration-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .design-exploration-card {
+    gap: 10px;
+  }
+
+  .design-exploration-media {
+    min-height: 0;
+  }
+
+  .design-exploration-media img {
+    width: min(100%, 150px);
+  }
+
   .opportunity-cards {
     grid-template-columns: 1fr;
   }
@@ -2277,9 +2368,18 @@ html.detail-root.is-theme-switching-lines::before {
     padding: 18px 20px;
   }
 
+  .design-exploration-copy {
+    padding: 18px 20px;
+  }
+
   .opportunity-cards {
     margin: 8px 14px;
     gap: 8px;
+  }
+
+  .design-exploration-grid {
+    margin-right: 14px;
+    margin-left: 14px;
   }
 
   .opportunity-card-media {
