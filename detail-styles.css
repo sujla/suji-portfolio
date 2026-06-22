@@ -1207,7 +1207,7 @@ ul.affected-user-card-detail {
 .ux-goal-card--finder {
   grid-column: 1 / -1;
   background:
-    url("assets/store-finder-renewal-ux-goal-img.png") right -1% bottom 18% / 405px auto no-repeat,
+    url("assets/store-guide/store-finder-renewal-ux-goal-img.png") right -1% bottom 18% / 405px auto no-repeat,
     var(--ux-goal-bg);
 }
 
@@ -1246,7 +1246,7 @@ ul.affected-user-card-detail {
   width: 50.5%;
   height: auto;
   aspect-ratio: 425 / 70;
-  background: url("assets/ux-goal-finder-rail.svg") 0 0 / 100% 100% no-repeat;
+  background: url("assets/store-guide/ux-goal-finder-rail.svg") 0 0 / 100% 100% no-repeat;
   pointer-events: none;
   content: "";
 }
@@ -2219,7 +2219,7 @@ html.detail-root.is-theme-switching-lines::before {
 
   .ux-goal-card--finder::before {
     width: 45.2%;
-    background-image: url("assets/ux-goal-finder-rail-mo.svg");
+    background-image: url("assets/store-guide/ux-goal-finder-rail-mo.svg");
     aspect-ratio: 228 / 90;
   }
 

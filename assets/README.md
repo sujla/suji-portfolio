@@ -1,9 +1,15 @@
-Add project images here and reference them from `data/projects.js`.
+Add main/project-card images and shared assets here.
 
 Example:
 
 ```js
 image: "./assets/store-guide-main.png"
+```
+
+Place detail-page-only assets in a slug folder:
+
+```text
+assets/store-guide/
 ```
 
 Theme logo files:
