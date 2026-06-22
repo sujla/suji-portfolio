@@ -842,338 +842,193 @@ const setupOpportunityCards = () => {
   });
 };
 
+const setupDesignExplorationMedia = () => {
+  const mediaItems = [...document.querySelectorAll(".design-exploration-media")];
+  const intervalDuration = 4000;
+
+  mediaItems.forEach((media) => {
+    const images = [...media.querySelectorAll("img")];
+    if (images.length < 2) return;
+
+    let activeIndex = images.findIndex((image) => image.classList.contains("is-active"));
+    let progressFrameId;
+    let rotationStartedAt = 0;
+    let remainingDuration = intervalDuration;
+    let userPaused = false;
+    let isVisible = true;
+
+    if (activeIndex < 0) activeIndex = 0;
+    images.forEach((image, index) => {
+      image.classList.add("design-exploration-image");
+      image.classList.toggle("is-active", index === activeIndex);
+    });
+
+    const toggleButton = document.createElement("button");
+    toggleButton.className = "design-exploration-toggle";
+    toggleButton.type = "button";
+    toggleButton.setAttribute("aria-label", "Pause image rotation");
+    toggleButton.setAttribute("aria-pressed", "false");
+    toggleButton.innerHTML = '<span class="design-exploration-toggle-icon" aria-hidden="true"></span>';
+    media.append(toggleButton);
+
+    const setProgress = (durationRemaining) => {
+      const progressAngle = (durationRemaining / intervalDuration) * 360;
+
+      toggleButton.style.setProperty("--rotation-progress-angle", `${progressAngle}deg`);
+    };
+
+    const setActiveImage = (nextIndex) => {
+      activeIndex = (nextIndex + images.length) % images.length;
+      images.forEach((image, index) => {
+        image.classList.toggle("is-active", index === activeIndex);
+      });
+    };
+
+    const stopRotation = () => {
+      window.cancelAnimationFrame(progressFrameId);
+      progressFrameId = undefined;
+    };
+
+    const updateProgress = (timestamp) => {
+      const elapsed = timestamp - rotationStartedAt;
+
+      remainingDuration = Math.max(0, intervalDuration - elapsed);
+      setProgress(remainingDuration);
+
+      if (remainingDuration <= 0) {
+        setActiveImage(activeIndex + 1);
+        rotationStartedAt = timestamp;
+        remainingDuration = intervalDuration;
+        setProgress(remainingDuration);
+      }
+
+      progressFrameId = window.requestAnimationFrame(updateProgress);
+    };
+
+    const startRotation = () => {
+      if (progressFrameId || userPaused || !isVisible) return;
+
+      rotationStartedAt = window.performance.now() - (intervalDuration - remainingDuration);
+      progressFrameId = window.requestAnimationFrame(updateProgress);
+    };
+
+    const syncToggleState = () => {
+      toggleButton.classList.toggle("is-paused", userPaused);
+      toggleButton.setAttribute("aria-pressed", String(userPaused));
+      toggleButton.setAttribute("aria-label", userPaused ? "Play image rotation" : "Pause image rotation");
+    };
+
+    toggleButton.addEventListener("click", () => {
+      userPaused = !userPaused;
+      syncToggleState();
+
+      if (userPaused) {
+        if (rotationStartedAt) {
+          remainingDuration = Math.max(0, intervalDuration - (window.performance.now() - rotationStartedAt));
+          setProgress(remainingDuration);
+        }
+        stopRotation();
+        return;
+      }
+
+      startRotation();
+    });
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          isVisible = Boolean(entry?.isIntersecting);
+
+          if (isVisible) {
+            startRotation();
+            return;
+          }
+
+          if (rotationStartedAt) {
+            remainingDuration = Math.max(0, intervalDuration - (window.performance.now() - rotationStartedAt));
+            setProgress(remainingDuration);
+          }
+          stopRotation();
+        },
+        { threshold: 0.2 },
+      );
+
+      observer.observe(media);
+    }
+
+    syncToggleState();
+    setProgress(remainingDuration);
+    startRotation();
+  });
+};
+
 const setupSolutionsShowcase = () => {
   const showcase = document.querySelector("[data-solutions-showcase]");
   if (!showcase) return;
 
-  const frame = showcase.querySelector("[data-solutions-frame]");
-  const stickyArea = showcase.closest(".solutions-sticky-area");
-  const scrollport = showcase.querySelector("[data-solutions-scroll]");
-  const openButton = showcase.querySelector("[data-solutions-open]");
-  const closeButton = showcase.querySelector("[data-solutions-close]");
   const panels = [...showcase.querySelectorAll("[data-solution-panel]")];
   const stepsPerSolution = 3;
-  const totalSteps = panels.length * stepsPerSolution;
-  const boundaryExitLockDuration = 650;
-  const modalStepScrollThreshold = 180;
-  let activeIndex = 0;
-  let armedBoundaryMessage = "";
-  let boundaryArmedAt = 0;
-  let modalStepScrollDistance = 0;
-  let restoreScrollBehaviorFrame;
-  let storedScrollBehavior = "";
-  let boundaryToastTimeout;
-  let touchStartYForShowcase;
 
-  if (!frame || !scrollport || !panels.length || totalSteps <= 1) return;
-
-  const boundaryToast = document.createElement("div");
-  boundaryToast.className = "solutions-showcase-toast";
-  boundaryToast.setAttribute("role", "status");
-  boundaryToast.setAttribute("aria-live", "polite");
-  frame.append(boundaryToast);
+  if (!panels.length) return;
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-  const isExpanded = () => showcase.classList.contains("is-expanded");
-
   const getDocumentTop = (target) => target.getBoundingClientRect().top + window.scrollY;
-  const getStickyTop = () => Number.parseFloat(getComputedStyle(frame).top) || 0;
-  const getScrollStartOffset = () =>
-    Number.parseFloat(getComputedStyle(showcase).getPropertyValue("--solutions-scroll-start-offset")) || 0;
-  const getScrollRange = () => {
-    const showcaseTop = getDocumentTop(showcase);
-    const stickyTop = getStickyTop();
-    const start = showcaseTop - stickyTop - getScrollStartOffset();
-    const end = showcaseTop + showcase.offsetHeight - frame.offsetHeight - stickyTop;
 
-    return {
-      end: Math.max(start + 1, end),
-      start,
-    };
+  const getPanelStickyElement = (panel) =>
+    panel.querySelector(".solutions-showcase-copy") || panel.querySelector(".solutions-phone-stage") || panel;
+
+  const getPanelStickyTop = (panel) =>
+    Number.parseFloat(getComputedStyle(getPanelStickyElement(panel)).top) || 0;
+
+  const getPanelStickyHeight = (panel) => {
+    const copy = panel.querySelector(".solutions-showcase-copy");
+    const phone = panel.querySelector(".solutions-phone-stage");
+
+    return Math.max(copy?.offsetHeight || 0, phone?.offsetHeight || 0, 1);
   };
 
-  const getCollapsedScrollRange = () => {
-    const wasExpanded = isExpanded();
-
-    if (wasExpanded) showcase.classList.remove("is-expanded");
-    const scrollRange = getScrollRange();
-    if (wasExpanded) showcase.classList.add("is-expanded");
-
-    return scrollRange;
-  };
-
-  const getShowcaseProgress = () => {
-    const { start, end } = getScrollRange();
+  const getPanelProgress = (panel) => {
+    const panelTop = getDocumentTop(panel);
+    const stickyTop = getPanelStickyTop(panel);
+    const stickyHeight = getPanelStickyHeight(panel);
+    const start = panelTop - stickyTop;
+    const end = Math.max(start + 1, panelTop + panel.offsetHeight - stickyHeight - stickyTop);
 
     return clamp((window.scrollY - start) / (end - start), 0, 1);
   };
 
-  const setActiveStep = (nextIndex) => {
-    const activeSolutionIndex = Math.floor(nextIndex / stepsPerSolution);
-    const activeStepIndex = nextIndex % stepsPerSolution;
-
-    activeIndex = nextIndex;
-    panels.forEach((panel, panelIndex) => {
-      const panelIsActive = panelIndex === activeSolutionIndex;
-
-      panel.classList.toggle("is-active", panelIsActive);
-      panel.dataset.activeStep = String(panelIsActive ? activeStepIndex : 0);
-      panel.querySelectorAll("[data-solution-step]").forEach((step) => {
-        step.classList.toggle(
-          "is-active",
-          panelIsActive && Number(step.dataset.stepIndex) === activeStepIndex,
-        );
-      });
-      panel.querySelectorAll("[data-phone-screen]").forEach((screen) => {
-        screen.classList.toggle(
-          "is-active",
-          panelIsActive && Number(screen.dataset.stepIndex) === activeStepIndex,
-        );
-      });
+  const setPanelActiveStep = (panel, activeStepIndex) => {
+    panel.dataset.activeStep = String(activeStepIndex);
+    panel.querySelectorAll("[data-solution-step]").forEach((step) => {
+      step.classList.toggle(
+        "is-active",
+        Number(step.dataset.stepIndex) === activeStepIndex,
+      );
+    });
+    panel.querySelectorAll("[data-phone-screen]").forEach((screen) => {
+      screen.classList.toggle(
+        "is-active",
+        Number(screen.dataset.stepIndex) === activeStepIndex,
+      );
     });
   };
 
   const syncActiveStep = () => {
-    const { end } = getScrollRange();
-    const nextIndex = clamp(Math.round(getShowcaseProgress() * (totalSteps - 1)), 0, totalSteps - 1);
-    const copyExitY = Math.min(0, end - window.scrollY);
+    panels.forEach((panel) => {
+      const nextIndex = clamp(Math.round(getPanelProgress(panel) * (stepsPerSolution - 1)), 0, stepsPerSolution - 1);
 
-    stickyArea?.style.setProperty("--solutions-copy-exit-y", `${Math.round(copyExitY)}px`);
-    setActiveStep(nextIndex);
-  };
-
-  const jumpToScrollTop = (top) => {
-    window.cancelAnimationFrame(restoreScrollBehaviorFrame);
-    if (restoreScrollBehaviorFrame === undefined) storedScrollBehavior = root.style.scrollBehavior;
-
-    root.style.scrollBehavior = "auto";
-    window.scrollTo(0, top);
-    restoreScrollBehaviorFrame = window.requestAnimationFrame(() => {
-      root.style.scrollBehavior = storedScrollBehavior;
-      restoreScrollBehaviorFrame = undefined;
-      storedScrollBehavior = "";
+      setPanelActiveStep(panel, nextIndex);
     });
   };
-
-  const scrollToStep = (index, behavior = "instant", scrollRange = getScrollRange()) => {
-    const { start, end } = scrollRange;
-    const progress = clamp(index, 0, totalSteps - 1) / (totalSteps - 1);
-    const top = start + (end - start) * progress;
-
-    if (behavior === "instant") {
-      jumpToScrollTop(top);
-      return;
-    }
-
-    window.scrollTo({
-      top,
-      behavior,
-    });
-  };
-
-  const setExpandedActiveStep = (index) => {
-    const nextIndex = clamp(index, 0, totalSteps - 1);
-
-    setActiveStep(nextIndex);
-    if (isExpanded()) scrollToStep(nextIndex, "instant", getCollapsedScrollRange());
-  };
-
-  const hideBoundaryToast = () => {
-    window.clearTimeout(boundaryToastTimeout);
-    boundaryToastTimeout = undefined;
-    boundaryToast.classList.remove("is-visible");
-  };
-
-  const showBoundaryToast = (message) => {
-    boundaryToast.textContent = message;
-    boundaryToast.classList.toggle("is-bottom", message === "You've reached the bottom");
-    boundaryToast.classList.add("is-visible");
-    window.clearTimeout(boundaryToastTimeout);
-    boundaryToastTimeout = window.setTimeout(hideBoundaryToast, 1200);
-  };
-
-  const closeShowcase = ({ focusTrigger = true } = {}) => {
-    const closingIndex = activeIndex;
-
-    armedBoundaryMessage = "";
-    boundaryArmedAt = 0;
-    modalStepScrollDistance = 0;
-    hideBoundaryToast();
-    setActiveStep(closingIndex);
-    showcase.classList.remove("is-expanded");
-    root.classList.remove("is-solutions-modal-open");
-    scrollToStep(closingIndex);
-    setActiveStep(closingIndex);
-    frame.removeAttribute("role");
-    frame.removeAttribute("aria-modal");
-    openButton?.setAttribute("aria-expanded", "false");
-
-    if (focusTrigger) openButton?.focus({ preventScroll: true });
-  };
-
-  const openShowcase = () => {
-    armedBoundaryMessage = "";
-    boundaryArmedAt = 0;
-    modalStepScrollDistance = 0;
-    hideBoundaryToast();
-    syncActiveStep();
-    const openingIndex = activeIndex;
-
-    showcase.classList.add("is-expanded");
-    root.classList.add("is-solutions-modal-open");
-    frame.setAttribute("role", "dialog");
-    frame.setAttribute("aria-modal", "true");
-    openButton?.setAttribute("aria-expanded", "true");
-
-    window.requestAnimationFrame(() => {
-      setExpandedActiveStep(openingIndex);
-    });
-  };
-
-  const getBoundaryExitMessage = (deltaY) => {
-    if (!isExpanded()) return "";
-    if (deltaY < 0 && activeIndex <= 0) return "You've reached the top";
-    if (deltaY > 0 && activeIndex >= totalSteps - 1) return "You've reached the bottom";
-
-    return "";
-  };
-
-  const handleBoundaryExit = (message) => {
-    const now = window.performance.now();
-
-    if (armedBoundaryMessage !== message) {
-      armedBoundaryMessage = message;
-      boundaryArmedAt = now;
-      showBoundaryToast(message);
-      return;
-    }
-
-    if (now - boundaryArmedAt < boundaryExitLockDuration) {
-      showBoundaryToast(message);
-      return;
-    }
-
-    closeShowcase({ focusTrigger: false });
-  };
-
-  const handleExpandedScroll = (deltaY) => {
-    const boundaryMessage = getBoundaryExitMessage(deltaY);
-
-    if (boundaryMessage) {
-      modalStepScrollDistance = 0;
-      handleBoundaryExit(boundaryMessage);
-      return;
-    }
-
-    armedBoundaryMessage = "";
-    boundaryArmedAt = 0;
-    hideBoundaryToast();
-    modalStepScrollDistance += deltaY;
-
-    if (Math.abs(modalStepScrollDistance) < modalStepScrollThreshold) return;
-
-    const stepDirection = modalStepScrollDistance > 0 ? 1 : -1;
-    modalStepScrollDistance = 0;
-    setExpandedActiveStep(activeIndex + stepDirection);
-  };
-
-  openButton?.addEventListener("click", openShowcase);
-  frame.addEventListener("click", (event) => {
-    if (isExpanded() || event.target.closest("[data-solutions-close]")) return;
-
-    openShowcase();
-  });
-  closeButton?.addEventListener("click", () => closeShowcase());
 
   window.addEventListener(
     "scroll",
-    () => {
-      if (!isExpanded()) syncActiveStep();
-    },
+    syncActiveStep,
     { passive: true },
   );
-
-  window.addEventListener(
-    "wheel",
-    (event) => {
-      if (!isExpanded()) return;
-
-      event.preventDefault();
-      handleExpandedScroll(event.deltaY);
-    },
-    { passive: false },
-  );
-
-  window.addEventListener(
-    "touchstart",
-    (event) => {
-      touchStartYForShowcase = event.touches?.[0]?.clientY || 0;
-    },
-    { passive: true },
-  );
-
-  window.addEventListener(
-    "touchmove",
-    (event) => {
-      const touchY = event.touches?.[0]?.clientY || touchStartYForShowcase;
-      const deltaY = touchStartYForShowcase - touchY;
-      touchStartYForShowcase = touchY;
-      if (!isExpanded()) return;
-
-      event.preventDefault();
-      handleExpandedScroll(deltaY);
-    },
-    { passive: false },
-  );
-
-  window.addEventListener("keydown", (event) => {
-    if (!isExpanded() || event.defaultPrevented) return;
-
-    if (event.key === "Escape" && isExpanded()) {
-      event.preventDefault();
-      closeShowcase();
-      return;
-    }
-
-    const backwardKeys = ["ArrowUp", "PageUp"];
-    const forwardKeys = ["ArrowDown", "PageDown", " ", "Spacebar"];
-    if (![...backwardKeys, ...forwardKeys].includes(event.key)) return;
-
-    event.preventDefault();
-
-    if (backwardKeys.includes(event.key)) {
-      if (activeIndex > 0) {
-        setExpandedActiveStep(activeIndex - 1);
-        return;
-      }
-
-      handleBoundaryExit("You've reached the top");
-      return;
-    }
-
-    if (activeIndex < totalSteps - 1) {
-      setExpandedActiveStep(activeIndex + 1);
-      return;
-    }
-
-    handleBoundaryExit("You've reached the bottom");
-  });
 
   window.addEventListener("resize", () => {
-    window.requestAnimationFrame(() => {
-      if (isExpanded()) {
-        scrollToStep(activeIndex);
-        syncActiveStep();
-        return;
-      }
-
-      const { start, end } = getScrollRange();
-      const viewportBuffer = window.innerHeight * 0.25;
-      const isInShowcaseRange = window.scrollY >= start - viewportBuffer && window.scrollY <= end + viewportBuffer;
-
-      if (isInShowcaseRange) scrollToStep(activeIndex);
-      syncActiveStep();
-    });
+    window.requestAnimationFrame(syncActiveStep);
   });
 
   syncActiveStep();
@@ -1308,6 +1163,7 @@ applyTheme(localStorage.getItem("portfolio-theme") || "light");
 setupAffectedUserActiveState();
 setupAffectedUserVideos();
 setupOpportunityCards();
+setupDesignExplorationMedia();
 setupSolutionsShowcase();
 syncDetailNav();
 syncActiveToc();
