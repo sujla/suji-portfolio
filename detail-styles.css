@@ -1429,14 +1429,6 @@ ul.affected-user-card-detail {
   min-width: 0;
 }
 
-.design-exploration-copy ol {
-  display: grid;
-  gap: 2px;
-  margin: 0;
-  padding-left: 1.1em;
-  list-style: decimal;
-}
-
 .design-exploration-copy li {
   padding-left: 2px;
   color: var(--text-secondary);
@@ -1491,9 +1483,6 @@ ul.affected-user-card-detail {
   min-height: var(--solutions-panel-min-height);
   padding: 72px clamp(64px, 9vw, 112px) 60px clamp(80px, 10vw, 132px);
   border-radius: 24px;
-  background:
-    linear-gradient(to bottom, color-mix(in srgb, var(--bg) 34%, transparent) 0%, transparent 20%),
-    var(--solutions-surface);
   color: var(--solutions-text);
 }
 
