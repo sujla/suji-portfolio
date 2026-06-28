@@ -967,24 +967,21 @@ const setupSolutionsShowcase = () => {
   if (!showcase) return;
 
   const panels = [...showcase.querySelectorAll("[data-solution-panel]")];
-  const stepsPerSolution = 3;
 
   if (!panels.length) return;
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const getDocumentTop = (target) => target.getBoundingClientRect().top + window.scrollY;
 
-  const getPanelStickyElement = (panel) =>
-    panel.querySelector(".solutions-showcase-copy") || panel.querySelector(".solutions-phone-stage") || panel;
+  const getPanelStickyElement = (panel) => panel.querySelector(".solutions-phone-stage") || panel;
 
   const getPanelStickyTop = (panel) =>
     Number.parseFloat(getComputedStyle(getPanelStickyElement(panel)).top) || 0;
 
   const getPanelStickyHeight = (panel) => {
-    const copy = panel.querySelector(".solutions-showcase-copy");
     const phone = panel.querySelector(".solutions-phone-stage");
 
-    return Math.max(copy?.offsetHeight || 0, phone?.offsetHeight || 0, 1);
+    return Math.max(phone?.offsetHeight || 0, 1);
   };
 
   const getPanelProgress = (panel) => {
@@ -997,27 +994,65 @@ const setupSolutionsShowcase = () => {
     return clamp((window.scrollY - start) / (end - start), 0, 1);
   };
 
-  const setPanelActiveStep = (panel, activeStepIndex) => {
-    panel.dataset.activeStep = String(activeStepIndex);
-    panel.querySelectorAll("[data-solution-step]").forEach((step) => {
-      step.classList.toggle(
-        "is-active",
-        Number(step.dataset.stepIndex) === activeStepIndex,
-      );
+  const setPanelActiveView = (panel, view) => {
+    const currentView = panel.dataset.activeView;
+    const toggles = [...panel.querySelectorAll(".solutions-view-toggle")];
+
+    panel.dataset.activeView = view;
+    panel.querySelectorAll("[data-solution-view-toggle]").forEach((button) => {
+      const isActive = button.dataset.solutionViewToggle === view;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
     });
-    panel.querySelectorAll("[data-phone-screen]").forEach((screen) => {
-      screen.classList.toggle(
-        "is-active",
-        Number(screen.dataset.stepIndex) === activeStepIndex,
-      );
+
+    if (currentView && currentView !== view) {
+      toggles.forEach((toggle) => {
+        toggle.classList.remove("is-switching");
+        window.requestAnimationFrame(() => {
+          toggle.classList.add("is-switching");
+        });
+      });
+    }
+  };
+
+  const setPanelProgress = (panel, progress) => {
+    const stacks = [...panel.querySelectorAll(".solutions-phone-screen-stack")];
+    const maxScreenCount = Math.max(
+      1,
+      ...stacks.map((stack) => stack.querySelectorAll("[data-phone-screen]").length),
+    );
+    const activeStepIndex = clamp(Math.round(progress * (maxScreenCount - 1)), 0, maxScreenCount - 1);
+
+    panel.dataset.activeStep = String(activeStepIndex);
+
+    stacks.forEach((stack) => {
+      const screens = [...stack.querySelectorAll("[data-phone-screen]")];
+      if (!screens.length) return;
+
+      const activeScreenIndex = clamp(Math.round(progress * (screens.length - 1)), 0, screens.length - 1);
+
+      screens.forEach((screen, index) => {
+        screen.classList.toggle(
+          "is-active",
+          index === activeScreenIndex,
+        );
+      });
     });
   };
 
+  panels.forEach((panel) => {
+    setPanelActiveView(panel, panel.dataset.activeView || "tobe");
+
+    panel.querySelectorAll("[data-solution-view-toggle]").forEach((button) => {
+      button.addEventListener("click", () => {
+        setPanelActiveView(panel, button.dataset.solutionViewToggle);
+      });
+    });
+  });
+
   const syncActiveStep = () => {
     panels.forEach((panel) => {
-      const nextIndex = clamp(Math.round(getPanelProgress(panel) * (stepsPerSolution - 1)), 0, stepsPerSolution - 1);
-
-      setPanelActiveStep(panel, nextIndex);
+      setPanelProgress(panel, getPanelProgress(panel));
     });
   };
 
