@@ -962,8 +962,8 @@ const setupDesignExplorationMedia = () => {
   });
 };
 
-const setupSolutionsShowcase = () => {
-  const showcase = document.querySelector("[data-solutions-showcase]");
+const setupsolutionShowcase = () => {
+  const showcase = document.querySelector("[data-solution-showcase]");
   if (!showcase) return;
 
   const panels = [...showcase.querySelectorAll("[data-solution-panel]")];
@@ -973,13 +973,13 @@ const setupSolutionsShowcase = () => {
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   const getDocumentTop = (target) => target.getBoundingClientRect().top + window.scrollY;
 
-  const getPanelStickyElement = (panel) => panel.querySelector(".solutions-phone-stage") || panel;
+  const getPanelStickyElement = (panel) => panel.querySelector(".solution-phone-stage") || panel;
 
   const getPanelStickyTop = (panel) =>
     Number.parseFloat(getComputedStyle(getPanelStickyElement(panel)).top) || 0;
 
   const getPanelStickyHeight = (panel) => {
-    const phone = panel.querySelector(".solutions-phone-stage");
+    const phone = panel.querySelector(".solution-phone-stage");
 
     return Math.max(phone?.offsetHeight || 0, 1);
   };
@@ -996,7 +996,7 @@ const setupSolutionsShowcase = () => {
 
   const setPanelActiveView = (panel, view) => {
     const currentView = panel.dataset.activeView;
-    const toggles = [...panel.querySelectorAll(".solutions-view-toggle")];
+    const toggles = [...panel.querySelectorAll(".solution-view-toggle")];
 
     panel.dataset.activeView = view;
     panel.querySelectorAll("[data-solution-view-toggle]").forEach((button) => {
@@ -1016,7 +1016,7 @@ const setupSolutionsShowcase = () => {
   };
 
   const setPanelProgress = (panel, progress) => {
-    const stacks = [...panel.querySelectorAll(".solutions-phone-screen-stack")];
+    const stacks = [...panel.querySelectorAll(".solution-phone-screen-stack")];
     const maxScreenCount = Math.max(
       1,
       ...stacks.map((stack) => stack.querySelectorAll("[data-phone-screen]").length),
@@ -1199,7 +1199,7 @@ setupAffectedUserActiveState();
 setupAffectedUserVideos();
 setupOpportunityCards();
 setupDesignExplorationMedia();
-setupSolutionsShowcase();
+setupsolutionShowcase();
 syncDetailNav();
 syncActiveToc();
 
