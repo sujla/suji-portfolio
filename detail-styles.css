@@ -1869,14 +1869,13 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .solution-showcase {
-    --solution-panel-min-height: 1280px;
-    --solution-panel-sticky-top: 112px;
+    --solution-panel-sticky-top: 102px;
   }
 
   .solution-showcase-panel {
     grid-template-columns: minmax(0, 1fr) minmax(200px, 0.7fr);
     gap: 30px;
-    padding: 76px 38px 54px 58px;
+    padding: 24px 0 64px;
   }
 
   .solution-showcase-panel--comparison {
@@ -1890,7 +1889,11 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .solution-showcase-panel--comparison {
-    --solution-phone-width: 248px;
+    --solution-phone-width: 300px;
+  }
+
+  .solution-view-toggle {
+    margin-top: 16px;
   }
 
   .mgrl-48 {
@@ -1993,11 +1996,6 @@ html.detail-root.is-theme-switching-lines::before {
     font-size: 19px;
   }
 
-  .solution-showcase {
-    --solution-panel-min-height: 1360px;
-    --solution-panel-sticky-top: 84px;
-  }
-
   .solution-showcase-list {
     gap: 36px;
     margin: 0 14px;
@@ -2008,13 +2006,6 @@ html.detail-root.is-theme-switching-lines::before {
     grid-template-rows: auto minmax(0, 1fr);
     gap: 22px;
     align-items: start;
-    padding: 72px 24px 34px;
-  }
-
-  .solution-phone-stage {
-    align-self: stretch;
-    place-items: start center;
-    top: calc(var(--solution-panel-sticky-top) + 324px);
   }
 
   .solution-phone-stage::after {
@@ -2033,14 +2024,6 @@ html.detail-root.is-theme-switching-lines::before {
     margin-bottom: 18px;
   }
 
-  .solution-phone {
-    width: 220px;
-  }
-
-  .solution-showcase-panel--comparison {
-    --solution-phone-width: 220px;
-  }
-
   .mgrl-48 {
     margin-left: 28px;
     margin-right: 28px;
@@ -2053,16 +2036,6 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 530px) {
-  .solution-showcase-panel--comparison {
-    --solution-phone-width: 210px;
-  }
-
-  .solution-view-toggle-button {
-    min-width: 76px;
-    padding-right: 14px;
-    padding-left: 14px;
-  }
-
   .detail-content {
     padding: 0 0 100px;
   }
@@ -2123,6 +2096,8 @@ html.detail-root.is-theme-switching-lines::before {
   .design-exploration-grid {
     margin-right: 14px;
     margin-left: 14px;
+    margin-bottom: 0;
+    gap: 44px;
   }
 
   .opportunity-card-media {
@@ -2148,16 +2123,29 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .solution-showcase {
-    --solution-panel-min-height: 1260px;
+    --solution-panel-sticky-top: 10dvh;
+    margin-top: 0;
+  }
+
+  .solution-showcase-list {
+    margin: 0;
   }
 
   .solution-showcase-panel {
-    padding-right: 18px;
-    padding-left: 18px;
+    padding-right: 0;
+    padding-left: 0;
   }
 
-  .solution-phone {
-    width: 210px;
+  .solution-showcase-panel--comparison {
+    width: auto;
+    height: min(80dvh, calc(var(--solution-phone-width) * 860 / 430));
+    padding: 24px 12px 0;
+  }
+
+  .solution-view-toggle-button {
+    min-width: 76px;
+    padding-right: 14px;
+    padding-left: 14px;
   }
 
   .ux-goal-card-grid {
@@ -2220,10 +2208,6 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 330px) {
-  .solution-showcase-panel--comparison {
-    --solution-phone-width: 180px;
-  }
-
   html,
   body {
     width: 100%;
