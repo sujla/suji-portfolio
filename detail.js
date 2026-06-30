@@ -847,15 +847,27 @@ const setupDesignExplorationMedia = () => {
   const intervalDuration = 4000;
 
   mediaItems.forEach((media) => {
-    const images = [...media.querySelectorAll("img")];
+    const imageStage = media.querySelector(".design-exploration-image-stage") || media;
+    const images = [...imageStage.querySelectorAll("img")];
     if (images.length < 2) return;
 
     let activeIndex = images.findIndex((image) => image.classList.contains("is-active"));
     let progressFrameId;
     let rotationStartedAt = 0;
     let remainingDuration = intervalDuration;
-    let userPaused = false;
     let isVisible = true;
+    const carousel = document.createElement("div");
+    const controls = images.map((image, index) => {
+      const button = document.createElement("button");
+      const imageLabel = image.alt || `image ${index + 1}`;
+
+      button.className = "design-exploration-carousel-button";
+      button.type = "button";
+      button.setAttribute("aria-label", `Show ${imageLabel}`);
+      carousel.append(button);
+
+      return button;
+    });
 
     if (activeIndex < 0) activeIndex = 0;
     images.forEach((image, index) => {
@@ -863,25 +875,44 @@ const setupDesignExplorationMedia = () => {
       image.classList.toggle("is-active", index === activeIndex);
     });
 
-    const toggleButton = document.createElement("button");
-    toggleButton.className = "design-exploration-toggle";
-    toggleButton.type = "button";
-    toggleButton.setAttribute("aria-label", "Pause image rotation");
-    toggleButton.setAttribute("aria-pressed", "false");
-    toggleButton.innerHTML = '<span class="design-exploration-toggle-icon" aria-hidden="true"></span>';
-    media.append(toggleButton);
+    carousel.className = "design-exploration-carousel";
+    carousel.style.setProperty("--carousel-count", images.length);
+    carousel.style.setProperty("--carousel-gap-total", `${(images.length - 1) * 12}px`);
+    imageStage.append(carousel);
 
     const setProgress = (durationRemaining) => {
-      const progressAngle = (durationRemaining / intervalDuration) * 360;
+      const progressPercent = ((intervalDuration - durationRemaining) / intervalDuration) * 100;
 
-      toggleButton.style.setProperty("--rotation-progress-angle", `${progressAngle}deg`);
+      controls.forEach((control, index) => {
+        control.style.setProperty(
+          "--rotation-progress",
+          index === activeIndex ? `${progressPercent}%` : "0%",
+        );
+      });
     };
 
-    const setActiveImage = (nextIndex) => {
+    const resetProgress = (timestamp = window.performance.now()) => {
+      rotationStartedAt = timestamp;
+      remainingDuration = intervalDuration;
+      setProgress(remainingDuration);
+    };
+
+    const syncControls = () => {
+      controls.forEach((control, index) => {
+        const isActive = index === activeIndex;
+
+        control.classList.toggle("is-active", isActive);
+        control.setAttribute("aria-current", String(isActive));
+      });
+    };
+
+    const setActiveImage = (nextIndex, timestamp = window.performance.now()) => {
       activeIndex = (nextIndex + images.length) % images.length;
       images.forEach((image, index) => {
         image.classList.toggle("is-active", index === activeIndex);
       });
+      syncControls();
+      resetProgress(timestamp);
     };
 
     const stopRotation = () => {
@@ -896,42 +927,24 @@ const setupDesignExplorationMedia = () => {
       setProgress(remainingDuration);
 
       if (remainingDuration <= 0) {
-        setActiveImage(activeIndex + 1);
-        rotationStartedAt = timestamp;
-        remainingDuration = intervalDuration;
-        setProgress(remainingDuration);
+        setActiveImage(activeIndex + 1, timestamp);
       }
 
       progressFrameId = window.requestAnimationFrame(updateProgress);
     };
 
     const startRotation = () => {
-      if (progressFrameId || userPaused || !isVisible) return;
+      if (progressFrameId || !isVisible) return;
 
       rotationStartedAt = window.performance.now() - (intervalDuration - remainingDuration);
       progressFrameId = window.requestAnimationFrame(updateProgress);
     };
 
-    const syncToggleState = () => {
-      toggleButton.classList.toggle("is-paused", userPaused);
-      toggleButton.setAttribute("aria-pressed", String(userPaused));
-      toggleButton.setAttribute("aria-label", userPaused ? "Play image rotation" : "Pause image rotation");
-    };
-
-    toggleButton.addEventListener("click", () => {
-      userPaused = !userPaused;
-      syncToggleState();
-
-      if (userPaused) {
-        if (rotationStartedAt) {
-          remainingDuration = Math.max(0, intervalDuration - (window.performance.now() - rotationStartedAt));
-          setProgress(remainingDuration);
-        }
-        stopRotation();
-        return;
-      }
-
-      startRotation();
+    controls.forEach((control, index) => {
+      control.addEventListener("click", () => {
+        setActiveImage(index);
+        startRotation();
+      });
     });
 
     if ("IntersectionObserver" in window) {
@@ -956,7 +969,7 @@ const setupDesignExplorationMedia = () => {
       observer.observe(media);
     }
 
-    syncToggleState();
+    syncControls();
     setProgress(remainingDuration);
     startRotation();
   });
