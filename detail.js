@@ -848,6 +848,7 @@ const setupDesignExplorationMedia = () => {
 
   mediaItems.forEach((media) => {
     const imageStage = media.querySelector(".design-exploration-image-stage") || media;
+    const pagination = media.querySelector(".design-exploration-pagination") || media;
     const images = [...imageStage.querySelectorAll("img")];
     if (images.length < 2) return;
 
@@ -857,13 +858,20 @@ const setupDesignExplorationMedia = () => {
     let remainingDuration = intervalDuration;
     let isVisible = true;
     const carousel = document.createElement("div");
+    const tooltipLabels = ["Drafts", "Wireframes"];
     const controls = images.map((image, index) => {
       const button = document.createElement("button");
+      const tooltip = document.createElement("span");
       const imageLabel = image.alt || `image ${index + 1}`;
+      const tooltipLabel = tooltipLabels[index] || imageLabel;
 
       button.className = "design-exploration-carousel-button";
       button.type = "button";
       button.setAttribute("aria-label", `Show ${imageLabel}`);
+      tooltip.className = "design-exploration-carousel-tooltip";
+      tooltip.textContent = tooltipLabel;
+      tooltip.setAttribute("aria-hidden", "true");
+      button.append(tooltip);
       carousel.append(button);
 
       return button;
@@ -877,8 +885,8 @@ const setupDesignExplorationMedia = () => {
 
     carousel.className = "design-exploration-carousel";
     carousel.style.setProperty("--carousel-count", images.length);
-    carousel.style.setProperty("--carousel-gap-total", `${(images.length - 1) * 12}px`);
-    imageStage.append(carousel);
+    carousel.style.setProperty("--carousel-gap-total", `${(images.length - 1) * 14}px`);
+    pagination.append(carousel);
 
     const setProgress = (durationRemaining) => {
       const progressPercent = ((intervalDuration - durationRemaining) / intervalDuration) * 100;
