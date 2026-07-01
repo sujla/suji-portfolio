@@ -860,6 +860,8 @@ const setupDesignExplorationMedia = () => {
     let remainingDuration = intervalDuration;
     let isVisible = true;
     let activeZoomPointerId;
+    let zoomFrameId;
+    let pendingZoomPoint;
     const carousel = document.createElement("div");
     const tooltipLabels = ["Drafts", "Wireframes"];
     const controls = images.map((image, index) => {
@@ -884,6 +886,7 @@ const setupDesignExplorationMedia = () => {
     images.forEach((image, index) => {
       image.classList.add("design-exploration-image");
       image.classList.toggle("is-active", index === activeIndex);
+      image.draggable = false;
     });
 
     carousel.className = "design-exploration-carousel";
@@ -919,6 +922,9 @@ const setupDesignExplorationMedia = () => {
 
     const resetZoom = () => {
       activeZoomPointerId = undefined;
+      window.cancelAnimationFrame(zoomFrameId);
+      zoomFrameId = undefined;
+      pendingZoomPoint = undefined;
       imageStage.classList.remove("is-touch-zooming");
       imageStage.style.removeProperty("--exploration-zoom-scale");
       imageStage.style.removeProperty("--exploration-zoom-x");
@@ -962,14 +968,35 @@ const setupDesignExplorationMedia = () => {
 
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-    const syncZoomFromPointer = (event) => {
+    const applyZoomFromPoint = (point) => {
       const rect = imageStage.getBoundingClientRect();
-      const pointX = clamp(event.clientX - rect.left, 0, rect.width);
-      const pointY = clamp(event.clientY - rect.top, 0, rect.height);
+      const pointX = clamp(point.clientX - rect.left, 0, rect.width);
+      const pointY = clamp(point.clientY - rect.top, 0, rect.height);
 
       imageStage.style.setProperty("--exploration-zoom-scale", zoomScale);
       imageStage.style.setProperty("--exploration-zoom-x", `${pointX * (1 - zoomScale)}px`);
       imageStage.style.setProperty("--exploration-zoom-y", `${pointY * (1 - zoomScale)}px`);
+    };
+
+    const syncZoomFromPointer = (event, { immediate = false } = {}) => {
+      pendingZoomPoint = {
+        clientX: event.clientX,
+        clientY: event.clientY,
+      };
+
+      if (immediate) {
+        window.cancelAnimationFrame(zoomFrameId);
+        zoomFrameId = undefined;
+        applyZoomFromPoint(pendingZoomPoint);
+        return;
+      }
+
+      if (zoomFrameId) return;
+
+      zoomFrameId = window.requestAnimationFrame(() => {
+        zoomFrameId = undefined;
+        if (pendingZoomPoint) applyZoomFromPoint(pendingZoomPoint);
+      });
     };
 
     const syncTooltipFromPointer = (event) => {
@@ -988,6 +1015,12 @@ const setupDesignExplorationMedia = () => {
       imageStage.classList.remove("is-hover-tooltip-visible");
     };
 
+    const preventMobileImageMenu = (event) => {
+      if (!mobileZoomMedia.matches) return;
+
+      event.preventDefault();
+    };
+
     const startZoom = (event) => {
       if (!mobileZoomMedia.matches || activeZoomPointerId !== undefined) return;
 
@@ -996,7 +1029,7 @@ const setupDesignExplorationMedia = () => {
       imageStage.setPointerCapture?.(event.pointerId);
       imageStage.classList.add("is-touch-zooming");
       hideTooltip();
-      syncZoomFromPointer(event);
+      syncZoomFromPointer(event, { immediate: true });
     };
 
     const moveZoom = (event) => {
@@ -1027,6 +1060,8 @@ const setupDesignExplorationMedia = () => {
     imageStage.addEventListener("pointerleave", hideTooltip);
     imageStage.addEventListener("pointerup", endZoom);
     imageStage.addEventListener("pointercancel", endZoom);
+    imageStage.addEventListener("contextmenu", preventMobileImageMenu);
+    imageStage.addEventListener("dragstart", preventMobileImageMenu);
     imageStage.addEventListener("lostpointercapture", () => {
       if (activeZoomPointerId === undefined) return;
 
