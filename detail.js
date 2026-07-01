@@ -852,11 +852,14 @@ const setupDesignExplorationMedia = () => {
     const images = [...imageStage.querySelectorAll("img")];
     if (images.length < 2) return;
 
+    const mobileZoomMedia = window.matchMedia("(max-width: 530px)");
+    const zoomScale = 2.18;
     let activeIndex = images.findIndex((image) => image.classList.contains("is-active"));
     let progressFrameId;
     let rotationStartedAt = 0;
     let remainingDuration = intervalDuration;
     let isVisible = true;
+    let activeZoomPointerId;
     const carousel = document.createElement("div");
     const tooltipLabels = ["Drafts", "Wireframes"];
     const controls = images.map((image, index) => {
@@ -914,7 +917,16 @@ const setupDesignExplorationMedia = () => {
       });
     };
 
+    const resetZoom = () => {
+      activeZoomPointerId = undefined;
+      imageStage.classList.remove("is-touch-zooming");
+      imageStage.style.removeProperty("--exploration-zoom-scale");
+      imageStage.style.removeProperty("--exploration-zoom-x");
+      imageStage.style.removeProperty("--exploration-zoom-y");
+    };
+
     const setActiveImage = (nextIndex, timestamp = window.performance.now()) => {
+      resetZoom();
       activeIndex = (nextIndex + images.length) % images.length;
       images.forEach((image, index) => {
         image.classList.toggle("is-active", index === activeIndex);
@@ -948,11 +960,84 @@ const setupDesignExplorationMedia = () => {
       progressFrameId = window.requestAnimationFrame(updateProgress);
     };
 
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+    const syncZoomFromPointer = (event) => {
+      const rect = imageStage.getBoundingClientRect();
+      const pointX = clamp(event.clientX - rect.left, 0, rect.width);
+      const pointY = clamp(event.clientY - rect.top, 0, rect.height);
+
+      imageStage.style.setProperty("--exploration-zoom-scale", zoomScale);
+      imageStage.style.setProperty("--exploration-zoom-x", `${pointX * (1 - zoomScale)}px`);
+      imageStage.style.setProperty("--exploration-zoom-y", `${pointY * (1 - zoomScale)}px`);
+    };
+
+    const syncTooltipFromPointer = (event) => {
+      if (!mobileZoomMedia.matches || event.pointerType !== "mouse") return;
+
+      const rect = imageStage.getBoundingClientRect();
+      const pointX = clamp(event.clientX - rect.left, 0, rect.width);
+      const pointY = clamp(event.clientY - rect.top, 0, rect.height);
+
+      imageStage.style.setProperty("--exploration-tooltip-x", `${pointX}px`);
+      imageStage.style.setProperty("--exploration-tooltip-y", `${pointY}px`);
+      imageStage.classList.add("is-hover-tooltip-visible");
+    };
+
+    const hideTooltip = () => {
+      imageStage.classList.remove("is-hover-tooltip-visible");
+    };
+
+    const startZoom = (event) => {
+      if (!mobileZoomMedia.matches || activeZoomPointerId !== undefined) return;
+
+      activeZoomPointerId = event.pointerId;
+      stopRotation();
+      imageStage.setPointerCapture?.(event.pointerId);
+      imageStage.classList.add("is-touch-zooming");
+      hideTooltip();
+      syncZoomFromPointer(event);
+    };
+
+    const moveZoom = (event) => {
+      syncTooltipFromPointer(event);
+      if (event.pointerId !== activeZoomPointerId) return;
+
+      syncZoomFromPointer(event);
+    };
+
+    const endZoom = (event) => {
+      if (event.pointerId !== activeZoomPointerId) return;
+
+      imageStage.releasePointerCapture?.(event.pointerId);
+      resetZoom();
+      startRotation();
+    };
+
     controls.forEach((control, index) => {
       control.addEventListener("click", () => {
         setActiveImage(index);
         startRotation();
       });
+    });
+
+    imageStage.addEventListener("pointerdown", startZoom);
+    imageStage.addEventListener("pointerenter", syncTooltipFromPointer);
+    imageStage.addEventListener("pointermove", moveZoom);
+    imageStage.addEventListener("pointerleave", hideTooltip);
+    imageStage.addEventListener("pointerup", endZoom);
+    imageStage.addEventListener("pointercancel", endZoom);
+    imageStage.addEventListener("lostpointercapture", () => {
+      if (activeZoomPointerId === undefined) return;
+
+      resetZoom();
+      startRotation();
+    });
+    mobileZoomMedia.addEventListener?.("change", () => {
+      if (mobileZoomMedia.matches) return;
+
+      resetZoom();
+      startRotation();
     });
 
     if ("IntersectionObserver" in window) {
