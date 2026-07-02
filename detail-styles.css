@@ -391,7 +391,7 @@ li::marker {
 
 .detail-content-col {
   min-width: 0;
-  padding: 0 0 160px;
+  padding: 0 0 50px;
   border-left: 1px solid var(--line);
   transition: border-color var(--detail-line-transition);
 }
@@ -1019,6 +1019,27 @@ ul.affected-user-card-detail {
 .opportunity-card-copy p {
   margin: 0;
   color: var(--text-tertiary);
+}
+
+/* Early impact */
+.impact-points.opportunity-cards {
+  margin: 18px 0 4px;
+}
+
+.impact-point-image-empty {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 42%),
+    color-mix(in srgb, var(--surface), var(--bg) 12%);
+}
+
+.impact-point-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* UX goal */
@@ -2301,7 +2322,8 @@ html.detail-root.is-theme-switching-lines::before {
 
 @layer dark-letter-spacing {
   :root[data-theme="dark"] body :is(.detail-toc, .detail-keywords),
-  :root[data-theme="dark"] body :is(.detail-toc, .detail-keywords) * {
+  :root[data-theme="dark"] body :is(.detail-toc, .detail-keywords) *,
+  :root[data-theme="dark"] body .impact-point-copy :is(h4, p) {
     letter-spacing: normal;
   }
 }
