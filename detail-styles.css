@@ -1207,7 +1207,7 @@ ul.affected-user-card-detail {
 .ux-goal-card--finder {
   grid-column: 1 / -1;
   background:
-    url("assets/store-guide/store-finder-renewal-ux-goal-img.png") right -1% bottom 18% / 405px auto no-repeat,
+    url("assets/store-guide/store-finder-renewal-ux-goal-img.avif") right -1% bottom 18% / 405px auto no-repeat,
     var(--ux-goal-bg);
 }
 

@@ -32,7 +32,7 @@ export const projects = [
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(0, 176, 6, 0.22), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
-    image: "./assets/store-guide-main.png",
+    image: "./assets/store-guide-main.avif",
   },
   {
     slug: "cta-enhancement",
@@ -59,7 +59,7 @@ export const projects = [
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(49, 49, 49, 0.3), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
-    image: "./assets/cta-enh-main.png",
+    image: "./assets/cta-enh-main.avif",
   },
   {
     slug: "article-studio",
@@ -84,6 +84,6 @@ export const projects = [
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(255, 133, 26, 0.10), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
-    image: "./assets/article-studio-main.png",
+    image: "./assets/article-studio-main.avif",
   },
 ];

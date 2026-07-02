@@ -3,7 +3,7 @@ Add main/project-card images and shared assets here.
 Example:
 
 ```js
-image: "./assets/store-guide-main.png"
+image: "./assets/store-guide-main.avif"
 ```
 
 Place detail-page-only assets in a slug folder:
