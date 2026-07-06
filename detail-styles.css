@@ -391,7 +391,7 @@ li::marker {
 
 .detail-content-col {
   min-width: 0;
-  padding: 0 0 50px;
+  padding: 0 0 64px;
   border-left: 1px solid var(--line);
   transition: border-color var(--detail-line-transition);
 }
@@ -1006,7 +1006,6 @@ ul.affected-user-card-detail {
 
 .opportunity-card-copy {
   display: grid;
-  gap: 4px;
   padding: 20px 10px 0;
 }
 
@@ -1023,7 +1022,7 @@ ul.affected-user-card-detail {
 
 /* Early impact */
 .impact-points.opportunity-cards {
-  margin: 18px 0 4px;
+  margin: 8px 40px 0px;
 }
 
 .impact-point-image-empty {
