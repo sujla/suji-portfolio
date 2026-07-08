@@ -20,7 +20,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../../styles.css?v=exploration-rotation-progress" />
-    <link rel="stylesheet" href="../../detail-styles.css?v=exploration-touch-zoom-callout" />
+    <link rel="stylesheet" href="../../detail-styles.css?v=solution-video-playback" />
   </head>
   <body class="detail-page" data-project-slug="store-guide">
     <nav class="detail-gnb" aria-label="Project navigation"></nav>
@@ -297,13 +297,6 @@
             <div class="design-exploration-grid">
               <article class="design-exploration-card">
                 <h3>1. Map UX</h3>
-                <div class="design-exploration-copy">
-                  <ul>
-                    <li>How to make nearby stores visible at first glance</li>
-                    <li>How to support both current-location search and manual store search</li>
-                    <li>How to help users understand store distance and location context quickly</li>
-                  </ul>
-                </div>
                 <figure class="design-exploration-media">
                   <div class="design-exploration-image-stage">
                     <img class="design-exploration-image is-active" src="../../assets/store-guide/exploration1-1.avif" alt="Map-based store discovery screen exploration" />
@@ -311,16 +304,16 @@
                   </div>
                   <div class="design-exploration-pagination"></div>
                 </figure>
+                <div class="design-exploration-copy">
+                  <ul>
+                    <li>How to make nearby stores visible at first glance</li>
+                    <li>How to support both current-location search and manual store search</li>
+                    <li>How to help users understand store distance and location context quickly</li>
+                  </ul>
+                </div>
               </article>
               <article class="design-exploration-card">
                 <h3>2. Store List UX</h3>
-                <div class="design-exploration-copy">
-                  <ul>
-                    <li>How to translate map results into a scannable list for easier store comparison</li>
-                    <li>How to help users recognize stores with storefront photos, not only store names</li>
-                    <li>How to keep map and list states connected when users switch views</li>
-                  </ul>
-                </div>
                 <figure class="design-exploration-media">
                   <div class="design-exploration-image-stage">
                     <img class="design-exploration-image is-active" src="../../assets/store-guide/exploration2-1.avif" alt="List-based nearby store discovery screen exploration" />
@@ -328,16 +321,16 @@
                   </div>
                   <div class="design-exploration-pagination"></div>
                 </figure>
+                <div class="design-exploration-copy">
+                  <ul>
+                    <li>How to translate map results into a scannable list for easier store comparison</li>
+                    <li>How to help users recognize stores with storefront photos, not only store names</li>
+                    <li>How to keep map and list states connected when users switch views</li>
+                  </ul>
+                </div>
               </article>
               <article class="design-exploration-card">
                 <h3>3. Stock Availability</h3>
-                <div class="design-exploration-copy">
-                  <ul>
-                    <li>How to make store-level availability clear enough for purchase decisions</li>
-                    <li>How to replace vague stock labels with more actionable information</li>
-                    <li>Define empty, low-stock, and unavailable states so customers know the next best action.</li>
-                  </ul>
-                </div>
                 <figure class="design-exploration-media">
                   <div class="design-exploration-image-stage">
                     <img class="design-exploration-image is-active" src="../../assets/store-guide/exploration3-1.avif" alt="List-based nearby store discovery screen exploration" />
@@ -345,6 +338,13 @@
                   </div>
                   <div class="design-exploration-pagination"></div>
                 </figure>
+                <div class="design-exploration-copy">
+                  <ul>
+                    <li>How to make store-level availability clear enough for purchase decisions</li>
+                    <li>How to replace vague stock labels with more actionable information</li>
+                    <li>Define empty, low-stock, and unavailable states so customers know the next best action.</li>
+                  </ul>
+                </div>
               </article>
             </div>
           </div>
@@ -355,19 +355,22 @@
               </div>
               <section class="solution-showcase" data-solution-showcase aria-label="Solution walkthrough">
                 <div class="solution-showcase-list">
-                  <article class="solution-showcase-panel solution-showcase-panel--comparison" data-solution-panel data-solution-index="0" data-active-step="0" data-active-view="tobe">
+                  <article class="solution-showcase-panel solution-showcase-panel--comparison" data-solution-panel data-active-view="tobe">
                     <div class="solution-phone-stage solution-phone-stage--comparison">
                       <div class="solution-asis-tobe-comparison">
                         <div class="solution-phone solution-phone--asis">
                           <div class="solution-phone-screen-stack solution-phone-screen-stack--asis">
-                            <img class="solution-phone-screen solution-phone-screen--asis is-active" data-phone-screen src="../../assets/store-guide/solution-asis-1.png" alt="">
+                            <img class="solution-phone-screen solution-phone-screen--asis is-active" src="../../assets/store-guide/solution-asis-1.png" alt="">
                           </div>
                           <img class="solution-phone-frame-image" src="../../assets/store-guide/solution-showcase-phone-frame.png" alt="">
                         </div>
                         <div class="solution-phone solution-phone--tobe">
                           <div class="solution-phone-screen-stack solution-phone-screen-stack--tobe">
-                            <img class="solution-phone-screen solution-phone-screen--tobe is-active" data-phone-screen src="../../assets/store-guide/solution-tobe-1-map.png" alt="">
-                            <img class="solution-phone-screen solution-phone-screen--tobe" data-phone-screen src="../../assets/store-guide/solution-tobe-2-list.png" alt="">
+                            <img class="solution-phone-screen solution-phone-screen--tobe is-active" src="../../assets/store-guide/solution-tobe1.png" alt="">
+                            <video class="solution-phone-video" data-solution-video muted playsinline preload="metadata" poster="../../assets/store-guide/solution-tobe1.png">
+                              <source src="../../assets/store-guide/solution-final-scroll.mp4" type="video/mp4">
+                            </video>
+                            <button class="solution-phone-play-toggle" type="button" data-solution-video-toggle aria-label="Play solution video" aria-pressed="false"></button>
                           </div>
                           <img class="solution-phone-frame-image" src="../../assets/store-guide/solution-showcase-phone-frame.png" alt="">
                         </div>
@@ -386,7 +389,7 @@
             <div class="mgrl-48 gap-16">
               <h2>Early Impact</h2>
               <div class="detail-body-props">
-                <p>Beyond the initial uplift, this project helped us start measuring cross-channel behavior more clearly. These signals later helped us uncover deeper friction in the pickup journey, leading to the next enhancement project.</p>
+                <p>Beyond the initial uplift, this project helped us build a clearer measurement foundation for the store-to-pickup journey. By connecting product interest, store availability, and pickup actions in one flow, we could start tracking how customers moved through key decision points.</p>
               </div>
             </div>
             <div class="impact-points opportunity-cards pdb-24" aria-label="Early impact cards">
@@ -395,8 +398,8 @@
                   <div class="impact-point-image-empty" aria-hidden="true"></div>
                 </div>
                 <div class="impact-point-copy opportunity-card-copy">
-                  <h4>+32.9% Page Views</h4>
-                  <p>Users used the available-store list more to check product availability.</p>
+                  <h4>Flow-level Tracking Foundation</h4>
+                  <p>Started tracking key steps beyond page views.</p>
                 </div>
               </article>
               <article class="impact-point-card opportunity-card">
@@ -404,8 +407,8 @@
                   <div class="impact-point-image-empty" aria-hidden="true"></div>
                 </div>
                 <div class="impact-point-copy opportunity-card-copy">
-                  <h4>Up to 11% Pickup Conversion</h4>
-                  <p>Availability checks started turning into pickup orders.</p>
+                  <h4>Available-store List Views</h4>
+                  <p>Page views increased by 32.9% after launch.</p>
                 </div>
               </article>
               <article class="impact-point-card opportunity-card">
@@ -413,8 +416,8 @@
                   <div class="impact-point-image-empty" aria-hidden="true"></div>
                 </div>
                 <div class="impact-point-copy opportunity-card-copy">
-                  <h4>Positive store staff feedback</h4>
-                  <p>Fewer inquiry calls and easier customer guidance.</p>
+                  <h4>Pickup Conversion</h4>
+                  <p>Up to 11% converted from the available-store list flow.</p>
                 </div>
               </article>
             </div>
@@ -423,6 +426,6 @@
       </section>
 
     </main>
-    <script type="module" src="../../detail.js?v=exploration-touch-zoom-callout"></script>
+    <script type="module" src="../../detail.js?v=solution-video-playback"></script>
   </body>
 </html>

@@ -1111,30 +1111,6 @@ const setupsolutionShowcase = () => {
 
   if (!panels.length) return;
 
-  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-  const getDocumentTop = (target) => target.getBoundingClientRect().top + window.scrollY;
-
-  const getPanelStickyElement = (panel) => panel.querySelector(".solution-phone-stage") || panel;
-
-  const getPanelStickyTop = (panel) =>
-    Number.parseFloat(getComputedStyle(getPanelStickyElement(panel)).top) || 0;
-
-  const getPanelStickyHeight = (panel) => {
-    const phone = panel.querySelector(".solution-phone-stage");
-
-    return Math.max(phone?.offsetHeight || 0, 1);
-  };
-
-  const getPanelProgress = (panel) => {
-    const panelTop = getDocumentTop(panel);
-    const stickyTop = getPanelStickyTop(panel);
-    const stickyHeight = getPanelStickyHeight(panel);
-    const start = panelTop - stickyTop;
-    const end = Math.max(start + 1, panelTop + panel.offsetHeight - stickyHeight - stickyTop);
-
-    return clamp((window.scrollY - start) / (end - start), 0, 1);
-  };
-
   const setPanelActiveView = (panel, view) => {
     const currentView = panel.dataset.activeView;
     const toggles = [...panel.querySelectorAll(".solution-view-toggle")];
@@ -1156,33 +1132,42 @@ const setupsolutionShowcase = () => {
     }
   };
 
-  const setPanelProgress = (panel, progress) => {
-    const stacks = [...panel.querySelectorAll(".solution-phone-screen-stack")];
-    const maxScreenCount = Math.max(
-      1,
-      ...stacks.map((stack) => stack.querySelectorAll("[data-phone-screen]").length),
-    );
-    const activeStepIndex = clamp(Math.round(progress * (maxScreenCount - 1)), 0, maxScreenCount - 1);
-
-    panel.dataset.activeStep = String(activeStepIndex);
-
-    stacks.forEach((stack) => {
-      const screens = [...stack.querySelectorAll("[data-phone-screen]")];
-      if (!screens.length) return;
-
-      const activeScreenIndex = clamp(Math.round(progress * (screens.length - 1)), 0, screens.length - 1);
-
-      screens.forEach((screen, index) => {
-        screen.classList.toggle(
-          "is-active",
-          index === activeScreenIndex,
-        );
-      });
-    });
-  };
-
   panels.forEach((panel) => {
     setPanelActiveView(panel, panel.dataset.activeView || "tobe");
+
+    panel.querySelectorAll("[data-solution-video]").forEach((video) => {
+      const stack = video.closest(".solution-phone-screen-stack");
+      const button = stack?.querySelector("[data-solution-video-toggle]");
+      if (!stack || !button) return;
+
+      const syncVideoButton = () => {
+        const isPlaying = !video.paused && !video.ended;
+
+        stack.classList.toggle("is-video-playing", isPlaying);
+        button.setAttribute("aria-label", isPlaying ? "Pause solution video" : "Play solution video");
+        button.setAttribute("aria-pressed", String(isPlaying));
+      };
+
+      button.addEventListener("click", () => {
+        if (!video.paused && !video.ended) {
+          video.pause();
+          return;
+        }
+
+        if (video.ended || (video.duration && video.currentTime >= video.duration - 0.1)) {
+          video.currentTime = 0;
+        }
+
+        video.play().catch(syncVideoButton);
+        syncVideoButton();
+      });
+
+      video.addEventListener("play", syncVideoButton);
+      video.addEventListener("pause", syncVideoButton);
+      video.addEventListener("ended", syncVideoButton);
+      video.addEventListener("loadedmetadata", syncVideoButton);
+      syncVideoButton();
+    });
 
     panel.querySelectorAll("[data-solution-view-toggle]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1190,24 +1175,6 @@ const setupsolutionShowcase = () => {
       });
     });
   });
-
-  const syncActiveStep = () => {
-    panels.forEach((panel) => {
-      setPanelProgress(panel, getPanelProgress(panel));
-    });
-  };
-
-  window.addEventListener(
-    "scroll",
-    syncActiveStep,
-    { passive: true },
-  );
-
-  window.addEventListener("resize", () => {
-    window.requestAnimationFrame(syncActiveStep);
-  });
-
-  syncActiveStep();
 };
 
 const getProjectOverviewTarget = () => document.getElementById("project-overview");
