@@ -37,6 +37,12 @@ const setSessionItem = (key, value) => {
   }
 };
 
+const trackProjectClick = (projectName) => {
+  window.gtag?.("event", "project_click", {
+    project_name: projectName,
+  });
+};
+
 const padProjectNumber = (value) => String(value).padStart(2, "0");
 
 const yearLabel = (year) => `'${String(year).slice(-2)}`;
@@ -216,6 +222,7 @@ const renderProjects = () => {
           class="project-section"
           id="${project.slug}"
           data-project="${project.number}"
+          data-analytics-id="${project.analyticsId}"
           data-year="${project.year}"
           data-title="${project.sideTitle}"
           style="
@@ -391,6 +398,7 @@ projectList.addEventListener("click", (event) => {
 
   if (!link || !projectList.contains(link) || !isPlainNavigationClick(event, link)) return;
 
+  trackProjectClick(link.closest(".project-section")?.dataset.analyticsId);
   event.preventDefault();
   runProjectTransition(link);
 });

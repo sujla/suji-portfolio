@@ -9,6 +9,7 @@ export const projectSettings = {
 export const projects = [
   {
     slug: "store-guide",
+    analyticsId: "olive_young_store_finder",
     detailSlug: "nearby-stores-right-products",
     wip: false,
     number: "01",
@@ -36,6 +37,7 @@ export const projects = [
   },
   {
     slug: "cta-enhancement",
+    analyticsId: "pickup_order_ux_enhancement",
     detailSlug: "converting-intent-into-pickup",
     wip: true,
     number: "02",
@@ -63,6 +65,7 @@ export const projects = [
   },
   {
     slug: "article-studio",
+    analyticsId: "article_studio_revamp",
     detailSlug: "from-weeks-to-minutes",
     wip: true,
     number: "03",
