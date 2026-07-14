@@ -1,5 +1,5 @@
 export const projectSettings = {
-  totalProjectCount: 6,
+  totalProjectCount: 3,
   yearRange: {
     start: 2020,
     end: 2026,
