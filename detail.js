@@ -21,6 +21,13 @@ const setSessionItem = (key, value) => {
   }
 };
 
+const trackComingSoonCta = (ctaName) => {
+  window.gtag?.("event", "coming_soon_cta_click", {
+    project_name: currentProject?.analyticsId,
+    cta_name: ctaName,
+  });
+};
+
 root.classList.add("detail-root");
 
 const renderDetailNav = () => {
@@ -1314,6 +1321,12 @@ syncActiveToc();
 themeToggle?.addEventListener("click", () => {
   triggerThemeLineSwap();
   applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
+});
+
+document.querySelectorAll("[data-coming-soon-cta]").forEach((button) => {
+  button.addEventListener("click", () => {
+    trackComingSoonCta(button.dataset.comingSoonCta);
+  });
 });
 
 tocLinks.forEach((link) => {
