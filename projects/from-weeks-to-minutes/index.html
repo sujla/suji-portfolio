@@ -4,12 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZYEBT08N8L"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-ZYEBT08N8L');
+      const hostname = window.location.hostname;
+      const isPrivateNetwork =
+        /^(192\.168\.|10\.|127\.)/.test(hostname) ||
+        /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);
+      const isLocalEnvironment =
+        ["localhost", "0.0.0.0", "::1", "[::1]"].includes(hostname) || isPrivateNetwork;
+
+      if (!isLocalEnvironment) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = (...args) => window.dataLayer.push(args);
+        window.gtag("js", new Date());
+        window.gtag("config", "G-ZYEBT08N8L");
+
+        const googleTagScript = document.createElement("script");
+        googleTagScript.async = true;
+        googleTagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-ZYEBT08N8L";
+        document.head.append(googleTagScript);
+      }
     </script>
     <script>
       (() => {
