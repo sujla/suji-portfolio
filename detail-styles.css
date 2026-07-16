@@ -1035,6 +1035,7 @@ ul.affected-user-card-detail {
 
 .impact-point-media {
   aspect-ratio: 3 / 2;
+  background: #f5f5f5;
 }
 
 .impact-point-media img {
@@ -2048,6 +2049,13 @@ html.detail-root.is-theme-switching-lines::before {
   .opportunity-card-media {
     height: 100%;
     aspect-ratio: 1.2 / 1;
+  }
+
+  .impact-point-card:nth-child(3) .impact-point-media img {
+    top: 50%;
+    bottom: auto;
+    height: auto;
+    transform: translateY(-50%);
   }
 
   .opportunity-card-copy {
