@@ -194,8 +194,15 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       project.id === "cta-enhancement" && index === 2
         ? `
           <div class="hero-modal-result">
-            <div class="hero-modal-result-chart">
-              <img src="./assets/cta-enhancement/result-chart.png" alt="" />
+            <div class="hero-modal-result-metrics">
+              <div class="hero-modal-result-metric">
+                <p>Pickup Conversion</p>
+                <strong>321.3%</strong>
+              </div>
+              <div class="hero-modal-result-metric">
+                <p class="hero-modal-result-metric-title--nowrap">Total Amount of Pickup Orders</p>
+                <strong>128.2%</strong>
+              </div>
             </div>
           </div>
         `

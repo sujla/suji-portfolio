@@ -683,36 +683,51 @@ html.is-hero-modal-open body {
   border: 1px solid var(--bg);
 }
 
-.hero-work--cta-enhancement .hero-modal-bento-placeholder--3 {
-  border: 1px solid var(--bg);
-}
-
 .hero-modal-result {
   height: 100%;
 }
 
-.hero-modal-result-chart {
-  position: relative;
+.hero-modal-result-metrics {
+  display: grid;
   height: 100%;
-  overflow: hidden;
-  background: #fff;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  background: transparent;
 }
 
-.hero-modal-result-chart img {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.hero-modal-result-metric {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  padding: clamp(12px, 1.35vw, 24px) clamp(20px, 2vw, 28px);
+  border: 1px solid var(--bg);
+  border-radius: 28px;
+  background: var(--hero-modal-feature-bg);
 }
 
-:root[data-theme="light"] .hero-modal-result-chart {
-  background: color-mix(in srgb, var(--bg) 50%, #fff);
+.hero-modal-result-metric p {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(14px, 1vw, 15px);
+  font-weight: 400;
+  line-height: 1.45;
+  text-align: left;
 }
 
-:root[data-theme="light"] .hero-modal-result-chart img {
-  mix-blend-mode: multiply;
+.hero-modal-result-metric-title--nowrap {
+  white-space: nowrap;
+}
+
+.hero-modal-result-metric strong {
+  color: #00b916;
+  font-size: clamp(24px, 2.55vw, 48px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
 }
 
 .hero-work--store-finder :is(
@@ -753,8 +768,12 @@ html.is-hero-modal-open body {
   grid-area: stack;
   display: grid;
   min-width: 0;
-  grid-template-rows: minmax(0, 7fr) minmax(0, 3fr);
+  grid-template-rows: minmax(0, 8fr) minmax(0, 2fr);
   gap: 12px;
+}
+
+.hero-work-modal.hero-work--store-finder .hero-modal-bento-stack {
+  grid-template-rows: minmax(0, 7fr) minmax(0, 3fr);
 }
 
 .hero-modal-bento-stack-top {
@@ -778,6 +797,11 @@ html.is-hero-modal-open body {
 
 .hero-work-modal:not(.hero-work--perp-dex) .hero-modal-bento-placeholder--3 {
   background: var(--hero-modal-placeholder-3-bg);
+}
+
+.hero-work-modal.hero-work--cta-enhancement .hero-modal-bento-placeholder--3 {
+  overflow: visible;
+  background: transparent;
 }
 
 .hero-work-modal.hero-work--public-transport .hero-modal-bento-feature {
@@ -1882,8 +1906,13 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .hero-modal-bento-feature,
-  .hero-modal-bento-placeholder {
+  .hero-modal-bento-placeholder,
+  .hero-modal-result-metric {
     border-radius: 20px;
+  }
+
+  .hero-modal-result-metrics {
+    gap: 8px;
   }
 
   .hero-modal-bento-feature {
