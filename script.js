@@ -1,5 +1,8 @@
 import { projectSettings, projects } from "./data/projects.js";
+import { heroProjects } from "./data/hero-projects.js";
+import { renderHero } from "./hero.js";
 
+const hero = document.querySelector("[data-hero]");
 const projectList = document.querySelector("[data-project-list]");
 const currentProject = document.querySelector("[data-current-project]");
 const totalProjects = document.querySelector("[data-total-projects]");
@@ -306,8 +309,22 @@ const syncMobileProjectViewport = ({ force = false } = {}) => {
 
 const getMobileFocusedProjectIndex = () => {
   const sectionHeight = sections[0]?.offsetHeight || mobileProjectViewportHeight || window.innerHeight;
+  const firstProjectOffset = sections[0]?.offsetTop || 0;
 
-  return Math.min(Math.max(Math.round(window.scrollY / sectionHeight), 0), sections.length - 1);
+  return Math.min(Math.max(Math.round((window.scrollY - firstProjectOffset) / sectionHeight), 0), sections.length - 1);
+};
+
+const updateHeroState = () => {
+  if (!hero) return;
+
+  const rect = hero.getBoundingClientRect();
+  const viewportCenter = window.innerHeight / 2;
+  const isHeroActive = rect.top <= viewportCenter && rect.bottom >= viewportCenter;
+  const scrollProgress = Math.min(Math.max(-rect.top / rect.height, 0), 1);
+
+  root.classList.toggle("is-hero-active", isHeroActive);
+  hero.style.setProperty("--hero-scroll-progress", scrollProgress.toFixed(3));
+  hero.style.setProperty("--hero-scroll-offset", `${scrollProgress * -96}px`);
 };
 
 const setActiveProject = (index) => {
@@ -357,7 +374,10 @@ let frame = 0;
 
 const requestProjectUpdate = () => {
   cancelAnimationFrame(frame);
-  frame = requestAnimationFrame(updateFocusedProject);
+  frame = requestAnimationFrame(() => {
+    updateHeroState();
+    updateFocusedProject();
+  });
 };
 
 const applyTheme = (theme) => {
@@ -368,6 +388,10 @@ const applyTheme = (theme) => {
 
 const preferredTheme = localStorage.getItem("portfolio-theme") || "light";
 
+const getNavigationType = () =>
+  window.performance.getEntriesByType("navigation")[0]?.type || "navigate";
+
+renderHero(hero, heroProjects, getPlainTitle);
 renderProjects();
 sections = [...document.querySelectorAll("[data-project]")];
 syncMobileProjectViewport({ force: true });
@@ -375,7 +399,8 @@ applyTheme(preferredTheme);
 
 const restoreLastProject = () => {
   const hashSlug = window.location.hash ? window.location.hash.slice(1) : "";
-  const savedSlug = hashSlug || getSessionItem(lastProjectStorageKey);
+  const shouldRestoreLastProject = getNavigationType() === "back_forward";
+  const savedSlug = hashSlug || (shouldRestoreLastProject ? getSessionItem(lastProjectStorageKey) : "");
   const targetSection = savedSlug ? document.getElementById(savedSlug) : null;
 
   if (hashSlug) {
@@ -388,6 +413,10 @@ const restoreLastProject = () => {
 };
 
 restoreLastProject();
+
+if (getNavigationType() === "reload") {
+  window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
+}
 
 themeToggle.addEventListener("click", () => {
   applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
@@ -413,4 +442,4 @@ mobileProjectMedia.addEventListener?.("change", () => {
   requestProjectUpdate();
 });
 window.addEventListener("pageshow", resetProjectTransition);
-updateFocusedProject();
+requestProjectUpdate();

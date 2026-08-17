@@ -14,6 +14,8 @@ export const projects = [
     wip: false,
     number: "01",
     year: 2024,
+    company: "CJ Olive Young, Inc.",
+    companyLabel: "Olive Young",
     keywords: ["E-commerce", "Discovery Optimization", "Map-based UX"],
     title: "Nearby Stores, |Right Products",
     sideTitle: "Map-based |Store Finder Renewal",
@@ -33,7 +35,7 @@ export const projects = [
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(0, 176, 6, 0.22), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
-    image: "./assets/store-guide-main.avif",
+    image: "./assets/common/store-guide-main.avif",
   },
   {
     slug: "cta-enhancement",
@@ -61,7 +63,7 @@ export const projects = [
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(49, 49, 49, 0.3), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
-    image: "./assets/cta-enh-main.avif",
+    image: "./assets/common/cta-enh-main.avif",
   },
   {
     slug: "article-studio",
@@ -87,6 +89,6 @@ export const projects = [
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(255, 133, 26, 0.10), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
-    image: "./assets/article-studio-main.avif",
+    image: "./assets/common/article-studio-main.avif",
   },
 ];

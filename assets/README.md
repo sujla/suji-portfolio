@@ -1,9 +1,9 @@
-Add main/project-card images and shared assets here.
+Add main/project-card images and shared assets in `assets/common/`.
 
 Example:
 
 ```js
-image: "./assets/store-guide-main.avif"
+image: "./assets/common/store-guide-main.avif"
 ```
 
 Place detail-page-only assets in a slug folder:
@@ -12,12 +12,12 @@ Place detail-page-only assets in a slug folder:
 assets/store-guide/
 ```
 
-Theme logo files:
+Theme logo files in `assets/common/`:
 
 - `site-mark-dark.svg`
 - `site-mark-light.svg`
 
-Theme toggle icon files:
+Theme toggle icon files in `assets/common/`:
 
 - `theme-toggle-sun-dark.svg`
 - `theme-toggle-sun-light.svg`

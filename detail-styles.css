@@ -555,7 +555,7 @@ html.detail-coming-soon-root {
 .detail-tape-canvas {
   --tape-thickness: 140px;
   --tape-color: var(--active-project-color);
-  --tape-pattern-image: url("assets/tape-design.svg");
+  --tape-pattern-image: url("assets/common/tape-design.svg");
   --tape-pattern-opacity: 1;
   --tape-pattern-scale: 1;
   position: fixed;
