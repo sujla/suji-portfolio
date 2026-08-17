@@ -2383,7 +2383,7 @@ body.is-project-transitioning .is-transition-source .project-card {
     grid-template-columns: minmax(0, 1fr);
     gap: 68px;
     max-width: 380px;
-    margin: 30px auto 0;
+    margin: 24px auto 32px;
   }
 
   .about-copy {
