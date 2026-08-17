@@ -336,13 +336,6 @@ const syncMobileProjectViewport = ({ force = false } = {}) => {
   root.style.setProperty("--mobile-project-viewport", `${mobileProjectViewportHeight}px`);
 };
 
-const getMobileFocusedProjectIndex = () => {
-  const sectionHeight = sections[0]?.offsetHeight || mobileProjectViewportHeight || window.innerHeight;
-  const firstProjectOffset = sections[0]?.offsetTop || 0;
-
-  return Math.min(Math.max(Math.round((window.scrollY - firstProjectOffset) / sectionHeight), 0), sections.length - 1);
-};
-
 const updateHeroState = () => {
   if (!hero) return;
 
@@ -387,17 +380,15 @@ const setActiveProject = (index) => {
 };
 
 const updateFocusedProject = () => {
-  const nextIndex = mobileProjectMedia.matches
-    ? getMobileFocusedProjectIndex()
-    : sections
-        .map((section, index) => {
-          const rect = section.getBoundingClientRect();
-          const sectionCenter = rect.top + rect.height / 2;
-          const viewportCenter = window.innerHeight / 2;
+  const viewportCenter = window.innerHeight / 2;
+  const nextIndex = sections
+    .map((section, index) => {
+      const rect = section.getBoundingClientRect();
+      const sectionCenter = rect.top + rect.height / 2;
 
-          return { index, distance: Math.abs(sectionCenter - viewportCenter) };
-        })
-        .sort((a, b) => a.distance - b.distance)[0]?.index;
+      return { index, distance: Math.abs(sectionCenter - viewportCenter) };
+    })
+    .sort((a, b) => a.distance - b.distance)[0]?.index;
 
   sections.forEach((section, index) => {
     const isActive = index === nextIndex;
