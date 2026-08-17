@@ -29,6 +29,9 @@
   --scrollbar-track: transparent;
   --hero-nav-height: 64px;
   --hero-frame-gutter: 16px;
+  --hero-modal-feature-bg: #1f2123;
+  --hero-modal-placeholder-2-bg: #242629;
+  --hero-modal-placeholder-3-bg: #1d1f20;
 }
 
 :root[data-theme="light"] {
@@ -50,6 +53,9 @@
   --red-bg: rgba(223, 78, 78, 0.12);
   --scrollbar-thumb: #020508;
   --scrollbar-thumb-hover: #181818;
+  --hero-modal-feature-bg: #fbfbfb;
+  --hero-modal-placeholder-2-bg: #f5f5f5;
+  --hero-modal-placeholder-3-bg: #f2f2f3;
 }
 
 :root[data-theme="dark"] .project-section {
@@ -429,6 +435,20 @@ html.is-hero-modal-open body {
   grid-template-areas: "feature side";
 }
 
+.hero-modal-bento-section--three-up {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  grid-template-areas: "feature slot-1 slot-2";
+}
+
+.hero-modal-bento-section--three-up > .hero-modal-bento-placeholder--1 {
+  grid-area: slot-1;
+}
+
+.hero-modal-bento-section--three-up > .hero-modal-bento-placeholder--2 {
+  grid-area: slot-2;
+}
+
 .hero-modal-bento-section--four-up {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: minmax(0, 1fr);
@@ -534,7 +554,10 @@ html.is-hero-modal-open body {
 
 .hero-modal-bento-feature {
   grid-area: feature;
-  background: color-mix(in srgb, var(--surface) 82%, var(--bg));
+}
+
+.hero-work-modal:not(.hero-work--perp-dex) .hero-modal-bento-feature {
+  background: var(--hero-modal-feature-bg);
 }
 
 .hero-modal-bento-side {
@@ -553,6 +576,47 @@ html.is-hero-modal-open body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.hero-modal-public-transport-video-frame {
+  position: absolute;
+  inset: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-modal-public-transport-video-shadow {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.12));
+}
+
+.hero-modal-public-transport-video {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  clip-path: inset(26px 0 0 0 round 18px);
+  margin-bottom: 16px;
+  border-radius: 18px;
+}
+
+.hero-modal-public-transport-caption {
+  max-width: 100%;
+  margin: 10px 0 6px;
+  color: var(--text-secondary);
+  font-size: clamp(12px, 0.72vw, 15px);
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
 }
 
 .hero-modal-bento-video {
@@ -613,7 +677,6 @@ html.is-hero-modal-open body {
 ),
 .hero-work--cta-enhancement .hero-modal-bento-placeholder--1 {
   isolation: isolate;
-  background: var(--bg);
 }
 
 .hero-work--cta-enhancement .hero-modal-bento-placeholder--1 {
@@ -621,7 +684,6 @@ html.is-hero-modal-open body {
 }
 
 .hero-work--cta-enhancement .hero-modal-bento-placeholder--3 {
-  background: var(--bg);
   border: 1px solid var(--bg);
 }
 
@@ -706,16 +768,28 @@ html.is-hero-modal-open body {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.hero-modal-bento-placeholder--1 {
-  background: #f7f6f2;
+.hero-work-modal:not(.hero-work--perp-dex) .hero-modal-bento-placeholder--1 {
+  background: var(--bg);
 }
 
-.hero-modal-bento-placeholder--2 {
-  background: #fffdf8;
+.hero-work-modal:not(.hero-work--perp-dex) .hero-modal-bento-placeholder--2 {
+  background: var(--hero-modal-placeholder-2-bg);
 }
 
-.hero-modal-bento-placeholder--3 {
-  background: #ebe7de;
+.hero-work-modal:not(.hero-work--perp-dex) .hero-modal-bento-placeholder--3 {
+  background: var(--hero-modal-placeholder-3-bg);
+}
+
+.hero-work-modal.hero-work--public-transport .hero-modal-bento-feature {
+  background: var(--hero-modal-feature-bg);
+}
+
+.hero-work-modal.hero-work--public-transport .hero-modal-bento-placeholder--1 {
+  background: var(--hero-modal-placeholder-2-bg);
+}
+
+.hero-work-modal.hero-work--public-transport .hero-modal-bento-placeholder--2 {
+  background: var(--hero-modal-feature-bg);
 }
 
 .hero-work-modal.hero-work--perp-dex .hero-modal-bento-placeholder {
@@ -724,10 +798,6 @@ html.is-hero-modal-open body {
 
 .hero-work-modal.hero-work--perp-dex .hero-modal-bento-placeholder--4 {
   background: #0e1010;
-}
-
-.hero-work--store-finder .hero-modal-bento-placeholder--3 {
-  background: var(--bg);
 }
 
 .hero-modal-impact-list {
@@ -804,6 +874,17 @@ html.is-hero-modal-open body {
   position: static;
   flex: 1 1 auto;
   min-width: 0;
+}
+
+.hero-modal-description {
+  width: min(42vw, 640px);
+  max-width: 100%;
+  flex: 0 1 640px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: clamp(13px, 0.9vw, 17px);
+  font-weight: 400;
+  line-height: 1.45;
 }
 
 .hero-work-modal .hero-work-meta h2 {
@@ -1717,6 +1798,10 @@ body.is-project-transitioning .is-transition-source .project-card {
     --hero-modal-footer-height: 210px;
   }
 
+  .hero-work-modal--has-description {
+    --hero-modal-footer-height: 260px;
+  }
+
   .hero-modal-card-content {
     padding:
       var(--hero-modal-content-padding)
@@ -1753,6 +1838,18 @@ body.is-project-transitioning .is-transition-source .project-card {
     .hero-modal-bento-side
   ) {
     min-height: min(52svh, 480px);
+  }
+
+  .hero-modal-bento-section--three-up,
+  .hero-modal-bento-section--three-up:nth-child(even) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: "feature slot-1 slot-2";
+    min-height: min(72svh, 640px);
+  }
+
+  .hero-modal-bento-section--three-up .hero-modal-bento-feature {
+    min-height: 0;
   }
 
   .hero-modal-bento-section--four-up,
@@ -1812,6 +1909,13 @@ body.is-project-transitioning .is-transition-source .project-card {
 
   .hero-modal-footer--no-cta {
     min-height: 56px;
+  }
+
+  .hero-modal-description {
+    width: auto;
+    flex: 0 0 auto;
+    font-size: 13px;
+    line-height: 1.45;
   }
 
   .hero-work-modal .hero-work-meta h2 {

@@ -55,10 +55,54 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     return '<div class="hero-work-empty" aria-hidden="true"></div>';
   };
 
-  const getProjectMedia = (project) =>
-    project.projectMedia
-      ? `<img class="hero-modal-project-media" src="${project.projectMedia}" alt="" />`
-      : getWorkMedia(project);
+  const publicTransportModalVideos = [
+    {
+      source: "./assets/public-transport/bus-route.mp4",
+      label: "Bus timings & route",
+    },
+    {
+      source: "./assets/public-transport/mrt-route.mp4",
+      label: "Simple & shortest MRT route options",
+    },
+    {
+      source: "./assets/public-transport/google-map-share.mp4",
+      label: "Locations shared via Google Maps",
+    },
+  ];
+
+  const getPublicTransportModalVideo = (order) => {
+    const item = publicTransportModalVideos[order - 1];
+
+    return `
+      <div class="hero-modal-public-transport-video-frame">
+        <div class="hero-modal-public-transport-video-shadow">
+          <video
+            class="hero-modal-public-transport-video"
+            muted
+            playsinline
+            preload="auto"
+            data-public-transport-video
+            data-public-transport-video-order="${order}"
+          >
+            <source src="${item.source}" type="video/mp4" />
+          </video>
+        </div>
+        <p class="hero-modal-public-transport-caption">${item.label}</p>
+      </div>
+    `;
+  };
+
+  const getProjectMedia = (project) => {
+    if (project.projectMedia) {
+      return `<img class="hero-modal-project-media" src="${project.projectMedia}" alt="" />`;
+    }
+
+    if (project.id === "public-transport") {
+      return getPublicTransportModalVideo(1);
+    }
+
+    return getWorkMedia(project);
+  };
 
   const storeGuideImpactItems = [
     {
@@ -82,6 +126,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
   const getBentoPlaceholder = (project, index) => {
     const videoSegment = storeGuideVideoSegments[index];
+    const publicTransportMedia =
+      project.id === "public-transport"
+        ? getPublicTransportModalVideo(index + 2)
+        : "";
     const perpDexMedia =
       project.id === "perp-dex"
         ? [
@@ -174,7 +222,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
     return `
       <div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}">
-        ${perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || impactCards}
+        ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || impactCards}
       </div>
     `;
   };
@@ -337,6 +385,79 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     playEntry(sequence[autoIndex], true);
   };
 
+  const initializePublicTransportMediaPlayback = (modal) => {
+    const sequence = [...modal.querySelectorAll("[data-public-transport-video]")]
+      .map((video) => ({
+        video,
+        order: Number(video.dataset.publicTransportVideoOrder),
+        container: video.closest(".hero-modal-bento-feature, .hero-modal-bento-placeholder"),
+      }))
+      .filter((entry) => entry.container)
+      .sort((a, b) => a.order - b.order);
+
+    if (!sequence.length) return;
+
+    let activeEntry = null;
+    let autoIndex = 0;
+    let hoveredEntry = null;
+    let playbackToken = 0;
+
+    const showStaticFrame = (entry) => {
+      entry.container.classList.remove("is-playing");
+      entry.video.loop = false;
+      entry.video.pause();
+
+      if (entry.video.readyState >= 1) entry.video.currentTime = 0;
+    };
+
+    const stopAll = () => sequence.forEach(showStaticFrame);
+
+    const advanceAuto = () => {
+      autoIndex = (autoIndex + 1) % sequence.length;
+      playEntry(sequence[autoIndex], true);
+    };
+
+    const playEntry = (entry, isAutoPlay = false) => {
+      const token = ++playbackToken;
+      stopAll();
+      activeEntry = entry;
+      entry.container.classList.add("is-playing");
+
+      const startVideo = () => {
+        if (token !== playbackToken || !modal.isConnected) return;
+        entry.video.loop = !isAutoPlay;
+        entry.video.currentTime = 0;
+        entry.video.play().catch(() => {
+          // Muted playback can still be blocked until the next user interaction.
+        });
+      };
+
+      if (entry.video.readyState >= 1) startVideo();
+      else entry.video.addEventListener("loadedmetadata", startVideo, { once: true });
+    };
+
+    sequence.forEach((entry) => {
+      entry.video.addEventListener("ended", () => {
+        if (entry === activeEntry && !hoveredEntry && modal.isConnected) advanceAuto();
+      });
+
+      entry.container.addEventListener("mouseenter", () => {
+        hoveredEntry = entry;
+        playEntry(entry);
+      });
+
+      entry.container.addEventListener("mouseleave", () => {
+        if (hoveredEntry !== entry) return;
+        hoveredEntry = null;
+        autoIndex = (sequence.indexOf(entry) + 1) % sequence.length;
+        playEntry(sequence[autoIndex], true);
+      });
+    });
+
+    sequence.forEach(showStaticFrame);
+    playEntry(sequence[autoIndex], true);
+  };
+
   const renderWorkCard = (project, isClone = false) => {
     const content = `
       ${getWorkMedia(project)}
@@ -443,13 +564,18 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         </a>
       `
       : "";
+    const descriptionMarkup = project.modalDescription
+      ? `<p class="hero-modal-description">${project.modalDescription}</p>`
+      : "";
     const isPerpDexProject = project.id === "perp-dex";
-    const placeholderCount = isPerpDexProject ? 4 : 3;
+    const isPublicTransportProject = project.id === "public-transport";
+    const placeholderCount = isPerpDexProject ? 4 : isPublicTransportProject ? 2 : 3;
     const bentoPlaceholders = Array.from({ length: placeholderCount }, (_, index) =>
       getBentoPlaceholder(project, index),
     );
-    const usesFourPartBento = !project.cta && !isPerpDexProject;
-    const isWebProject = project.deviceType === "web" && !usesFourPartBento;
+    const usesThreePartBento = isPublicTransportProject;
+    const usesFourPartBento = !project.cta && !isPerpDexProject && !usesThreePartBento;
+    const isWebProject = project.deviceType === "web" && !usesThreePartBento && !usesFourPartBento;
     const usesSingleTopBento = project.id === "cta-enhancement";
     const bentoStackTopMarkup = usesSingleTopBento
       ? bentoPlaceholders[0]
@@ -465,11 +591,13 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         </div>
         ${bentoPlaceholders[3]}
       `
-      : usesFourPartBento
+      : usesThreePartBento
         ? bentoPlaceholders.join("")
-        : isWebProject
-          ? `<div class="hero-modal-bento-side">${bentoPlaceholders[0]}</div>`
-          : `
+        : usesFourPartBento
+          ? bentoPlaceholders.join("")
+          : isWebProject
+            ? `<div class="hero-modal-bento-side">${bentoPlaceholders[0]}</div>`
+            : `
         <div class="hero-modal-bento-stack">
           <div class="hero-modal-bento-stack-top${usesSingleTopBento ? " hero-modal-bento-stack-top--single" : ""}">
             ${bentoStackTopMarkup}
@@ -486,13 +614,13 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       `;
 
     layer.className = "hero-modal-layer";
-    modal.className = `hero-work-modal hero-work--${project.id}`;
+    modal.className = `hero-work-modal hero-work--${project.id}${descriptionMarkup ? " hero-work-modal--has-description" : ""}`;
     modal.setAttribute("role", "dialog");
     modal.setAttribute("aria-modal", "true");
     modal.setAttribute("aria-labelledby", titleId);
     modal.innerHTML = `
       <div class="hero-modal-card-content">
-        <section class="hero-modal-bento-section${isWebProject ? " hero-modal-bento-section--web" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}${isPerpDexProject ? " hero-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
+        <section class="hero-modal-bento-section${isWebProject ? " hero-modal-bento-section--web" : ""}${usesThreePartBento ? " hero-modal-bento-section--three-up" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}${isPerpDexProject ? " hero-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
           ${bentoFeatureMarkup}
           ${bentoSideMarkup}
         </section>
@@ -503,7 +631,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           <h2 id="${titleId}">${project.title}</h2>
           ${project.companyLabel ? `<span>@ ${project.companyLabel}</span>` : ""}
         </div>
-        ${ctaMarkup}
+        ${ctaMarkup || descriptionMarkup}
       </div>
     `;
 
@@ -513,6 +641,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     document.body.append(layer);
     initializeSegmentVideos(modal);
     initializePerpDexMediaPlayback(modal);
+    initializePublicTransportMediaPlayback(modal);
 
     modal.classList.add("is-revealing");
     work.classList.add("is-modal-source");

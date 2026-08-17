@@ -31,6 +31,8 @@ export const heroProjects = [
     title: "Public Transport App in SG",
     companyLabel: "Taurus Labs",
     deviceType: "mobile",
+    modalDescription:
+      "Finding the right MRT exit and exploring transit routes on a full-screen map still felt harder than it should be. I built BusMrtSG to solve those transit-specific problems using AI coding tools and a serverless architecture.",
   },
   {
     id: "article-studio",
@@ -50,5 +52,7 @@ export const heroProjects = [
     title: "Clearer Control for Perp Trading",
     companyLabel: "Taurus Labs",
     deviceType: "mobile",
+    modalDescription:
+      "I redesigned the trading and wallet experience to streamline key workflows, helping users act with greater speed and confidence while improving portfolio visibility and transaction clarity.",
   },
 ];
