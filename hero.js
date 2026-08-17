@@ -6,20 +6,35 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   let activeModal = null;
 
   const getWorkMedia = (project) => {
-    if (project.media !== "store-guide") {
-      return '<div class="hero-work-empty" aria-hidden="true"></div>';
+    if (project.deviceType === "web") {
+      return `
+        <div class="hero-project-mockups hero-project-mockups--web" aria-hidden="true">
+          <img class="hero-web-mockup" src="./assets/common/hero-web-mockup.png" alt="" />
+        </div>
+      `;
     }
 
-    return `
-      <div class="hero-store-guide-mockups" aria-hidden="true">
-        <div class="hero-phone-mockup hero-phone-mockup--center">
-          <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/store-guide/solution-tobe1.png">
-            <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
-          </video>
-          <img class="hero-phone-frame" src="./assets/common/hero-mobile-frame.png" alt="" />
+    if (project.deviceType === "mobile") {
+      const screenMedia =
+        project.media === "store-guide"
+          ? `
+            <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/store-guide/solution-tobe1.png">
+              <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
+            </video>
+          `
+          : "";
+
+      return `
+        <div class="hero-project-mockups hero-project-mockups--mobile" aria-hidden="true">
+          <div class="hero-phone-mockup hero-phone-mockup--center">
+            ${screenMedia}
+            <img class="hero-phone-frame" src="./assets/common/hero-mobile-frame.png" alt="" />
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    }
+
+    return '<div class="hero-work-empty" aria-hidden="true"></div>';
   };
 
   const renderWorkCard = (project, isClone = false) => {
@@ -96,6 +111,11 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         </a>
       `
       : "";
+    const placeholderCount = 2;
+    const bentoPlaceholders = Array.from(
+      { length: placeholderCount },
+      (_, index) => `<div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}"></div>`,
+    ).join("");
 
     layer.className = "hero-modal-layer";
     modal.className = `hero-work-modal hero-work--${project.id}`;
@@ -103,15 +123,26 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     modal.setAttribute("aria-modal", "true");
     modal.setAttribute("aria-labelledby", titleId);
     modal.innerHTML = `
-      <div class="hero-modal-card-content">${work.innerHTML}</div>
+      <div class="hero-modal-transition-cover" aria-hidden="true">${work.innerHTML}</div>
+      <div class="hero-modal-card-content">
+        <section class="hero-modal-bento-section" aria-hidden="true">
+          <div class="hero-modal-bento-feature">
+            ${getWorkMedia(project)}
+          </div>
+          <div class="hero-modal-bento-stack">
+            ${bentoPlaceholders}
+          </div>
+        </section>
+      </div>
       <button class="hero-modal-close" type="button" aria-label="Close project preview"></button>
       <div class="hero-modal-footer">
+        <div class="hero-work-meta">
+          <h2 id="${titleId}">${project.title}</h2>
+          ${project.companyLabel ? `<span>@ ${project.companyLabel}</span>` : ""}
+        </div>
         ${ctaMarkup}
       </div>
     `;
-    const modalMeta = modal.querySelector(".hero-work-meta");
-    modal.querySelector(".hero-modal-footer")?.prepend(modalMeta);
-    modalMeta?.querySelector("h2")?.setAttribute("id", titleId);
     applyRect(modal, sourceRect);
     modal.style.borderRadius = sourceRadius;
     layer.append(modal);
@@ -153,6 +184,12 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const closeButton = modal.querySelector(".hero-modal-close");
     const cta = modal.querySelector(".hero-modal-cta");
     let isClosing = false;
+    const revealTimer = window.setTimeout(
+      () => {
+        if (!isClosing) modal.classList.add("is-revealing");
+      },
+      prefersReducedMotion ? 0 : 480,
+    );
 
     const handleModalResize = () => {
       if (!isClosing && modal.classList.contains("is-ready")) {
@@ -163,7 +200,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const closeModal = () => {
       if (isClosing) return;
       isClosing = true;
-      modal.classList.remove("is-ready");
+      window.clearTimeout(revealTimer);
+      modal.classList.remove("is-revealing", "is-ready");
 
       const currentRect = modal.getBoundingClientRect();
       const currentRadius = window.getComputedStyle(modal).borderRadius;
@@ -254,10 +292,11 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     modalAnimation.finished
       .then(() => {
         if (isClosing) return;
+        window.clearTimeout(revealTimer);
         applyRect(modal, targetRect);
         modal.style.borderRadius = "36px";
         modalAnimation.cancel();
-        modal.classList.add("is-ready");
+        modal.classList.add("is-revealing", "is-ready");
         closeButton.focus({ preventScroll: true });
       })
       .catch(() => {

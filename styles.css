@@ -224,7 +224,7 @@ body.is-project-transitioning {
   inset: 0;
 }
 
-.hero-store-guide-mockups {
+.hero-project-mockups {
   position: absolute;
   top: 12%;
   right: 0;
@@ -239,7 +239,7 @@ body.is-project-transitioning {
   position: relative;
   width: 190px;
   aspect-ratio: 430 / 860;
-  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.16));
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.16));
 }
 
 .hero-phone-mockup--center {
@@ -262,6 +262,13 @@ body.is-project-transitioning {
   display: block;
   width: 100%;
   height: 100%;
+  pointer-events: none;
+}
+
+.hero-web-mockup {
+  display: block;
+  width: min(84%, 680px);
+  height: auto;
   pointer-events: none;
 }
 
@@ -322,12 +329,92 @@ html.is-hero-modal-open body {
   will-change: top, left, width, height, border-radius;
 }
 
+.hero-modal-transition-cover,
 .hero-modal-card-content {
   position: absolute;
   inset: 0;
+  transition: opacity 180ms ease;
+}
+
+.hero-modal-transition-cover {
+  overflow: hidden;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.hero-modal-card-content {
+  padding: 12px 12px clamp(136px, 16vh, 184px);
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-work-modal.is-revealing .hero-modal-transition-cover {
+  opacity: 0;
+}
+
+.hero-work-modal.is-revealing .hero-modal-card-content {
+  opacity: 1;
+}
+
+.hero-work-modal.is-ready .hero-modal-card-content {
+  pointer-events: auto;
+}
+
+.hero-modal-bento-section {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-areas: "feature stack";
+  min-height: 100%;
+  gap: 12px;
+}
+
+.hero-modal-bento-section:nth-child(even) {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  grid-template-areas: "stack feature";
+}
+
+.hero-modal-bento-section + .hero-modal-bento-section {
+  margin-top: 12px;
+}
+
+.hero-modal-bento-feature,
+.hero-modal-bento-placeholder {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 28px;
+}
+
+.hero-modal-bento-feature {
+  grid-area: feature;
+  background: color-mix(in srgb, var(--surface) 82%, var(--bg));
+}
+
+.hero-modal-bento-feature .hero-phone-mockup {
+  width: 250px;
+}
+
+.hero-modal-bento-stack {
+  grid-area: stack;
+  display: grid;
+  min-width: 0;
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.hero-modal-bento-placeholder--1 {
+  background: #d9f36c;
+}
+
+.hero-modal-bento-placeholder--2 {
+  background: #91a9ff;
+}
+
+.hero-modal-bento-placeholder--3 {
+  background: #ff9f73;
 }
 
 .hero-modal-footer {
@@ -337,10 +424,11 @@ html.is-hero-modal-open body {
   left: clamp(24px, 3vw, 72px);
   z-index: 4;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: clamp(24px, 4vw, 72px);
   opacity: 0;
+  pointer-events: none;
   transform: translateY(10px);
   transition:
     opacity 180ms ease,
@@ -367,6 +455,7 @@ html.is-hero-modal-open body {
   position: absolute;
   z-index: 4;
   opacity: 0;
+  pointer-events: none;
   transform: translateY(10px);
   transition:
     opacity 180ms ease,
@@ -374,10 +463,19 @@ html.is-hero-modal-open body {
     background-color 180ms ease;
 }
 
-.hero-work-modal.is-ready .hero-modal-close,
-.hero-work-modal.is-ready .hero-modal-footer {
+.hero-work-modal.is-revealing .hero-modal-close,
+.hero-work-modal.is-revealing .hero-modal-footer {
   opacity: 1;
   transform: translateY(0);
+}
+
+.hero-work-modal.is-revealing .hero-modal-footer {
+  transition-delay: 60ms;
+}
+
+.hero-work-modal.is-ready .hero-modal-close,
+.hero-work-modal.is-ready .hero-modal-footer {
+  pointer-events: auto;
 }
 
 .hero-modal-close {
@@ -388,7 +486,7 @@ html.is-hero-modal-open body {
   padding: 0;
   border: 0;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  background: var(--surface);
   color: var(--text);
   cursor: pointer;
   backdrop-filter: blur(10px);
@@ -453,7 +551,7 @@ html.is-hero-modal-open body {
 }
 
 .hero-modal-close:hover {
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  background: color-mix(in srgb, var(--surface) 86%, var(--text));
 }
 
 .hero-modal-cta:hover .hero-modal-cta-arrow--internal {
@@ -1209,12 +1307,50 @@ body.is-project-transitioning .is-transition-source .project-card {
     font-size: 15px;
   }
 
-  .hero-store-guide-mockups {
+  .hero-project-mockups {
     top: 15%;
     right: 0;
     bottom: 17%;
     left: 0;
     height: auto;
+  }
+
+  .hero-modal-card-content {
+    padding: 8px 8px 210px;
+  }
+
+  .hero-modal-bento-section,
+  .hero-modal-bento-section:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "feature"
+      "stack";
+    min-height: auto;
+    gap: 8px;
+  }
+
+  .hero-modal-bento-section:nth-child(even) {
+    grid-template-areas:
+      "stack"
+      "feature";
+  }
+
+  .hero-modal-bento-section + .hero-modal-bento-section {
+    margin-top: 8px;
+  }
+
+  .hero-modal-bento-feature,
+  .hero-modal-bento-placeholder {
+    border-radius: 20px;
+  }
+
+  .hero-modal-bento-feature {
+    min-height: min(58svh, 540px);
+  }
+
+  .hero-modal-bento-stack {
+    min-height: min(52svh, 480px);
+    gap: 8px;
   }
 
   .hero-modal-footer {
@@ -1239,7 +1375,7 @@ body.is-project-transitioning .is-transition-source .project-card {
     min-height: 56px;
   }
 
-  .hero-work-modal .hero-store-guide-mockups {
+  .hero-work-modal .hero-project-mockups {
     top: 10%;
     bottom: 24%;
   }
