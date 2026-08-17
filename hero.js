@@ -9,7 +9,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     if (project.deviceType === "web") {
       return `
         <div class="hero-project-mockups hero-project-mockups--web" aria-hidden="true">
-          <img class="hero-web-mockup" src="./assets/common/hero-web-mockup.png" alt="" />
+          <img class="hero-web-mockup" src="./assets/common/laptop.png" alt="" />
         </div>
       `;
     }
@@ -22,7 +22,25 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
               <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
             </video>
           `
-          : "";
+          : project.id === "cta-enhancement"
+            ? `
+              <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata">
+                <source src="./assets/cta-enhancement/cta-enhancement-solution.mp4" type="video/mp4" />
+              </video>
+            `
+            : project.id === "public-transport"
+              ? `
+                <video class="hero-phone-screen hero-phone-screen--public-transport" autoplay muted loop playsinline preload="metadata">
+                  <source src="./assets/public-transport/mrt-bottomsheet.mp4" type="video/mp4" />
+                </video>
+              `
+              : project.id === "perp-dex"
+                ? `
+                  <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata">
+                    <source src="./assets/perp-dex/onboarding.mp4" type="video/mp4" />
+                  </video>
+                `
+                : "";
 
       return `
         <div class="hero-project-mockups hero-project-mockups--mobile" aria-hidden="true">
@@ -68,7 +86,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       project.media === "store-guide" && videoSegment
         ? `
           <video
-            class="hero-modal-segment-video"
+            class="hero-modal-bento-video hero-modal-segment-video"
             autoplay
             muted
             playsinline
@@ -79,6 +97,33 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           >
             <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
           </video>
+        `
+        : "";
+    const ctaEnhancementVideo =
+      project.id === "cta-enhancement" && index === 0
+        ? `
+          <div class="hero-modal-bento-video-frame">
+            <video
+              class="hero-modal-bento-video"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+            >
+              <source src="./assets/cta-enhancement/cta-enhancement-solution.mp4" type="video/mp4" />
+            </video>
+          </div>
+        `
+        : "";
+    const ctaEnhancementResult =
+      project.id === "cta-enhancement" && index === 2
+        ? `
+          <div class="hero-modal-result">
+            <div class="hero-modal-result-chart">
+              <img src="./assets/cta-enhancement/result-chart.png" alt="" />
+            </div>
+          </div>
         `
         : "";
     const impactCards =
@@ -103,7 +148,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
     return `
       <div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}">
-        ${segmentVideo || impactCards}
+        ${segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || impactCards}
       </div>
     `;
   };
@@ -229,14 +274,18 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     );
     const usesFourPartBento = !project.cta;
     const isWebProject = project.deviceType === "web" && !usesFourPartBento;
+    const usesSingleTopBento = project.id === "cta-enhancement";
+    const bentoStackTopMarkup = usesSingleTopBento
+      ? bentoPlaceholders[0]
+      : bentoPlaceholders.slice(0, 2).join("");
     const bentoSideMarkup = usesFourPartBento
       ? bentoPlaceholders.join("")
       : isWebProject
         ? `<div class="hero-modal-bento-side">${bentoPlaceholders[0]}</div>`
         : `
         <div class="hero-modal-bento-stack">
-          <div class="hero-modal-bento-stack-top">
-            ${bentoPlaceholders.slice(0, 2).join("")}
+          <div class="hero-modal-bento-stack-top${usesSingleTopBento ? " hero-modal-bento-stack-top--single" : ""}">
+            ${bentoStackTopMarkup}
           </div>
           ${bentoPlaceholders[2]}
         </div>

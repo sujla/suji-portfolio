@@ -39,7 +39,7 @@ export const projects = [
   },
   {
     slug: "cta-enhancement",
-    analyticsId: "pickup_order_ux_enhancement",
+    analyticsId: "cta_enhancement",
     detailSlug: "converting-intent-into-pickup",
     wip: true,
     number: "02",

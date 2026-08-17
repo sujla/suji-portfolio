@@ -264,6 +264,18 @@ body.is-project-transitioning {
   align-self: end;
 }
 
+.hero-work--perp-dex .hero-phone-mockup {
+  border-radius: 28px;
+}
+
+.hero-work--perp-dex .hero-phone-screen {
+  left: 2%;
+  width: 95%;
+  height: calc(100% - 4px);
+  clip-path: inset(6px 0 0 0 round 24px);
+  top: -6px;
+}
+
 .hero-phone-screen {
   position: absolute;
   top: 2px;
@@ -276,6 +288,11 @@ body.is-project-transitioning {
   object-position: center top;
 }
 
+.hero-phone-screen--public-transport {
+  border-radius: 20px;
+  object-position: center bottom;
+}
+
 .hero-phone-frame {
   position: absolute;
   inset: 0;
@@ -285,10 +302,17 @@ body.is-project-transitioning {
   pointer-events: none;
 }
 
+.hero-project-mockups--web {
+  top: 10%;
+  bottom: 17%;
+  place-items: center;
+}
+
 .hero-web-mockup {
   display: block;
-  width: min(84%, 680px);
+  width: min(85%, 700px);
   height: auto;
+  filter: drop-shadow(0 16px 24px rgba(2, 5, 8, 0.18));
   pointer-events: none;
 }
 
@@ -452,7 +476,7 @@ html.is-hero-modal-open body {
   object-fit: cover;
 }
 
-.hero-modal-segment-video {
+.hero-modal-bento-video {
   position: absolute;
   top: var(--hero-modal-video-top, 0);
   right: 16px;
@@ -464,17 +488,90 @@ html.is-hero-modal-open body {
   object-fit: cover;
   object-position: center var(--hero-modal-video-y, 50%);
   clip-path: inset(0 1px 1px 0);
+  border-radius: 18px;
+}
+
+.hero-modal-segment-video {
   opacity: 0;
   transition: opacity 180ms ease;
+}
+
+.hero-work--cta-enhancement .hero-modal-bento-video-frame {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  z-index: 1;
+  height: calc(100% - 48px);
+  max-width: calc(100% - 48px);
+  aspect-ratio: 1080 / 2340;
+  transform: translateX(-50%) scale(1.1);
+  transform-origin: center bottom;
+}
+
+.hero-work--cta-enhancement .hero-modal-bento-video-frame::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  content: "";
+}
+
+.hero-work--cta-enhancement .hero-modal-bento-video {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  clip-path: none;
+  border-radius: 18px 18px 0 0;
 }
 
 .hero-work--store-finder :is(
   .hero-modal-bento-placeholder--1,
   .hero-modal-bento-placeholder--2
-) {
+),
+.hero-work--cta-enhancement .hero-modal-bento-placeholder--1 {
   isolation: isolate;
   background: var(--bg);
+}
+
+.hero-work--cta-enhancement .hero-modal-bento-placeholder--1 {
+  border: 1px solid var(--bg);
+}
+
+.hero-work--cta-enhancement .hero-modal-bento-placeholder--3 {
+  background: var(--bg);
+  border: 1px solid var(--bg);
+}
+
+.hero-modal-result {
+  height: 100%;
+}
+
+.hero-modal-result-chart {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #fff;
+}
+
+.hero-modal-result-chart img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+:root[data-theme="light"] .hero-modal-result-chart {
+  background: color-mix(in srgb, var(--bg) 50%, #fff);
+}
+
+:root[data-theme="light"] .hero-modal-result-chart img {
+  mix-blend-mode: multiply;
 }
 
 .hero-work--store-finder :is(
@@ -524,6 +621,10 @@ html.is-hero-modal-open body {
   min-width: 0;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.hero-modal-bento-stack-top--single {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .hero-modal-bento-placeholder--1 {
@@ -1513,6 +1614,15 @@ body.is-project-transitioning .is-transition-source .project-card {
     bottom: 17%;
     left: 0;
     height: auto;
+  }
+
+  .hero-project-mockups--web {
+    top: 21%;
+    bottom: 16%;
+  }
+
+  .hero-web-mockup {
+    width: min(92%, 540px);
   }
 
   .hero-work-modal {

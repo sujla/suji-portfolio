@@ -14,7 +14,7 @@ export const heroProjects = [
     },
   },
   {
-    id: "pickup-order",
+    id: "cta-enhancement",
     href: "./projects/converting-intent-into-pickup/",
     title: "Pickup Order UX Enhancement",
     companyLabel: "CJ Olive Young",
