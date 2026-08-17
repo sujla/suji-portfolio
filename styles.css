@@ -424,7 +424,7 @@ html.is-hero-modal-open body {
   outline-offset: 4px;
 }
 
-:root.is-hero-active :is(.year-rail, .fixed-project-meta, .project-counter) {
+:root:is(.is-hero-active, .is-about-active) :is(.year-rail, .fixed-project-meta, .project-counter) {
   opacity: 0;
   pointer-events: none;
 }
@@ -550,6 +550,15 @@ html.is-hero-modal-open body {
   display: block;
   height: var(--portfolio-end-padding, 0px);
   content: "";
+}
+
+.about-section {
+  display: flex;
+  width: 100%;
+  height: 100svh;
+  align-items: center;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
 }
 
 .project-section {

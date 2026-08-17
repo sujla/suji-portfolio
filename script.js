@@ -3,6 +3,7 @@ import { heroProjects } from "./data/hero-projects.js";
 import { renderHero } from "./hero.js";
 
 const hero = document.querySelector("[data-hero]");
+const about = document.querySelector("[data-about]");
 const projectList = document.querySelector("[data-project-list]");
 const currentProject = document.querySelector("[data-current-project]");
 const totalProjects = document.querySelector("[data-total-projects]");
@@ -327,6 +328,16 @@ const updateHeroState = () => {
   hero.style.setProperty("--hero-scroll-offset", `${scrollProgress * -96}px`);
 };
 
+const updateAboutState = () => {
+  if (!about) return;
+
+  const rect = about.getBoundingClientRect();
+  const viewportCenter = window.innerHeight / 2;
+  const isAboutActive = rect.top <= viewportCenter && rect.bottom >= viewportCenter;
+
+  root.classList.toggle("is-about-active", isAboutActive);
+};
+
 const setActiveProject = (index) => {
   if (index === activeIndex || index < 0) return;
 
@@ -376,6 +387,7 @@ const requestProjectUpdate = () => {
   cancelAnimationFrame(frame);
   frame = requestAnimationFrame(() => {
     updateHeroState();
+    updateAboutState();
     updateFocusedProject();
   });
 };
