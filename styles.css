@@ -70,6 +70,16 @@
   background: var(--active-project-color);
 }
 
+:root[data-theme="dark"] :is(.hero-section, .about-section) ::selection {
+  color: var(--text);
+  background: rgba(247, 248, 245, 0.1);
+}
+
+:root[data-theme="light"] :is(.hero-section, .about-section) ::selection {
+  color: var(--text);
+  background: rgba(2, 5, 8, 0.08);
+}
+
 * {
   box-sizing: border-box;
 }
