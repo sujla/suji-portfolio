@@ -22,7 +22,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     `;
   };
 
-  const renderWorkCard = (project) => {
+  const renderWorkCard = (project, isClone = false) => {
     const content = `
       ${getWorkMedia(project)}
       <div class="hero-work-meta">
@@ -31,8 +31,18 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       </div>
     `;
 
-    return `<a class="hero-work hero-work--${project.id}" href="${project.href}" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
+    if (isClone) {
+      return `<div class="hero-work hero-work--${project.id} hero-work--clone" aria-hidden="true">${content}</div>`;
+    }
+
+    return `<a class="hero-work hero-work--${project.id}" href="${project.href}" draggable="false" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
   };
+
+  const renderWorkSet = (isClone = false) => `
+    <div class="hero-work-set${isClone ? " hero-work-set--clone" : " hero-work-set--primary"}">
+      ${heroProjects.map((project) => renderWorkCard(project, isClone)).join("")}
+    </div>
+  `;
 
   const isPlainNavigationClick = (event, link) =>
     event.button === 0 &&
@@ -147,7 +157,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       applyRect(modal, currentRect);
       modal.style.borderRadius = currentRadius;
 
-      const closeDuration = prefersReducedMotion ? 1 : 560;
+      const closeDuration = prefersReducedMotion ? 1 : 320;
       const sourceRevealAnimation = work.animate([{ opacity: 0 }, { opacity: 1 }], {
         duration: prefersReducedMotion ? 1 : 180,
         easing: "ease-out",
@@ -178,7 +188,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       );
 
       layer.animate([{ opacity: 1 }, { opacity: 0 }], {
-        duration: closeDuration,
+        duration: prefersReducedMotion ? 1 : 240,
         easing: "ease-in",
         fill: "forwards",
       });
@@ -191,7 +201,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         document.removeEventListener("keydown", handleModalKeydown);
         window.removeEventListener("resize", handleModalResize);
         activeModal = null;
-        work.focus({ preventScroll: true });
+        const focusTarget = work.matches("a")
+          ? work
+          : hero.querySelector(`.hero-work-set--primary .hero-work--${project.id}`);
+        focusTarget?.focus({ preventScroll: true });
       });
     };
 
@@ -237,51 +250,96 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   };
 
   hero.innerHTML = `
-    <div class="hero-work-rail" data-hero-work-rail>
+    <div class="hero-work-rail hero-work-rail--infinite" data-hero-work-rail>
       <div class="hero-work-track">
-        ${heroProjects.map((project) => renderWorkCard(project)).join("")}
+        ${renderWorkSet(true)}
+        ${renderWorkSet()}
+        ${renderWorkSet(true)}
       </div>
     </div>
   `;
 
   const rail = hero.querySelector("[data-hero-work-rail]");
+  const workSets = [...hero.querySelectorAll(".hero-work-set")];
+  const primaryFirstWork = hero.querySelector(".hero-work-set--primary .hero-work");
+  const defaultAutoScrollSpeed = 32;
+  const hoverAutoScrollSpeed = 12;
   let autoScrollPreviousTime;
   let autoScrollPausedUntil = 0;
-  let autoScrollPosition = rail?.scrollLeft ?? 0;
-  let isHoveringWork = false;
+  let autoScrollPosition = 0;
+  let autoScrollSpeed = defaultAutoScrollSpeed;
+  let isHoveringRail = false;
+  let isDraggingRail = false;
+  let dragStartX = 0;
+  let dragStartScrollLeft = 0;
+  let dragMoved = false;
+  let suppressNextClick = false;
+  let segmentWidth = 0;
+  let centerScrollLeft = 0;
 
-  const updateRailFade = () => {
-    if (!rail) return;
+  const syncInfiniteMetrics = ({ preservePosition = false } = {}) => {
+    if (!rail || !primaryFirstWork || workSets.length < 3) return;
 
-    const maxScrollLeft = rail.scrollWidth - rail.clientWidth;
-    rail.style.setProperty("--hero-fade-left", rail.scrollLeft > 1 ? "16px" : "0px");
-    rail.style.setProperty("--hero-fade-right", rail.scrollLeft < maxScrollLeft - 1 ? "24px" : "0px");
+    const previousSegmentWidth = segmentWidth;
+    const previousCenterScrollLeft = centerScrollLeft;
+    const relativePosition = previousSegmentWidth
+      ? (rail.scrollLeft - previousCenterScrollLeft) / previousSegmentWidth
+      : 0;
+
+    const railRect = rail.getBoundingClientRect();
+    const primaryFirstWorkRect = primaryFirstWork.getBoundingClientRect();
+    const primaryFirstWorkScrollLeft = rail.scrollLeft + primaryFirstWorkRect.left - railRect.left;
+
+    segmentWidth = workSets[2].getBoundingClientRect().left - workSets[1].getBoundingClientRect().left;
+    centerScrollLeft =
+      primaryFirstWorkScrollLeft - (rail.clientWidth - primaryFirstWorkRect.width) / 2;
+    rail.scrollLeft = preservePosition
+      ? centerScrollLeft + relativePosition * segmentWidth
+      : centerScrollLeft;
+    autoScrollPosition = rail.scrollLeft;
+  };
+
+  const normalizeInfiniteScroll = () => {
+    if (!rail || !segmentWidth) return 0;
+
+    const lowerBoundary = centerScrollLeft - segmentWidth * 0.5;
+    const upperBoundary = centerScrollLeft + segmentWidth * 0.5;
+    let normalizedScrollLeft = rail.scrollLeft;
+
+    while (normalizedScrollLeft < lowerBoundary) normalizedScrollLeft += segmentWidth;
+    while (normalizedScrollLeft >= upperBoundary) normalizedScrollLeft -= segmentWidth;
+
+    const scrollShift = normalizedScrollLeft - rail.scrollLeft;
+    if (Math.abs(scrollShift) > 0.5) rail.scrollLeft = normalizedScrollLeft;
+
+    return scrollShift;
   };
 
   const pauseAutoScroll = () => {
     autoScrollPosition = rail?.scrollLeft ?? autoScrollPosition;
-    autoScrollPausedUntil = performance.now() + 2200;
+    autoScrollPausedUntil = performance.now() + 200;
   };
 
   const animateRail = (time) => {
     const elapsed = Math.min((time - (autoScrollPreviousTime ?? time)) / 1000, 0.1);
+    const targetAutoScrollSpeed = isHoveringRail ? hoverAutoScrollSpeed : defaultAutoScrollSpeed;
     autoScrollPreviousTime = time;
+    autoScrollSpeed +=
+      (targetAutoScrollSpeed - autoScrollSpeed) * Math.min(elapsed * 6, 1);
 
     if (rail) {
       const heroBounds = hero.getBoundingClientRect();
       const heroIsVisible = heroBounds.bottom > 0 && heroBounds.top < window.innerHeight;
-      const maxScrollLeft = rail.scrollWidth - rail.clientWidth;
 
       if (
         heroIsVisible &&
-        !isHoveringWork &&
+        !isDraggingRail &&
         !document.documentElement.classList.contains("is-hero-modal-open") &&
-        time >= autoScrollPausedUntil &&
-        maxScrollLeft > 0
+        time >= autoScrollPausedUntil
       ) {
-        autoScrollPosition = Math.min(autoScrollPosition + elapsed * 12, maxScrollLeft);
+        autoScrollPosition += elapsed * autoScrollSpeed;
         rail.scrollLeft = autoScrollPosition;
-        updateRailFade();
+        autoScrollPosition += normalizeInfiniteScroll();
       }
     }
 
@@ -290,6 +348,16 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
   requestAnimationFrame(animateRail);
 
+  requestAnimationFrame(() => syncInfiniteMetrics());
+
+  rail?.addEventListener("mouseenter", () => {
+    isHoveringRail = true;
+  });
+
+  rail?.addEventListener("mouseleave", () => {
+    isHoveringRail = false;
+  });
+
   hero.addEventListener(
     "wheel",
     (event) => {
@@ -297,30 +365,76 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
       pauseAutoScroll();
 
-      const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-      const maxScrollLeft = rail.scrollWidth - rail.clientWidth;
-      const canScrollForward = delta > 0 && rail.scrollLeft < maxScrollLeft - 1;
-      const canScrollBackward = delta < 0 && rail.scrollLeft > 1;
-
-      if (!canScrollForward && !canScrollBackward) return;
-
-      event.preventDefault();
-      rail.scrollLeft = Math.min(Math.max(rail.scrollLeft + delta, 0), maxScrollLeft);
-      autoScrollPosition = rail.scrollLeft;
-      updateRailFade();
+      if (event.shiftKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+        event.preventDefault();
+      }
     },
     { passive: false },
   );
 
+  rail?.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0 || activeModal) return;
+
+    isDraggingRail = true;
+    dragMoved = false;
+    dragStartX = event.clientX;
+    dragStartScrollLeft = rail.scrollLeft;
+    pauseAutoScroll();
+  });
+
+  rail?.addEventListener("dragstart", (event) => {
+    event.preventDefault();
+  });
+
+  rail?.addEventListener("pointermove", (event) => {
+    if (!isDraggingRail) return;
+
+    const dragDistance = event.clientX - dragStartX;
+    if (!dragMoved && Math.abs(dragDistance) <= 5) return;
+
+    if (!dragMoved) {
+      dragMoved = true;
+      rail.classList.add("is-dragging");
+      rail.setPointerCapture(event.pointerId);
+    }
+
+    rail.scrollLeft = dragStartScrollLeft - dragDistance;
+    dragStartScrollLeft += normalizeInfiniteScroll();
+    autoScrollPosition = rail.scrollLeft;
+    pauseAutoScroll();
+  });
+
+  const finishRailDrag = (event) => {
+    if (!rail || !isDraggingRail) return;
+
+    isDraggingRail = false;
+    rail.classList.remove("is-dragging");
+    if (rail.hasPointerCapture(event.pointerId)) rail.releasePointerCapture(event.pointerId);
+    autoScrollPosition = rail.scrollLeft;
+
+    if (dragMoved) {
+      suppressNextClick = true;
+      window.setTimeout(() => {
+        suppressNextClick = false;
+      }, 0);
+    }
+  };
+
+  rail?.addEventListener("pointerup", finishRailDrag);
+  rail?.addEventListener("pointercancel", finishRailDrag);
+  rail?.addEventListener(
+    "click",
+    (event) => {
+      if (!suppressNextClick) return;
+
+      suppressNextClick = false;
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true,
+  );
+
   hero.querySelectorAll(".hero-work").forEach((work) => {
-    work.addEventListener("pointerenter", () => {
-      isHoveringWork = true;
-    });
-
-    work.addEventListener("pointerleave", () => {
-      isHoveringWork = false;
-    });
-
     work.addEventListener("click", (event) => {
       if (!isPlainNavigationClick(event, work)) return;
 
@@ -333,6 +447,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     });
   });
 
-  rail?.addEventListener("scroll", updateRailFade, { passive: true });
-  updateRailFade();
+  window.addEventListener("resize", () => {
+    requestAnimationFrame(() => syncInfiniteMetrics({ preservePosition: true }));
+  });
 };

@@ -141,14 +141,14 @@ body.is-project-transitioning {
 }
 
 .hero-work-rail {
-  width: calc(100% - 32px);
-  height: 100%;
-  margin-inline-start: 24px;
-  margin-inline-end: 16px;
+  width: 100%;
+  height: min(100%, 576px);
   overflow: hidden;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
+  cursor: grab;
+  touch-action: pan-y;
   opacity: calc(1 - var(--hero-scroll-progress, 0));
   transform: translate3d(0, var(--hero-scroll-offset, 0px), 0);
   will-change: opacity, transform;
@@ -156,16 +156,34 @@ body.is-project-transitioning {
   mask-image: linear-gradient(to right, transparent, #000 var(--hero-fade-left, 0px), #000 calc(100% - var(--hero-fade-right, 40px)), transparent);
 }
 
+.hero-work-rail--infinite {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.hero-work-rail.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
 .hero-work-rail::-webkit-scrollbar {
   display: none;
 }
 
 .hero-work-track {
+  --hero-work-gap: clamp(12px, 1.3vw, 36px);
   display: flex;
   width: max-content;
   min-width: 100%;
   height: 100%;
-  gap: clamp(12px, 1.3vw, 36px);
+  gap: var(--hero-work-gap);
+}
+
+.hero-work-set {
+  display: flex;
+  flex: 0 0 auto;
+  height: 100%;
+  gap: var(--hero-work-gap);
 }
 
 .hero-work {
@@ -179,7 +197,10 @@ body.is-project-transitioning {
   color: var(--text);
   background: var(--surface);
   text-decoration: none;
-  margin: 8px 0 20px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  margin: 8px 0;
 }
 
 .hero-work--store-guide {
@@ -193,9 +214,9 @@ body.is-project-transitioning {
 
 .hero-store-guide-mockups {
   position: absolute;
-  top: 15%;
+  top: 12%;
   right: 0;
-  bottom: 18%;
+  bottom: 24%;
   left: 0;
   display: grid;
   place-items: end center;
@@ -204,7 +225,7 @@ body.is-project-transitioning {
 
 .hero-phone-mockup {
   position: relative;
-  width: min(32%, 320px);
+  width: 190px;
   aspect-ratio: 430 / 860;
   filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.16));
 }
@@ -239,26 +260,26 @@ body.is-project-transitioning {
 
 .hero-work-meta {
   position: absolute;
-  right: clamp(28px, 3vw, 80px);
-  bottom: clamp(28px, 3vw, 80px);
-  left: clamp(28px, 3vw, 80px);
+  right: clamp(28px, 2vw, 80px);
+  bottom: clamp(28px, 2.25vw, 80px);
+  left: clamp(28px, 2.55vw, 80px);
   z-index: 1;
 }
 
 .hero-work-meta span {
   display: block;
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: clamp(16px, 1.1vw, 28px);
   font-weight: 400;
   line-height: 1.1;
+  color: var(--text-secondary)
 }
 
 .hero-work-meta h2 {
   margin: 0;
-  font-size: clamp(20px, 1.35vw, 34px);
-  font-weight: 600;
+  font-size: clamp(18px, 1.25vw, 34px);
+  font-weight: 500;
   line-height: 1.05;
-  letter-spacing: -0.04em;
 }
 
 html.is-hero-modal-open,
@@ -1124,10 +1145,6 @@ body.is-project-transitioning .is-transition-source .project-card {
     bottom: 17%;
     left: 0;
     height: auto;
-  }
-
-  .hero-phone-mockup--center {
-    width: min(48%, 220px);
   }
 
   .hero-work-modal .hero-work-meta {
