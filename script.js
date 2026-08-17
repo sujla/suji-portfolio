@@ -4,6 +4,7 @@ import { renderHero } from "./hero.js";
 
 const hero = document.querySelector("[data-hero]");
 const about = document.querySelector("[data-about]");
+const aboutPhotoStack = document.querySelector(".about-photo-stack");
 const projectList = document.querySelector("[data-project-list]");
 const currentProject = document.querySelector("[data-current-project]");
 const totalProjects = document.querySelector("[data-total-projects]");
@@ -21,9 +22,36 @@ const projectTransitionDuration = 760;
 const desktopProjectTransitionMargin = 12;
 const mobileProjectTransitionMargin = 8;
 const mobileProjectMedia = window.matchMedia("(max-width: 600px)");
+const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+const aboutPhotoInterval = 3000;
+const aboutPhotoTransitionDuration = 200;
 let projectTransitionInProgress = false;
 let mobileProjectViewportHeight = 0;
 let lastViewportWidth = 0;
+let aboutPhotoLoopTimer = 0;
+let aboutPhotoTransitionTimer = 0;
+
+const shuffleAboutPhotos = () => {
+  const frontPhoto = aboutPhotoStack?.lastElementChild;
+
+  if (!frontPhoto || aboutPhotoStack.children.length < 2 || frontPhoto.classList.contains("is-moving-to-back")) return;
+
+  frontPhoto.classList.add("is-moving-to-back");
+  aboutPhotoTransitionTimer = window.setTimeout(() => {
+    aboutPhotoStack.prepend(frontPhoto);
+    window.requestAnimationFrame(() => frontPhoto.classList.remove("is-moving-to-back"));
+  }, aboutPhotoTransitionDuration);
+};
+
+const syncAboutPhotoLoop = () => {
+  window.clearInterval(aboutPhotoLoopTimer);
+  window.clearTimeout(aboutPhotoTransitionTimer);
+  aboutPhotoStack?.querySelector(".is-moving-to-back")?.classList.remove("is-moving-to-back");
+
+  if (!aboutPhotoStack || aboutPhotoStack.children.length < 2 || reducedMotionMedia.matches) return;
+
+  aboutPhotoLoopTimer = window.setInterval(shuffleAboutPhotos, aboutPhotoInterval);
+};
 
 const getSessionItem = (key) => {
   try {
@@ -402,6 +430,9 @@ const preferredTheme = localStorage.getItem("portfolio-theme") || "light";
 
 const getNavigationType = () =>
   window.performance.getEntriesByType("navigation")[0]?.type || "navigate";
+
+reducedMotionMedia.addEventListener?.("change", syncAboutPhotoLoop);
+syncAboutPhotoLoop();
 
 renderHero(hero, heroProjects, getPlainTitle);
 renderProjects();

@@ -37,7 +37,7 @@ export const heroProjects = [
   {
     id: "article-studio",
     href: "./projects/from-weeks-to-minutes/",
-    title: "Internal Editorial Tool Revamp",
+    title: "Editorial Workflow: From Weeks to Minutes",
     companyLabel: "CJ Olive Young",
     deviceType: "web",
     projectMedia: "./assets/common/article-studio-main.avif",
