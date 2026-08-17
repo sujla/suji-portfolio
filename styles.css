@@ -11,6 +11,7 @@
   --toggle-bg: #282827;
   --toggle-knob: rgba(247, 248, 245, 0.12);
   --card-text: #020508;
+  --hero-cta-color: #020508;
   --green: #17ff2b;
   --orange: #ff8422;
   --red: #EE6D6D;
@@ -43,6 +44,7 @@
   --toggle-bg: #DBDBDA;
   --toggle-knob: rgba(255, 255, 255, 0.8);
   --card-text: #020508;
+  --hero-cta-color: #fff;
   --gnb-bg: rgba(231, 231, 230, 0.2);
   --red: #f04b4b;
   --red-bg: rgba(223, 78, 78, 0.12);
@@ -261,7 +263,7 @@ body.is-project-transitioning {
 .hero-work-meta {
   position: absolute;
   right: clamp(28px, 2vw, 80px);
-  bottom: clamp(28px, 2.25vw, 80px);
+  bottom: clamp(24px, 2vw, 80px);
   left: clamp(28px, 2.55vw, 80px);
   z-index: 1;
 }
@@ -313,28 +315,45 @@ html.is-hero-modal-open body {
 .hero-modal-card-content {
   position: absolute;
   inset: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
-.hero-work-modal .hero-work-meta {
-  right: clamp(32px, 4vw, 72px);
-  bottom: clamp(34px, 5vw, 76px);
-  left: clamp(32px, 4vw, 72px);
-  padding-right: min(34vw, 390px);
+.hero-modal-footer {
+  position: absolute;
+  right: clamp(24px, 3vw, 72px);
+  bottom: clamp(20px, 2.6vw, 72px);
+  left: clamp(24px, 3vw, 72px);
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(24px, 4vw, 72px);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 180ms ease,
+    transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-work-modal .hero-modal-footer .hero-work-meta {
+  position: static;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .hero-work-modal .hero-work-meta h2 {
-  font-size: clamp(28px, 3.2vw, 64px);
+  font-size: clamp(22px, 1.35vw, 34px);
   line-height: 0.98;
 }
 
 .hero-work-modal .hero-work-meta span {
   margin-top: 10px;
-  font-size: clamp(16px, 1.4vw, 24px);
+  font-size: clamp(16px, 1.1vw, 28px);
 }
 
-.hero-modal-close,
-.hero-modal-cta {
+.hero-modal-close {
   position: absolute;
   z-index: 4;
   opacity: 0;
@@ -346,7 +365,7 @@ html.is-hero-modal-open body {
 }
 
 .hero-work-modal.is-ready .hero-modal-close,
-.hero-work-modal.is-ready .hero-modal-cta {
+.hero-work-modal.is-ready .hero-modal-footer {
   opacity: 1;
   transform: translateY(0);
 }
@@ -387,34 +406,51 @@ html.is-hero-modal-open body {
 }
 
 .hero-modal-cta {
-  right: clamp(32px, 4vw, 72px);
-  bottom: clamp(32px, 4vw, 72px);
   display: inline-flex;
+  flex: 0 0 auto;
   min-height: 60px;
   align-items: center;
   justify-content: center;
-  gap: 22px;
+  gap: 8px;
   padding: 0 22px 1px 26px;
   border-radius: 999px;
-  color: var(--bg);
+  color: var(--hero-cta-color);
   background: var(--text);
   font-size: clamp(16px, 1.15vw, 20px);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
+  text-transform: capitalize;
   text-decoration: none;
 }
 
 .hero-modal-cta-arrow {
-  font-size: 1.2em;
-  line-height: 1;
+  display: block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  background: currentColor;
   transition: transform 220ms ease;
+}
+
+.hero-modal-cta-arrow--internal {
+  mask: url("assets/common/arrow_right_big.svg") center / contain no-repeat;
+  -webkit-mask: url("assets/common/arrow_right_big.svg") center / contain no-repeat;
+}
+
+.hero-modal-cta-arrow--external {
+  mask: url("assets/common/arrow-up-right.svg") center / contain no-repeat;
+  -webkit-mask: url("assets/common/arrow-up-right.svg") center / contain no-repeat;
 }
 
 .hero-modal-close:hover {
   background: color-mix(in srgb, var(--bg) 92%, transparent);
 }
 
-.hero-modal-cta:hover .hero-modal-cta-arrow {
+.hero-modal-cta:hover .hero-modal-cta-arrow--internal {
+  transform: translateX(3px);
+}
+
+.hero-modal-cta:hover .hero-modal-cta-arrow--external {
   transform: translate(3px, -3px);
 }
 
@@ -559,6 +595,21 @@ html.is-hero-modal-open body {
   align-items: center;
   scroll-snap-align: center;
   scroll-snap-stop: always;
+  padding-inline: 80px;
+}
+
+#about-title {
+  margin-bottom: 24px;
+  font-size: 48px;
+  line-height: 1.2;
+  max-width: 800px;
+}
+
+.about-body {
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 1.3;
+  color: var(--text-secondary);
+  max-width: 900px;
 }
 
 .project-section {
@@ -1156,11 +1207,13 @@ body.is-project-transitioning .is-transition-source .project-card {
     height: auto;
   }
 
-  .hero-work-modal .hero-work-meta {
-    right: 24px;
-    bottom: 110px;
-    left: 24px;
-    padding-right: 0;
+  .hero-modal-footer {
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
   }
 
   .hero-work-modal .hero-work-meta h2 {
@@ -1173,9 +1226,6 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .hero-modal-cta {
-    right: 20px;
-    bottom: 20px;
-    left: 20px;
     min-height: 56px;
   }
 

@@ -16,7 +16,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/store-guide/solution-tobe1.png">
             <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
           </video>
-          <img class="hero-phone-frame" src="./assets/store-guide/solution-showcase-phone-frame.png" alt="" />
+          <img class="hero-phone-frame" src="./assets/common/hero-mobile-frame.png" alt="" />
         </div>
       </div>
     `;
@@ -81,6 +81,21 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const titleId = `hero-modal-${project.id}-title`;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const transitionDuration = prefersReducedMotion ? 1 : modalTransitionDuration;
+    const ctaMarkup = project.cta
+      ? `
+        <a
+          class="hero-modal-cta"
+          href="${project.cta.href}"
+          ${project.cta.newTab ? 'target="_blank" rel="noopener noreferrer"' : ""}
+        >
+          <span>${project.cta.label}</span>
+          <span
+            class="hero-modal-cta-arrow hero-modal-cta-arrow--${project.cta.newTab ? "external" : "internal"}"
+            aria-hidden="true"
+          ></span>
+        </a>
+      `
+      : "";
 
     layer.className = "hero-modal-layer";
     modal.className = `hero-work-modal hero-work--${project.id}`;
@@ -90,12 +105,13 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     modal.innerHTML = `
       <div class="hero-modal-card-content">${work.innerHTML}</div>
       <button class="hero-modal-close" type="button" aria-label="Close project preview"></button>
-      <a class="hero-modal-cta" href="${project.href}">
-        <span>View case study</span>
-        <span class="hero-modal-cta-arrow" aria-hidden="true">↗</span>
-      </a>
+      <div class="hero-modal-footer">
+        ${ctaMarkup}
+      </div>
     `;
-    modal.querySelector(".hero-work-meta h2")?.setAttribute("id", titleId);
+    const modalMeta = modal.querySelector(".hero-work-meta");
+    modal.querySelector(".hero-modal-footer")?.prepend(modalMeta);
+    modalMeta?.querySelector("h2")?.setAttribute("id", titleId);
     applyRect(modal, sourceRect);
     modal.style.borderRadius = sourceRadius;
     layer.append(modal);
@@ -217,7 +233,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
       if (event.key !== "Tab") return;
 
-      const focusable = [closeButton, cta];
+      const focusable = [closeButton, cta].filter(Boolean);
       const currentIndex = focusable.indexOf(document.activeElement);
       const nextIndex = event.shiftKey
         ? (currentIndex - 1 + focusable.length) % focusable.length
