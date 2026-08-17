@@ -400,6 +400,38 @@ html.is-hero-modal-open body {
   object-fit: cover;
 }
 
+.hero-modal-segment-video {
+  position: absolute;
+  right: 11px;
+  left: 12px;
+  display: block;
+  width: calc(100% - 23px);
+  height: 100%;
+  object-fit: cover;
+  clip-path: inset(0 1px 0 0);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.hero-work--store-finder :is(
+  .hero-modal-bento-placeholder--1,
+  .hero-modal-bento-placeholder--2
+) {
+  background: var(--bg);
+}
+
+.hero-modal-bento-placeholder--1 .hero-modal-segment-video {
+  top: -12px;
+}
+
+.hero-modal-bento-placeholder--2 .hero-modal-segment-video {
+  top: 12px;
+}
+
+.hero-modal-segment-video.is-ready {
+  opacity: 1;
+}
+
 .hero-modal-bento-feature .hero-phone-mockup {
   width: 250px;
 }
@@ -508,8 +540,8 @@ html.is-hero-modal-open body {
 }
 
 .hero-modal-close {
-  top: 20px;
-  right: 20px;
+  top: 22px;
+  right: 22px;
   width: 48px;
   height: 48px;
   padding: 0;
@@ -517,6 +549,9 @@ html.is-hero-modal-open body {
   border-radius: 999px;
   background: var(--surface);
   color: var(--text);
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);

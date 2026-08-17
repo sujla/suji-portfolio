@@ -42,6 +42,64 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       ? `<img class="hero-modal-project-media" src="${project.projectMedia}" alt="" />`
       : getWorkMedia(project);
 
+  const getBentoPlaceholder = (project, index) => {
+    const segmentStart = index * 8;
+    const segmentEnd = segmentStart + 8;
+    const segmentVideo =
+      project.media === "store-guide" && index < 2
+        ? `
+          <video
+            class="hero-modal-segment-video"
+            autoplay
+            muted
+            playsinline
+            preload="auto"
+            poster="./assets/store-guide/solution-tobe1.png"
+            data-segment-start="${segmentStart}"
+            data-segment-end="${segmentEnd}"
+          >
+            <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
+          </video>
+        `
+        : "";
+
+    return `
+      <div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}">
+        ${segmentVideo}
+      </div>
+    `;
+  };
+
+  const initializeSegmentVideos = (modal) => {
+    modal.querySelectorAll(".hero-modal-segment-video").forEach((video) => {
+      const segmentStart = Number(video.dataset.segmentStart);
+      const segmentEnd = Number(video.dataset.segmentEnd);
+
+      const restartSegment = () => {
+        video.currentTime = segmentStart;
+        video.play().catch(() => {
+          // Autoplay can be blocked by the browser until the next user interaction.
+        });
+      };
+
+      const prepareSegment = () => {
+        video.currentTime = segmentStart;
+        video.classList.add("is-ready");
+        video.play().catch(() => {
+          // Autoplay can be blocked by the browser until the next user interaction.
+        });
+      };
+
+      video.addEventListener("loadedmetadata", prepareSegment, { once: true });
+      video.addEventListener("timeupdate", () => {
+        if (video.currentTime >= segmentEnd) restartSegment();
+      });
+      video.addEventListener("ended", restartSegment);
+
+      if (video.readyState >= 1) prepareSegment();
+    });
+  };
+
   const renderWorkCard = (project, isClone = false) => {
     const content = `
       ${getWorkMedia(project)}
@@ -128,9 +186,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       `
       : "";
     const placeholderCount = 3;
-    const bentoPlaceholders = Array.from(
-      { length: placeholderCount },
-      (_, index) => `<div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}"></div>`,
+    const bentoPlaceholders = Array.from({ length: placeholderCount }, (_, index) =>
+      getBentoPlaceholder(project, index),
     );
 
     layer.className = "hero-modal-layer";
@@ -165,6 +222,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     modal.style.borderRadius = sourceRadius;
     layer.append(modal);
     document.body.append(layer);
+    initializeSegmentVideos(modal);
 
     modal.classList.add("is-revealing");
     work.classList.add("is-modal-source");
