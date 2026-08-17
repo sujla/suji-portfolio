@@ -266,12 +266,14 @@ body.is-project-transitioning {
 
 .hero-phone-screen {
   position: absolute;
-  inset: 1.2% 4%;
+  top: 2px;
+  left: 3.5%;
   display: block;
-  width: 92%;
+  width: 93%;
   height: 97.6%;
-  border-radius: 8%;
+  border-radius: 24px;
   object-fit: cover;
+  object-position: center top;
 }
 
 .hero-phone-frame {
