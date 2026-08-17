@@ -37,6 +37,11 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     return '<div class="hero-work-empty" aria-hidden="true"></div>';
   };
 
+  const getProjectMedia = (project) =>
+    project.projectMedia
+      ? `<img class="hero-modal-project-media" src="${project.projectMedia}" alt="" />`
+      : getWorkMedia(project);
+
   const renderWorkCard = (project, isClone = false) => {
     const content = `
       ${getWorkMedia(project)}
@@ -122,11 +127,11 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         </a>
       `
       : "";
-    const placeholderCount = 2;
+    const placeholderCount = 3;
     const bentoPlaceholders = Array.from(
       { length: placeholderCount },
       (_, index) => `<div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}"></div>`,
-    ).join("");
+    );
 
     layer.className = "hero-modal-layer";
     modal.className = `hero-work-modal hero-work--${project.id}`;
@@ -137,10 +142,13 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       <div class="hero-modal-card-content">
         <section class="hero-modal-bento-section" aria-hidden="true">
           <div class="hero-modal-bento-feature">
-            ${getWorkMedia(project)}
+            ${getProjectMedia(project)}
           </div>
           <div class="hero-modal-bento-stack">
-            ${bentoPlaceholders}
+            <div class="hero-modal-bento-stack-top">
+              ${bentoPlaceholders.slice(0, 2).join("")}
+            </div>
+            ${bentoPlaceholders[2]}
           </div>
         </section>
       </div>

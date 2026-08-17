@@ -6,6 +6,7 @@ export const heroProjects = [
     companyLabel: "Olive Young",
     deviceType: "mobile",
     media: "store-guide",
+    projectMedia: "./assets/common/store-guide-main.avif",
     cta: {
       label: "View Case Study",
       href: "./projects/nearby-stores-right-products/",
@@ -18,6 +19,7 @@ export const heroProjects = [
     title: "Pickup Order UX Enhancement",
     companyLabel: "Olive Young",
     deviceType: "mobile",
+    projectMedia: "./assets/common/cta-enh-main.avif",
     cta: {
       label: "View Case Study",
       href: "https://sujikweon.framer.website/cta-enhancement",
@@ -36,6 +38,7 @@ export const heroProjects = [
     title: "Internal Editorial Tool Revamp",
     companyLabel: "Olive Young",
     deviceType: "web",
+    projectMedia: "./assets/common/article-studio-main.avif",
     cta: {
       label: "View Case Study",
       href: "https://sujikweon.framer.website/article-studio",
