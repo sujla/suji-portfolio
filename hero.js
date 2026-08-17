@@ -9,7 +9,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     if (project.deviceType === "web") {
       return `
         <div class="hero-project-mockups hero-project-mockups--web" aria-hidden="true">
-          <img class="hero-web-mockup" src="./assets/common/laptop.png" alt="" />
+          <div class="hero-web-mockup">
+            <img class="hero-web-screen" src="./assets/article-studio/main.png" alt="" />
+            <img class="hero-web-frame" src="./assets/common/laptop.png" alt="" />
+          </div>
         </div>
       `;
     }
@@ -207,6 +210,23 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           </div>
         `
         : "";
+    const articleStudioMedia =
+      project.id === "article-studio" && index === 0
+        ? `
+          <div class="hero-modal-article-studio-roller">
+            <div class="hero-modal-article-studio-track">
+              <img src="./assets/article-studio/structure.png" alt="" />
+              <img src="./assets/article-studio/props.png" alt="" />
+            </div>
+            <div class="hero-modal-article-studio-carousel">
+              <span class="hero-modal-article-studio-carousel-segment hero-modal-article-studio-carousel-segment--1"></span>
+              <span class="hero-modal-article-studio-carousel-segment hero-modal-article-studio-carousel-segment--2"></span>
+            </div>
+          </div>
+        `
+        : project.id === "article-studio" && index === 1
+          ? `<img class="hero-modal-article-studio-interface" src="./assets/article-studio/interface.png" alt="" />`
+          : "";
     const impactCards =
       project.media === "store-guide" && index === 2
         ? `
@@ -229,7 +249,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
     return `
       <div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}">
-        ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || impactCards}
+        ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || articleStudioMedia || impactCards}
       </div>
     `;
   };
@@ -603,7 +623,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         : usesFourPartBento
           ? bentoPlaceholders.join("")
           : isWebProject
-            ? `<div class="hero-modal-bento-side">${bentoPlaceholders[0]}</div>`
+            ? `<div class="hero-modal-bento-side">${bentoPlaceholders.slice(0, 2).join("")}</div>`
             : `
         <div class="hero-modal-bento-stack">
           <div class="hero-modal-bento-stack-top${usesSingleTopBento ? " hero-modal-bento-stack-top--single" : ""}">

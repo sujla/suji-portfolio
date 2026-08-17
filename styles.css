@@ -321,10 +321,31 @@ body.is-project-transitioning {
 }
 
 .hero-web-mockup {
-  display: block;
+  position: relative;
   width: min(85%, 700px);
-  height: auto;
+  aspect-ratio: 1124 / 630;
   filter: drop-shadow(0 16px 24px rgba(2, 5, 8, 0.18));
+  pointer-events: none;
+}
+
+.hero-web-screen {
+  position: absolute;
+  top: 2.9%;
+  left: 11%;
+  display: block;
+  width: 78%;
+  height: auto;
+  aspect-ratio: 1485 / 962;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.hero-web-frame {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
@@ -562,11 +583,15 @@ html.is-hero-modal-open body {
 
 .hero-modal-bento-side {
   grid-area: side;
+  display: grid;
   min-width: 0;
+  min-height: 0;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .hero-modal-bento-side > .hero-modal-bento-placeholder {
-  height: 100%;
+  min-height: 0;
 }
 
 .hero-modal-project-media {
@@ -576,6 +601,145 @@ html.is-hero-modal-open body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.hero-modal-article-studio-roller {
+  --article-studio-rotation-duration: 8s;
+
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: rgb(250, 250, 252);
+}
+
+.hero-modal-article-studio-track {
+  display: grid;
+  width: 100%;
+  height: 200%;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  animation: hero-article-studio-roll var(--article-studio-rotation-duration) cubic-bezier(0.76, 0, 0.24, 1) infinite;
+}
+
+.hero-modal-article-studio-track img,
+.hero-modal-article-studio-interface {
+  display: block;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.hero-modal-article-studio-track img {
+  justify-self: center;
+}
+
+.hero-modal-article-studio-interface {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.hero-modal-article-studio-carousel {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  width: min(214px, calc(100% - 32px));
+  gap: 14px;
+  transform: translateX(-50%);
+}
+
+.hero-modal-article-studio-carousel-segment {
+  position: relative;
+  display: block;
+  flex: 1 1 100px;
+  height: 24px;
+}
+
+.hero-modal-article-studio-carousel-segment::before,
+.hero-modal-article-studio-carousel-segment::after {
+  position: absolute;
+  top: 11px;
+  left: 0;
+  height: 2px;
+  content: "";
+}
+
+.hero-modal-article-studio-carousel-segment::before {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.hero-modal-article-studio-carousel-segment::after {
+  width: 0;
+  background: #111;
+}
+
+.hero-modal-article-studio-carousel-segment--1::after {
+  animation: hero-article-studio-progress-1 var(--article-studio-rotation-duration) linear infinite;
+}
+
+.hero-modal-article-studio-carousel-segment--2::after {
+  animation: hero-article-studio-progress-2 var(--article-studio-rotation-duration) linear infinite;
+}
+
+@keyframes hero-article-studio-roll {
+  0%,
+  40% {
+    transform: translateY(0);
+  }
+
+  50%,
+  90% {
+    transform: translateY(-50%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-article-studio-progress-1 {
+  0% {
+    width: 0;
+  }
+
+  40%,
+  49.999% {
+    width: 100%;
+  }
+
+  50%,
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes hero-article-studio-progress-2 {
+  0%,
+  50% {
+    width: 0;
+  }
+
+  90%,
+  100% {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-modal-article-studio-track,
+  .hero-modal-article-studio-carousel-segment::after {
+    animation: none;
+  }
+
+  .hero-modal-article-studio-carousel-segment--1::after {
+    width: 100%;
+  }
 }
 
 .hero-modal-public-transport-video-frame {
@@ -797,6 +961,14 @@ html.is-hero-modal-open body {
 
 .hero-work-modal:not(.hero-work--perp-dex) .hero-modal-bento-placeholder--3 {
   background: var(--hero-modal-placeholder-3-bg);
+}
+
+.hero-work-modal.hero-work--article-studio .hero-modal-bento-placeholder--1 {
+  background: rgb(250, 250, 252);
+}
+
+.hero-work-modal.hero-work--article-studio .hero-modal-bento-placeholder--2 {
+  background: rgb(251, 251, 252);
 }
 
 .hero-work-modal.hero-work--cta-enhancement .hero-modal-bento-placeholder--3 {
