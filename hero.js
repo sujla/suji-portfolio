@@ -82,6 +82,32 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
   const getBentoPlaceholder = (project, index) => {
     const videoSegment = storeGuideVideoSegments[index];
+    const perpDexMedia =
+      project.id === "perp-dex"
+        ? [
+            `
+              <video class="hero-modal-perp-media" muted playsinline preload="auto" data-perp-video data-perp-thumbnail-time="3.44">
+                <source src="./assets/perp-dex/logo-intro.mp4" type="video/mp4" />
+              </video>
+            `,
+            `
+              <video class="hero-modal-perp-media" muted playsinline preload="auto" data-perp-video>
+                <source src="./assets/perp-dex/sltp.mp4" type="video/mp4" />
+              </video>
+            `,
+            `
+              <div class="hero-modal-perp-media hero-modal-perp-gif" data-perp-gif data-perp-gif-src="./assets/perp-dex/multiwallet.gif" data-perp-gif-duration="6600">
+                <canvas class="hero-modal-perp-gif-frame" data-perp-gif-frame></canvas>
+                <img class="hero-modal-perp-gif-frame hero-modal-perp-gif-player" alt="" data-perp-gif-player />
+              </div>
+            `,
+            `
+              <video class="hero-modal-perp-media hero-modal-perp-media--trading" muted playsinline preload="auto" data-perp-video>
+                <source src="./assets/perp-dex/trading.mov" />
+              </video>
+            `,
+          ][index]
+        : "";
     const segmentVideo =
       project.media === "store-guide" && videoSegment
         ? `
@@ -148,7 +174,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
     return `
       <div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}">
-        ${segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || impactCards}
+        ${perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || impactCards}
       </div>
     `;
   };
@@ -181,6 +207,134 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
       if (video.readyState >= 1) prepareSegment();
     });
+  };
+
+  const initializePerpDexMediaPlayback = (modal) => {
+    const sequence = [4, 1, 2, 3]
+      .map((index) => modal.querySelector(`.hero-modal-bento-placeholder--${index}`))
+      .filter(Boolean)
+      .map((container) => ({
+        container,
+        video: container.querySelector("[data-perp-video]"),
+        gif: container.querySelector("[data-perp-gif]"),
+      }));
+
+    if (!sequence.length) return;
+
+    let activeEntry = null;
+    let autoIndex = 0;
+    let gifTimer = 0;
+    let playbackToken = 0;
+    let hoveredEntry = null;
+
+    const showStaticFrame = (entry) => {
+      entry.container.classList.remove("is-playing");
+
+      if (entry.video) {
+        const thumbnailTime = Number(entry.video.dataset.perpThumbnailTime || 0);
+        const freezeVideo = () => {
+          entry.video.loop = false;
+          entry.video.pause();
+          entry.video.currentTime = Math.min(
+            thumbnailTime,
+            Number.isFinite(entry.video.duration) ? entry.video.duration : thumbnailTime,
+          );
+        };
+
+        if (entry.video.readyState >= 1) freezeVideo();
+        else entry.video.addEventListener("loadedmetadata", freezeVideo, { once: true });
+      }
+
+      if (entry.gif) {
+        const player = entry.gif.querySelector("[data-perp-gif-player]");
+        player?.removeAttribute("src");
+      }
+    };
+
+    const stopAll = () => {
+      window.clearTimeout(gifTimer);
+      sequence.forEach(showStaticFrame);
+    };
+
+    const advanceAuto = () => {
+      autoIndex = (autoIndex + 1) % sequence.length;
+      playEntry(sequence[autoIndex], true);
+    };
+
+    const playEntry = (entry, isAutoPlay = false) => {
+      const token = ++playbackToken;
+      stopAll();
+      activeEntry = entry;
+      entry.container.classList.add("is-playing");
+
+      if (entry.video) {
+        const startVideo = () => {
+          if (token !== playbackToken || !modal.isConnected) return;
+          entry.video.loop = !isAutoPlay;
+          entry.video.currentTime = 0;
+          entry.video.play().catch(() => {
+            // Muted playback can still be blocked until the next user interaction.
+          });
+        };
+
+        if (entry.video.readyState >= 1) startVideo();
+        else entry.video.addEventListener("loadedmetadata", startVideo, { once: true });
+      }
+
+      if (entry.gif) {
+        const player = entry.gif.querySelector("[data-perp-gif-player]");
+        const source = entry.gif.dataset.perpGifSrc;
+
+        if (player && source) {
+          player.src = `${source}?play=${token}`;
+        }
+
+        if (isAutoPlay) {
+          gifTimer = window.setTimeout(() => {
+            if (token === playbackToken && !hoveredEntry && modal.isConnected) advanceAuto();
+          }, Number(entry.gif.dataset.perpGifDuration || 6600));
+        }
+      }
+    };
+
+    sequence.forEach((entry) => {
+      if (entry.video) {
+        entry.video.addEventListener("ended", () => {
+          if (entry === activeEntry && !hoveredEntry && modal.isConnected) advanceAuto();
+        });
+      }
+
+      if (entry.gif) {
+        const canvas = entry.gif.querySelector("[data-perp-gif-frame]");
+        const image = new Image();
+
+        image.addEventListener(
+          "load",
+          () => {
+            canvas.width = image.naturalWidth;
+            canvas.height = image.naturalHeight;
+            canvas.getContext("2d")?.drawImage(image, 0, 0);
+          },
+          { once: true },
+        );
+        image.src = entry.gif.dataset.perpGifSrc;
+      }
+
+      entry.container.addEventListener("mouseenter", () => {
+        hoveredEntry = entry;
+        playEntry(entry);
+      });
+
+      entry.container.addEventListener("mouseleave", () => {
+        if (hoveredEntry !== entry) return;
+        hoveredEntry = null;
+        autoIndex = (sequence.indexOf(entry) + 1) % sequence.length;
+        playEntry(sequence[autoIndex], true);
+      });
+    });
+
+    sequence.forEach(showStaticFrame);
+    playEntry(sequence[autoIndex], true);
   };
 
   const renderWorkCard = (project, isClone = false) => {
@@ -242,9 +396,30 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     });
   };
 
+  const pauseHeroWorkVideos = () => {
+    const videos = [...hero.querySelectorAll(".hero-work video")];
+    const playingVideos = videos.filter(
+      (video) => !video.paused && !video.ended,
+    );
+
+    videos.forEach((video) => video.pause());
+    return playingVideos;
+  };
+
+  const resumeHeroWorkVideos = (videos) => {
+    videos.forEach((video) => {
+      if (!video.isConnected) return;
+
+      video.play().catch(() => {
+        // Autoplay can be blocked by the browser until the next user interaction.
+      });
+    });
+  };
+
   const openWorkModal = (work, project) => {
     if (activeModal) return;
 
+    const pausedHeroWorkVideos = pauseHeroWorkVideos();
     const sourceRect = work.getBoundingClientRect();
     const sourceRadius = window.getComputedStyle(work).borderRadius;
     const targetRect = getModalTargetRect();
@@ -268,26 +443,45 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         </a>
       `
       : "";
-    const placeholderCount = 3;
+    const isPerpDexProject = project.id === "perp-dex";
+    const placeholderCount = isPerpDexProject ? 4 : 3;
     const bentoPlaceholders = Array.from({ length: placeholderCount }, (_, index) =>
       getBentoPlaceholder(project, index),
     );
-    const usesFourPartBento = !project.cta;
+    const usesFourPartBento = !project.cta && !isPerpDexProject;
     const isWebProject = project.deviceType === "web" && !usesFourPartBento;
     const usesSingleTopBento = project.id === "cta-enhancement";
     const bentoStackTopMarkup = usesSingleTopBento
       ? bentoPlaceholders[0]
       : bentoPlaceholders.slice(0, 2).join("");
-    const bentoSideMarkup = usesFourPartBento
-      ? bentoPlaceholders.join("")
-      : isWebProject
-        ? `<div class="hero-modal-bento-side">${bentoPlaceholders[0]}</div>`
-        : `
+    const bentoSideMarkup = isPerpDexProject
+      ? `
+        <div class="hero-modal-perp-left">
+          ${bentoPlaceholders[0]}
+          <div class="hero-modal-perp-center-bottom">
+            ${bentoPlaceholders[1]}
+            ${bentoPlaceholders[2]}
+          </div>
+        </div>
+        ${bentoPlaceholders[3]}
+      `
+      : usesFourPartBento
+        ? bentoPlaceholders.join("")
+        : isWebProject
+          ? `<div class="hero-modal-bento-side">${bentoPlaceholders[0]}</div>`
+          : `
         <div class="hero-modal-bento-stack">
           <div class="hero-modal-bento-stack-top${usesSingleTopBento ? " hero-modal-bento-stack-top--single" : ""}">
             ${bentoStackTopMarkup}
           </div>
           ${bentoPlaceholders[2]}
+        </div>
+      `;
+    const bentoFeatureMarkup = isPerpDexProject
+      ? ""
+      : `
+        <div class="hero-modal-bento-feature">
+          ${getProjectMedia(project)}
         </div>
       `;
 
@@ -298,10 +492,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     modal.setAttribute("aria-labelledby", titleId);
     modal.innerHTML = `
       <div class="hero-modal-card-content">
-        <section class="hero-modal-bento-section${isWebProject ? " hero-modal-bento-section--web" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}" aria-hidden="true">
-          <div class="hero-modal-bento-feature">
-            ${getProjectMedia(project)}
-          </div>
+        <section class="hero-modal-bento-section${isWebProject ? " hero-modal-bento-section--web" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}${isPerpDexProject ? " hero-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
+          ${bentoFeatureMarkup}
           ${bentoSideMarkup}
         </section>
       </div>
@@ -314,11 +506,13 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         ${ctaMarkup}
       </div>
     `;
+
     applyRect(modal, sourceRect);
     modal.style.borderRadius = sourceRadius;
     layer.append(modal);
     document.body.append(layer);
     initializeSegmentVideos(modal);
+    initializePerpDexMediaPlayback(modal);
 
     modal.classList.add("is-revealing");
     work.classList.add("is-modal-source");
@@ -440,6 +634,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         document.removeEventListener("keydown", handleModalKeydown);
         window.removeEventListener("resize", handleModalResize);
         activeModal = null;
+        resumeHeroWorkVideos(pausedHeroWorkVideos);
         const focusTarget = work.matches("a")
           ? work
           : hero.querySelector(`.hero-work-set--primary .hero-work--${project.id}`);
