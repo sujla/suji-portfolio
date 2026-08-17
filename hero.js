@@ -42,6 +42,21 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       ? `<img class="hero-modal-project-media" src="${project.projectMedia}" alt="" />`
       : getWorkMedia(project);
 
+  const storeGuideImpactItems = [
+    {
+      image: "./assets/store-guide/impact-1.png",
+      title: "Flow-level Tracking Foundation",
+    },
+    {
+      image: "./assets/store-guide/impact-2.png",
+      title: "Available-store List Views",
+    },
+    {
+      image: "./assets/store-guide/impact-3.png",
+      title: "Pickup Conversion",
+    },
+  ];
+
   const getBentoPlaceholder = (project, index) => {
     const segmentStart = index * 8;
     const segmentEnd = segmentStart + 8;
@@ -62,10 +77,29 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           </video>
         `
         : "";
+    const impactCards =
+      project.media === "store-guide" && index === 2
+        ? `
+          <div class="hero-modal-impact-list">
+            ${storeGuideImpactItems
+              .map(
+                (item) => `
+                  <article class="hero-modal-impact-card">
+                    <div class="hero-modal-impact-media">
+                      <img src="${item.image}" alt="" />
+                    </div>
+                    <h3>${item.title}</h3>
+                  </article>
+                `,
+              )
+              .join("")}
+          </div>
+        `
+        : "";
 
     return `
       <div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}">
-        ${segmentVideo}
+        ${segmentVideo || impactCards}
       </div>
     `;
   };
@@ -189,6 +223,20 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const bentoPlaceholders = Array.from({ length: placeholderCount }, (_, index) =>
       getBentoPlaceholder(project, index),
     );
+    const usesFourPartBento = !project.cta;
+    const isWebProject = project.deviceType === "web" && !usesFourPartBento;
+    const bentoSideMarkup = usesFourPartBento
+      ? bentoPlaceholders.join("")
+      : isWebProject
+        ? `<div class="hero-modal-bento-side">${bentoPlaceholders[0]}</div>`
+        : `
+        <div class="hero-modal-bento-stack">
+          <div class="hero-modal-bento-stack-top">
+            ${bentoPlaceholders.slice(0, 2).join("")}
+          </div>
+          ${bentoPlaceholders[2]}
+        </div>
+      `;
 
     layer.className = "hero-modal-layer";
     modal.className = `hero-work-modal hero-work--${project.id}`;
@@ -197,16 +245,11 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     modal.setAttribute("aria-labelledby", titleId);
     modal.innerHTML = `
       <div class="hero-modal-card-content">
-        <section class="hero-modal-bento-section" aria-hidden="true">
+        <section class="hero-modal-bento-section${isWebProject ? " hero-modal-bento-section--web" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}" aria-hidden="true">
           <div class="hero-modal-bento-feature">
             ${getProjectMedia(project)}
           </div>
-          <div class="hero-modal-bento-stack">
-            <div class="hero-modal-bento-stack-top">
-              ${bentoPlaceholders.slice(0, 2).join("")}
-            </div>
-            ${bentoPlaceholders[2]}
-          </div>
+          ${bentoSideMarkup}
         </section>
       </div>
       <button class="hero-modal-close" type="button" aria-label="Close project preview"></button>
