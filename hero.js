@@ -45,23 +45,27 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   const storeGuideImpactItems = [
     {
       image: "./assets/store-guide/impact-1.png",
-      title: "Flow-level Tracking Foundation",
+      title: "Flow-level Data Tracking",
     },
     {
       image: "./assets/store-guide/impact-2.png",
-      title: "Available-store List Views",
+      title: "Increased Page Views",
     },
     {
       image: "./assets/store-guide/impact-3.png",
-      title: "Pickup Conversion",
+      title: "Pickup Conversion up to 11%",
     },
   ];
 
+  const storeGuideVideoSegments = [
+    { start: 0, end: 5 },
+    { start: 18, end: 26 },
+  ];
+
   const getBentoPlaceholder = (project, index) => {
-    const segmentStart = index * 8;
-    const segmentEnd = segmentStart + 8;
+    const videoSegment = storeGuideVideoSegments[index];
     const segmentVideo =
-      project.media === "store-guide" && index < 2
+      project.media === "store-guide" && videoSegment
         ? `
           <video
             class="hero-modal-segment-video"
@@ -70,8 +74,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
             playsinline
             preload="auto"
             poster="./assets/store-guide/solution-tobe1.png"
-            data-segment-start="${segmentStart}"
-            data-segment-end="${segmentEnd}"
+            data-segment-start="${videoSegment.start}"
+            data-segment-end="${videoSegment.end}"
           >
             <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
           </video>
