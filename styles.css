@@ -326,20 +326,17 @@ html.is-hero-modal-open body {
   color: var(--text);
   background: var(--surface);
   box-shadow: 0 32px 100px rgba(0, 0, 0, 0.34);
-  will-change: top, left, width, height, border-radius;
+  will-change: top, left, width, height, border-radius, opacity;
 }
 
-.hero-modal-transition-cover,
+.hero-work-modal.is-navigating {
+  pointer-events: none;
+}
+
 .hero-modal-card-content {
   position: absolute;
   inset: 0;
   transition: opacity 180ms ease;
-}
-
-.hero-modal-transition-cover {
-  overflow: hidden;
-  opacity: 1;
-  pointer-events: none;
 }
 
 .hero-modal-card-content {
@@ -349,10 +346,6 @@ html.is-hero-modal-open body {
   overscroll-behavior: contain;
   opacity: 0;
   pointer-events: none;
-}
-
-.hero-work-modal.is-revealing .hero-modal-transition-cover {
-  opacity: 0;
 }
 
 .hero-work-modal.is-revealing .hero-modal-card-content {
@@ -435,6 +428,10 @@ html.is-hero-modal-open body {
     transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.hero-modal-footer--no-cta {
+  min-height: 60px;
+}
+
 .hero-work-modal .hero-modal-footer .hero-work-meta {
   position: static;
   flex: 1 1 auto;
@@ -476,6 +473,13 @@ html.is-hero-modal-open body {
 .hero-work-modal.is-ready .hero-modal-close,
 .hero-work-modal.is-ready .hero-modal-footer {
   pointer-events: auto;
+}
+
+.hero-work-modal.is-closing .hero-modal-card-content,
+.hero-work-modal.is-closing .hero-modal-close,
+.hero-work-modal.is-closing .hero-modal-footer {
+  transition: none;
+  transition-delay: 0ms;
 }
 
 .hero-modal-close {
@@ -529,6 +533,11 @@ html.is-hero-modal-open body {
   line-height: 1;
   text-transform: capitalize;
   text-decoration: none;
+  transform: translateY(0);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--text) 0%, transparent);
+  transition:
+    transform 240ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 280ms ease;
 }
 
 .hero-modal-cta-arrow {
@@ -552,6 +561,13 @@ html.is-hero-modal-open body {
 
 .hero-modal-close:hover {
   background: color-mix(in srgb, var(--surface) 86%, var(--text));
+}
+
+.hero-modal-cta:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 18px 48px 12px color-mix(in srgb, var(--text) 18%, transparent),
+    0 8px 20px color-mix(in srgb, var(--text) 10%, transparent);
 }
 
 .hero-modal-cta:hover .hero-modal-cta-arrow--internal {
@@ -1360,6 +1376,10 @@ body.is-project-transitioning .is-transition-source .project-card {
     flex-direction: column;
     align-items: stretch;
     gap: 20px;
+  }
+
+  .hero-modal-footer--no-cta {
+    min-height: 56px;
   }
 
   .hero-work-modal .hero-work-meta h2 {

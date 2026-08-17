@@ -76,6 +76,17 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     height: window.innerHeight - modalInset * 2,
   });
 
+  const getModalNavigationTargetRect = () => {
+    const targetInset = window.matchMedia("(max-width: 600px)").matches ? 8 : 12;
+
+    return {
+      top: targetInset,
+      left: targetInset,
+      width: window.innerWidth - targetInset * 2,
+      height: window.innerHeight - targetInset * 2,
+    };
+  };
+
   const applyRect = (element, rect) => {
     Object.assign(element.style, {
       top: `${rect.top}px`,
@@ -123,7 +134,6 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     modal.setAttribute("aria-modal", "true");
     modal.setAttribute("aria-labelledby", titleId);
     modal.innerHTML = `
-      <div class="hero-modal-transition-cover" aria-hidden="true">${work.innerHTML}</div>
       <div class="hero-modal-card-content">
         <section class="hero-modal-bento-section" aria-hidden="true">
           <div class="hero-modal-bento-feature">
@@ -135,7 +145,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         </section>
       </div>
       <button class="hero-modal-close" type="button" aria-label="Close project preview"></button>
-      <div class="hero-modal-footer">
+      <div class="hero-modal-footer${ctaMarkup ? "" : " hero-modal-footer--no-cta"}">
         <div class="hero-work-meta">
           <h2 id="${titleId}">${project.title}</h2>
           ${project.companyLabel ? `<span>@ ${project.companyLabel}</span>` : ""}
@@ -148,6 +158,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     layer.append(modal);
     document.body.append(layer);
 
+    modal.classList.add("is-revealing");
     work.classList.add("is-modal-source");
     document.documentElement.classList.add("is-hero-modal-open");
 
@@ -175,21 +186,27 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       },
     );
 
-    const backdropAnimation = layer.animate([{ opacity: 0 }, { opacity: 1 }], {
-      duration: Math.min(transitionDuration, 420),
-      easing: "ease-out",
-      fill: "forwards",
-    });
+    const backdropAnimation = layer.animate(
+      [
+        {
+          backgroundColor: "rgba(0, 0, 0, 0)",
+          backdropFilter: "blur(0px)",
+        },
+        {
+          backgroundColor: "rgba(0, 0, 0, 0.54)",
+          backdropFilter: "blur(10px)",
+        },
+      ],
+      {
+        duration: Math.min(transitionDuration, 420),
+        easing: "ease-out",
+        fill: "forwards",
+      },
+    );
 
     const closeButton = modal.querySelector(".hero-modal-close");
     const cta = modal.querySelector(".hero-modal-cta");
     let isClosing = false;
-    const revealTimer = window.setTimeout(
-      () => {
-        if (!isClosing) modal.classList.add("is-revealing");
-      },
-      prefersReducedMotion ? 0 : 480,
-    );
 
     const handleModalResize = () => {
       if (!isClosing && modal.classList.contains("is-ready")) {
@@ -200,23 +217,19 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const closeModal = () => {
       if (isClosing) return;
       isClosing = true;
-      window.clearTimeout(revealTimer);
+      modal.classList.add("is-closing");
       modal.classList.remove("is-revealing", "is-ready");
 
       const currentRect = modal.getBoundingClientRect();
       const currentRadius = window.getComputedStyle(modal).borderRadius;
       const latestSourceRect = work.getBoundingClientRect();
+      work.classList.remove("is-modal-source");
       modalAnimation.cancel();
       backdropAnimation.cancel();
       applyRect(modal, currentRect);
       modal.style.borderRadius = currentRadius;
 
       const closeDuration = prefersReducedMotion ? 1 : 320;
-      const sourceRevealAnimation = work.animate([{ opacity: 0 }, { opacity: 1 }], {
-        duration: prefersReducedMotion ? 1 : 180,
-        easing: "ease-out",
-        fill: "forwards",
-      });
       const closeAnimation = modal.animate(
         [
           {
@@ -241,16 +254,26 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         },
       );
 
-      layer.animate([{ opacity: 1 }, { opacity: 0 }], {
-        duration: prefersReducedMotion ? 1 : 240,
-        easing: "ease-in",
-        fill: "forwards",
-      });
+      layer.animate(
+        [
+          {
+            backgroundColor: "rgba(0, 0, 0, 0.54)",
+            backdropFilter: "blur(10px)",
+          },
+          {
+            backgroundColor: "rgba(0, 0, 0, 0)",
+            backdropFilter: "blur(0px)",
+          },
+        ],
+        {
+          duration: prefersReducedMotion ? 1 : 200,
+          easing: "ease-out",
+          fill: "forwards",
+        },
+      );
 
       closeAnimation.finished.finally(() => {
         layer.remove();
-        work.classList.remove("is-modal-source");
-        sourceRevealAnimation.cancel();
         document.documentElement.classList.remove("is-hero-modal-open");
         document.removeEventListener("keydown", handleModalKeydown);
         window.removeEventListener("resize", handleModalResize);
@@ -260,6 +283,85 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           : hero.querySelector(`.hero-work-set--primary .hero-work--${project.id}`);
         focusTarget?.focus({ preventScroll: true });
       });
+    };
+
+    const runModalNavigation = (event) => {
+      if (
+        !cta ||
+        project.cta?.newTab !== false ||
+        !isPlainNavigationClick(event, cta)
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      if (isClosing) return;
+
+      isClosing = true;
+      modal.classList.add("is-navigating");
+      document.removeEventListener("keydown", handleModalKeydown);
+
+      const currentRect = modal.getBoundingClientRect();
+      const currentRadius = window.getComputedStyle(modal).borderRadius;
+      const navigationTargetRect = getModalNavigationTargetRect();
+      modalAnimation.cancel();
+      backdropAnimation.cancel();
+      applyRect(modal, currentRect);
+      modal.style.borderRadius = currentRadius;
+
+      modal.animate(
+        [
+          {
+            top: `${currentRect.top}px`,
+            left: `${currentRect.left}px`,
+            width: `${currentRect.width}px`,
+            height: `${currentRect.height}px`,
+            borderRadius: currentRadius,
+            opacity: 1,
+            offset: 0,
+          },
+          {
+            opacity: 1,
+            offset: 0.9,
+          },
+          {
+            top: `${navigationTargetRect.top}px`,
+            left: `${navigationTargetRect.left}px`,
+            width: `${navigationTargetRect.width}px`,
+            height: `${navigationTargetRect.height}px`,
+            borderRadius: "24px",
+            opacity: 0,
+            offset: 1,
+          },
+        ],
+        {
+          duration: modalTransitionDuration,
+          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+          fill: "forwards",
+        },
+      );
+
+      layer.animate(
+        [
+          {
+            backgroundColor: "rgba(0, 0, 0, 0.54)",
+            backdropFilter: "blur(10px)",
+          },
+          {
+            backgroundColor: "rgba(0, 0, 0, 0)",
+            backdropFilter: "blur(0px)",
+          },
+        ],
+        {
+          duration: 420,
+          easing: "ease-out",
+          fill: "forwards",
+        },
+      );
+
+      window.setTimeout(() => {
+        window.location.href = cta.href;
+      }, modalTransitionDuration - 120);
     };
 
     const handleModalKeydown = (event) => {
@@ -285,6 +387,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     document.addEventListener("keydown", handleModalKeydown);
     window.addEventListener("resize", handleModalResize);
     closeButton.addEventListener("click", closeModal);
+    cta?.addEventListener("click", runModalNavigation);
     layer.addEventListener("click", (event) => {
       if (event.target === layer) closeModal();
     });
@@ -292,11 +395,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     modalAnimation.finished
       .then(() => {
         if (isClosing) return;
-        window.clearTimeout(revealTimer);
         applyRect(modal, targetRect);
         modal.style.borderRadius = "36px";
         modalAnimation.cancel();
-        modal.classList.add("is-revealing", "is-ready");
+        modal.classList.add("is-ready");
         closeButton.focus({ preventScroll: true });
       })
       .catch(() => {
