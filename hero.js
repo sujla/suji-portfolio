@@ -1217,15 +1217,20 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   let secondaryRailTouchScrollTimer = 0;
 
   mobileEmblaApis = [
-    { rail: mobileRail, direction: "forward" },
-    { rail: mobileSecondaryRail, direction: "backward" },
+    { rail: mobileRail, direction: "forward", alignmentOffset: -24 },
+    {
+      rail: mobileSecondaryRail,
+      direction: "backward",
+      alignmentOffset: 80,
+    },
   ]
     .filter(({ rail: mobileEmblaRail }) => mobileEmblaRail)
-    .map(({ rail: mobileEmblaRail, direction }) =>
+    .map(({ rail: mobileEmblaRail, direction, alignmentOffset }) =>
       EmblaCarousel(
         mobileEmblaRail,
         {
-          align: "center",
+          align: (viewSize, snapSize) =>
+            (viewSize - snapSize) / 2 + alignmentOffset,
           dragFree: true,
           loop: true,
           startIndex: Math.floor(heroProjects.length / 2),
