@@ -399,9 +399,15 @@ html.is-hero-modal-open body {
   position: fixed;
   inset: 0;
   z-index: 100;
+}
+
+.hero-modal-backdrop {
+  position: absolute;
+  inset: 0;
   background: rgba(0, 0, 0, 0.54);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  will-change: opacity;
 }
 
 .hero-work-modal {
@@ -414,7 +420,7 @@ html.is-hero-modal-open body {
   color: var(--text);
   background: var(--surface);
   box-shadow: 0 32px 100px rgba(0, 0, 0, 0.34);
-  will-change: top, left, width, height, border-radius, opacity;
+  will-change: transform, border-radius, opacity;
 }
 
 .hero-work-modal.is-navigating {
@@ -439,7 +445,11 @@ html.is-hero-modal-open body {
   pointer-events: none;
 }
 
-.hero-work-modal.is-revealing .hero-modal-card-content {
+.hero-modal-card-content.is-skeleton {
+  opacity: 1;
+}
+
+.hero-work-modal.is-content-ready .hero-modal-card-content {
   opacity: 1;
 }
 
@@ -580,6 +590,24 @@ html.is-hero-modal-open body {
   min-width: 0;
   overflow: hidden;
   border-radius: 28px;
+}
+
+.hero-modal-bento-skeleton {
+  border: 1px solid color-mix(in srgb, var(--surface) 82%, var(--text)) !important;
+  background:
+    linear-gradient(
+      112deg,
+      color-mix(in srgb, var(--surface) 88%, var(--text)) 0%,
+      color-mix(in srgb, var(--surface) 95%, var(--text)) 48%,
+      color-mix(in srgb, var(--surface) 88%, var(--text)) 100%
+    ) !important;
+  box-shadow: none !important;
+  isolation: auto !important;
+}
+
+.hero-modal-bento-skeleton::before,
+.hero-modal-bento-skeleton::after {
+  display: none !important;
 }
 
 .hero-modal-bento-feature {
@@ -946,6 +974,10 @@ html.is-hero-modal-open body {
   gap: 12px;
 }
 
+.hero-work-modal.hero-work--cta-enhancement .hero-modal-bento-stack {
+  grid-template-rows: minmax(0, 7fr) minmax(160px, 3fr);
+}
+
 .hero-work-modal.hero-work--store-finder .hero-modal-bento-stack {
   grid-template-rows: minmax(0, 7fr) minmax(0, 3fr);
 }
@@ -982,7 +1014,6 @@ html.is-hero-modal-open body {
 }
 
 .hero-work-modal.hero-work--cta-enhancement .hero-modal-bento-placeholder--3 {
-  overflow: visible;
   background: transparent;
 }
 

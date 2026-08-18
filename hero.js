@@ -652,6 +652,15 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     });
   };
 
+  const getFlipTransform = (fromRect, baseRect) => {
+    const scaleX = baseRect.width ? fromRect.width / baseRect.width : 1;
+    const scaleY = baseRect.height ? fromRect.height / baseRect.height : 1;
+    const translateX = fromRect.left - baseRect.left;
+    const translateY = fromRect.top - baseRect.top;
+
+    return `translate3d(${translateX}px, ${translateY}px, 0) scale(${scaleX}, ${scaleY})`;
+  };
+
   const pauseHeroWorkVideos = () => {
     const videos = [...hero.querySelectorAll(".hero-work video")];
     const playingVideos = videos.filter(
@@ -675,12 +684,14 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   const openWorkModal = (work, project) => {
     if (activeModal) return;
 
+    stopAutoScrollLoop();
     const pausedHeroWorkVideos = pauseHeroWorkVideos();
     const sourceRect = work.getBoundingClientRect();
     const sourceRadius = window.getComputedStyle(work).borderRadius;
     const targetRect = getModalTargetRect();
     const targetRadius = getModalTargetRadius();
     const layer = document.createElement("div");
+    const backdrop = document.createElement("div");
     const modal = document.createElement("div");
     const titleId = `hero-modal-${project.id}-title`;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -709,38 +720,49 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const bentoPlaceholders = Array.from({ length: placeholderCount }, (_, index) =>
       getBentoPlaceholder(project, index),
     );
+    const skeletonPlaceholders = Array.from(
+      { length: placeholderCount },
+      (_, index) => `
+        <div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1} hero-modal-bento-skeleton"></div>
+      `,
+    );
     const usesThreePartBento = isPublicTransportProject;
     const usesFourPartBento = !project.cta && !isPerpDexProject && !usesThreePartBento;
     const isWebProject = project.deviceType === "web" && !usesThreePartBento && !usesFourPartBento;
     const usesSingleTopBento = project.id === "cta-enhancement";
-    const bentoStackTopMarkup = usesSingleTopBento
-      ? bentoPlaceholders[0]
-      : bentoPlaceholders.slice(0, 2).join("");
-    const bentoSideMarkup = isPerpDexProject
-      ? `
-        <div class="hero-modal-perp-left">
-          ${bentoPlaceholders[0]}
-          <div class="hero-modal-perp-center-bottom">
-            ${bentoPlaceholders[1]}
-            ${bentoPlaceholders[2]}
+    const getBentoSideMarkup = (placeholders) => {
+      const stackTopMarkup = usesSingleTopBento
+        ? placeholders[0]
+        : placeholders.slice(0, 2).join("");
+
+      return isPerpDexProject
+        ? `
+          <div class="hero-modal-perp-left">
+            ${placeholders[0]}
+            <div class="hero-modal-perp-center-bottom">
+              ${placeholders[1]}
+              ${placeholders[2]}
+            </div>
           </div>
-        </div>
-        ${bentoPlaceholders[3]}
-      `
-      : usesThreePartBento
-        ? bentoPlaceholders.join("")
-        : usesFourPartBento
-          ? bentoPlaceholders.join("")
-          : isWebProject
-            ? `<div class="hero-modal-bento-side">${bentoPlaceholders.slice(0, 2).join("")}</div>`
-            : `
-        <div class="hero-modal-bento-stack">
-          <div class="hero-modal-bento-stack-top${usesSingleTopBento ? " hero-modal-bento-stack-top--single" : ""}">
-            ${bentoStackTopMarkup}
+          ${placeholders[3]}
+        `
+        : usesThreePartBento
+          ? placeholders.join("")
+          : usesFourPartBento
+            ? placeholders.join("")
+            : isWebProject
+              ? `<div class="hero-modal-bento-side">${placeholders.slice(0, 2).join("")}</div>`
+              : `
+          <div class="hero-modal-bento-stack">
+            <div class="hero-modal-bento-stack-top${usesSingleTopBento ? " hero-modal-bento-stack-top--single" : ""}">
+              ${stackTopMarkup}
+            </div>
+            ${placeholders[2]}
           </div>
-          ${bentoPlaceholders[2]}
-        </div>
-      `;
+        `;
+    };
+    const bentoSideMarkup = getBentoSideMarkup(bentoPlaceholders);
+    const skeletonSideMarkup = getBentoSideMarkup(skeletonPlaceholders);
     const bentoFeatureMarkup = isPerpDexProject
       ? ""
       : `
@@ -748,19 +770,31 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           ${getProjectMedia(project)}
         </div>
       `;
+    const bentoMarkup = `
+      <section class="hero-modal-bento-section${isWebProject ? " hero-modal-bento-section--web" : ""}${usesThreePartBento ? " hero-modal-bento-section--three-up" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}${isPerpDexProject ? " hero-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
+        ${bentoFeatureMarkup}
+        ${bentoSideMarkup}
+      </section>
+    `;
+    const skeletonFeatureMarkup = isPerpDexProject
+      ? ""
+      : '<div class="hero-modal-bento-feature hero-modal-bento-skeleton"></div>';
+    const skeletonMarkup = `
+      <section class="hero-modal-bento-section hero-modal-bento-section--skeleton${isWebProject ? " hero-modal-bento-section--web" : ""}${usesThreePartBento ? " hero-modal-bento-section--three-up" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}${isPerpDexProject ? " hero-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
+        ${skeletonFeatureMarkup}
+        ${skeletonSideMarkup}
+      </section>
+    `;
 
     layer.className = "hero-modal-layer";
+    backdrop.className = "hero-modal-backdrop";
+    backdrop.style.opacity = "0";
     modal.className = `hero-work-modal hero-work--${project.id}${descriptionMarkup ? " hero-work-modal--has-description" : ""}${ctaMarkup ? "" : " hero-work-modal--no-cta"}`;
     modal.setAttribute("role", "dialog");
     modal.setAttribute("aria-modal", "true");
     modal.setAttribute("aria-labelledby", titleId);
     modal.innerHTML = `
-      <div class="hero-modal-card-content">
-        <section class="hero-modal-bento-section${isWebProject ? " hero-modal-bento-section--web" : ""}${usesThreePartBento ? " hero-modal-bento-section--three-up" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}${isPerpDexProject ? " hero-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
-          ${bentoFeatureMarkup}
-          ${bentoSideMarkup}
-        </section>
-      </div>
+      <div class="hero-modal-card-content is-skeleton">${skeletonMarkup}</div>
       <button class="hero-modal-close" type="button" aria-label="Close project preview"></button>
       <div class="hero-modal-footer${ctaMarkup ? "" : " hero-modal-footer--no-cta"}">
         <div class="hero-work-meta">
@@ -771,14 +805,11 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       </div>
     `;
 
-    applyRect(modal, sourceRect);
-    modal.style.borderRadius = sourceRadius;
-    layer.append(modal);
+    applyRect(modal, targetRect);
+    modal.style.borderRadius = targetRadius;
+    modal.style.transformOrigin = "top left";
+    layer.append(backdrop, modal);
     document.body.append(layer);
-    initializeMediaMatchedBentoBackgrounds(modal);
-    initializeSegmentVideos(modal);
-    initializePerpDexMediaPlayback(modal);
-    initializePublicTransportMediaPlayback(modal);
 
     modal.classList.add("is-revealing");
     work.classList.add("is-modal-source");
@@ -787,17 +818,11 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const modalAnimation = modal.animate(
       [
         {
-          top: `${sourceRect.top}px`,
-          left: `${sourceRect.left}px`,
-          width: `${sourceRect.width}px`,
-          height: `${sourceRect.height}px`,
+          transform: getFlipTransform(sourceRect, targetRect),
           borderRadius: sourceRadius,
         },
         {
-          top: `${targetRect.top}px`,
-          left: `${targetRect.left}px`,
-          width: `${targetRect.width}px`,
-          height: `${targetRect.height}px`,
+          transform: "translate3d(0, 0, 0) scale(1, 1)",
           borderRadius: targetRadius,
         },
       ],
@@ -808,17 +833,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       },
     );
 
-    const backdropAnimation = layer.animate(
-      [
-        {
-          backgroundColor: "rgba(0, 0, 0, 0)",
-          backdropFilter: "blur(0px)",
-        },
-        {
-          backgroundColor: "rgba(0, 0, 0, 0.54)",
-          backdropFilter: "blur(10px)",
-        },
-      ],
+    const backdropAnimation = backdrop.animate(
+      [{ opacity: 0 }, { opacity: 1 }],
       {
         duration: Math.min(transitionDuration, 420),
         easing: "ease-out",
@@ -829,10 +845,28 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const closeButton = modal.querySelector(".hero-modal-close");
     const cta = modal.querySelector(".hero-modal-cta");
     const footer = modal.querySelector(".hero-modal-footer");
+    const cardContent = modal.querySelector(".hero-modal-card-content");
+    let hasMountedBento = false;
     let isClosing = false;
 
+    const mountBentoContent = () => {
+      if (hasMountedBento || !cardContent || isClosing) return;
+
+      hasMountedBento = true;
+      cardContent.classList.remove("is-skeleton");
+      cardContent.innerHTML = bentoMarkup;
+      initializeMediaMatchedBentoBackgrounds(modal);
+      initializeSegmentVideos(modal);
+      initializePerpDexMediaPlayback(modal);
+      initializePublicTransportMediaPlayback(modal);
+
+      window.requestAnimationFrame(() => {
+        if (!isClosing && modal.isConnected) modal.classList.add("is-content-ready");
+      });
+    };
+
     const syncFooterSpace = () => {
-      const footerHeight = footer ? Math.ceil(footer.getBoundingClientRect().height) : 0;
+      const footerHeight = footer?.offsetHeight ?? 0;
       modal.style.setProperty("--hero-modal-footer-space", `${footerHeight}px`);
     };
 
@@ -856,7 +890,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       if (isClosing) return;
       isClosing = true;
       modal.classList.add("is-closing");
-      modal.classList.remove("is-revealing", "is-ready");
+      modal.classList.remove("is-revealing", "is-ready", "is-content-ready");
 
       const currentRect = modal.getBoundingClientRect();
       const currentRadius = window.getComputedStyle(modal).borderRadius;
@@ -866,22 +900,17 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       backdropAnimation.cancel();
       applyRect(modal, currentRect);
       modal.style.borderRadius = currentRadius;
+      modal.style.transform = "none";
 
       const closeDuration = prefersReducedMotion ? 1 : 320;
       const closeAnimation = modal.animate(
         [
           {
-            top: `${currentRect.top}px`,
-            left: `${currentRect.left}px`,
-            width: `${currentRect.width}px`,
-            height: `${currentRect.height}px`,
+            transform: "translate3d(0, 0, 0) scale(1, 1)",
             borderRadius: currentRadius,
           },
           {
-            top: `${latestSourceRect.top}px`,
-            left: `${latestSourceRect.left}px`,
-            width: `${latestSourceRect.width}px`,
-            height: `${latestSourceRect.height}px`,
+            transform: getFlipTransform(latestSourceRect, currentRect),
             borderRadius: sourceRadius,
           },
         ],
@@ -892,17 +921,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         },
       );
 
-      layer.animate(
-        [
-          {
-            backgroundColor: "rgba(0, 0, 0, 0.54)",
-            backdropFilter: "blur(10px)",
-          },
-          {
-            backgroundColor: "rgba(0, 0, 0, 0)",
-            backdropFilter: "blur(0px)",
-          },
-        ],
+      backdrop.animate(
+        [{ opacity: 1 }, { opacity: 0 }],
         {
           duration: prefersReducedMotion ? 1 : 200,
           easing: "ease-out",
@@ -918,6 +938,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         footerResizeObserver?.disconnect();
         activeModal = null;
         resumeHeroWorkVideos(pausedHeroWorkVideos);
+        startAutoScrollLoop();
         const focusTarget = work.matches("a")
           ? work
           : hero.querySelector(`.hero-work-set--primary .hero-work--${project.id}`);
@@ -948,14 +969,12 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       backdropAnimation.cancel();
       applyRect(modal, currentRect);
       modal.style.borderRadius = currentRadius;
+      modal.style.transform = "none";
 
       modal.animate(
         [
           {
-            top: `${currentRect.top}px`,
-            left: `${currentRect.left}px`,
-            width: `${currentRect.width}px`,
-            height: `${currentRect.height}px`,
+            transform: "translate3d(0, 0, 0) scale(1, 1)",
             borderRadius: currentRadius,
             opacity: 1,
             offset: 0,
@@ -965,10 +984,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
             offset: 0.9,
           },
           {
-            top: `${navigationTargetRect.top}px`,
-            left: `${navigationTargetRect.left}px`,
-            width: `${navigationTargetRect.width}px`,
-            height: `${navigationTargetRect.height}px`,
+            transform: getFlipTransform(navigationTargetRect, currentRect),
             borderRadius: "24px",
             opacity: 0,
             offset: 1,
@@ -981,17 +997,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         },
       );
 
-      layer.animate(
-        [
-          {
-            backgroundColor: "rgba(0, 0, 0, 0.54)",
-            backdropFilter: "blur(10px)",
-          },
-          {
-            backgroundColor: "rgba(0, 0, 0, 0)",
-            backdropFilter: "blur(0px)",
-          },
-        ],
+      backdrop.animate(
+        [{ opacity: 1 }, { opacity: 0 }],
         {
           duration: 420,
           easing: "ease-out",
@@ -1029,16 +1036,28 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     closeButton.addEventListener("click", closeModal);
     cta?.addEventListener("click", runModalNavigation);
     layer.addEventListener("click", (event) => {
-      if (event.target === layer) closeModal();
+      if (event.target === layer || event.target === backdrop) closeModal();
     });
+
+    backdropAnimation.finished
+      .then(() => {
+        backdrop.style.opacity = "1";
+        backdropAnimation.cancel();
+      })
+      .catch(() => {
+        // Closing or navigation can intentionally cancel the backdrop fade.
+      });
 
     modalAnimation.finished
       .then(() => {
         if (isClosing) return;
         applyRect(modal, targetRect);
         modal.style.borderRadius = targetRadius;
+        modal.style.transform = "none";
         modalAnimation.cancel();
+        syncFooterSpace();
         modal.classList.add("is-ready");
+        mountBentoContent();
         closeButton.focus({ preventScroll: true });
       })
       .catch(() => {
@@ -1077,6 +1096,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   const defaultAutoScrollSpeed = 32;
   const hoverAutoScrollSpeed = 12;
   let autoScrollPreviousTime;
+  let autoScrollFrameId = 0;
   let autoScrollPausedUntil = 0;
   let autoScrollPosition = 0;
   let autoScrollSpeed = defaultAutoScrollSpeed;
@@ -1227,10 +1247,25 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       }
     }
 
-    requestAnimationFrame(animateRail);
+    autoScrollFrameId = requestAnimationFrame(animateRail);
   };
 
-  requestAnimationFrame(animateRail);
+  const startAutoScrollLoop = () => {
+    if (autoScrollFrameId) return;
+
+    autoScrollPreviousTime = undefined;
+    autoScrollFrameId = requestAnimationFrame(animateRail);
+  };
+
+  const stopAutoScrollLoop = () => {
+    if (!autoScrollFrameId) return;
+
+    cancelAnimationFrame(autoScrollFrameId);
+    autoScrollFrameId = 0;
+    autoScrollPreviousTime = undefined;
+  };
+
+  startAutoScrollLoop();
 
   requestAnimationFrame(() => {
     syncInfiniteMetrics();
