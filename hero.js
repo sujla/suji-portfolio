@@ -2,7 +2,6 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   if (!hero) return;
 
   const modalTransitionDuration = 760;
-  const modalInset = 24;
   let activeModal = null;
 
   const getWorkMedia = (project) => {
@@ -517,12 +516,16 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     !link.target &&
     !link.hasAttribute("download");
 
-  const getModalTargetRect = () => ({
-    top: modalInset,
-    left: modalInset,
-    width: window.innerWidth - modalInset * 2,
-    height: window.innerHeight - modalInset * 2,
-  });
+  const getModalTargetRect = () => {
+    const modalInset = window.innerWidth <= 600 ? 12 : window.innerWidth <= 920 ? 16 : 24;
+
+    return {
+      top: modalInset,
+      left: modalInset,
+      width: window.innerWidth - modalInset * 2,
+      height: window.innerHeight - modalInset * 2,
+    };
+  };
 
   const getModalNavigationTargetRect = () => {
     const targetInset = window.matchMedia("(max-width: 600px)").matches ? 8 : 12;
