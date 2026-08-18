@@ -641,7 +641,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       `;
 
     layer.className = "hero-modal-layer";
-    modal.className = `hero-work-modal hero-work--${project.id}${descriptionMarkup ? " hero-work-modal--has-description" : ""}`;
+    modal.className = `hero-work-modal hero-work--${project.id}${descriptionMarkup ? " hero-work-modal--has-description" : ""}${ctaMarkup ? "" : " hero-work-modal--no-cta"}`;
     modal.setAttribute("role", "dialog");
     modal.setAttribute("aria-modal", "true");
     modal.setAttribute("aria-labelledby", titleId);

@@ -223,6 +223,8 @@ body.is-project-transitioning {
   transition:
     transform 220ms ease,
     box-shadow 220ms ease;
+  min-width: 460px;
+  max-width: 520px;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -356,9 +358,9 @@ body.is-project-transitioning {
 
 .hero-work-meta {
   position: absolute;
-  right: clamp(28px, 2vw, 80px);
-  bottom: clamp(24px, 2vw, 80px);
-  left: clamp(28px, 2.55vw, 80px);
+  right: clamp(32px, 2vw, 80px);
+  bottom: clamp(28px, 2vw, 80px);
+  left: clamp(36px, 2.55vw, 80px);
   z-index: 1;
 }
 
@@ -2031,6 +2033,7 @@ body.is-project-transitioning .is-transition-source .project-card {
     height: calc(var(--mobile-project-viewport) - var(--mobile-project-padding-top) - var(--mobile-project-padding-bottom));
     max-height: none;
     min-height: 0;
+    max-width: 680px;
   }
 
   .project-media {
@@ -2103,17 +2106,17 @@ body.is-project-transitioning .is-transition-source .project-card {
 
   .hero-work-meta {
     top: auto;
-    right: 20px;
-    bottom: 20px;
-    left: 20px;
+    right: 28px;
+    bottom: 28px;
+    left: 34px;
   }
 
   .hero-work-meta h2 {
-    font-size: clamp(18px, 5vw, 22px);
+    font-size: clamp(16px, 5vw, 18px);
   }
 
   .hero-work-meta span {
-    margin-top: 4px;
+    margin-top: 8px;
     font-size: 15px;
   }
 
@@ -2136,11 +2139,15 @@ body.is-project-transitioning .is-transition-source .project-card {
 
   .hero-work-modal {
     --hero-modal-content-padding: 8px;
-    --hero-modal-footer-height: 210px;
+    --hero-modal-footer-height: auto;
   }
 
   .hero-work-modal--has-description {
     --hero-modal-footer-height: 260px;
+  }
+
+  .hero-work-modal--no-cta {
+    --hero-modal-footer-height: auto;
   }
 
   .hero-modal-card-content {
@@ -2264,8 +2271,12 @@ body.is-project-transitioning .is-transition-source .project-card {
     line-height: 1.45;
   }
 
+  .hero-modal-footer--no-cta .hero-modal-description {
+    display: none;
+  }
+
   .hero-work-modal .hero-work-meta h2 {
-    font-size: clamp(28px, 9vw, 42px);
+    font-size: clamp(18px, 2vw, 22px);
   }
 
   .hero-modal-close {
