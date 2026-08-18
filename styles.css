@@ -407,6 +407,7 @@ html.is-hero-modal-open body {
 .hero-work-modal {
   --hero-modal-content-padding: 12px;
   --hero-modal-footer-height: clamp(136px, 16vh, 184px);
+  --hero-modal-footer-space: var(--hero-modal-footer-height);
   position: fixed;
   z-index: 1;
   overflow: hidden;
@@ -430,7 +431,7 @@ html.is-hero-modal-open body {
   padding:
     var(--hero-modal-content-padding)
     var(--hero-modal-content-padding)
-    var(--hero-modal-footer-height);
+    var(--hero-modal-footer-space);
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -1140,8 +1141,8 @@ html.is-hero-modal-open body {
 .hero-modal-close {
   top: 22px;
   right: 22px;
-  width: 48px;
-  height: 48px;
+  width: clamp(44px, 1vw, 48px);
+  height: clamp(44px, 1vw, 48px);
   padding: 0;
   border: 0;
   border-radius: 999px;
@@ -1158,9 +1159,9 @@ html.is-hero-modal-open body {
 .hero-modal-close::before,
 .hero-modal-close::after {
   position: absolute;
-  top: 23px;
-  left: 14px;
-  width: 20px;
+  top: clamp(21px, 1vw, 23px);
+  left: clamp(13px, 0.4vw, 14px);
+  width: clamp(19px, 1vw, 20px);
   height: 2px;
   border-radius: 999px;
   background: currentColor;
@@ -1986,6 +1987,286 @@ body.is-project-transitioning .is-transition-source .project-card {
     flex-basis: min(80vw, 680px);
   }
 
+  .hero-modal-bento-section,
+  .hero-modal-bento-section:nth-child(even),
+  .hero-modal-bento-section--web,
+  .hero-modal-bento-section--web:nth-child(even),
+  .hero-modal-bento-section--three-up,
+  .hero-modal-bento-section--three-up:nth-child(even),
+  .hero-modal-bento-section--four-up,
+  .hero-modal-bento-section--four-up:nth-child(even),
+  .hero-modal-bento-section--perp-dex,
+  .hero-modal-bento-section--perp-dex:nth-child(even) {
+    --hero-modal-bento-item-height: min(58svh, 400px);
+
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas: none;
+    grid-auto-rows: var(--hero-modal-bento-item-height);
+  }
+
+  .hero-modal-bento-side,
+  .hero-modal-bento-stack,
+  .hero-modal-bento-stack-top,
+  .hero-modal-perp-left,
+  .hero-modal-perp-center-bottom {
+    display: contents;
+  }
+
+  .hero-modal-bento-feature,
+  .hero-modal-bento-placeholder,
+  .hero-modal-bento-section--perp-dex > .hero-modal-bento-placeholder--4,
+  .hero-modal-bento-section--three-up > .hero-modal-bento-placeholder,
+  .hero-modal-bento-section--four-up > .hero-modal-bento-placeholder {
+    width: 100%;
+    height: 100%;
+    max-height: 400px;
+    min-height: 0;
+    grid-area: auto;
+    aspect-ratio: auto;
+  }
+
+  .hero-modal-project-media,
+  .hero-modal-bento-video,
+  video.hero-modal-perp-media,
+  .hero-modal-perp-gif-frame {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .hero-modal-bento-video {
+    inset: 0;
+  }
+
+  .hero-modal-bento-feature .hero-phone-mockup,
+  .hero-modal-bento-feature .hero-web-mockup {
+    width: auto;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
+
+  .hero-work-modal.hero-work--store-finder .hero-modal-bento-section {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows:
+      repeat(2, var(--hero-modal-bento-item-height))
+      auto;
+    grid-auto-rows: auto;
+  }
+
+  .hero-work-modal.hero-work--store-finder :is(
+    .hero-modal-bento-feature,
+    .hero-modal-bento-placeholder--3
+  ) {
+    grid-column: 1 / -1;
+  }
+
+  .hero-work-modal.hero-work--store-finder .hero-modal-bento-feature .hero-modal-project-media {
+    top: 50%;
+    bottom: auto;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    object-fit: cover;
+    transform: translateY(-50%);
+  }
+
+  .hero-work-modal.hero-work--store-finder :is(
+    .hero-modal-bento-placeholder--1,
+    .hero-modal-bento-placeholder--2
+  ) {
+    --store-finder-video-padding: clamp(0px, 1vw, 12px);
+
+    padding: var(--store-finder-video-padding);
+  }
+
+  .hero-work-modal.hero-work--store-finder :is(
+    .hero-modal-bento-placeholder--1,
+    .hero-modal-bento-placeholder--2
+  )::before {
+    display: none;
+  }
+
+  .hero-work-modal.hero-work--store-finder :is(
+    .hero-modal-bento-placeholder--1,
+    .hero-modal-bento-placeholder--2
+  ) .hero-modal-bento-video {
+    top: var(--store-finder-video-padding);
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: auto;
+    max-width: calc(100% - (var(--store-finder-video-padding) * 2));
+    height: calc(100% - (var(--store-finder-video-padding) * 2));
+    object-fit: contain;
+    transform: translateX(-50%);
+    clip-path: none;
+    border-radius: 18px;
+    box-shadow:
+      0 calc(var(--store-finder-video-padding) * 0.25)
+      calc(var(--store-finder-video-padding) * 0.5)
+      rgba(0, 0, 0, 0.16);
+    filter: none;
+  }
+
+  .hero-work-modal.hero-work--store-finder .hero-modal-bento-placeholder--3 {
+    height: auto;
+    max-height: none;
+  }
+
+  .hero-work-modal.hero-work--store-finder .hero-modal-impact-list {
+    height: auto;
+  }
+
+  .hero-work-modal.hero-work--store-finder .hero-modal-impact-card {
+    grid-template-rows: auto auto;
+  }
+
+  .hero-work-modal.hero-work--store-finder .hero-modal-impact-media img {
+    position: static;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .hero-work-modal.hero-work--cta-enhancement .hero-modal-bento-section {
+    grid-template-rows:
+      auto
+      var(--hero-modal-bento-item-height)
+      auto;
+    grid-auto-rows: auto;
+  }
+
+  .hero-work-modal.hero-work--cta-enhancement .hero-modal-bento-feature,
+  .hero-work-modal.hero-work--cta-enhancement .hero-modal-bento-placeholder--3 {
+    height: auto;
+    max-height: none;
+  }
+
+  .hero-work-modal.hero-work--cta-enhancement .hero-modal-bento-feature .hero-modal-project-media {
+    position: static;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .hero-work-modal.hero-work--cta-enhancement :is(
+    .hero-modal-result,
+    .hero-modal-result-metrics
+  ) {
+    height: auto;
+  }
+
+  .hero-work-modal.hero-work--cta-enhancement .hero-modal-result-metrics {
+    min-height: 110px;
+  }
+
+  .hero-work-modal.hero-work--article-studio .hero-modal-bento-section,
+  .hero-work-modal.hero-work--perp-dex .hero-modal-bento-section {
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+  }
+
+  .hero-work-modal.hero-work--article-studio :is(
+    .hero-modal-bento-feature,
+    .hero-modal-bento-placeholder
+  ),
+  .hero-work-modal.hero-work--perp-dex .hero-modal-bento-placeholder {
+    height: auto;
+    max-height: none;
+  }
+
+  .hero-work-modal.hero-work--article-studio .hero-modal-project-media {
+    position: static;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .hero-work-modal.hero-work--article-studio .hero-modal-article-studio-roller {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+  }
+
+  .hero-work-modal.hero-work--article-studio .hero-modal-article-studio-track {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    animation-name: hero-article-studio-roll-content-fit;
+  }
+
+  .hero-work-modal.hero-work--article-studio .hero-modal-article-studio-track img {
+    width: 100%;
+    max-width: none;
+    height: auto;
+  }
+
+  .hero-work-modal.hero-work--article-studio .hero-modal-article-studio-track img:nth-child(2) {
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+
+  .hero-work-modal.hero-work--article-studio .hero-modal-article-studio-interface {
+    position: static;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    transform: none;
+  }
+
+  .hero-work-modal.hero-work--perp-dex video.hero-modal-perp-media {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    transform: none;
+  }
+
+  .hero-work-modal.hero-work--perp-dex .hero-modal-perp-gif {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+  }
+
+  .hero-work-modal.hero-work--perp-dex .hero-modal-perp-gif-frame {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+  }
+
+  .hero-modal-public-transport-video {
+    clip-path: inset(15px 0 0 0 round 16px);
+  }
+
+  @keyframes hero-article-studio-roll-content-fit {
+    0%,
+    40% {
+      transform: translateY(0);
+    }
+
+    50%,
+    90% {
+      transform: translateY(-100%);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
+  }
+
   .about-content {
     grid-template-columns: minmax(0, 1fr);
     gap: 80px;
@@ -2084,6 +2365,12 @@ body.is-project-transitioning .is-transition-source .project-card {
     display: inline;
   }
 
+}
+
+@media (max-width: 920px) and (prefers-reduced-motion: reduce) {
+  .hero-work-modal.hero-work--article-studio .hero-modal-article-studio-track {
+    animation: none;
+  }
 }
 
 @media (max-width: 600px) {
@@ -2187,6 +2474,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   .hero-work-modal {
     --hero-modal-content-padding: 8px;
     --hero-modal-footer-height: auto;
+    --hero-modal-footer-space: 0px;
   }
 
   .hero-work-modal--has-description {
@@ -2201,75 +2489,28 @@ body.is-project-transitioning .is-transition-source .project-card {
     padding:
       var(--hero-modal-content-padding)
       var(--hero-modal-content-padding)
-      var(--hero-modal-footer-height);
+      var(--hero-modal-footer-space);
   }
 
-  .hero-modal-bento-section,
-  .hero-modal-bento-section:nth-child(even) {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "feature"
-      "stack";
-    min-height: auto;
+  .hero-modal-bento-section {
     gap: 8px;
   }
 
-  .hero-modal-bento-section:nth-child(even) {
-    grid-template-areas:
-      "stack"
-      "feature";
+  .hero-work-modal.hero-work--store-finder .hero-modal-bento-section {
+    grid-template-rows:
+      auto
+      var(--hero-modal-bento-item-height)
+      auto;
   }
 
-  .hero-modal-bento-section--web,
-  .hero-modal-bento-section--web:nth-child(even) {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "feature"
-      "side";
+  .hero-work-modal.hero-work--store-finder .hero-modal-bento-feature {
+    height: auto;
+    max-height: none;
   }
 
-  .hero-modal-bento-section--web :is(
-    .hero-modal-bento-feature,
-    .hero-modal-bento-side
-  ) {
-    min-height: min(52svh, 480px);
-  }
-
-  .hero-modal-bento-section--three-up,
-  .hero-modal-bento-section--three-up:nth-child(even) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr);
-    grid-template-areas: "feature slot-1 slot-2";
-    min-height: min(72svh, 640px);
-  }
-
-  .hero-modal-bento-section--three-up .hero-modal-bento-feature {
-    min-height: 0;
-  }
-
-  .hero-modal-bento-section--four-up,
-  .hero-modal-bento-section--four-up:nth-child(even) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr);
-    grid-template-areas: "feature slot-1 slot-2 slot-3";
-    min-height: min(72svh, 640px);
-  }
-
-  .hero-modal-bento-section--four-up .hero-modal-bento-feature {
-    min-height: 0;
-  }
-
-  .hero-modal-bento-section--perp-dex,
-  .hero-modal-bento-section--perp-dex:nth-child(even) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr);
-    grid-template-areas: "left right";
-    min-height: min(72svh, 640px);
-  }
-
-  .hero-modal-perp-left,
-  .hero-modal-perp-center-bottom {
-    gap: 8px;
+  .hero-work-modal.hero-work--store-finder .hero-modal-bento-feature .hero-modal-project-media {
+    position: static;
+    transform: none;
   }
 
   .hero-modal-bento-section + .hero-modal-bento-section {
@@ -2283,19 +2524,6 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .hero-modal-result-metrics {
-    gap: 8px;
-  }
-
-  .hero-modal-bento-feature {
-    min-height: min(58svh, 540px);
-  }
-
-  .hero-modal-bento-stack {
-    min-height: min(52svh, 480px);
-    gap: 8px;
-  }
-
-  .hero-modal-bento-stack-top {
     gap: 8px;
   }
 

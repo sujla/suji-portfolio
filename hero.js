@@ -253,6 +253,105 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     `;
   };
 
+  const initializeMediaMatchedBentoBackgrounds = (modal) => {
+    const hasDedicatedBackground = (container) =>
+      container.matches(`
+        .hero-work--article-studio :is(
+          .hero-modal-bento-placeholder--1,
+          .hero-modal-bento-placeholder--2
+        ),
+        .hero-work--public-transport :is(
+          .hero-modal-bento-feature,
+          .hero-modal-bento-placeholder--1,
+          .hero-modal-bento-placeholder--2
+        ),
+        .hero-work--perp-dex .hero-modal-bento-placeholder,
+        .hero-work--cta-enhancement .hero-modal-bento-placeholder--3
+      `);
+
+    const getEdgeColor = (media) => {
+      const sourceWidth = media.videoWidth || media.naturalWidth || media.width;
+      const sourceHeight = media.videoHeight || media.naturalHeight || media.height;
+
+      if (!sourceWidth || !sourceHeight) return null;
+
+      const sampleSize = 16;
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+
+      if (!context) return null;
+
+      canvas.width = sampleSize;
+      canvas.height = sampleSize;
+
+      try {
+        context.drawImage(media, 0, 0, sampleSize, sampleSize);
+        const pixels = context.getImageData(0, 0, sampleSize, sampleSize).data;
+        let red = 0;
+        let green = 0;
+        let blue = 0;
+        let weight = 0;
+
+        for (let y = 0; y < sampleSize; y += 1) {
+          for (let x = 0; x < sampleSize; x += 1) {
+            if (x > 1 && x < sampleSize - 2 && y > 1 && y < sampleSize - 2) continue;
+
+            const offset = (y * sampleSize + x) * 4;
+            const alpha = pixels[offset + 3] / 255;
+
+            if (alpha < 0.2) continue;
+
+            red += pixels[offset] * alpha;
+            green += pixels[offset + 1] * alpha;
+            blue += pixels[offset + 2] * alpha;
+            weight += alpha;
+          }
+        }
+
+        if (!weight) return null;
+
+        return `rgb(${Math.round(red / weight)} ${Math.round(green / weight)} ${Math.round(blue / weight)})`;
+      } catch {
+        return null;
+      }
+    };
+
+    modal
+      .querySelectorAll(".hero-modal-bento-feature, .hero-modal-bento-placeholder")
+      .forEach((container) => {
+        if (hasDedicatedBackground(container)) return;
+
+        const media = container.querySelector("img, video, canvas");
+
+        if (!media) return;
+
+        const applyBackground = () => {
+          if (!container.isConnected) return;
+
+          const color = getEdgeColor(media);
+
+          if (!color) return;
+
+          container.style.setProperty("--hero-modal-media-background", color);
+          container.classList.add("has-media-sampled-background");
+        };
+
+        if (media instanceof HTMLImageElement) {
+          if (media.complete && media.naturalWidth) applyBackground();
+          else media.addEventListener("load", applyBackground, { once: true });
+          return;
+        }
+
+        if (media instanceof HTMLVideoElement) {
+          if (media.readyState >= 2) applyBackground();
+          else media.addEventListener("loadeddata", applyBackground, { once: true });
+          return;
+        }
+
+        window.requestAnimationFrame(applyBackground);
+      });
+  };
+
   const initializeSegmentVideos = (modal) => {
     modal.querySelectorAll(".hero-modal-segment-video").forEach((video) => {
       const segmentStart = Number(video.dataset.segmentStart);
@@ -527,6 +626,9 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     };
   };
 
+  const getModalTargetRadius = () =>
+    window.innerWidth <= 600 ? "28px" : window.innerWidth <= 920 ? "32px" : "36px";
+
   const getModalNavigationTargetRect = () => {
     const targetInset = window.matchMedia("(max-width: 600px)").matches ? 8 : 12;
 
@@ -574,6 +676,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const sourceRect = work.getBoundingClientRect();
     const sourceRadius = window.getComputedStyle(work).borderRadius;
     const targetRect = getModalTargetRect();
+    const targetRadius = getModalTargetRadius();
     const layer = document.createElement("div");
     const modal = document.createElement("div");
     const titleId = `hero-modal-${project.id}-title`;
@@ -669,6 +772,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     modal.style.borderRadius = sourceRadius;
     layer.append(modal);
     document.body.append(layer);
+    initializeMediaMatchedBentoBackgrounds(modal);
     initializeSegmentVideos(modal);
     initializePerpDexMediaPlayback(modal);
     initializePublicTransportMediaPlayback(modal);
@@ -691,7 +795,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           left: `${targetRect.left}px`,
           width: `${targetRect.width}px`,
           height: `${targetRect.height}px`,
-          borderRadius: "36px",
+          borderRadius: targetRadius,
         },
       ],
       {
@@ -721,11 +825,27 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
     const closeButton = modal.querySelector(".hero-modal-close");
     const cta = modal.querySelector(".hero-modal-cta");
+    const footer = modal.querySelector(".hero-modal-footer");
     let isClosing = false;
+
+    const syncFooterSpace = () => {
+      const footerHeight = footer ? Math.ceil(footer.getBoundingClientRect().height) : 0;
+      modal.style.setProperty("--hero-modal-footer-space", `${footerHeight}px`);
+    };
+
+    const footerResizeObserver =
+      footer && typeof ResizeObserver === "function"
+        ? new ResizeObserver(syncFooterSpace)
+        : null;
+
+    footerResizeObserver?.observe(footer);
+    syncFooterSpace();
 
     const handleModalResize = () => {
       if (!isClosing && modal.classList.contains("is-ready")) {
         applyRect(modal, getModalTargetRect());
+        modal.style.borderRadius = getModalTargetRadius();
+        syncFooterSpace();
       }
     };
 
@@ -792,6 +912,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         document.documentElement.classList.remove("is-hero-modal-open");
         document.removeEventListener("keydown", handleModalKeydown);
         window.removeEventListener("resize", handleModalResize);
+        footerResizeObserver?.disconnect();
         activeModal = null;
         resumeHeroWorkVideos(pausedHeroWorkVideos);
         const focusTarget = work.matches("a")
@@ -912,7 +1033,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       .then(() => {
         if (isClosing) return;
         applyRect(modal, targetRect);
-        modal.style.borderRadius = "36px";
+        modal.style.borderRadius = targetRadius;
         modalAnimation.cancel();
         modal.classList.add("is-ready");
         closeButton.focus({ preventScroll: true });
