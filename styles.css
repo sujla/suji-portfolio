@@ -605,6 +605,10 @@ html.is-hero-modal-open body {
   isolation: auto !important;
 }
 
+.hero-modal-card-content.is-skeleton .hero-modal-bento-skeleton {
+  min-height: 240px;
+}
+
 .hero-modal-bento-skeleton::before,
 .hero-modal-bento-skeleton::after {
   display: none !important;
@@ -2432,6 +2436,8 @@ body.is-project-transitioning .is-transition-source .project-card {
     min-height: 0;
     height: auto;
     max-height: 436px;
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
   }
 
   .hero-work-rail--secondary {

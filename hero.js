@@ -26,19 +26,19 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           `
           : project.id === "cta-enhancement"
             ? `
-              <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata">
+              <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/cta-enhancement/cta-enhancement-solution-poster.jpg">
                 <source src="./assets/cta-enhancement/cta-enhancement-solution.mp4" type="video/mp4" />
               </video>
             `
             : project.id === "public-transport"
               ? `
-                <video class="hero-phone-screen hero-phone-screen--public-transport" autoplay muted loop playsinline preload="metadata">
+                <video class="hero-phone-screen hero-phone-screen--public-transport" autoplay muted loop playsinline preload="metadata" poster="./assets/public-transport/mrt-bottomsheet-poster.jpg">
                   <source src="./assets/public-transport/mrt-bottomsheet.mp4" type="video/mp4" />
                 </video>
               `
               : project.id === "perp-dex"
                 ? `
-                  <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata">
+                  <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/perp-dex/onboarding-poster.jpg">
                     <source src="./assets/perp-dex/onboarding.mp4" type="video/mp4" />
                   </video>
                 `
@@ -60,14 +60,17 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   const publicTransportModalVideos = [
     {
       source: "./assets/public-transport/bus-route.mp4",
+      poster: "./assets/public-transport/bus-route-poster.jpg",
       label: "Bus timings & route",
     },
     {
       source: "./assets/public-transport/mrt-route.mp4",
+      poster: "./assets/public-transport/mrt-route-poster.jpg",
       label: "Simple & shortest MRT route options",
     },
     {
       source: "./assets/public-transport/google-map-share.mp4",
+      poster: "./assets/public-transport/google-map-share-poster.jpg",
       label: "Locations shared via Google Maps",
     },
   ];
@@ -83,6 +86,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
             muted
             playsinline
             preload="auto"
+            poster="${item.poster}"
             data-public-transport-video
             data-public-transport-video-order="${order}"
           >
@@ -136,12 +140,12 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       project.id === "perp-dex"
         ? [
             `
-              <video class="hero-modal-perp-media" muted playsinline preload="auto" data-perp-video data-perp-thumbnail-time="3.44">
+              <video class="hero-modal-perp-media" muted playsinline preload="auto" poster="./assets/perp-dex/logo-intro-poster.jpg" data-perp-video data-perp-thumbnail-time="3.44">
                 <source src="./assets/perp-dex/logo-intro.mp4" type="video/mp4" />
               </video>
             `,
             `
-              <video class="hero-modal-perp-media" muted playsinline preload="auto" data-perp-video>
+              <video class="hero-modal-perp-media" muted playsinline preload="auto" poster="./assets/perp-dex/sltp-poster.jpg" data-perp-video>
                 <source src="./assets/perp-dex/sltp.mp4" type="video/mp4" />
               </video>
             `,
@@ -152,7 +156,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
               </div>
             `,
             `
-              <video class="hero-modal-perp-media hero-modal-perp-media--trading" muted playsinline preload="auto" data-perp-video>
+              <video class="hero-modal-perp-media hero-modal-perp-media--trading" muted playsinline preload="auto" poster="./assets/perp-dex/trading-poster.jpg" data-perp-video>
                 <source src="./assets/perp-dex/trading.mov" />
               </video>
             `,
@@ -186,6 +190,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
               loop
               playsinline
               preload="auto"
+              poster="./assets/cta-enhancement/cta-enhancement-solution-poster.jpg"
             >
               <source src="./assets/cta-enhancement/cta-enhancement-solution.mp4" type="video/mp4" />
             </video>
@@ -408,17 +413,15 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
       if (entry.video) {
         const thumbnailTime = Number(entry.video.dataset.perpThumbnailTime || 0);
-        const freezeVideo = () => {
-          entry.video.loop = false;
-          entry.video.pause();
+        entry.video.loop = false;
+        entry.video.pause();
+
+        if (entry.video.readyState >= 2) {
           entry.video.currentTime = Math.min(
             thumbnailTime,
             Number.isFinite(entry.video.duration) ? entry.video.duration : thumbnailTime,
           );
-        };
-
-        if (entry.video.readyState >= 1) freezeVideo();
-        else entry.video.addEventListener("loadedmetadata", freezeVideo, { once: true });
+        }
       }
 
       if (entry.gif) {
@@ -535,7 +538,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       entry.video.loop = false;
       entry.video.pause();
 
-      if (entry.video.readyState >= 1) entry.video.currentTime = 0;
+      if (entry.video.readyState >= 2) entry.video.currentTime = 0;
     };
 
     const stopAll = () => sequence.forEach(showStaticFrame);
@@ -1095,6 +1098,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   const secondaryMobileStartOffset = -80;
   const defaultAutoScrollSpeed = 32;
   const hoverAutoScrollSpeed = 12;
+  const touchScrollSettleDelay = 180;
+  const touchAutoScrollResumeDelay = 600;
   let autoScrollPreviousTime;
   let autoScrollFrameId = 0;
   let autoScrollPausedUntil = 0;
@@ -1106,6 +1111,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   let dragStartScrollLeft = 0;
   let dragMoved = false;
   let suppressNextClick = false;
+  let isTouchScrollingRail = false;
+  let railTouchScrollTimer = 0;
   let segmentWidth = 0;
   let centerScrollLeft = 0;
   let secondarySegmentWidth = 0;
@@ -1117,6 +1124,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   let secondaryDragStartScrollLeft = 0;
   let secondaryDragMoved = false;
   let suppressNextSecondaryClick = false;
+  let isTouchScrollingSecondaryRail = false;
+  let secondaryRailTouchScrollTimer = 0;
 
   const syncInfiniteMetrics = ({ preservePosition = false } = {}) => {
     if (!rail || !primaryFirstWork || workSets.length < 3) return;
@@ -1211,6 +1220,42 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     secondaryAutoScrollPausedUntil = performance.now() + 200;
   };
 
+  const beginRailTouchScroll = () => {
+    window.clearTimeout(railTouchScrollTimer);
+    isTouchScrollingRail = true;
+    autoScrollPosition = rail?.scrollLeft ?? autoScrollPosition;
+  };
+
+  const scheduleRailTouchScrollEnd = () => {
+    window.clearTimeout(railTouchScrollTimer);
+    railTouchScrollTimer = window.setTimeout(() => {
+      if (!rail) return;
+
+      autoScrollPosition = rail.scrollLeft;
+      autoScrollPosition += normalizeInfiniteScroll();
+      isTouchScrollingRail = false;
+      autoScrollPausedUntil = performance.now() + touchAutoScrollResumeDelay;
+    }, touchScrollSettleDelay);
+  };
+
+  const beginSecondaryRailTouchScroll = () => {
+    window.clearTimeout(secondaryRailTouchScrollTimer);
+    isTouchScrollingSecondaryRail = true;
+    secondaryAutoScrollPosition = secondaryRail?.scrollLeft ?? secondaryAutoScrollPosition;
+  };
+
+  const scheduleSecondaryRailTouchScrollEnd = () => {
+    window.clearTimeout(secondaryRailTouchScrollTimer);
+    secondaryRailTouchScrollTimer = window.setTimeout(() => {
+      if (!secondaryRail) return;
+
+      secondaryAutoScrollPosition = secondaryRail.scrollLeft;
+      secondaryAutoScrollPosition += normalizeSecondaryInfiniteScroll();
+      isTouchScrollingSecondaryRail = false;
+      secondaryAutoScrollPausedUntil = performance.now() + touchAutoScrollResumeDelay;
+    }, touchScrollSettleDelay);
+  };
+
   const animateRail = (time) => {
     const elapsed = Math.min((time - (autoScrollPreviousTime ?? time)) / 1000, 0.1);
     const targetAutoScrollSpeed = isHoveringRail ? hoverAutoScrollSpeed : defaultAutoScrollSpeed;
@@ -1225,6 +1270,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       if (
         heroIsVisible &&
         !isDraggingRail &&
+        !isTouchScrollingRail &&
+        !isTouchScrollingSecondaryRail &&
         !document.documentElement.classList.contains("is-hero-modal-open") &&
         time >= autoScrollPausedUntil
       ) {
@@ -1238,6 +1285,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         secondaryRail?.clientWidth &&
         secondarySegmentWidth &&
         !isDraggingSecondaryRail &&
+        !isTouchScrollingSecondaryRail &&
+        !isTouchScrollingRail &&
         !document.documentElement.classList.contains("is-hero-modal-open") &&
         time >= secondaryAutoScrollPausedUntil
       ) {
@@ -1297,6 +1346,11 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   rail?.addEventListener("pointerdown", (event) => {
     if (event.button !== 0 || activeModal) return;
 
+    if (event.pointerType === "touch" && mobileHeroMedia.matches) {
+      beginRailTouchScroll();
+      return;
+    }
+
     isDraggingRail = true;
     dragMoved = false;
     dragStartX = event.clientX;
@@ -1342,8 +1396,24 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     }
   };
 
-  rail?.addEventListener("pointerup", finishRailDrag);
-  rail?.addEventListener("pointercancel", finishRailDrag);
+  rail?.addEventListener("scroll", () => {
+    if (!isTouchScrollingRail) return;
+
+    autoScrollPosition = rail.scrollLeft;
+    scheduleRailTouchScrollEnd();
+  }, { passive: true });
+
+  const finishRailPointerInteraction = (event) => {
+    if (event.pointerType === "touch" && mobileHeroMedia.matches) {
+      scheduleRailTouchScrollEnd();
+      return;
+    }
+
+    finishRailDrag(event);
+  };
+
+  rail?.addEventListener("pointerup", finishRailPointerInteraction);
+  rail?.addEventListener("pointercancel", finishRailPointerInteraction);
   rail?.addEventListener(
     "click",
     (event) => {
@@ -1358,6 +1428,11 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
   secondaryRail?.addEventListener("pointerdown", (event) => {
     if (event.button !== 0 || activeModal) return;
+
+    if (event.pointerType === "touch" && mobileHeroMedia.matches) {
+      beginSecondaryRailTouchScroll();
+      return;
+    }
 
     isDraggingSecondaryRail = true;
     secondaryDragMoved = false;
@@ -1406,8 +1481,24 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     }
   };
 
-  secondaryRail?.addEventListener("pointerup", finishSecondaryRailDrag);
-  secondaryRail?.addEventListener("pointercancel", finishSecondaryRailDrag);
+  secondaryRail?.addEventListener("scroll", () => {
+    if (!isTouchScrollingSecondaryRail) return;
+
+    secondaryAutoScrollPosition = secondaryRail.scrollLeft;
+    scheduleSecondaryRailTouchScrollEnd();
+  }, { passive: true });
+
+  const finishSecondaryRailPointerInteraction = (event) => {
+    if (event.pointerType === "touch" && mobileHeroMedia.matches) {
+      scheduleSecondaryRailTouchScrollEnd();
+      return;
+    }
+
+    finishSecondaryRailDrag(event);
+  };
+
+  secondaryRail?.addEventListener("pointerup", finishSecondaryRailPointerInteraction);
+  secondaryRail?.addEventListener("pointercancel", finishSecondaryRailPointerInteraction);
   secondaryRail?.addEventListener(
     "click",
     (event) => {
