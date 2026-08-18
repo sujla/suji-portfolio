@@ -383,7 +383,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   };
 
   const initializePerpDexMediaPlayback = (modal) => {
-    const sequence = [4, 1, 2, 3]
+    const playbackOrder = window.matchMedia("(max-width: 920px)").matches
+      ? [1, 2, 3, 4]
+      : [4, 1, 2, 3];
+    const sequence = playbackOrder
       .map((index) => modal.querySelector(`.hero-modal-bento-placeholder--${index}`))
       .filter(Boolean)
       .map((container) => ({
