@@ -593,14 +593,8 @@ html.is-hero-modal-open body {
 }
 
 .hero-modal-bento-skeleton {
-  border: 1px solid color-mix(in srgb, var(--surface) 82%, var(--text)) !important;
-  background:
-    linear-gradient(
-      112deg,
-      color-mix(in srgb, var(--surface) 88%, var(--text)) 0%,
-      color-mix(in srgb, var(--surface) 95%, var(--text)) 48%,
-      color-mix(in srgb, var(--surface) 88%, var(--text)) 100%
-    ) !important;
+  border: none !important;
+  background: var(--hero-modal-placeholder-2-bg) !important;
   box-shadow: none !important;
   isolation: auto !important;
 }
