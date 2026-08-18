@@ -945,8 +945,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     ".hero-work:nth-child(4)",
   );
   const mobileHeroMedia = window.matchMedia("(max-width: 600px)");
-  const primaryMobileStartOffset = 110;
-  const secondaryMobileStartOffset = -110;
+  const primaryMobileStartOffset = 80;
+  const secondaryMobileStartOffset = -80;
   const defaultAutoScrollSpeed = 32;
   const hoverAutoScrollSpeed = 12;
   let autoScrollPreviousTime;

@@ -887,6 +887,7 @@ html.is-hero-modal-open body {
   font-weight: 400;
   line-height: 1.45;
   text-align: left;
+  white-space: pre-wrap;
 }
 
 .hero-modal-result-metric-title--nowrap {
@@ -2122,13 +2123,15 @@ body.is-project-transitioning .is-transition-source .project-card {
   .hero-work {
     flex-basis: calc(100vw - (var(--hero-frame-gutter) * 2));
     border-radius: 24px;
+    min-width: 350px;
+    max-width: 400px;
   }
 
   .hero-work-meta {
     top: auto;
     right: 28px;
-    bottom: 28px;
-    left: 34px;
+    bottom: 24px;
+    left: 28px;
   }
 
   .hero-work-rail .hero-work-meta::before {
@@ -2144,12 +2147,12 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .hero-work-meta h2 {
-    font-size: clamp(16px, 5vw, 18px);
+    font-size: clamp(16px, 5vw, 17px);
   }
 
   .hero-work-meta span {
-    margin-top: 8px;
-    font-size: 15px;
+    margin-top: 6px;
+    font-size: 14px;
   }
 
   .hero-project-mockups {
@@ -2164,13 +2167,21 @@ body.is-project-transitioning .is-transition-source .project-card {
     width: clamp(130px, 36vw, 150px);
   }
 
+  .hero-phone-screen {
+    border-radius: 16px;
+  }
+
+  .hero-work--perp-dex .hero-phone-screen {
+    clip-path: inset(10px 0 0 0 round 20px);
+  }
+
   .hero-project-mockups--web {
-    top: 8%;
+    top: 4%;
     bottom: 16%;
   }
 
   .hero-web-mockup {
-    width: min(70%, 390px);
+    width: min(78%, 390px);
   }
 
   .hero-work-modal {
