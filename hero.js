@@ -927,11 +927,26 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         ${renderWorkSet(true)}
       </div>
     </div>
+    <div class="hero-work-rail hero-work-rail--infinite hero-work-rail--secondary" data-hero-work-rail-secondary>
+      <div class="hero-work-track">
+        ${renderWorkSet(true)}
+        ${renderWorkSet()}
+        ${renderWorkSet(true)}
+      </div>
+    </div>
   `;
 
   const rail = hero.querySelector("[data-hero-work-rail]");
-  const workSets = [...hero.querySelectorAll(".hero-work-set")];
+  const workSets = [...rail.querySelectorAll(".hero-work-set")];
   const primaryFirstWork = hero.querySelector(".hero-work-set--primary .hero-work");
+  const secondaryRail = hero.querySelector("[data-hero-work-rail-secondary]");
+  const secondaryWorkSets = [...secondaryRail.querySelectorAll(".hero-work-set")];
+  const secondaryInitialWork = secondaryWorkSets[1]?.querySelector(
+    ".hero-work:nth-child(4)",
+  );
+  const mobileHeroMedia = window.matchMedia("(max-width: 600px)");
+  const primaryMobileStartOffset = 110;
+  const secondaryMobileStartOffset = -110;
   const defaultAutoScrollSpeed = 32;
   const hoverAutoScrollSpeed = 12;
   let autoScrollPreviousTime;
@@ -946,6 +961,15 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   let suppressNextClick = false;
   let segmentWidth = 0;
   let centerScrollLeft = 0;
+  let secondarySegmentWidth = 0;
+  let secondaryCenterScrollLeft = 0;
+  let secondaryAutoScrollPosition = 0;
+  let secondaryAutoScrollPausedUntil = 0;
+  let isDraggingSecondaryRail = false;
+  let secondaryDragStartX = 0;
+  let secondaryDragStartScrollLeft = 0;
+  let secondaryDragMoved = false;
+  let suppressNextSecondaryClick = false;
 
   const syncInfiniteMetrics = ({ preservePosition = false } = {}) => {
     if (!rail || !primaryFirstWork || workSets.length < 3) return;
@@ -962,7 +986,9 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
     segmentWidth = workSets[2].getBoundingClientRect().left - workSets[1].getBoundingClientRect().left;
     centerScrollLeft =
-      primaryFirstWorkScrollLeft - (rail.clientWidth - primaryFirstWorkRect.width) / 2;
+      primaryFirstWorkScrollLeft -
+      (rail.clientWidth - primaryFirstWorkRect.width) / 2 -
+      (mobileHeroMedia.matches ? primaryMobileStartOffset : 0);
     rail.scrollLeft = preservePosition
       ? centerScrollLeft + relativePosition * segmentWidth
       : centerScrollLeft;
@@ -985,9 +1011,57 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     return scrollShift;
   };
 
+  const syncSecondaryInfiniteMetrics = ({ preservePosition = false } = {}) => {
+    if (!secondaryRail || !secondaryInitialWork || secondaryWorkSets.length < 3 || !secondaryRail.clientWidth) return;
+
+    const previousSegmentWidth = secondarySegmentWidth;
+    const previousCenterScrollLeft = secondaryCenterScrollLeft;
+    const relativePosition = previousSegmentWidth
+      ? (secondaryRail.scrollLeft - previousCenterScrollLeft) / previousSegmentWidth
+      : 0;
+    const railRect = secondaryRail.getBoundingClientRect();
+    const initialWorkRect = secondaryInitialWork.getBoundingClientRect();
+    const initialWorkScrollLeft =
+      secondaryRail.scrollLeft + initialWorkRect.left - railRect.left;
+
+    secondarySegmentWidth =
+    secondaryWorkSets[2].getBoundingClientRect().left -
+      secondaryWorkSets[1].getBoundingClientRect().left;
+    secondaryCenterScrollLeft =
+      initialWorkScrollLeft -
+      (secondaryRail.clientWidth - initialWorkRect.width) / 2 -
+      secondaryMobileStartOffset;
+    secondaryRail.scrollLeft = preservePosition
+      ? secondaryCenterScrollLeft + relativePosition * secondarySegmentWidth
+      : secondaryCenterScrollLeft;
+    secondaryAutoScrollPosition = secondaryRail.scrollLeft;
+  };
+
+  const normalizeSecondaryInfiniteScroll = () => {
+    if (!secondaryRail || !secondarySegmentWidth) return 0;
+
+    const lowerBoundary = secondaryCenterScrollLeft - secondarySegmentWidth * 0.5;
+    const upperBoundary = secondaryCenterScrollLeft + secondarySegmentWidth * 0.5;
+    let normalizedScrollLeft = secondaryRail.scrollLeft;
+
+    while (normalizedScrollLeft < lowerBoundary) normalizedScrollLeft += secondarySegmentWidth;
+    while (normalizedScrollLeft >= upperBoundary) normalizedScrollLeft -= secondarySegmentWidth;
+
+    const scrollShift = normalizedScrollLeft - secondaryRail.scrollLeft;
+    if (Math.abs(scrollShift) > 0.5) secondaryRail.scrollLeft = normalizedScrollLeft;
+
+    return scrollShift;
+  };
+
   const pauseAutoScroll = () => {
     autoScrollPosition = rail?.scrollLeft ?? autoScrollPosition;
     autoScrollPausedUntil = performance.now() + 200;
+  };
+
+  const pauseSecondaryAutoScroll = () => {
+    secondaryAutoScrollPosition =
+      secondaryRail?.scrollLeft ?? secondaryAutoScrollPosition;
+    secondaryAutoScrollPausedUntil = performance.now() + 200;
   };
 
   const animateRail = (time) => {
@@ -1011,6 +1085,19 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         rail.scrollLeft = autoScrollPosition;
         autoScrollPosition += normalizeInfiniteScroll();
       }
+
+      if (
+        heroIsVisible &&
+        secondaryRail?.clientWidth &&
+        secondarySegmentWidth &&
+        !isDraggingSecondaryRail &&
+        !document.documentElement.classList.contains("is-hero-modal-open") &&
+        time >= secondaryAutoScrollPausedUntil
+      ) {
+        secondaryAutoScrollPosition -= elapsed * defaultAutoScrollSpeed;
+        secondaryRail.scrollLeft = secondaryAutoScrollPosition;
+        secondaryAutoScrollPosition += normalizeSecondaryInfiniteScroll();
+      }
     }
 
     requestAnimationFrame(animateRail);
@@ -1018,7 +1105,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
   requestAnimationFrame(animateRail);
 
-  requestAnimationFrame(() => syncInfiniteMetrics());
+  requestAnimationFrame(() => {
+    syncInfiniteMetrics();
+    syncSecondaryInfiniteMetrics();
+  });
 
   rail?.addEventListener("mouseenter", () => {
     isHoveringRail = true;
@@ -1104,6 +1194,70 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     true,
   );
 
+  secondaryRail?.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0 || activeModal) return;
+
+    isDraggingSecondaryRail = true;
+    secondaryDragMoved = false;
+    secondaryDragStartX = event.clientX;
+    secondaryDragStartScrollLeft = secondaryRail.scrollLeft;
+    pauseSecondaryAutoScroll();
+  });
+
+  secondaryRail?.addEventListener("dragstart", (event) => {
+    event.preventDefault();
+  });
+
+  secondaryRail?.addEventListener("pointermove", (event) => {
+    if (!isDraggingSecondaryRail) return;
+
+    const dragDistance = event.clientX - secondaryDragStartX;
+    if (!secondaryDragMoved && Math.abs(dragDistance) <= 5) return;
+
+    if (!secondaryDragMoved) {
+      secondaryDragMoved = true;
+      secondaryRail.classList.add("is-dragging");
+      secondaryRail.setPointerCapture(event.pointerId);
+    }
+
+    secondaryRail.scrollLeft = secondaryDragStartScrollLeft - dragDistance;
+    secondaryDragStartScrollLeft += normalizeSecondaryInfiniteScroll();
+    secondaryAutoScrollPosition = secondaryRail.scrollLeft;
+    pauseSecondaryAutoScroll();
+  });
+
+  const finishSecondaryRailDrag = (event) => {
+    if (!secondaryRail || !isDraggingSecondaryRail) return;
+
+    isDraggingSecondaryRail = false;
+    secondaryRail.classList.remove("is-dragging");
+    if (secondaryRail.hasPointerCapture(event.pointerId)) {
+      secondaryRail.releasePointerCapture(event.pointerId);
+    }
+    secondaryAutoScrollPosition = secondaryRail.scrollLeft;
+
+    if (secondaryDragMoved) {
+      suppressNextSecondaryClick = true;
+      window.setTimeout(() => {
+        suppressNextSecondaryClick = false;
+      }, 0);
+    }
+  };
+
+  secondaryRail?.addEventListener("pointerup", finishSecondaryRailDrag);
+  secondaryRail?.addEventListener("pointercancel", finishSecondaryRailDrag);
+  secondaryRail?.addEventListener(
+    "click",
+    (event) => {
+      if (!suppressNextSecondaryClick) return;
+
+      suppressNextSecondaryClick = false;
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true,
+  );
+
   hero.querySelectorAll(".hero-work").forEach((work) => {
     work.addEventListener("click", (event) => {
       if (!isPlainNavigationClick(event, work)) return;
@@ -1118,6 +1272,9 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   });
 
   window.addEventListener("resize", () => {
-    requestAnimationFrame(() => syncInfiniteMetrics({ preservePosition: true }));
+    requestAnimationFrame(() => {
+      syncInfiniteMetrics({ preservePosition: true });
+      syncSecondaryInfiniteMetrics({ preservePosition: true });
+    });
   });
 };
