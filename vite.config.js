@@ -1,10 +1,22 @@
+import { cp } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 
 const fromRoot = (path) => fileURLToPath(new URL(path, import.meta.url));
 
+const copyRuntimeAssets = {
+  name: "copy-runtime-assets",
+  apply: "build",
+  async closeBundle() {
+    await cp(fromRoot("./assets"), fromRoot("./docs/assets"), {
+      recursive: true,
+    });
+  },
+};
+
 export default defineConfig({
   base: "/suji-portfolio/",
+  plugins: [copyRuntimeAssets],
   build: {
     outDir: "docs",
     rollupOptions: {
