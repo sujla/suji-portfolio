@@ -388,9 +388,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   };
 
   const initializePerpDexMediaPlayback = (modal) => {
-    const playbackOrder = window.matchMedia("(max-width: 920px)").matches
-      ? [1, 2, 3, 4]
-      : [4, 1, 2, 3];
+    const playSimultaneously = window.matchMedia("(max-width: 920px)").matches;
+    const playbackOrder = playSimultaneously ? [1, 2, 3, 4] : [4, 1, 2, 3];
     const sequence = playbackOrder
       .map((index) => modal.querySelector(`.hero-modal-bento-placeholder--${index}`))
       .filter(Boolean)
@@ -401,6 +400,34 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       }));
 
     if (!sequence.length) return;
+
+    if (playSimultaneously) {
+      sequence.forEach((entry) => {
+        entry.container.classList.add("is-playing");
+
+        if (entry.video) {
+          const startVideo = () => {
+            if (!modal.isConnected) return;
+            entry.video.loop = true;
+            entry.video.currentTime = 0;
+            entry.video.play().catch(() => {
+              // Muted playback can still be blocked until the next user interaction.
+            });
+          };
+
+          if (entry.video.readyState >= 1) startVideo();
+          else entry.video.addEventListener("loadedmetadata", startVideo, { once: true });
+        }
+
+        if (entry.gif) {
+          const player = entry.gif.querySelector("[data-perp-gif-player]");
+          const source = entry.gif.dataset.perpGifSrc;
+
+          if (player && source) player.src = source;
+        }
+      });
+      return;
+    }
 
     let activeEntry = null;
     let autoIndex = 0;
@@ -517,6 +544,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   };
 
   const initializePublicTransportMediaPlayback = (modal) => {
+    const playSimultaneously = window.matchMedia("(max-width: 920px)").matches;
     const sequence = [...modal.querySelectorAll("[data-public-transport-video]")]
       .map((video) => ({
         video,
@@ -527,6 +555,25 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       .sort((a, b) => a.order - b.order);
 
     if (!sequence.length) return;
+
+    if (playSimultaneously) {
+      sequence.forEach((entry) => {
+        entry.container.classList.add("is-playing");
+        entry.video.loop = true;
+
+        const startVideo = () => {
+          if (!modal.isConnected) return;
+          entry.video.currentTime = 0;
+          entry.video.play().catch(() => {
+            // Muted playback can still be blocked until the next user interaction.
+          });
+        };
+
+        if (entry.video.readyState >= 1) startVideo();
+        else entry.video.addEventListener("loadedmetadata", startVideo, { once: true });
+      });
+      return;
+    }
 
     let activeEntry = null;
     let autoIndex = 0;
