@@ -2001,7 +2001,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   .about-photo-stack {
     grid-row: 1;
     width: min(70%, 36svh, 360px);
-    min-width: 240px;
+    min-width: 220px;
   }
 
   .project-section {
