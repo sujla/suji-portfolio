@@ -1,8 +1,12 @@
+import EmblaCarousel from "embla-carousel";
+import AutoScroll from "embla-carousel-auto-scroll";
+
 export const renderHero = (hero, heroProjects, getPlainTitle) => {
   if (!hero) return;
 
   const modalTransitionDuration = 760;
   let activeModal = null;
+  let mobileEmblaApis = [];
 
   const getWorkMedia = (project) => {
     if (project.deviceType === "web") {
@@ -658,6 +662,19 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     </div>
   `;
 
+  const renderMobileSlides = (centerProjectIndex) => {
+    const projectCount = heroProjects.length;
+    const cellCount = projectCount;
+    const centerCellIndex = Math.floor(cellCount / 2);
+
+    return Array.from({ length: cellCount }, (_, slotIndex) => {
+      const projectIndex =
+        (centerProjectIndex + slotIndex - centerCellIndex + projectCount) %
+        projectCount;
+      return renderWorkCard(heroProjects[projectIndex]);
+    }).join("");
+  };
+
   const isPlainNavigationClick = (event, link) =>
     event.button === 0 &&
     !event.defaultPrevented &&
@@ -731,10 +748,23 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     });
   };
 
+  const stopMobileAutoScroll = () => {
+    mobileEmblaApis.forEach((emblaApi) => {
+      emblaApi.plugins().autoScroll?.stop();
+    });
+  };
+
+  const playMobileAutoScroll = () => {
+    mobileEmblaApis.forEach((emblaApi) => {
+      emblaApi.plugins().autoScroll?.play(600);
+    });
+  };
+
   const openWorkModal = (work, project) => {
     if (activeModal) return;
 
     stopAutoScrollLoop();
+    stopMobileAutoScroll();
     const pausedHeroWorkVideos = pauseHeroWorkVideos();
     const sourceRect = work.getBoundingClientRect();
     const sourceRadius = window.getComputedStyle(work).borderRadius;
@@ -989,6 +1019,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         activeModal = null;
         resumeHeroWorkVideos(pausedHeroWorkVideos);
         startAutoScrollLoop();
+        playMobileAutoScroll();
         const focusTarget = work.matches("a")
           ? work
           : hero.querySelector(`.hero-work-set--primary .hero-work--${project.id}`);
@@ -1115,32 +1146,43 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       });
   };
 
-  hero.innerHTML = `
-    <div class="hero-work-rail hero-work-rail--infinite" data-hero-work-rail>
-      <div class="hero-work-track">
-        ${renderWorkSet(true)}
-        ${renderWorkSet()}
-        ${renderWorkSet(true)}
+  const mobileHeroMedia = window.matchMedia("(max-width: 600px)");
+
+  hero.innerHTML = mobileHeroMedia.matches
+    ? `
+      <div class="hero-work-rail hero-work-rail--infinite hero-work-rail--mobile" data-mobile-hero-work-rail>
+        <div class="hero-work-track hero-work-track--embla">
+          ${renderMobileSlides(0)}
+        </div>
       </div>
-    </div>
-    <div class="hero-work-rail hero-work-rail--infinite hero-work-rail--secondary" data-hero-work-rail-secondary>
-      <div class="hero-work-track">
-        ${renderWorkSet(true)}
-        ${renderWorkSet()}
-        ${renderWorkSet(true)}
+      <div class="hero-work-rail hero-work-rail--infinite hero-work-rail--secondary hero-work-rail--mobile" data-mobile-hero-work-rail-secondary>
+        <div class="hero-work-track hero-work-track--embla">
+          ${renderMobileSlides(3)}
+        </div>
       </div>
-    </div>
-  `;
+    `
+    : `
+      <div class="hero-work-rail hero-work-rail--infinite" data-hero-work-rail>
+        <div class="hero-work-track">
+          ${renderWorkSet(true)}
+          ${renderWorkSet()}
+          ${renderWorkSet(true)}
+        </div>
+      </div>
+    `;
 
   const rail = hero.querySelector("[data-hero-work-rail]");
-  const workSets = [...rail.querySelectorAll(".hero-work-set")];
+  const workSets = rail ? [...rail.querySelectorAll(".hero-work-set")] : [];
   const primaryFirstWork = hero.querySelector(".hero-work-set--primary .hero-work");
   const secondaryRail = hero.querySelector("[data-hero-work-rail-secondary]");
-  const secondaryWorkSets = [...secondaryRail.querySelectorAll(".hero-work-set")];
+  const secondaryWorkSets = secondaryRail
+    ? [...secondaryRail.querySelectorAll(".hero-work-set")]
+    : [];
   const secondaryInitialWork = secondaryWorkSets[1]?.querySelector(
     ".hero-work:nth-child(4)",
   );
-  const mobileHeroMedia = window.matchMedia("(max-width: 600px)");
+  const mobileRail = hero.querySelector("[data-mobile-hero-work-rail]");
+  const mobileSecondaryRail = hero.querySelector("[data-mobile-hero-work-rail-secondary]");
   const primaryMobileStartOffset = 80;
   const secondaryMobileStartOffset = -80;
   const defaultAutoScrollSpeed = 32;
@@ -1173,6 +1215,33 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   let suppressNextSecondaryClick = false;
   let isTouchScrollingSecondaryRail = false;
   let secondaryRailTouchScrollTimer = 0;
+
+  mobileEmblaApis = [
+    { rail: mobileRail, direction: "forward" },
+    { rail: mobileSecondaryRail, direction: "backward" },
+  ]
+    .filter(({ rail: mobileEmblaRail }) => mobileEmblaRail)
+    .map(({ rail: mobileEmblaRail, direction }) =>
+      EmblaCarousel(
+        mobileEmblaRail,
+        {
+          align: "center",
+          dragFree: true,
+          loop: true,
+          startIndex: Math.floor(heroProjects.length / 2),
+        },
+        [
+          AutoScroll({
+            direction,
+            playOnInit: true,
+            speed: 0.55,
+            startDelay: 600,
+            stopOnFocusIn: true,
+            stopOnInteraction: false,
+          }),
+        ],
+      ),
+    );
 
   const syncInfiniteMetrics = ({ preservePosition = false } = {}) => {
     if (!rail || !primaryFirstWork || workSets.length < 3) return;
@@ -1347,7 +1416,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   };
 
   const startAutoScrollLoop = () => {
-    if (autoScrollFrameId) return;
+    if (!rail || autoScrollFrameId) return;
 
     autoScrollPreviousTime = undefined;
     autoScrollFrameId = requestAnimationFrame(animateRail);

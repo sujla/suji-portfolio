@@ -9,5 +9,9 @@
   },
   "devDependencies": {
     "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-auto-scroll": "^8.6.0"
   }
 }
