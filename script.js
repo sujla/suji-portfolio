@@ -478,6 +478,7 @@ mobileProjectMedia.addEventListener?.("change", () => {
 window.addEventListener("pagehide", () => heroController?.resetModal());
 window.addEventListener("pageshow", () => {
   heroController?.resetModal();
+  heroController?.syncModalWithHistory();
   resetProjectTransition();
 });
 requestProjectUpdate();

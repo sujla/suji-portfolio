@@ -5,8 +5,24 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   if (!hero) return;
 
   const modalTransitionDuration = 760;
+  const modalHistoryStateKey = "portfolioHeroModalProject";
   let activeModal = null;
   let mobileEmblaApis = [];
+
+  const getModalHistoryProjectId = () =>
+    window.history.state?.[modalHistoryStateKey] || "";
+
+  const pushModalHistoryEntry = (projectId) => {
+    const currentState =
+      window.history.state && typeof window.history.state === "object"
+        ? window.history.state
+        : {};
+
+    window.history.pushState(
+      { ...currentState, [modalHistoryStateKey]: projectId },
+      "",
+    );
+  };
 
   const getWorkMedia = (project) => {
     if (project.deviceType === "web") {
@@ -749,8 +765,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     });
   };
 
-  const openWorkModal = (work, project) => {
+  const openWorkModal = (work, project, { pushHistory = true } = {}) => {
     if (activeModal) return;
+
+    if (pushHistory) pushModalHistoryEntry(project.id);
 
     stopAutoScrollLoop();
     stopMobileAutoScroll();
@@ -917,6 +935,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const cardContent = modal.querySelector(".hero-modal-card-content");
     let hasMountedBento = false;
     let isClosing = false;
+    let isHistoryClosePending = false;
 
     const mountBentoContent = () => {
       if (hasMountedBento || !cardContent || isClosing) return;
@@ -986,6 +1005,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const closeModal = () => {
       if (isClosing) return;
       isClosing = true;
+      isHistoryClosePending = false;
       modal.classList.add("is-closing");
       modal.classList.remove("is-revealing", "is-ready", "is-content-ready");
 
@@ -1030,6 +1050,18 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       closeAnimation.finished.finally(() => disposeModal({ restoreFocus: true }));
     };
 
+    const requestModalClose = () => {
+      if (isClosing || isHistoryClosePending) return;
+
+      if (getModalHistoryProjectId() === project.id) {
+        isHistoryClosePending = true;
+        window.history.back();
+        return;
+      }
+
+      closeModal();
+    };
+
     const runModalNavigation = (event) => {
       if (
         !cta ||
@@ -1040,18 +1072,23 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       }
 
       event.preventDefault();
-      if (isClosing) return;
+      if (isClosing || isHistoryClosePending) return;
 
       isClosing = true;
       modal.classList.add("is-navigating");
       document.removeEventListener("keydown", handleModalKeydown);
-      window.location.href = cta.href;
+
+      if (getModalHistoryProjectId() === project.id) {
+        window.location.replace(cta.href);
+      } else {
+        window.location.href = cta.href;
+      }
     };
 
     const handleModalKeydown = (event) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        closeModal();
+        requestModalClose();
         return;
       }
 
@@ -1067,13 +1104,13 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       focusable[nextIndex].focus();
     };
 
-    activeModal = { layer, modal, closeModal, disposeModal };
+    activeModal = { layer, modal, projectId: project.id, closeModal, disposeModal };
     document.addEventListener("keydown", handleModalKeydown);
     window.addEventListener("resize", handleModalResize);
-    closeButton.addEventListener("click", closeModal);
+    closeButton.addEventListener("click", requestModalClose);
     cta?.addEventListener("click", runModalNavigation);
     layer.addEventListener("click", (event) => {
-      if (event.target === layer || event.target === backdrop) closeModal();
+      if (event.target === layer || event.target === backdrop) requestModalClose();
     });
 
     backdropAnimation.finished
@@ -1608,7 +1645,26 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     });
   });
 
+  const syncModalWithHistory = () => {
+    const projectId = getModalHistoryProjectId();
+
+    if (activeModal) {
+      if (activeModal.projectId !== projectId) activeModal.closeModal();
+      return;
+    }
+
+    if (!projectId) return;
+
+    const project = heroProjects.find((item) => item.id === projectId);
+    const work = hero.querySelector(`.hero-work--${projectId}:not(.hero-work--clone)`);
+
+    if (project && work) openWorkModal(work, project, { pushHistory: false });
+  };
+
+  window.addEventListener("popstate", syncModalWithHistory);
+
   return {
     resetModal: () => activeModal?.disposeModal(),
+    syncModalWithHistory,
   };
 };
