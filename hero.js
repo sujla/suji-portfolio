@@ -699,17 +699,6 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   const getModalTargetRadius = () =>
     window.innerWidth <= 600 ? "28px" : window.innerWidth <= 920 ? "32px" : "36px";
 
-  const getModalNavigationTargetRect = () => {
-    const targetInset = window.matchMedia("(max-width: 600px)").matches ? 8 : 12;
-
-    return {
-      top: targetInset,
-      left: targetInset,
-      width: window.innerWidth - targetInset * 2,
-      height: window.innerHeight - targetInset * 2,
-    };
-  };
-
   const applyRect = (element, rect) => {
     Object.assign(element.style, {
       top: `${rect.top}px`,
@@ -966,6 +955,34 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       }
     };
 
+    let hasDisposed = false;
+
+    const disposeModal = ({ restoreFocus = false } = {}) => {
+      if (hasDisposed) return;
+      hasDisposed = true;
+
+      layer.getAnimations?.({ subtree: true })?.forEach((animation) => animation.cancel());
+      layer.remove();
+      work.classList.remove("is-modal-source");
+      document.documentElement.classList.remove("is-hero-modal-open");
+      document.removeEventListener("keydown", handleModalKeydown);
+      window.removeEventListener("resize", handleModalResize);
+      footerResizeObserver?.disconnect();
+
+      if (activeModal?.modal === modal) activeModal = null;
+
+      resumeHeroWorkVideos(pausedHeroWorkVideos);
+      startAutoScrollLoop();
+      playMobileAutoScroll();
+
+      if (!restoreFocus) return;
+
+      const focusTarget = work.matches("a")
+        ? work
+        : hero.querySelector(`.hero-work-set--primary .hero-work--${project.id}`);
+      focusTarget?.focus({ preventScroll: true });
+    };
+
     const closeModal = () => {
       if (isClosing) return;
       isClosing = true;
@@ -1010,21 +1027,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         },
       );
 
-      closeAnimation.finished.finally(() => {
-        layer.remove();
-        document.documentElement.classList.remove("is-hero-modal-open");
-        document.removeEventListener("keydown", handleModalKeydown);
-        window.removeEventListener("resize", handleModalResize);
-        footerResizeObserver?.disconnect();
-        activeModal = null;
-        resumeHeroWorkVideos(pausedHeroWorkVideos);
-        startAutoScrollLoop();
-        playMobileAutoScroll();
-        const focusTarget = work.matches("a")
-          ? work
-          : hero.querySelector(`.hero-work-set--primary .hero-work--${project.id}`);
-        focusTarget?.focus({ preventScroll: true });
-      });
+      closeAnimation.finished.finally(() => disposeModal({ restoreFocus: true }));
     };
 
     const runModalNavigation = (event) => {
@@ -1042,54 +1045,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       isClosing = true;
       modal.classList.add("is-navigating");
       document.removeEventListener("keydown", handleModalKeydown);
-
-      const currentRect = modal.getBoundingClientRect();
-      const currentRadius = window.getComputedStyle(modal).borderRadius;
-      const navigationTargetRect = getModalNavigationTargetRect();
-      modalAnimation.cancel();
-      backdropAnimation.cancel();
-      applyRect(modal, currentRect);
-      modal.style.borderRadius = currentRadius;
-      modal.style.transform = "none";
-
-      modal.animate(
-        [
-          {
-            transform: "translate3d(0, 0, 0) scale(1, 1)",
-            borderRadius: currentRadius,
-            opacity: 1,
-            offset: 0,
-          },
-          {
-            opacity: 1,
-            offset: 0.9,
-          },
-          {
-            transform: getFlipTransform(navigationTargetRect, currentRect),
-            borderRadius: "24px",
-            opacity: 0,
-            offset: 1,
-          },
-        ],
-        {
-          duration: modalTransitionDuration,
-          easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-          fill: "forwards",
-        },
-      );
-
-      backdrop.animate(
-        [{ opacity: 1 }, { opacity: 0 }],
-        {
-          duration: 420,
-          easing: "ease-out",
-          fill: "forwards",
-        },
-      );
-
-      window.setTimeout(() => {
-        window.location.href = cta.href;
-      }, modalTransitionDuration - 120);
+      window.location.href = cta.href;
     };
 
     const handleModalKeydown = (event) => {
@@ -1111,7 +1067,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       focusable[nextIndex].focus();
     };
 
-    activeModal = { layer, modal, closeModal };
+    activeModal = { layer, modal, closeModal, disposeModal };
     document.addEventListener("keydown", handleModalKeydown);
     window.addEventListener("resize", handleModalResize);
     closeButton.addEventListener("click", closeModal);
@@ -1651,4 +1607,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       syncSecondaryInfiniteMetrics({ preservePosition: true });
     });
   });
+
+  return {
+    resetModal: () => activeModal?.disposeModal(),
+  };
 };

@@ -425,7 +425,7 @@ const getNavigationType = () =>
 reducedMotionMedia.addEventListener?.("change", syncAboutPhotoLoop);
 syncAboutPhotoLoop();
 
-renderHero(hero, heroProjects, getPlainTitle);
+const heroController = renderHero(hero, heroProjects, getPlainTitle);
 renderProjects();
 sections = [...document.querySelectorAll("[data-project]")];
 syncMobileProjectViewport({ force: true });
@@ -475,5 +475,9 @@ mobileProjectMedia.addEventListener?.("change", () => {
   syncMobileProjectViewport({ force: true });
   requestProjectUpdate();
 });
-window.addEventListener("pageshow", resetProjectTransition);
+window.addEventListener("pagehide", () => heroController?.resetModal());
+window.addEventListener("pageshow", () => {
+  heroController?.resetModal();
+  resetProjectTransition();
+});
 requestProjectUpdate();
