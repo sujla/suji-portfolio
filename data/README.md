@@ -33,7 +33,7 @@ If `image` is empty, the page renders a blank placeholder. Add project images to
 
 Project detail URLs use `detailSlug` and point to standalone folders in `projects/`.
 
-Example: `detailSlug: "nearby-stores-right-products"` becomes `projects/nearby-stores-right-products/`.
+Example: `detailSlug: "store-finder-renewal"` becomes `projects/store-finder-renewal/`.
 If `detailSlug` is empty, the URL falls back to a generated slug from `title`.
 
 Each detail page is a separate editable file at `projects/{detailSlug}/index.html`.

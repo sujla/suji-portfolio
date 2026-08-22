@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko" data-theme="light" class="detail-coming-soon-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google tag (gtag.js) -->
+    <script>
+      const hostname = window.location.hostname;
+      const isPrivateNetwork =
+        /^(192\.168\.|10\.|127\.)/.test(hostname) ||
+        /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);
+      const isLocalEnvironment =
+        ["localhost", "0.0.0.0", "::1", "[::1]"].includes(hostname) || isPrivateNetwork;
+
+      if (!isLocalEnvironment) {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = (...args) => window.dataLayer.push(args);
+        window.gtag("js", new Date());
+        window.gtag("config", "G-ZYEBT08N8L");
+
+        const googleTagScript = document.createElement("script");
+        googleTagScript.async = true;
+        googleTagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-ZYEBT08N8L";
+        document.head.append(googleTagScript);
+      }
+    </script>
+    <script>
+      (() => {
+        try {
+          const theme = localStorage.getItem("portfolio-theme");
+          if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+        } catch {}
+      })();
+    </script>
+    <title>Suji Kweon</title>
+    <link rel="icon" href="../../assets/common/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="stylesheet" href="../../detail-styles.css?v=opportunity-mobile-row" />
+  </head>
+  <body class="detail-page detail-coming-soon-page" data-project-slug="cta-enhancement">
+    <nav class="detail-gnb" aria-label="Project navigation"></nav>
+
+    <main
+      class="detail-shell"
+      style="--project-color: #87F88B; --project-sub-color: #89D98C;"
+    >
+      <section class="detail-title-section">
+        <div class="detail-title-inner">
+          <header class="detail-header">
+            <p>02</p>
+            <h1>Converting Intent<br />into Pickup</h1>
+            <div class="detail-keywords" aria-label="Keywords">
+              <span>E-commerce</span>
+              <span>Data-driven Design</span>
+              <span>Conversion Optimization</span>
+            </div>
+            <div class="detail-header-brief">
+              <p>This data-driven enhancement focused on customers with clear purchase intent who needed a clearer final step toward pickup.</p>
+              <p>By clarifying pickup CTAs and actions by store availability, the goal was to convert purchase intent into pickup more quickly and confidently.</p>
+            </div>
+          </header>
+        </div>
+      </section>
+
+      <section class="detail-content-section">
+        <nav class="detail-toc" aria-label="Project sections">
+          <ul>
+            <li>
+              <a href="#project-overview" aria-current="true">
+                <span class="detail-toc-label">Project Overview</span>
+              </a>
+            </li>
+            <li><a href="#problems"><span class="detail-toc-label">Problems</span></a></li>
+            <li><a href="#users-needs"><span class="detail-toc-label">Affected Users</span></a></li>
+            <li><a href="#business-opportunity"><span class="detail-toc-label">Business Opportunity</span></a></li>
+            <li><a href="#goal"><span class="detail-toc-label">UX Goal</span></a></li>
+            <li><a href="#solution"><span class="detail-toc-label">Key Metrics</span></a></li>
+            <li><a href="#results"><span class="detail-toc-label">Results</span></a></li>
+          </ul>
+        </nav>
+
+        <div class="detail-content-col">
+          <div class="detail-content" aria-label="Project summary" id="project-overview">
+            <figure class="detail-media">
+              <img class="detail-image" src="../../assets/common/cta-enh-main.avif" alt="Pickup Order UX Enhancement main image" />
+            </figure>
+          </div>
+
+          <div class="detail-content detail-coming-soon-panel" aria-label="Coming soon" id="coming-soon">
+            <div class="detail-coming-soon-inner">
+              <h2>🚧 Coming Soon</h2>
+              <p>This case study is still in progress.<br/>Thanks for your patience!</p>
+              <div class="detail-coming-soon-buttons">
+                <a class="detail-coming-soon-button" href="../../" data-coming-soon-cta="back_to_main">Back to Main</a>
+                <a class="detail-coming-soon-button button-sub" href="https://sujikweon.framer.website/cta-enhancement" target="_blank" rel="noopener" data-coming-soon-cta="view_previous_version">View Previous Version</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="../../detail.js?v=detail-coming-soon"></script>
+  </body>
+</html>

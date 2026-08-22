@@ -10,24 +10,23 @@ export const projects = [
   {
     slug: "store-guide",
     analyticsId: "olive_young_store_finder",
-    detailSlug: "nearby-stores-right-products",
+    detailSlug: "store-finder-renewal",
     wip: false,
     number: "01",
     year: 2024,
     company: "CJ Olive Young, Inc.",
     companyLabel: "Olive Young",
     keywords: ["E-commerce", "Discovery Optimization", "Map-based UX"],
-    title: "Nearby Stores, |Right Products",
+    title: "Store Discovery, Renewed",
     sideTitle: "Map-based |Store Finder Renewal",
     brief: [
       "This project aimed to transform Olive Young’s static store finder into a map-based shopping tool.",
       "The goal was to help customers connect product interest to nearby store availability and pickup, reducing friction between digital browsing and physical store purchase."
     ],
     contribution: [
-      "Turned a static store page into a map-based finder",
-      "Aligned store and product search with real shopping behavior",
+      "Increased page views by 32.9%, with pickup conversion reaching 11%",
+      "Built a map-based finder around real shopping behavior",
       "Integrated store info, inventory, and pickup flows",
-      "Led end-to-end UX/UI renewal",
     ],
     keyColor: "#62FE67",
     subColor: "#00DE07",
@@ -40,7 +39,7 @@ export const projects = [
   {
     slug: "cta-enhancement",
     analyticsId: "cta_enhancement",
-    detailSlug: "converting-intent-into-pickup",
+    detailSlug: "cta-enhancement",
     wip: true,
     number: "02",
     year: 2025,
@@ -68,7 +67,7 @@ export const projects = [
   {
     slug: "article-studio",
     analyticsId: "article_studio_revamp",
-    detailSlug: "from-weeks-to-minutes",
+    detailSlug: "modular-editorial-system",
     wip: true,
     number: "03",
     year: 2023,

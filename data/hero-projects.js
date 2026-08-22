@@ -1,7 +1,7 @@
 export const heroProjects = [
   {
     id: "store-finder",
-    href: "./projects/nearby-stores-right-products/",
+    href: "./projects/store-finder-renewal/",
     title: "Map-based Store Finder Renewal",
     companyLabel: "CJ Olive Young",
     deviceType: "mobile",
@@ -9,13 +9,13 @@ export const heroProjects = [
     projectMedia: "./assets/common/store-guide-main.avif",
     cta: {
       label: "View Case Study",
-      href: "./projects/nearby-stores-right-products/",
+      href: "./projects/store-finder-renewal/",
       newTab: false,
     },
   },
   {
     id: "cta-enhancement",
-    href: "./projects/converting-intent-into-pickup/",
+    href: "./projects/cta-enhancement/",
     title: "Pickup Order UX Enhancement",
     companyLabel: "CJ Olive Young",
     deviceType: "mobile",
@@ -36,7 +36,7 @@ export const heroProjects = [
   },
   {
     id: "article-studio",
-    href: "./projects/from-weeks-to-minutes/",
+    href: "./projects/modular-editorial-system/",
     title: "Editorial Workflow: From Weeks to Minutes",
     companyLabel: "CJ Olive Young",
     deviceType: "web",

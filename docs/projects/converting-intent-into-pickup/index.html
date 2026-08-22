@@ -1,112 +1,17 @@
 <!doctype html>
-<html lang="ko" data-theme="light" class="detail-coming-soon-root">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Google tag (gtag.js) -->
+    <title>Page moved | Suji Kweon</title>
     <script>
-      const hostname = window.location.hostname;
-      const isPrivateNetwork =
-        /^(192\.168\.|10\.|127\.)/.test(hostname) ||
-        /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);
-      const isLocalEnvironment =
-        ["localhost", "0.0.0.0", "::1", "[::1]"].includes(hostname) || isPrivateNetwork;
-
-      if (!isLocalEnvironment) {
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = (...args) => window.dataLayer.push(args);
-        window.gtag("js", new Date());
-        window.gtag("config", "G-ZYEBT08N8L");
-
-        const googleTagScript = document.createElement("script");
-        googleTagScript.async = true;
-        googleTagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-ZYEBT08N8L";
-        document.head.append(googleTagScript);
-      }
+      const target = new URL("../cta-enhancement/", window.location.href);
+      target.search = window.location.search;
+      target.hash = window.location.hash;
+      window.location.replace(target.href);
     </script>
-    <script>
-      (() => {
-        try {
-          const theme = localStorage.getItem("portfolio-theme");
-          if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
-        } catch {}
-      })();
-    </script>
-    <title>Suji Kweon</title>
-    <link rel="icon" href="/suji-portfolio/assets/favicon-BEYIlZqN.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <script type="module" crossorigin src="/suji-portfolio/assets/projects-_tPiloYU.js"></script>
-    <script type="module" crossorigin src="/suji-portfolio/assets/detail-BCYEstT5.js"></script>
-    <link rel="stylesheet" crossorigin href="/suji-portfolio/assets/styles-Ca4hSke_.css">
-    <link rel="stylesheet" crossorigin href="/suji-portfolio/assets/detail-styles-BX6TJqtV.css">
   </head>
-  <body class="detail-page detail-coming-soon-page" data-project-slug="cta-enhancement">
-    <nav class="detail-gnb" aria-label="Project navigation"></nav>
-
-    <main
-      class="detail-shell"
-      style="--project-color: #87F88B; --project-sub-color: #89D98C;"
-    >
-      <section class="detail-title-section">
-        <div class="detail-title-inner">
-          <header class="detail-header">
-            <p>02</p>
-            <h1>Converting Intent<br />into Pickup</h1>
-            <div class="detail-keywords" aria-label="Keywords">
-              <span>E-commerce</span>
-              <span>Data-driven Design</span>
-              <span>Conversion Optimization</span>
-            </div>
-            <div class="detail-header-brief">
-              <p>This data-driven enhancement focused on customers with clear purchase intent who needed a clearer final step toward pickup.</p>
-              <p>By clarifying pickup CTAs and actions by store availability, the goal was to convert purchase intent into pickup more quickly and confidently.</p>
-            </div>
-          </header>
-        </div>
-      </section>
-
-      <section class="detail-content-section">
-        <nav class="detail-toc" aria-label="Project sections">
-          <ul>
-            <li>
-              <a href="#project-overview" aria-current="true">
-                <span class="detail-toc-label">Project Overview</span>
-              </a>
-            </li>
-            <li><a href="#problems"><span class="detail-toc-label">Problems</span></a></li>
-            <li><a href="#users-needs"><span class="detail-toc-label">Affected Users</span></a></li>
-            <li><a href="#business-opportunity"><span class="detail-toc-label">Business Opportunity</span></a></li>
-            <li><a href="#goal"><span class="detail-toc-label">UX Goal</span></a></li>
-            <li><a href="#solution"><span class="detail-toc-label">Key Metrics</span></a></li>
-            <li><a href="#results"><span class="detail-toc-label">Results</span></a></li>
-          </ul>
-        </nav>
-
-        <div class="detail-content-col">
-          <div class="detail-content" aria-label="Project summary" id="project-overview">
-            <figure class="detail-media">
-              <img class="detail-image" src="/suji-portfolio/assets/cta-enh-main-vl0kkCfu.avif" alt="Pickup Order UX Enhancement main image" />
-            </figure>
-          </div>
-
-          <div class="detail-content detail-coming-soon-panel" aria-label="Coming soon" id="coming-soon">
-            <div class="detail-coming-soon-inner">
-              <h2>🚧 Coming Soon</h2>
-              <p>This case study is still in progress.<br/>Thanks for your patience!</p>
-              <div class="detail-coming-soon-buttons">
-                <a class="detail-coming-soon-button" href="../../" data-coming-soon-cta="back_to_main">Back to Main</a>
-                <a class="detail-coming-soon-button button-sub" href="https://sujikweon.framer.website/cta-enhancement" target="_blank" rel="noopener" data-coming-soon-cta="view_previous_version">View Previous Version</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
+  <body>
+    <p>This page has moved to <a href="../cta-enhancement/">CTA Enhancement</a>.</p>
   </body>
 </html>
