@@ -9,6 +9,13 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   let activeModal = null;
   let mobileEmblaApis = [];
 
+  const trackHeroWorkCardClick = (project) => {
+    window.gtag?.("event", "hero_work_card_click", {
+      project_id: project.id,
+      project_title: project.title,
+    });
+  };
+
   const getModalHistoryProjectId = () =>
     window.history.state?.[modalHistoryStateKey] || "";
 
@@ -1632,6 +1639,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       const project = heroProjects.find((item) => work.classList.contains(`hero-work--${item.id}`));
       if (!project) return;
 
+      trackHeroWorkCardClick(project);
       event.preventDefault();
       pauseAutoScroll();
       openWorkModal(work, project);
