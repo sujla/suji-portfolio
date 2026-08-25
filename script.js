@@ -465,10 +465,9 @@ const updateGnbVisibility = () => {
 
 const scrollToGnbSection = (target) => {
   const maxScrollY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  const scrollOffset = target.id === "work" ? 70 : 30;
   const targetScrollY = target === document.body
     ? 0
-    : target.getBoundingClientRect().top + window.scrollY - scrollOffset;
+    : target.getBoundingClientRect().top + window.scrollY;
 
   gnbMenuScrollTargetY = Math.min(
     maxScrollY,
