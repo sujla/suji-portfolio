@@ -33,7 +33,7 @@
 }
 
 :root[data-theme="light"] {
-  --bg: #F1F2F4;
+  --bg: #F9FAFB;
   --text: #020508;
   --text-secondary: rgba(2, 5, 8, 0.72);
   --text-tertiary: rgba(2, 5, 8, 0.5);
@@ -100,6 +100,7 @@ html {
 body {
   min-width: 320px;
   margin: 0;
+  padding: 0 32px;
   background: var(--bg);
   overflow-x: hidden;
   scroll-snap-type: y mandatory;
@@ -1241,20 +1242,48 @@ html.is-pf-modal-open body {
   pointer-events: none;
 }
 
-.site-mark {
+.index-gnb {
   position: fixed;
-  top: 22px;
-  left: 24px;
-  z-index: 20;
+  inset: 0 0 auto;
+  z-index: 30;
+  display: flex;
+  min-height: 66px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px 20px 24px 32px;
+  transition: opacity 360ms ease;
+}
+
+.site-mark {
+  position: relative;
   display: block;
-  width: auto;
-  color: var(--text);
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1;
-  text-transform: uppercase;
-  white-space: nowrap;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--text);
+}
+
+.site-mark-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 29px;
+  height: 20px;
+  object-fit: contain;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+:root[data-theme="dark"] .site-mark-image-light,
+:root[data-theme="light"] .site-mark-image-dark {
+  opacity: 1;
+}
+
+.index-gnb .theme-toggle {
+  position: relative;
+  top: auto;
+  right: auto;
 }
 
 .theme-toggle {
@@ -1320,7 +1349,7 @@ html.is-pf-modal-open body {
 }
 
 .theme-icon-moon {
-  transform: translate(2px, 0px);
+  transform: translate(0px, 0px);
 }
 
 :root[data-theme="light"] .theme-icon-sun,
@@ -1508,7 +1537,7 @@ html.is-pf-modal-open body {
   scroll-snap-stop: always;
 }
 
-body.is-project-transitioning :is(.site-mark, .theme-toggle, .year-rail, .fixed-project-meta, .project-counter),
+body.is-project-transitioning :is(.index-gnb, .year-rail, .fixed-project-meta, .project-counter),
 body.is-project-transitioning .project-section:not(.is-transition-source),
 body.is-project-transitioning .is-transition-source .project-card {
   opacity: 0;
@@ -2708,7 +2737,7 @@ body {
   height: auto;
   min-height: 300px;
   margin: 80px 0;
-  padding: 0 24px;
+  padding: 0;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px 24px;
   background: var(--bg);
@@ -2753,7 +2782,7 @@ body {
   width: 100%;
   height: auto;
   min-height: 100svh;
-  padding: 0 24px 24px;
+  padding: 0 0 24px;
   overflow: visible;
   scroll-snap-align: none;
 }
@@ -2882,7 +2911,7 @@ body {
     display: block;
     height: auto;
     min-height: 100dvh;
-    padding: 0 24px 24px;
+    padding: 0 0 24px;
   }
 
   .pf-work-grid {
