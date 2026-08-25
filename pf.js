@@ -701,7 +701,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     !link.hasAttribute("download");
 
   const getModalTargetRect = () => {
-    const modalInset = window.innerWidth <= 600 ? 12 : window.innerWidth <= 920 ? 16 : 24;
+    const modalInset = window.innerWidth <= 600 ? 12 : 16;
 
     return {
       top: modalInset,
@@ -711,8 +711,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     };
   };
 
-  const getModalTargetRadius = () =>
-    window.innerWidth <= 600 ? "28px" : window.innerWidth <= 920 ? "32px" : "36px";
+  const getModalTargetRadius = () => "24px";
 
   const applyRect = (element, rect) => {
     Object.assign(element.style, {
@@ -868,6 +867,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     modal.setAttribute("aria-labelledby", titleId);
     modal.innerHTML = `
       <div class="pf-modal-card-content is-skeleton">${skeletonMarkup}</div>
+      <span class="pf-modal-scroll-indicator" aria-hidden="true"></span>
       <button class="pf-modal-close" type="button" aria-label="Close project preview"></button>
       <div class="pf-modal-footer${ctaMarkup ? "" : " pf-modal-footer--no-cta"}">
         <div class="pf-work-meta">
@@ -919,9 +919,56 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const cta = modal.querySelector(".pf-modal-cta");
     const footer = modal.querySelector(".pf-modal-footer");
     const cardContent = modal.querySelector(".pf-modal-card-content");
+    const scrollIndicator = modal.querySelector(".pf-modal-scroll-indicator");
     let hasMountedBento = false;
     let isClosing = false;
     let isHistoryClosePending = false;
+    let scrollIndicatorFrame = 0;
+
+    const updateScrollIndicator = () => {
+      scrollIndicatorFrame = 0;
+      if (!cardContent || !scrollIndicator || isClosing) return;
+
+      const scrollableDistance = cardContent.scrollHeight - cardContent.clientHeight;
+      const indicatorInset = 8;
+      const footerHeight = footer?.offsetHeight ?? 0;
+      const trackHeight = Math.max(
+        0,
+        modal.clientHeight - footerHeight - indicatorInset * 2,
+      );
+
+      if (scrollableDistance <= 1 || trackHeight <= 0) {
+        scrollIndicator.classList.remove("is-visible");
+        return;
+      }
+
+      const thumbHeight = Math.min(
+        trackHeight,
+        Math.max(36, trackHeight * (cardContent.clientHeight / cardContent.scrollHeight)),
+      );
+      const scrollProgress = Math.min(
+        1,
+        Math.max(0, cardContent.scrollTop / scrollableDistance),
+      );
+      const thumbOffset = scrollProgress * (trackHeight - thumbHeight);
+
+      scrollIndicator.style.height = `${thumbHeight}px`;
+      scrollIndicator.style.transform = `translate3d(0, ${thumbOffset}px, 0)`;
+      scrollIndicator.classList.add("is-visible");
+    };
+
+    const scheduleScrollIndicatorUpdate = () => {
+      if (scrollIndicatorFrame) return;
+      scrollIndicatorFrame = window.requestAnimationFrame(updateScrollIndicator);
+    };
+
+    const contentResizeObserver =
+      typeof ResizeObserver === "function"
+        ? new ResizeObserver(scheduleScrollIndicatorUpdate)
+        : null;
+
+    contentResizeObserver?.observe(cardContent);
+    cardContent?.addEventListener("scroll", scheduleScrollIndicatorUpdate, { passive: true });
 
     const mountBentoContent = () => {
       if (hasMountedBento || !cardContent || isClosing) return;
@@ -933,15 +980,22 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       initializeSegmentVideos(modal);
       initializePerpDexMediaPlayback(modal);
       initializePublicTransportMediaPlayback(modal);
+      cardContent
+        .querySelectorAll(".pf-modal-bento-section")
+        .forEach((section) => contentResizeObserver?.observe(section));
 
       window.requestAnimationFrame(() => {
-        if (!isClosing && modal.isConnected) modal.classList.add("is-content-ready");
+        if (!isClosing && modal.isConnected) {
+          modal.classList.add("is-content-ready");
+          scheduleScrollIndicatorUpdate();
+        }
       });
     };
 
     const syncFooterSpace = () => {
       const footerHeight = footer?.offsetHeight ?? 0;
       modal.style.setProperty("--pf-modal-footer-space", `${footerHeight}px`);
+      scheduleScrollIndicatorUpdate();
     };
 
     const footerResizeObserver =
@@ -973,6 +1027,9 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       document.removeEventListener("keydown", handleModalKeydown);
       window.removeEventListener("resize", handleModalResize);
       footerResizeObserver?.disconnect();
+      contentResizeObserver?.disconnect();
+      cardContent?.removeEventListener("scroll", scheduleScrollIndicatorUpdate);
+      if (scrollIndicatorFrame) window.cancelAnimationFrame(scrollIndicatorFrame);
 
       if (activeModal?.modal === modal) activeModal = null;
 

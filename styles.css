@@ -405,8 +405,32 @@ html.is-pf-modal-open body {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
+  scrollbar-width: none;
   opacity: 0;
   pointer-events: none;
+}
+
+.pf-modal-card-content::-webkit-scrollbar {
+  display: none;
+}
+
+.pf-modal-scroll-indicator {
+  position: absolute;
+  top: 8px;
+  right: 4px;
+  z-index: 3;
+  width: 3px;
+  min-height: 36px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 44%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  will-change: height, transform;
+  transition: opacity 180ms ease;
+}
+
+.pf-work-modal.is-content-ready .pf-modal-scroll-indicator.is-visible {
+  opacity: 1;
 }
 
 .pf-modal-card-content.is-skeleton {
@@ -553,7 +577,7 @@ html.is-pf-modal-open body {
   position: relative;
   min-width: 0;
   overflow: hidden;
-  border-radius: 28px;
+  border-radius: 16px;
 }
 
 .pf-modal-bento-skeleton {
@@ -1293,7 +1317,7 @@ html.is-pf-modal-open body {
   display: flex;
   align-items: center;
   gap: 40px;
-  transform: translate(-48%, -50%);
+  transform: translate(-44%, -50%);
 }
 
 .index-gnb-link {
@@ -2570,7 +2594,10 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .pf-modal-bento-feature,
-  .pf-modal-bento-placeholder,
+  .pf-modal-bento-placeholder {
+    border-radius: 16px;
+  }
+
   .pf-modal-result-metric {
     border-radius: 20px;
   }
@@ -2809,6 +2836,7 @@ body {
 }
 
 .hero-copy p {
+  max-width: 350px;
   margin: 0;
 }
 
