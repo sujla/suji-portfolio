@@ -10,7 +10,7 @@
   --rail-muted: rgba(247, 248, 245, 0.2);
   --counter-muted: rgba(247, 248, 245, 0.46);
   --toggle-bg: #282827;
-  --toggle-knob: rgba(247, 248, 245, 0.12);
+  --toggle-knob: rgba(247, 248, 245, 0.3);
   --card-text: #020508;
   --pf-cta-color: #020508;
   --green: #17ff2b;
@@ -43,8 +43,8 @@
   --line: #D7d7d7;
   --rail-muted: rgba(2, 5, 8, 0.18);
   --counter-muted: rgba(2, 5, 8, 0.46);
-  --toggle-bg: #DBDBDA;
-  --toggle-knob: rgba(255, 255, 255, 0.8);
+  --toggle-bg: #E5E7EB;
+  --toggle-knob: rgba(255, 255, 255, 1);
   --card-text: #020508;
   --pf-cta-color: #fff;
   --gnb-bg: rgba(231, 231, 230, 0.2);
@@ -104,8 +104,8 @@ body {
   overflow-x: hidden;
   scroll-snap-type: y mandatory;
   transition:
-    background-color 260ms ease,
-    color 260ms ease;
+    background-color 0ms,
+    color 0ms;
 }
 
 html.is-project-transitioning,
@@ -126,6 +126,7 @@ body.is-project-transitioning {
   background: var(--bg);
   scroll-snap-align: center;
   scroll-snap-stop: always;
+  transition: background-color 0ms;
 }
 
 .pf-work-rail {
@@ -1261,12 +1262,12 @@ html.is-pf-modal-open body {
   top: 14px;
   right: 14px;
   z-index: 30;
-  width: 78px;
+  width: 70px;
   display: grid;
-  grid-template-columns: 32px 2px 32px;
+  grid-template-columns: 30px 0 30px;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  height: 38px;
   padding: 4px;
   border: 0;
   border-radius: 999px;
@@ -1275,8 +1276,8 @@ html.is-pf-modal-open body {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition:
-    background-color 260ms ease,
-    color 260ms ease;
+    background-color 0ms,
+    color 0ms;
 }
 
 .theme-toggle:focus-visible {
@@ -1289,18 +1290,18 @@ html.is-pf-modal-open body {
   position: absolute;
   top: 4px;
   left: 4px;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 999px;
   background: var(--toggle-knob);
   transition:
-    transform 260ms ease,
-    background-color 260ms ease;
+    transform 0ms,
+    background-color 0ms;
   content: "";
 }
 
 :root[data-theme="dark"] .theme-toggle::before {
-  transform: translateX(38px);
+  transform: translateX(32px);
 }
 
 .theme-icon {
@@ -1308,14 +1309,14 @@ html.is-pf-modal-open body {
   z-index: 1;
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   opacity: 0.48;
-  transition: opacity 260ms ease;
+  transition: opacity 0ms;
 }
 
 .theme-icon-sun {
-  transform: translate(-2px, 0px);
+  transform: translate(-1px, 0px);
 }
 
 .theme-icon-moon {
@@ -1330,12 +1331,12 @@ html.is-pf-modal-open body {
 .theme-icon-image {
   display: block;
   grid-area: 1 / 1;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   object-fit: contain;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 220ms ease;
+  transition: opacity 0ms;
 }
 
 :root[data-theme="dark"] .theme-icon-image-dark,
@@ -2706,11 +2707,12 @@ body {
   width: 100%;
   height: auto;
   min-height: 300px;
-  margin-top: 64px;
+  margin: 80px 0;
   padding: 0 24px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px 24px;
   background: var(--bg);
+  transition: background-color 0ms;
 }
 
 .hero-title-column {
@@ -2729,8 +2731,8 @@ body {
 
 .hero-copy {
   min-width: 0;
-  max-width: 370px;
-  padding-top: 58px;
+  max-width: 360px;
+  padding: 59px 10px 80px;
   color: var(--text);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -2744,7 +2746,7 @@ body {
 }
 
 .hero-copy p + p {
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 .pf-section {
