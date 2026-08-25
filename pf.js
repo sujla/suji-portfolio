@@ -15,6 +15,11 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   );
   let activeModal = null;
 
+  const renderWorkMetaLine = (project) => {
+    const metaItems = [project.companyLabel, project.year].filter(Boolean);
+    return metaItems.length ? `<span>${metaItems.join(" · ")}</span>` : "";
+  };
+
   const trackPfWorkCardClick = (project) => {
     window.gtag?.("event", "pf_work_card_click", {
       project_id: project.id,
@@ -679,7 +684,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       </div>
       <div class="pf-work-meta">
         <h2>${project.title}</h2>
-        ${project.companyLabel ? `<span>@ ${project.companyLabel}</span>` : ""}
+        ${renderWorkMetaLine(project)}
       </div>
     `;
 
@@ -872,7 +877,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       <div class="pf-modal-footer${ctaMarkup ? "" : " pf-modal-footer--no-cta"}">
         <div class="pf-work-meta">
           <h2 id="${titleId}">${project.title}</h2>
-          ${project.companyLabel ? `<span>@ ${project.companyLabel}</span>` : ""}
+          ${renderWorkMetaLine(project)}
         </div>
         ${ctaMarkup || descriptionMarkup}
       </div>
