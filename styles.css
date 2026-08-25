@@ -30,6 +30,7 @@
   --pf-modal-feature-bg: #1f2123;
   --pf-modal-placeholder-2-bg: #242629;
   --pf-modal-placeholder-3-bg: #1d1f20;
+  --selection-bg: rgba(198, 198, 247, 0.4);
 }
 
 :root[data-theme="light"] {
@@ -53,6 +54,7 @@
   --pf-modal-feature-bg: #fbfbfb;
   --pf-modal-placeholder-2-bg: #f5f5f5;
   --pf-modal-placeholder-3-bg: #f2f2f3;
+  --selection-bg: rgba(214, 214, 249, 0.4);
 }
 
 :root[data-theme="dark"] .project-section {
@@ -64,19 +66,19 @@
 }
 
 :root[data-theme="dark"] ::selection {
-  background: rgba(198, 198, 247, 0.4);
+  background: var(--selection-bg);
 }
 
 :root[data-theme="light"] ::selection {
-  background: rgba(214, 214, 249, 0.4);
+  background: var(--selection-bg);
 }
 
 :root[data-theme="dark"] :is(.pf-section, .about-section, .pf-work-modal) ::selection {
-  background: rgba(198, 198, 247, 0.4);
+  background: var(--selection-bg);
 }
 
 :root[data-theme="light"] :is(.pf-section, .about-section, .pf-work-modal) ::selection {
-  background: rgba(214, 214, 249, 0.4);
+  background: var(--selection-bg);
 }
 
 * {
@@ -2892,6 +2894,81 @@ body {
   outline-offset: 3px;
 }
 
+.pf-floating-filter {
+  position: fixed;
+  z-index: 30;
+  bottom: 40px;
+  left: 52%;
+  display: flex;
+  max-width: calc(100vw - 40px);
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.14);
+  opacity: 0;
+  overflow-x: auto;
+  pointer-events: none;
+  scrollbar-width: none;
+  transform: translate3d(-50%, calc(100% + 24px), 0);
+  transition:
+    opacity 180ms ease,
+    visibility 180ms step-end,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  visibility: hidden;
+  white-space: nowrap;
+}
+
+.pf-floating-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.pf-floating-filter.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(-50%, 0, 0);
+  transition:
+    opacity 180ms ease,
+    visibility 0ms step-start,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  visibility: visible;
+}
+
+.pf-floating-filter-button {
+  flex: 0 0 auto;
+  padding: 4px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font-family: "Google Sans Code", monospace;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  cursor: pointer;
+  appearance: none;
+}
+
+.pf-floating-filter-button[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--text) 4%, transparent);
+  background: var(--selection-bg);
+}
+
+.pf-floating-filter-button:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-floating-filter,
+  .pf-floating-filter.is-visible {
+    transition: none;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .pf-type-filter-button:hover {
     font-weight: 500;
@@ -2951,7 +3028,7 @@ body {
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  padding: 3px 6px;
+  padding: 6px;
 }
 
 .pf-work-grid .pf-work-meta h2 {

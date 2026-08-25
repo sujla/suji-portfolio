@@ -1186,6 +1186,8 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
   const mobilePfMedia = window.matchMedia("(max-width: 600px)");
   const typeFilter = document.querySelector("[data-pf-type-filter]");
+  const floatingFilterThreshold = 270;
+  const floatingFilterExitRatio = 0.36;
 
   if (typeFilter) {
     typeFilter.innerHTML = `
@@ -1208,6 +1210,30 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     `;
   }
 
+  document.querySelector("[data-pf-floating-filter]")?.remove();
+  const floatingTypeFilter = document.createElement("div");
+  floatingTypeFilter.className = "pf-floating-filter";
+  floatingTypeFilter.dataset.pfFloatingFilter = "";
+  floatingTypeFilter.setAttribute("role", "group");
+  floatingTypeFilter.setAttribute("aria-label", "Filter projects by type");
+  floatingTypeFilter.innerHTML = [
+    { value: "", label: "All" },
+    ...projectTypeFilters,
+  ]
+    .map(
+      ({ value, label }) => `
+        <button
+          class="pf-floating-filter-button"
+          type="button"
+          data-project-type-filter="${value}"
+          aria-controls="pf-work-grid"
+          aria-pressed="false"
+        >${label}</button>
+      `,
+    )
+    .join("");
+  document.body.append(floatingTypeFilter);
+
   pf.innerHTML = `
     <div class="pf-work-grid" id="pf-work-grid">
       ${pfProjects.map((project) => renderWorkCard(project)).join("")}
@@ -1215,13 +1241,36 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     <p class="pf-filter-empty" role="status" hidden>No projects in this category yet.</p>
   `;
 
-  const filterButtons = typeFilter
-    ? [...typeFilter.querySelectorAll("[data-project-type-filter]")]
-    : [];
+  const filterButtons = [
+    ...(typeFilter
+      ? [...typeFilter.querySelectorAll("[data-project-type-filter]")]
+      : []),
+    ...floatingTypeFilter.querySelectorAll("[data-project-type-filter]"),
+  ];
   const typeFilterGroup = typeFilter?.querySelector(".pf-type-filter");
   const filterableWorks = [...pf.querySelectorAll(".pf-work[data-project-types]")];
   const filterEmptyState = pf.querySelector(".pf-filter-empty");
   let activeProjectType = "";
+  let filterScrollAnchorRestoreTimer = 0;
+
+  const updateFloatingFilterVisibility = () => {
+    const pfBottom = pf.getBoundingClientRect().bottom;
+    const exitLine = window.innerHeight * floatingFilterExitRatio;
+
+    floatingTypeFilter.classList.toggle(
+      "is-visible",
+      window.scrollY > floatingFilterThreshold && pfBottom > exitLine,
+    );
+  };
+
+  const scrollToFilteredWork = () => {
+    const workScrollY = Math.max(
+      0,
+      pf.getBoundingClientRect().top + window.scrollY - 10,
+    );
+
+    window.scrollTo({ top: workScrollY, behavior: "smooth" });
+  };
 
   const applyProjectTypeFilter = (projectType) => {
     activeProjectType = activeProjectType === projectType ? "" : projectType;
@@ -1248,15 +1297,21 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
+      const root = document.documentElement;
+      window.clearTimeout(filterScrollAnchorRestoreTimer);
+      root.style.overflowAnchor = "none";
       applyProjectTypeFilter(button.dataset.projectTypeFilter);
-      window.scrollTo({
-        top: Math.max(0, pf.getBoundingClientRect().top + window.scrollY - 10),
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
-      });
+      scrollToFilteredWork();
+      filterScrollAnchorRestoreTimer = window.setTimeout(() => {
+        root.style.removeProperty("overflow-anchor");
+      }, 700);
     });
   });
+
+  window.addEventListener("scroll", updateFloatingFilterVisibility, { passive: true });
+  window.addEventListener("resize", updateFloatingFilterVisibility, { passive: true });
+  updateFloatingFilterVisibility();
+  applyProjectTypeFilter("");
 
   const rail = pf.querySelector("[data-pf-work-rail]");
   const workSets = rail ? [...rail.querySelectorAll(".pf-work-set")] : [];
