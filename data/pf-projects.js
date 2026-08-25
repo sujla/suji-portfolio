@@ -1,6 +1,7 @@
 export const pfProjects = [
   {
     id: "store-finder",
+    type: "e-commerce",
     href: "./projects/store-finder-renewal/",
     title: "Map-based Store Finder Renewal",
     companyLabel: "CJ Olive Young",
@@ -15,6 +16,7 @@ export const pfProjects = [
   },
   {
     id: "cta-enhancement",
+    type: "e-commerce",
     href: "./projects/cta-enhancement/",
     title: "Pickup Order UX Enhancement",
     companyLabel: "CJ Olive Young",
@@ -28,6 +30,7 @@ export const pfProjects = [
   },
   {
     id: "public-transport",
+    type: "mobility",
     title: "Public Transport App in SG",
     companyLabel: "Taurus Labs",
     deviceType: "mobile",
@@ -36,6 +39,7 @@ export const pfProjects = [
   },
   {
     id: "article-studio",
+    type: "enterprise",
     href: "./projects/modular-editorial-system/",
     title: "Editorial Workflow: From Weeks to Minutes",
     companyLabel: "CJ Olive Young",
@@ -49,6 +53,7 @@ export const pfProjects = [
   },
   {
     id: "perp-dex",
+    type: "fintech",
     title: "Clearer Control for Perp Trading",
     companyLabel: "Taurus Labs",
     deviceType: "mobile",

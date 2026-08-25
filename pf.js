@@ -3,6 +3,13 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
   const modalTransitionDuration = 760;
   const modalHistoryStateKey = "portfolioPfModalProject";
+  const projectTypeFilters = [
+    { value: "enterprise", label: "Enterprise/SaaS" },
+    { value: "fintech", label: "Fintech" },
+    { value: "e-commerce", label: "E-commerce" },
+    { value: "mobility", label: "Mobility" },
+    { value: "others", label: "Others" },
+  ];
   let activeModal = null;
 
   const trackPfWorkCardClick = (project) => {
@@ -674,7 +681,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       return `<div class="pf-work pf-work--${project.id} pf-work--clone" aria-hidden="true">${content}</div>`;
     }
 
-    return `<a class="pf-work pf-work--${project.id}" href="${project.href}" draggable="false" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
+    return `<a class="pf-work pf-work--${project.id}" href="${project.href}" data-project-type="${project.type || "others"}" draggable="false" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
   };
 
   const isPlainNavigationClick = (event, link) =>
@@ -1112,10 +1119,57 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   const mobilePfMedia = window.matchMedia("(max-width: 600px)");
 
   pf.innerHTML = `
-    <div class="pf-work-grid">
+    <div class="pf-type-filter" role="group" aria-label="Filter projects by type">
+      ${projectTypeFilters
+        .map(
+          ({ value, label }) => `
+            <button
+              class="pf-type-filter-button"
+              type="button"
+              data-project-type-filter="${value}"
+              aria-controls="pf-work-grid"
+              aria-pressed="false"
+            >${label}</button>
+          `,
+        )
+        .join("")}
+    </div>
+    <div class="pf-work-grid" id="pf-work-grid">
       ${pfProjects.map((project) => renderWorkCard(project)).join("")}
     </div>
+    <p class="pf-filter-empty" role="status" hidden>No projects in this category yet.</p>
   `;
+
+  const filterButtons = [...pf.querySelectorAll("[data-project-type-filter]")];
+  const filterableWorks = [...pf.querySelectorAll(".pf-work[data-project-type]")];
+  const filterEmptyState = pf.querySelector(".pf-filter-empty");
+  let activeProjectType = "";
+
+  const applyProjectTypeFilter = (projectType) => {
+    activeProjectType = activeProjectType === projectType ? "" : projectType;
+    let visibleProjectCount = 0;
+
+    filterButtons.forEach((button) => {
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.projectTypeFilter === activeProjectType),
+      );
+    });
+
+    filterableWorks.forEach((work) => {
+      const isVisible = !activeProjectType || work.dataset.projectType === activeProjectType;
+      work.hidden = !isVisible;
+      if (isVisible) visibleProjectCount += 1;
+    });
+
+    if (filterEmptyState) filterEmptyState.hidden = visibleProjectCount > 0;
+  };
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      applyProjectTypeFilter(button.dataset.projectTypeFilter);
+    });
+  });
 
   const rail = pf.querySelector("[data-pf-work-rail]");
   const workSets = rail ? [...rail.querySelectorAll(".pf-work-set")] : [];
