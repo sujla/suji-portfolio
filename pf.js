@@ -1,16 +1,12 @@
-import EmblaCarousel from "embla-carousel";
-import AutoScroll from "embla-carousel-auto-scroll";
-
-export const renderHero = (hero, heroProjects, getPlainTitle) => {
-  if (!hero) return;
+export const renderPf = (pf, pfProjects, getPlainTitle) => {
+  if (!pf) return;
 
   const modalTransitionDuration = 760;
-  const modalHistoryStateKey = "portfolioHeroModalProject";
+  const modalHistoryStateKey = "portfolioPfModalProject";
   let activeModal = null;
-  let mobileEmblaApis = [];
 
-  const trackHeroWorkCardClick = (project) => {
-    window.gtag?.("event", "hero_work_card_click", {
+  const trackPfWorkCardClick = (project) => {
+    window.gtag?.("event", "pf_work_card_click", {
       project_id: project.id,
       project_title: project.title,
     });
@@ -34,10 +30,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   const getWorkMedia = (project) => {
     if (project.deviceType === "web") {
       return `
-        <div class="hero-project-mockups hero-project-mockups--web" aria-hidden="true">
-          <div class="hero-web-mockup">
-            <img class="hero-web-screen" src="./assets/article-studio/main.png" alt="" />
-            <img class="hero-web-frame" src="./assets/common/laptop.png" alt="" />
+        <div class="pf-project-mockups pf-project-mockups--web" aria-hidden="true">
+          <div class="pf-web-mockup">
+            <img class="pf-web-screen" src="./assets/article-studio/main.png" alt="" />
+            <img class="pf-web-frame" src="./assets/common/laptop.png" alt="" />
           </div>
         </div>
       `;
@@ -47,41 +43,41 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       const screenMedia =
         project.media === "store-guide"
           ? `
-            <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/store-guide/solution-tobe1.png">
+            <video class="pf-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/store-guide/solution-tobe1.png">
               <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
             </video>
           `
           : project.id === "cta-enhancement"
             ? `
-              <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/cta-enhancement/cta-enhancement-solution-poster.jpg">
+              <video class="pf-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/cta-enhancement/cta-enhancement-solution-poster.jpg">
                 <source src="./assets/cta-enhancement/cta-enhancement-solution.mp4" type="video/mp4" />
               </video>
             `
             : project.id === "public-transport"
               ? `
-                <video class="hero-phone-screen hero-phone-screen--public-transport" autoplay muted loop playsinline preload="metadata" poster="./assets/public-transport/mrt-bottomsheet-poster.jpg">
+                <video class="pf-phone-screen pf-phone-screen--public-transport" autoplay muted loop playsinline preload="metadata" poster="./assets/public-transport/mrt-bottomsheet-poster.jpg">
                   <source src="./assets/public-transport/mrt-bottomsheet.mp4" type="video/mp4" />
                 </video>
               `
               : project.id === "perp-dex"
                 ? `
-                  <video class="hero-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/perp-dex/onboarding-poster.jpg">
+                  <video class="pf-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/perp-dex/onboarding-poster.jpg">
                     <source src="./assets/perp-dex/onboarding.mp4" type="video/mp4" />
                   </video>
                 `
                 : "";
 
       return `
-        <div class="hero-project-mockups hero-project-mockups--mobile" aria-hidden="true">
-          <div class="hero-phone-mockup hero-phone-mockup--center">
+        <div class="pf-project-mockups pf-project-mockups--mobile" aria-hidden="true">
+          <div class="pf-phone-mockup pf-phone-mockup--center">
             ${screenMedia}
-            <img class="hero-phone-frame" src="./assets/common/hero-mobile-frame.png" alt="" />
+            <img class="pf-phone-frame" src="./assets/common/pf-mobile-frame.png" alt="" />
           </div>
         </div>
       `;
     }
 
-    return '<div class="hero-work-empty" aria-hidden="true"></div>';
+    return '<div class="pf-work-empty" aria-hidden="true"></div>';
   };
 
   const publicTransportModalVideos = [
@@ -106,10 +102,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const item = publicTransportModalVideos[order - 1];
 
     return `
-      <div class="hero-modal-public-transport-video-frame">
-        <div class="hero-modal-public-transport-video-shadow">
+      <div class="pf-modal-public-transport-video-frame">
+        <div class="pf-modal-public-transport-video-shadow">
           <video
-            class="hero-modal-public-transport-video"
+            class="pf-modal-public-transport-video"
             muted
             playsinline
             preload="auto"
@@ -120,14 +116,14 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
             <source src="${item.source}" type="video/mp4" />
           </video>
         </div>
-        <p class="hero-modal-public-transport-caption">${item.label}</p>
+        <p class="pf-modal-public-transport-caption">${item.label}</p>
       </div>
     `;
   };
 
   const getProjectMedia = (project) => {
     if (project.projectMedia) {
-      return `<img class="hero-modal-project-media" src="${project.projectMedia}" alt="" />`;
+      return `<img class="pf-modal-project-media" src="${project.projectMedia}" alt="" />`;
     }
 
     if (project.id === "public-transport") {
@@ -167,23 +163,23 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       project.id === "perp-dex"
         ? [
             `
-              <video class="hero-modal-perp-media" muted playsinline preload="auto" poster="./assets/perp-dex/logo-intro-poster.jpg" data-perp-video data-perp-thumbnail-time="3.44">
+              <video class="pf-modal-perp-media" muted playsinline preload="auto" poster="./assets/perp-dex/logo-intro-poster.jpg" data-perp-video data-perp-thumbnail-time="3.44">
                 <source src="./assets/perp-dex/logo-intro.mp4" type="video/mp4" />
               </video>
             `,
             `
-              <video class="hero-modal-perp-media" muted playsinline preload="auto" poster="./assets/perp-dex/sltp-poster.jpg" data-perp-video>
+              <video class="pf-modal-perp-media" muted playsinline preload="auto" poster="./assets/perp-dex/sltp-poster.jpg" data-perp-video>
                 <source src="./assets/perp-dex/sltp.mp4" type="video/mp4" />
               </video>
             `,
             `
-              <div class="hero-modal-perp-media hero-modal-perp-gif" data-perp-gif data-perp-gif-src="./assets/perp-dex/multiwallet.gif" data-perp-gif-duration="6600">
-                <canvas class="hero-modal-perp-gif-frame" data-perp-gif-frame></canvas>
-                <img class="hero-modal-perp-gif-frame hero-modal-perp-gif-player" alt="" data-perp-gif-player />
+              <div class="pf-modal-perp-media pf-modal-perp-gif" data-perp-gif data-perp-gif-src="./assets/perp-dex/multiwallet.gif" data-perp-gif-duration="6600">
+                <canvas class="pf-modal-perp-gif-frame" data-perp-gif-frame></canvas>
+                <img class="pf-modal-perp-gif-frame pf-modal-perp-gif-player" alt="" data-perp-gif-player />
               </div>
             `,
             `
-              <video class="hero-modal-perp-media hero-modal-perp-media--trading" muted playsinline preload="auto" poster="./assets/perp-dex/trading-poster.jpg" data-perp-video>
+              <video class="pf-modal-perp-media pf-modal-perp-media--trading" muted playsinline preload="auto" poster="./assets/perp-dex/trading-poster.jpg" data-perp-video>
                 <source src="./assets/perp-dex/trading.mov" />
               </video>
             `,
@@ -193,7 +189,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       project.media === "store-guide" && videoSegment
         ? `
           <video
-            class="hero-modal-bento-video hero-modal-segment-video"
+            class="pf-modal-bento-video pf-modal-segment-video"
             autoplay
             muted
             playsinline
@@ -209,9 +205,9 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const ctaEnhancementVideo =
       project.id === "cta-enhancement" && index === 0
         ? `
-          <div class="hero-modal-bento-video-frame">
+          <div class="pf-modal-bento-video-frame">
             <video
-              class="hero-modal-bento-video"
+              class="pf-modal-bento-video"
               autoplay
               muted
               loop
@@ -227,14 +223,14 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const ctaEnhancementResult =
       project.id === "cta-enhancement" && index === 2
         ? `
-          <div class="hero-modal-result">
-            <div class="hero-modal-result-metrics">
-              <div class="hero-modal-result-metric">
+          <div class="pf-modal-result">
+            <div class="pf-modal-result-metrics">
+              <div class="pf-modal-result-metric">
                 <p>Pickup Conversion</p>
                 <strong>321.3%</strong>
               </div>
-              <div class="hero-modal-result-metric">
-                <p class="hero-modal-result-metric-title--nowrap">Total Amount of Pickup Orders</p>
+              <div class="pf-modal-result-metric">
+                <p class="pf-modal-result-metric-title--nowrap">Total Amount of Pickup Orders</p>
                 <strong>128.2%</strong>
               </div>
             </div>
@@ -244,29 +240,29 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const articleStudioMedia =
       project.id === "article-studio" && index === 0
         ? `
-          <div class="hero-modal-article-studio-roller">
-            <div class="hero-modal-article-studio-track">
+          <div class="pf-modal-article-studio-roller">
+            <div class="pf-modal-article-studio-track">
               <img src="./assets/article-studio/structure.png" alt="" />
               <img src="./assets/article-studio/props.png" alt="" />
             </div>
-            <div class="hero-modal-article-studio-carousel">
-              <span class="hero-modal-article-studio-carousel-segment hero-modal-article-studio-carousel-segment--1"></span>
-              <span class="hero-modal-article-studio-carousel-segment hero-modal-article-studio-carousel-segment--2"></span>
+            <div class="pf-modal-article-studio-carousel">
+              <span class="pf-modal-article-studio-carousel-segment pf-modal-article-studio-carousel-segment--1"></span>
+              <span class="pf-modal-article-studio-carousel-segment pf-modal-article-studio-carousel-segment--2"></span>
             </div>
           </div>
         `
         : project.id === "article-studio" && index === 1
-          ? `<img class="hero-modal-article-studio-interface" src="./assets/article-studio/interface.png" alt="" />`
+          ? `<img class="pf-modal-article-studio-interface" src="./assets/article-studio/interface.png" alt="" />`
           : "";
     const impactCards =
       project.media === "store-guide" && index === 2
         ? `
-          <div class="hero-modal-impact-list">
+          <div class="pf-modal-impact-list">
             ${storeGuideImpactItems
               .map(
                 (item) => `
-                  <article class="hero-modal-impact-card">
-                    <div class="hero-modal-impact-media">
+                  <article class="pf-modal-impact-card">
+                    <div class="pf-modal-impact-media">
                       <img src="${item.image}" alt="" />
                     </div>
                     <h3>${item.title}</h3>
@@ -279,7 +275,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
         : "";
 
     return `
-      <div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1}">
+      <div class="pf-modal-bento-placeholder pf-modal-bento-placeholder--${index + 1}">
         ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || articleStudioMedia || impactCards}
       </div>
     `;
@@ -288,17 +284,17 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   const initializeMediaMatchedBentoBackgrounds = (modal) => {
     const hasDedicatedBackground = (container) =>
       container.matches(`
-        .hero-work--article-studio :is(
-          .hero-modal-bento-placeholder--1,
-          .hero-modal-bento-placeholder--2
+        .pf-work--article-studio :is(
+          .pf-modal-bento-placeholder--1,
+          .pf-modal-bento-placeholder--2
         ),
-        .hero-work--public-transport :is(
-          .hero-modal-bento-feature,
-          .hero-modal-bento-placeholder--1,
-          .hero-modal-bento-placeholder--2
+        .pf-work--public-transport :is(
+          .pf-modal-bento-feature,
+          .pf-modal-bento-placeholder--1,
+          .pf-modal-bento-placeholder--2
         ),
-        .hero-work--perp-dex .hero-modal-bento-placeholder,
-        .hero-work--cta-enhancement .hero-modal-bento-placeholder--3
+        .pf-work--perp-dex .pf-modal-bento-placeholder,
+        .pf-work--cta-enhancement .pf-modal-bento-placeholder--3
       `);
 
     const getEdgeColor = (media) => {
@@ -349,7 +345,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     };
 
     modal
-      .querySelectorAll(".hero-modal-bento-feature, .hero-modal-bento-placeholder")
+      .querySelectorAll(".pf-modal-bento-feature, .pf-modal-bento-placeholder")
       .forEach((container) => {
         if (hasDedicatedBackground(container)) return;
 
@@ -364,7 +360,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
           if (!color) return;
 
-          container.style.setProperty("--hero-modal-media-background", color);
+          container.style.setProperty("--pf-modal-media-background", color);
           container.classList.add("has-media-sampled-background");
         };
 
@@ -385,7 +381,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   };
 
   const initializeSegmentVideos = (modal) => {
-    modal.querySelectorAll(".hero-modal-segment-video").forEach((video) => {
+    modal.querySelectorAll(".pf-modal-segment-video").forEach((video) => {
       const segmentStart = Number(video.dataset.segmentStart);
       const segmentEnd = Number(video.dataset.segmentEnd);
 
@@ -418,7 +414,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const playSimultaneously = window.matchMedia("(max-width: 920px)").matches;
     const playbackOrder = playSimultaneously ? [1, 2, 3, 4] : [4, 1, 2, 3];
     const sequence = playbackOrder
-      .map((index) => modal.querySelector(`.hero-modal-bento-placeholder--${index}`))
+      .map((index) => modal.querySelector(`.pf-modal-bento-placeholder--${index}`))
       .filter(Boolean)
       .map((container) => ({
         container,
@@ -576,7 +572,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       .map((video) => ({
         video,
         order: Number(video.dataset.publicTransportVideoOrder),
-        container: video.closest(".hero-modal-bento-feature, .hero-modal-bento-placeholder"),
+        container: video.closest(".pf-modal-bento-feature, .pf-modal-bento-placeholder"),
       }))
       .filter((entry) => entry.container)
       .sort((a, b) => a.order - b.order);
@@ -665,37 +661,20 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
   const renderWorkCard = (project, isClone = false) => {
     const content = `
-      ${getWorkMedia(project)}
-      <div class="hero-work-meta">
+      <div class="pf-work-card">
+        ${getWorkMedia(project)}
+      </div>
+      <div class="pf-work-meta">
         <h2>${project.title}</h2>
         ${project.companyLabel ? `<span>@ ${project.companyLabel}</span>` : ""}
       </div>
     `;
 
     if (isClone) {
-      return `<div class="hero-work hero-work--${project.id} hero-work--clone" aria-hidden="true">${content}</div>`;
+      return `<div class="pf-work pf-work--${project.id} pf-work--clone" aria-hidden="true">${content}</div>`;
     }
 
-    return `<a class="hero-work hero-work--${project.id}" href="${project.href}" draggable="false" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
-  };
-
-  const renderWorkSet = (isClone = false) => `
-    <div class="hero-work-set${isClone ? " hero-work-set--clone" : " hero-work-set--primary"}">
-      ${heroProjects.map((project) => renderWorkCard(project, isClone)).join("")}
-    </div>
-  `;
-
-  const renderMobileSlides = (centerProjectIndex) => {
-    const projectCount = heroProjects.length;
-    const cellCount = projectCount;
-    const centerCellIndex = Math.floor(cellCount / 2);
-
-    return Array.from({ length: cellCount }, (_, slotIndex) => {
-      const projectIndex =
-        (centerProjectIndex + slotIndex - centerCellIndex + projectCount) %
-        projectCount;
-      return renderWorkCard(heroProjects[projectIndex]);
-    }).join("");
+    return `<a class="pf-work pf-work--${project.id}" href="${project.href}" draggable="false" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
   };
 
   const isPlainNavigationClick = (event, link) =>
@@ -740,8 +719,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     return `translate3d(${translateX}px, ${translateY}px, 0) scale(${scaleX}, ${scaleY})`;
   };
 
-  const pauseHeroWorkVideos = () => {
-    const videos = [...hero.querySelectorAll(".hero-work video")];
+  const pausePfWorkVideos = () => {
+    const videos = [...pf.querySelectorAll(".pf-work video")];
     const playingVideos = videos.filter(
       (video) => !video.paused && !video.ended,
     );
@@ -750,7 +729,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     return playingVideos;
   };
 
-  const resumeHeroWorkVideos = (videos) => {
+  const resumePfWorkVideos = (videos) => {
     videos.forEach((video) => {
       if (!video.isConnected) return;
 
@@ -760,53 +739,40 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     });
   };
 
-  const stopMobileAutoScroll = () => {
-    mobileEmblaApis.forEach((emblaApi) => {
-      emblaApi.plugins().autoScroll?.stop();
-    });
-  };
-
-  const playMobileAutoScroll = () => {
-    mobileEmblaApis.forEach((emblaApi) => {
-      emblaApi.plugins().autoScroll?.play(600);
-    });
-  };
-
   const openWorkModal = (work, project, { pushHistory = true } = {}) => {
     if (activeModal) return;
 
     if (pushHistory) pushModalHistoryEntry(project.id);
 
-    stopAutoScrollLoop();
-    stopMobileAutoScroll();
-    const pausedHeroWorkVideos = pauseHeroWorkVideos();
-    const sourceRect = work.getBoundingClientRect();
-    const sourceRadius = window.getComputedStyle(work).borderRadius;
+    const pausedPfWorkVideos = pausePfWorkVideos();
+    const sourceCard = work.querySelector(".pf-work-card") || work;
+    const sourceRect = sourceCard.getBoundingClientRect();
+    const sourceRadius = window.getComputedStyle(sourceCard).borderRadius;
     const targetRect = getModalTargetRect();
     const targetRadius = getModalTargetRadius();
     const layer = document.createElement("div");
     const backdrop = document.createElement("div");
     const modal = document.createElement("div");
-    const titleId = `hero-modal-${project.id}-title`;
+    const titleId = `pf-modal-${project.id}-title`;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const transitionDuration = prefersReducedMotion ? 1 : modalTransitionDuration;
     const ctaMarkup = project.cta
       ? `
         <a
-          class="hero-modal-cta"
+          class="pf-modal-cta"
           href="${project.cta.href}"
           ${project.cta.newTab ? 'target="_blank" rel="noopener noreferrer"' : ""}
         >
           <span>${project.cta.label}</span>
           <span
-            class="hero-modal-cta-arrow hero-modal-cta-arrow--${project.cta.newTab ? "external" : "internal"}"
+            class="pf-modal-cta-arrow pf-modal-cta-arrow--${project.cta.newTab ? "external" : "internal"}"
             aria-hidden="true"
           ></span>
         </a>
       `
       : "";
     const descriptionMarkup = project.modalDescription
-      ? `<p class="hero-modal-description">${project.modalDescription}</p>`
+      ? `<p class="pf-modal-description">${project.modalDescription}</p>`
       : "";
     const isPerpDexProject = project.id === "perp-dex";
     const isPublicTransportProject = project.id === "public-transport";
@@ -817,7 +783,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const skeletonPlaceholders = Array.from(
       { length: placeholderCount },
       (_, index) => `
-        <div class="hero-modal-bento-placeholder hero-modal-bento-placeholder--${index + 1} hero-modal-bento-skeleton"></div>
+        <div class="pf-modal-bento-placeholder pf-modal-bento-placeholder--${index + 1} pf-modal-bento-skeleton"></div>
       `,
     );
     const usesThreePartBento = isPublicTransportProject;
@@ -831,9 +797,9 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
       return isPerpDexProject
         ? `
-          <div class="hero-modal-perp-left">
+          <div class="pf-modal-perp-left">
             ${placeholders[0]}
-            <div class="hero-modal-perp-center-bottom">
+            <div class="pf-modal-perp-center-bottom">
               ${placeholders[1]}
               ${placeholders[2]}
             </div>
@@ -845,10 +811,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
           : usesFourPartBento
             ? placeholders.join("")
             : isWebProject
-              ? `<div class="hero-modal-bento-side">${placeholders.slice(0, 2).join("")}</div>`
+              ? `<div class="pf-modal-bento-side">${placeholders.slice(0, 2).join("")}</div>`
               : `
-          <div class="hero-modal-bento-stack">
-            <div class="hero-modal-bento-stack-top${usesSingleTopBento ? " hero-modal-bento-stack-top--single" : ""}">
+          <div class="pf-modal-bento-stack">
+            <div class="pf-modal-bento-stack-top${usesSingleTopBento ? " pf-modal-bento-stack-top--single" : ""}">
               ${stackTopMarkup}
             </div>
             ${placeholders[2]}
@@ -860,38 +826,38 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     const bentoFeatureMarkup = isPerpDexProject
       ? ""
       : `
-        <div class="hero-modal-bento-feature">
+        <div class="pf-modal-bento-feature">
           ${getProjectMedia(project)}
         </div>
       `;
     const bentoMarkup = `
-      <section class="hero-modal-bento-section${isWebProject ? " hero-modal-bento-section--web" : ""}${usesThreePartBento ? " hero-modal-bento-section--three-up" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}${isPerpDexProject ? " hero-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
+      <section class="pf-modal-bento-section${isWebProject ? " pf-modal-bento-section--web" : ""}${usesThreePartBento ? " pf-modal-bento-section--three-up" : ""}${usesFourPartBento ? " pf-modal-bento-section--four-up" : ""}${isPerpDexProject ? " pf-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
         ${bentoFeatureMarkup}
         ${bentoSideMarkup}
       </section>
     `;
     const skeletonFeatureMarkup = isPerpDexProject
       ? ""
-      : '<div class="hero-modal-bento-feature hero-modal-bento-skeleton"></div>';
+      : '<div class="pf-modal-bento-feature pf-modal-bento-skeleton"></div>';
     const skeletonMarkup = `
-      <section class="hero-modal-bento-section hero-modal-bento-section--skeleton${isWebProject ? " hero-modal-bento-section--web" : ""}${usesThreePartBento ? " hero-modal-bento-section--three-up" : ""}${usesFourPartBento ? " hero-modal-bento-section--four-up" : ""}${isPerpDexProject ? " hero-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
+      <section class="pf-modal-bento-section pf-modal-bento-section--skeleton${isWebProject ? " pf-modal-bento-section--web" : ""}${usesThreePartBento ? " pf-modal-bento-section--three-up" : ""}${usesFourPartBento ? " pf-modal-bento-section--four-up" : ""}${isPerpDexProject ? " pf-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
         ${skeletonFeatureMarkup}
         ${skeletonSideMarkup}
       </section>
     `;
 
-    layer.className = "hero-modal-layer";
-    backdrop.className = "hero-modal-backdrop";
+    layer.className = "pf-modal-layer";
+    backdrop.className = "pf-modal-backdrop";
     backdrop.style.opacity = "0";
-    modal.className = `hero-work-modal hero-work--${project.id}${descriptionMarkup ? " hero-work-modal--has-description" : ""}${ctaMarkup ? "" : " hero-work-modal--no-cta"}`;
+    modal.className = `pf-work-modal pf-work--${project.id}${descriptionMarkup ? " pf-work-modal--has-description" : ""}${ctaMarkup ? "" : " pf-work-modal--no-cta"}`;
     modal.setAttribute("role", "dialog");
     modal.setAttribute("aria-modal", "true");
     modal.setAttribute("aria-labelledby", titleId);
     modal.innerHTML = `
-      <div class="hero-modal-card-content is-skeleton">${skeletonMarkup}</div>
-      <button class="hero-modal-close" type="button" aria-label="Close project preview"></button>
-      <div class="hero-modal-footer${ctaMarkup ? "" : " hero-modal-footer--no-cta"}">
-        <div class="hero-work-meta">
+      <div class="pf-modal-card-content is-skeleton">${skeletonMarkup}</div>
+      <button class="pf-modal-close" type="button" aria-label="Close project preview"></button>
+      <div class="pf-modal-footer${ctaMarkup ? "" : " pf-modal-footer--no-cta"}">
+        <div class="pf-work-meta">
           <h2 id="${titleId}">${project.title}</h2>
           ${project.companyLabel ? `<span>@ ${project.companyLabel}</span>` : ""}
         </div>
@@ -907,7 +873,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
     modal.classList.add("is-revealing");
     work.classList.add("is-modal-source");
-    document.documentElement.classList.add("is-hero-modal-open");
+    document.documentElement.classList.add("is-pf-modal-open");
 
     const modalAnimation = modal.animate(
       [
@@ -936,10 +902,10 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       },
     );
 
-    const closeButton = modal.querySelector(".hero-modal-close");
-    const cta = modal.querySelector(".hero-modal-cta");
-    const footer = modal.querySelector(".hero-modal-footer");
-    const cardContent = modal.querySelector(".hero-modal-card-content");
+    const closeButton = modal.querySelector(".pf-modal-close");
+    const cta = modal.querySelector(".pf-modal-cta");
+    const footer = modal.querySelector(".pf-modal-footer");
+    const cardContent = modal.querySelector(".pf-modal-card-content");
     let hasMountedBento = false;
     let isClosing = false;
     let isHistoryClosePending = false;
@@ -962,7 +928,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
     const syncFooterSpace = () => {
       const footerHeight = footer?.offsetHeight ?? 0;
-      modal.style.setProperty("--hero-modal-footer-space", `${footerHeight}px`);
+      modal.style.setProperty("--pf-modal-footer-space", `${footerHeight}px`);
     };
 
     const footerResizeObserver =
@@ -990,22 +956,19 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       layer.getAnimations?.({ subtree: true })?.forEach((animation) => animation.cancel());
       layer.remove();
       work.classList.remove("is-modal-source");
-      document.documentElement.classList.remove("is-hero-modal-open");
+      document.documentElement.classList.remove("is-pf-modal-open");
       document.removeEventListener("keydown", handleModalKeydown);
       window.removeEventListener("resize", handleModalResize);
       footerResizeObserver?.disconnect();
 
       if (activeModal?.modal === modal) activeModal = null;
 
-      resumeHeroWorkVideos(pausedHeroWorkVideos);
-      startAutoScrollLoop();
-      playMobileAutoScroll();
-
+      resumePfWorkVideos(pausedPfWorkVideos);
       if (!restoreFocus) return;
 
       const focusTarget = work.matches("a")
         ? work
-        : hero.querySelector(`.hero-work-set--primary .hero-work--${project.id}`);
+        : pf.querySelector(`.pf-work--${project.id}`);
       focusTarget?.focus({ preventScroll: true });
     };
 
@@ -1018,7 +981,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
       const currentRect = modal.getBoundingClientRect();
       const currentRadius = window.getComputedStyle(modal).borderRadius;
-      const latestSourceRect = work.getBoundingClientRect();
+      const latestSourceRect = sourceCard.getBoundingClientRect();
       work.classList.remove("is-modal-source");
       modalAnimation.cancel();
       backdropAnimation.cancel();
@@ -1146,43 +1109,26 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       });
   };
 
-  const mobileHeroMedia = window.matchMedia("(max-width: 600px)");
+  const mobilePfMedia = window.matchMedia("(max-width: 600px)");
 
-  hero.innerHTML = mobileHeroMedia.matches
-    ? `
-      <div class="hero-work-rail hero-work-rail--infinite hero-work-rail--mobile" data-mobile-hero-work-rail>
-        <div class="hero-work-track hero-work-track--embla">
-          ${renderMobileSlides(0)}
-        </div>
-      </div>
-      <div class="hero-work-rail hero-work-rail--infinite hero-work-rail--secondary hero-work-rail--mobile" data-mobile-hero-work-rail-secondary>
-        <div class="hero-work-track hero-work-track--embla">
-          ${renderMobileSlides(3)}
-        </div>
-      </div>
-    `
-    : `
-      <div class="hero-work-rail hero-work-rail--infinite" data-hero-work-rail>
-        <div class="hero-work-track">
-          ${renderWorkSet(true)}
-          ${renderWorkSet()}
-          ${renderWorkSet(true)}
-        </div>
-      </div>
-    `;
+  pf.innerHTML = `
+    <div class="pf-work-grid">
+      ${pfProjects.map((project) => renderWorkCard(project)).join("")}
+    </div>
+  `;
 
-  const rail = hero.querySelector("[data-hero-work-rail]");
-  const workSets = rail ? [...rail.querySelectorAll(".hero-work-set")] : [];
-  const primaryFirstWork = hero.querySelector(".hero-work-set--primary .hero-work");
-  const secondaryRail = hero.querySelector("[data-hero-work-rail-secondary]");
+  const rail = pf.querySelector("[data-pf-work-rail]");
+  const workSets = rail ? [...rail.querySelectorAll(".pf-work-set")] : [];
+  const primaryFirstWork = pf.querySelector(".pf-work-set--primary .pf-work");
+  const secondaryRail = pf.querySelector("[data-pf-work-rail-secondary]");
   const secondaryWorkSets = secondaryRail
-    ? [...secondaryRail.querySelectorAll(".hero-work-set")]
+    ? [...secondaryRail.querySelectorAll(".pf-work-set")]
     : [];
   const secondaryInitialWork = secondaryWorkSets[1]?.querySelector(
-    ".hero-work:nth-child(4)",
+    ".pf-work:nth-child(4)",
   );
-  const mobileRail = hero.querySelector("[data-mobile-hero-work-rail]");
-  const mobileSecondaryRail = hero.querySelector("[data-mobile-hero-work-rail-secondary]");
+  const mobileRail = pf.querySelector("[data-mobile-pf-work-rail]");
+  const mobileSecondaryRail = pf.querySelector("[data-mobile-pf-work-rail-secondary]");
   const primaryMobileStartOffset = 80;
   const secondaryMobileStartOffset = -80;
   const defaultAutoScrollSpeed = 32;
@@ -1216,38 +1162,6 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   let isTouchScrollingSecondaryRail = false;
   let secondaryRailTouchScrollTimer = 0;
 
-  mobileEmblaApis = [
-    { rail: mobileRail, direction: "forward", alignmentOffset: -24 },
-    {
-      rail: mobileSecondaryRail,
-      direction: "backward",
-      alignmentOffset: 80,
-    },
-  ]
-    .filter(({ rail: mobileEmblaRail }) => mobileEmblaRail)
-    .map(({ rail: mobileEmblaRail, direction, alignmentOffset }) =>
-      EmblaCarousel(
-        mobileEmblaRail,
-        {
-          align: (viewSize, snapSize) =>
-            (viewSize - snapSize) / 2 + alignmentOffset,
-          dragFree: true,
-          loop: true,
-          startIndex: Math.floor(heroProjects.length / 2),
-        },
-        [
-          AutoScroll({
-            direction,
-            playOnInit: true,
-            speed: 0.55,
-            startDelay: 600,
-            stopOnFocusIn: true,
-            stopOnInteraction: false,
-          }),
-        ],
-      ),
-    );
-
   const syncInfiniteMetrics = ({ preservePosition = false } = {}) => {
     if (!rail || !primaryFirstWork || workSets.length < 3) return;
 
@@ -1265,7 +1179,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     centerScrollLeft =
       primaryFirstWorkScrollLeft -
       (rail.clientWidth - primaryFirstWorkRect.width) / 2 -
-      (mobileHeroMedia.matches ? primaryMobileStartOffset : 0);
+      (mobilePfMedia.matches ? primaryMobileStartOffset : 0);
     rail.scrollLeft = preservePosition
       ? centerScrollLeft + relativePosition * segmentWidth
       : centerScrollLeft;
@@ -1385,15 +1299,15 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       (targetAutoScrollSpeed - autoScrollSpeed) * Math.min(elapsed * 6, 1);
 
     if (rail) {
-      const heroBounds = hero.getBoundingClientRect();
-      const heroIsVisible = heroBounds.bottom > 0 && heroBounds.top < window.innerHeight;
+      const pfBounds = pf.getBoundingClientRect();
+      const pfIsVisible = pfBounds.bottom > 0 && pfBounds.top < window.innerHeight;
 
       if (
-        heroIsVisible &&
+        pfIsVisible &&
         !isDraggingRail &&
         !isTouchScrollingRail &&
         !isTouchScrollingSecondaryRail &&
-        !document.documentElement.classList.contains("is-hero-modal-open") &&
+        !document.documentElement.classList.contains("is-pf-modal-open") &&
         time >= autoScrollPausedUntil
       ) {
         autoScrollPosition += elapsed * autoScrollSpeed;
@@ -1402,13 +1316,13 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
       }
 
       if (
-        heroIsVisible &&
+        pfIsVisible &&
         secondaryRail?.clientWidth &&
         secondarySegmentWidth &&
         !isDraggingSecondaryRail &&
         !isTouchScrollingSecondaryRail &&
         !isTouchScrollingRail &&
-        !document.documentElement.classList.contains("is-hero-modal-open") &&
+        !document.documentElement.classList.contains("is-pf-modal-open") &&
         time >= secondaryAutoScrollPausedUntil
       ) {
         secondaryAutoScrollPosition -= elapsed * defaultAutoScrollSpeed;
@@ -1450,7 +1364,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     isHoveringRail = false;
   });
 
-  hero.addEventListener(
+  pf.addEventListener(
     "wheel",
     (event) => {
       if (!rail || event.ctrlKey) return;
@@ -1467,7 +1381,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   rail?.addEventListener("pointerdown", (event) => {
     if (event.button !== 0 || activeModal) return;
 
-    if (event.pointerType === "touch" && mobileHeroMedia.matches) {
+    if (event.pointerType === "touch" && mobilePfMedia.matches) {
       beginRailTouchScroll();
       return;
     }
@@ -1525,7 +1439,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   }, { passive: true });
 
   const finishRailPointerInteraction = (event) => {
-    if (event.pointerType === "touch" && mobileHeroMedia.matches) {
+    if (event.pointerType === "touch" && mobilePfMedia.matches) {
       scheduleRailTouchScrollEnd();
       return;
     }
@@ -1550,7 +1464,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   secondaryRail?.addEventListener("pointerdown", (event) => {
     if (event.button !== 0 || activeModal) return;
 
-    if (event.pointerType === "touch" && mobileHeroMedia.matches) {
+    if (event.pointerType === "touch" && mobilePfMedia.matches) {
       beginSecondaryRailTouchScroll();
       return;
     }
@@ -1610,7 +1524,7 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
   }, { passive: true });
 
   const finishSecondaryRailPointerInteraction = (event) => {
-    if (event.pointerType === "touch" && mobileHeroMedia.matches) {
+    if (event.pointerType === "touch" && mobilePfMedia.matches) {
       scheduleSecondaryRailTouchScrollEnd();
       return;
     }
@@ -1632,16 +1546,15 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
     true,
   );
 
-  hero.querySelectorAll(".hero-work").forEach((work) => {
+  pf.querySelectorAll(".pf-work").forEach((work) => {
     work.addEventListener("click", (event) => {
       if (!isPlainNavigationClick(event, work)) return;
 
-      const project = heroProjects.find((item) => work.classList.contains(`hero-work--${item.id}`));
+      const project = pfProjects.find((item) => work.classList.contains(`pf-work--${item.id}`));
       if (!project) return;
 
-      trackHeroWorkCardClick(project);
+      trackPfWorkCardClick(project);
       event.preventDefault();
-      pauseAutoScroll();
       openWorkModal(work, project);
     });
   });
@@ -1663,8 +1576,8 @@ export const renderHero = (hero, heroProjects, getPlainTitle) => {
 
     if (!projectId) return;
 
-    const project = heroProjects.find((item) => item.id === projectId);
-    const work = hero.querySelector(`.hero-work--${projectId}:not(.hero-work--clone)`);
+    const project = pfProjects.find((item) => item.id === projectId);
+    const work = pf.querySelector(`.pf-work--${projectId}:not(.pf-work--clone)`);
 
     if (project && work) openWorkModal(work, project, { pushHistory: false });
   };

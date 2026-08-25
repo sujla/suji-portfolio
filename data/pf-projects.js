@@ -1,4 +1,4 @@
-export const heroProjects = [
+export const pfProjects = [
   {
     id: "store-finder",
     href: "./projects/store-finder-renewal/",

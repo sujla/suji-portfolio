@@ -1,8 +1,8 @@
 import { projectSettings, projects } from "./data/projects.js";
-import { heroProjects } from "./data/hero-projects.js";
-import { renderHero } from "./hero.js";
+import { pfProjects } from "./data/pf-projects.js";
+import { renderPf } from "./pf.js";
 
-const hero = document.querySelector("[data-hero]");
+const pf = document.querySelector("[data-pf]");
 const about = document.querySelector("[data-about]");
 const aboutPhotoStack = document.querySelector(".about-photo-stack");
 const projectList = document.querySelector("[data-project-list]");
@@ -336,17 +336,14 @@ const syncMobileProjectViewport = ({ force = false } = {}) => {
   root.style.setProperty("--mobile-project-viewport", `${mobileProjectViewportHeight}px`);
 };
 
-const updateHeroState = () => {
-  if (!hero) return;
+const updatePfState = () => {
+  if (!pf) return;
 
-  const rect = hero.getBoundingClientRect();
+  const rect = pf.getBoundingClientRect();
   const viewportCenter = window.innerHeight / 2;
-  const isHeroActive = rect.top <= viewportCenter && rect.bottom >= viewportCenter;
-  const scrollProgress = Math.min(Math.max(-rect.top / rect.height, 0), 1);
+  const isPfActive = rect.top <= viewportCenter && rect.bottom >= viewportCenter;
 
-  root.classList.toggle("is-hero-active", isHeroActive);
-  hero.style.setProperty("--hero-scroll-progress", scrollProgress.toFixed(3));
-  hero.style.setProperty("--hero-scroll-offset", `${scrollProgress * -96}px`);
+  root.classList.toggle("is-pf-active", isPfActive);
 };
 
 const updateAboutState = () => {
@@ -380,6 +377,8 @@ const setActiveProject = (index) => {
 };
 
 const updateFocusedProject = () => {
+  if (!sections.length) return;
+
   const viewportCenter = window.innerHeight / 2;
   const nextIndex = sections
     .map((section, index) => {
@@ -405,7 +404,7 @@ let frame = 0;
 const requestProjectUpdate = () => {
   cancelAnimationFrame(frame);
   frame = requestAnimationFrame(() => {
-    updateHeroState();
+    updatePfState();
     updateAboutState();
     updateFocusedProject();
   });
@@ -425,8 +424,7 @@ const getNavigationType = () =>
 reducedMotionMedia.addEventListener?.("change", syncAboutPhotoLoop);
 syncAboutPhotoLoop();
 
-const heroController = renderHero(hero, heroProjects, getPlainTitle);
-renderProjects();
+const pfController = renderPf(pf, pfProjects, getPlainTitle);
 sections = [...document.querySelectorAll("[data-project]")];
 syncMobileProjectViewport({ force: true });
 applyTheme(preferredTheme);
@@ -456,7 +454,7 @@ themeToggle.addEventListener("click", () => {
   applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
 });
 
-projectList.addEventListener("click", (event) => {
+projectList?.addEventListener("click", (event) => {
   const link = event.target.closest(".project-link");
 
   if (!link || !projectList.contains(link) || !isPlainNavigationClick(event, link)) return;
@@ -475,10 +473,10 @@ mobileProjectMedia.addEventListener?.("change", () => {
   syncMobileProjectViewport({ force: true });
   requestProjectUpdate();
 });
-window.addEventListener("pagehide", () => heroController?.resetModal());
+window.addEventListener("pagehide", () => pfController?.resetModal());
 window.addEventListener("pageshow", () => {
-  heroController?.resetModal();
-  heroController?.syncModalWithHistory();
+  pfController?.resetModal();
+  pfController?.syncModalWithHistory();
   resetProjectTransition();
 });
 requestProjectUpdate();
