@@ -1250,7 +1250,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     button.addEventListener("click", () => {
       applyProjectTypeFilter(button.dataset.projectTypeFilter);
       window.scrollTo({
-        top: Math.max(0, pf.getBoundingClientRect().top + window.scrollY - 30),
+        top: Math.max(0, pf.getBoundingClientRect().top + window.scrollY - 10),
         behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
           ? "auto"
           : "smooth",

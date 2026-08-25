@@ -1316,7 +1316,7 @@ html.is-pf-modal-open body {
   left: 52%;
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: clamp(32px, 4vw, 40px);
   border-radius: 4px;
   background-color: color-mix(in srgb, var(--bg) 70%, transparent);
   backdrop-filter: blur(5px);
@@ -2798,7 +2798,7 @@ body {
   width: 100%;
   height: auto;
   min-height: 300px;
-  margin: 92px 0 82px;
+  margin: 92px 0 52px;
   padding: 0;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px 24px;
@@ -2907,6 +2907,7 @@ body {
 .pf-work-grid {
   display: grid;
   width: 100%;
+  padding-top: 30px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 24px;
   row-gap: 32px;
