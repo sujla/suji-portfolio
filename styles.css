@@ -33,7 +33,7 @@
 }
 
 :root[data-theme="light"] {
-  --bg: #E8E8E9;
+  --bg: #F1F2F4;
   --text: #020508;
   --text-secondary: rgba(2, 5, 8, 0.72);
   --text-tertiary: rgba(2, 5, 8, 0.5);
@@ -2706,10 +2706,49 @@ body {
 }
 
 .hero-section {
+  display: grid;
   width: 100%;
   height: auto;
-  min-height: 320px;
+  min-height: 300px;
+  margin-top: 64px;
+  padding: 0 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 24px;
   background: var(--bg);
+}
+
+.hero-title-column {
+  min-width: 0;
+  padding-top: 53px;
+}
+
+.hero-title-column h1 {
+  margin: 0;
+  color: var(--text);
+  font-family: "Castoro", Georgia, serif;
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1.08;
+}
+
+.hero-copy {
+  min-width: 0;
+  max-width: 370px;
+  padding-top: 58px;
+  color: var(--text);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+}
+
+.hero-copy p {
+  margin: 0;
+}
+
+.hero-copy p + p {
+  margin-top: 18px;
 }
 
 .pf-section {
