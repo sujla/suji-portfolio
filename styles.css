@@ -64,23 +64,19 @@
 }
 
 :root[data-theme="dark"] ::selection {
-  color: #020508;
-  background: var(--active-project-color);
+  background: rgba(198, 198, 247, 0.4);
 }
 
 :root[data-theme="light"] ::selection {
-  color: var(--text);
-  background: var(--active-project-color);
+  background: rgba(214, 214, 249, 0.4);
 }
 
 :root[data-theme="dark"] :is(.pf-section, .about-section, .pf-work-modal) ::selection {
-  color: var(--text);
-  background: rgba(247, 248, 245, 0.1);
+  background: rgba(198, 198, 247, 0.4);
 }
 
 :root[data-theme="light"] :is(.pf-section, .about-section, .pf-work-modal) ::selection {
-  color: var(--text);
-  background: rgba(2, 5, 8, 0.08);
+  background: rgba(214, 214, 249, 0.4);
 }
 
 * {
