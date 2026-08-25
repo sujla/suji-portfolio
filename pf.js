@@ -3,13 +3,16 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
   const modalTransitionDuration = 760;
   const modalHistoryStateKey = "portfolioPfModalProject";
-  const projectTypeFilters = [
-    { value: "enterprise", label: "Enterprise/SaaS" },
-    { value: "fintech", label: "Fintech" },
-    { value: "e-commerce", label: "E-commerce" },
-    { value: "mobility", label: "Mobility" },
-    { value: "others", label: "Others" },
-  ];
+  const projectTypeMap = {
+    AI: "ai",
+    "Enterprise/SaaS": "enterprise",
+    Fintech: "fintech",
+    "E-commerce": "e-commerce",
+    Mobility: "mobility",
+  };
+  const projectTypeFilters = Object.entries(projectTypeMap).map(
+    ([label, value]) => ({ label, value }),
+  );
   let activeModal = null;
 
   const trackPfWorkCardClick = (project) => {
@@ -667,6 +670,9 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   };
 
   const renderWorkCard = (project, isClone = false) => {
+    const projectTypes = project.types?.length
+      ? project.types
+      : [project.type || "others"];
     const content = `
       <div class="pf-work-card">
         ${getWorkMedia(project)}
@@ -681,7 +687,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       return `<div class="pf-work pf-work--${project.id} pf-work--clone" aria-hidden="true">${content}</div>`;
     }
 
-    return `<a class="pf-work pf-work--${project.id}" href="${project.href}" data-project-type="${project.type || "others"}" draggable="false" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
+    return `<a class="pf-work pf-work--${project.id}" href="${project.href}" data-project-types="${projectTypes.join(" ")}" draggable="false" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
   };
 
   const isPlainNavigationClick = (event, link) =>
@@ -1117,12 +1123,15 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   };
 
   const mobilePfMedia = window.matchMedia("(max-width: 600px)");
+  const typeFilter = document.querySelector("[data-pf-type-filter]");
 
-  pf.innerHTML = `
-    <div class="pf-type-filter" role="group" aria-label="Filter projects by type">
+  if (typeFilter) {
+    typeFilter.innerHTML = `
+      <div class="pf-type-filter" role="group" aria-label="Filter projects by type">
       ${projectTypeFilters
         .map(
-          ({ value, label }) => `
+          ({ value, label }, index) => `
+            ${index > 0 ? '<span class="pf-type-filter-dot" aria-hidden="true">•</span>' : ""}
             <button
               class="pf-type-filter-button"
               type="button"
@@ -1133,15 +1142,22 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           `,
         )
         .join("")}
-    </div>
+      </div>
+    `;
+  }
+
+  pf.innerHTML = `
     <div class="pf-work-grid" id="pf-work-grid">
       ${pfProjects.map((project) => renderWorkCard(project)).join("")}
     </div>
     <p class="pf-filter-empty" role="status" hidden>No projects in this category yet.</p>
   `;
 
-  const filterButtons = [...pf.querySelectorAll("[data-project-type-filter]")];
-  const filterableWorks = [...pf.querySelectorAll(".pf-work[data-project-type]")];
+  const filterButtons = typeFilter
+    ? [...typeFilter.querySelectorAll("[data-project-type-filter]")]
+    : [];
+  const typeFilterGroup = typeFilter?.querySelector(".pf-type-filter");
+  const filterableWorks = [...pf.querySelectorAll(".pf-work[data-project-types]")];
   const filterEmptyState = pf.querySelector(".pf-filter-empty");
   let activeProjectType = "";
 
@@ -1156,8 +1172,11 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       );
     });
 
+    typeFilterGroup?.classList.toggle("is-filtering", Boolean(activeProjectType));
+
     filterableWorks.forEach((work) => {
-      const isVisible = !activeProjectType || work.dataset.projectType === activeProjectType;
+      const projectTypes = work.dataset.projectTypes.split(" ");
+      const isVisible = !activeProjectType || projectTypes.includes(activeProjectType);
       work.hidden = !isVisible;
       if (isVisible) visibleProjectCount += 1;
     });
@@ -1168,6 +1187,12 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       applyProjectTypeFilter(button.dataset.projectTypeFilter);
+      window.scrollTo({
+        top: Math.max(0, pf.getBoundingClientRect().top + window.scrollY - 30),
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+      });
     });
   });
 

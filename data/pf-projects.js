@@ -31,6 +31,7 @@ export const pfProjects = [
   {
     id: "public-transport",
     type: "mobility",
+    types: ["ai", "mobility"],
     title: "Public Transport App in SG",
     companyLabel: "Taurus Labs",
     deviceType: "mobile",
