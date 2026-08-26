@@ -42,6 +42,46 @@ export function HomePage() {
 
       <ThemeToggle />
 
+      {/* Squircle filter adapted from https://skiper-ui.com/v1/skiper63 */}
+      <svg
+        className="pf-squircle-filter-defs"
+        width="0"
+        height="0"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <defs>
+          <filter
+            id="pf-work-squircle"
+            x="-10%"
+            y="-10%"
+            width="120%"
+            height="120%"
+            colorInterpolationFilters="sRGB"
+          >
+            <feGaussianBlur
+              in="SourceAlpha"
+              stdDeviation="10"
+              result="blur"
+            />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 20 -7"
+              result="squircleMask"
+            />
+            <feFlood className="pf-squircle-filter-fill" result="surfaceColor" />
+            <feComposite
+              in="surfaceColor"
+              in2="squircleMask"
+              operator="in"
+              result="squircleFill"
+            />
+            <feComposite in="SourceGraphic" in2="squircleFill" operator="over" />
+          </filter>
+        </defs>
+      </svg>
+
       <section className="hero-section" aria-labelledby="hero-title">
         <div className="hero-title-column">
           <h1 id="hero-title">

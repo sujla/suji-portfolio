@@ -676,6 +676,9 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         <h2>${project.title}</h2>
         ${renderWorkMetaLine(project)}
       </div>
+      <span class="pf-work-cursor-label" aria-hidden="true">
+        <span>View Details</span>
+      </span>
     `;
 
     if (isClone) {
@@ -1810,6 +1813,40 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   );
 
   pf.querySelectorAll(".pf-work").forEach((work) => {
+    const cursorLabel = work.querySelector(".pf-work-cursor-label");
+    let cursorFrameId = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+
+    work.addEventListener("pointermove", (event) => {
+      if (event.pointerType !== "mouse" || !cursorLabel) return;
+
+      const workRect = work.getBoundingClientRect();
+      const cursorOffset = 14;
+      const edgeInset = 12;
+      const labelHalfWidth = cursorLabel.offsetWidth / 2;
+      cursorX = Math.min(
+        Math.max(labelHalfWidth + edgeInset, event.clientX - workRect.left),
+        workRect.width - labelHalfWidth - edgeInset,
+      );
+      cursorY = Math.min(
+        Math.max(edgeInset, event.clientY - workRect.top + cursorOffset),
+        workRect.height - cursorLabel.offsetHeight - edgeInset,
+      );
+
+      if (cursorFrameId) return;
+      cursorFrameId = requestAnimationFrame(() => {
+        cursorFrameId = 0;
+        work.style.setProperty("--pf-cursor-x", `${cursorX}px`);
+        work.style.setProperty("--pf-cursor-y", `${cursorY}px`);
+      });
+    });
+
+    work.addEventListener("pointerleave", () => {
+      if (cursorFrameId) cancelAnimationFrame(cursorFrameId);
+      cursorFrameId = 0;
+    });
+
     work.addEventListener("click", (event) => {
       if (!isPlainNavigationClick(event, work)) return;
 

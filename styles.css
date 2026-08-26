@@ -1426,6 +1426,7 @@ html.is-pf-modal-open body {
     266px
   );
   position: relative;
+  z-index: 0;
   width: 100%;
   height: auto;
   margin:
@@ -3100,6 +3101,7 @@ body {
 
 .pf-section {
   display: flex;
+  z-index: 1;
   width: 100%;
   height: auto;
   min-height: 90vh;
@@ -3286,15 +3288,29 @@ body {
   font-size: 14px;
 }
 
+.pf-squircle-filter-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pf-squircle-filter-fill {
+  flood-color: var(--surface);
+}
+
 .pf-work-grid {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 24px;
+  column-gap: 28px;
   row-gap: 32px;
 }
 
 .pf-work-grid .pf-work {
+  --pf-cursor-x: 24px;
+  --pf-cursor-y: 24px;
   display: grid;
   width: 100%;
   min-width: 0;
@@ -3316,7 +3332,7 @@ body {
 
 @media (min-width: 701px) {
   .pf-work-grid.is-single-result .pf-work:not([hidden]) {
-    width: calc((100% - 24px) / 2);
+    width: calc((100% - 28px) / 2);
     grid-column: 1 / -1;
     justify-self: center;
   }
@@ -3327,9 +3343,48 @@ body {
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--surface);
-  transition: box-shadow 220ms ease;
+  filter: url("#pf-work-squircle");
+}
+
+.pf-work-card::before {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.pf-work-cursor-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  display: block;
+  pointer-events: none;
+  transform: translate3d(var(--pf-cursor-x), var(--pf-cursor-y), 0) translateX(-50%);
+  white-space: nowrap;
+}
+
+.pf-work-cursor-label > span {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: "Google Sans Code", monospace;
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0;
+  transform: scale(0);
+  transform-origin: top center;
+  transition:
+    opacity 120ms ease,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pf-work-card .pf-project-mockups {
@@ -3368,11 +3423,17 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
   .pf-work-grid .pf-work:hover {
+    transform: none;
     box-shadow: none;
   }
 
-  .pf-work-grid .pf-work:hover .pf-work-card {
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  .pf-work-grid .pf-work:hover .pf-work-card::before {
+    opacity: 1;
+  }
+
+  .pf-work-grid .pf-work:hover .pf-work-cursor-label > span {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
