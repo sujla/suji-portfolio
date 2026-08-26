@@ -128,10 +128,12 @@ export function ExperienceSection() {
           <div className="experience-heading">
             <div className="experience-heading-content">
               <h2
-                className="experience-subsection-title"
+                className="display-title"
                 id="professional-experience-title"
               >
-                Professional Experience
+                Where
+                <br />
+                I've Worked
               </h2>
             </div>
           </div>
@@ -145,10 +147,12 @@ export function ExperienceSection() {
       >
         <div className="life-experience-heading">
           <h2
-            className="experience-subsection-title"
+            className="display-title"
             id="life-experience-title"
           >
-            Life Experience
+            Where
+            <br />
+            I've Lived
           </h2>
         </div>
       </section>

@@ -1432,7 +1432,7 @@ html.is-pf-modal-open body {
   margin:
     calc(100px - clamp(144px, 22vh, 210px)) 0
     100px;
-  padding: 28px 0 0;
+  padding: 48px 0 0;
 }
 
 .professional-experience-section {
@@ -1440,19 +1440,25 @@ html.is-pf-modal-open body {
   width: 100%;
   margin-bottom: calc(100px + var(--experience-heading-release-extension));
   align-items: start;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   column-gap: 24px;
 }
 
 .life-experience-section {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 100svh;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   column-gap: 24px;
 }
 
 .life-experience-heading {
-  padding: 0 66px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
   grid-column: 2;
 }
 
@@ -1470,16 +1476,25 @@ html.is-pf-modal-open body {
   aspect-ratio: 1.62 / 1;
   box-sizing: content-box;
   align-items: center;
-  padding: 36px 0;
+  margin-inline: auto;
+  padding: 34px 0;
 }
 
 .experience-heading-content {
   display: flex;
   width: 100%;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
-  gap: 16px;
-  padding-left: 66px;
+  gap: 12px;
+  padding-left: 0;
+  text-align: center;
+}
+
+.experience-section .display-title {
+  margin-bottom: 6px;
+  font-size: 40px;
+  line-height: 1.18;
+  text-align: left;
 }
 
 .experience-subsection-title {
@@ -1593,7 +1608,7 @@ html.is-pf-modal-open body {
 }
 
 .experience-card--taurus .experience-card-company img {
-  width: 47%;
+  width: 48%;
   max-height: 42px;
 }
 
@@ -1662,7 +1677,7 @@ html.is-pf-modal-open body {
 @media (max-width: 700px) {
   .experience-section {
     margin: 50px 0 100px;
-    padding-top: 28px;
+    padding-top: 48px;
   }
 
   .professional-experience-section {
@@ -1697,8 +1712,10 @@ html.is-pf-modal-open body {
   }
 
   .experience-heading-content {
+    align-items: flex-start;
     gap: 12px;
     padding-left: 0;
+    text-align: left;
     transform: none;
   }
 
@@ -3070,7 +3087,7 @@ body {
   padding-left: 66px;
 }
 
-.hero-title-column h1 {
+.display-title {
   margin: 0;
   color: var(--text);
   font-family: "Fjord One", Georgia, serif;

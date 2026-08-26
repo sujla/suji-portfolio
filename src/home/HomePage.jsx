@@ -84,7 +84,7 @@ export function HomePage() {
 
       <section className="hero-section" aria-labelledby="hero-title">
         <div className="hero-title-column">
-          <h1 id="hero-title">
+          <h1 className="display-title" id="hero-title">
             Senior
             <br />
             Product Designer

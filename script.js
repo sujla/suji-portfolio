@@ -27,6 +27,10 @@ const mobileProjectMedia = window.matchMedia("(max-width: 600px)");
 const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
 const aboutPhotoInterval = 3000;
 const aboutPhotoTransitionDuration = 200;
+const gnbSectionScrollOffsets = {
+  work: 40,
+  experience: -50,
+};
 let projectTransitionInProgress = false;
 let mobileProjectViewportHeight = 0;
 let lastViewportWidth = 0;
@@ -465,7 +469,7 @@ const updateGnbVisibility = () => {
 
 const scrollToGnbSection = (target) => {
   const maxScrollY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  const scrollOffset = target.id === "work" ? 40 : 0;
+  const scrollOffset = gnbSectionScrollOffsets[target.id] ?? 0;
   const targetScrollY = target === document.body
     ? 0
     : target.getBoundingClientRect().top + window.scrollY - scrollOffset;
