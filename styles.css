@@ -325,7 +325,7 @@ body.is-project-transitioning {
 
 .pf-work:focus-visible {
   outline: 2px solid var(--text);
-  outline-offset: -6px;
+  outline-offset: 4px;
 }
 
 .pf-work-meta {
@@ -1102,9 +1102,9 @@ html.is-pf-modal-open body {
 .pf-work-modal .pf-work-meta span {
   margin-top: 10px;
   margin-bottom: 2px;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   font-family: "Google Sans Code", monospace;
-  font-size: clamp(16px, 1.1vw, 28px);
+  font-size: 15px;
 }
 
 .pf-modal-close {
