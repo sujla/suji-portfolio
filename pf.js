@@ -1357,7 +1357,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   };
 
   const applyProjectTypeFilter = (projectType) => {
-    activeProjectType = activeProjectType === projectType ? "" : projectType;
+    activeProjectType = projectType;
     let visibleProjectCount = 0;
 
     filterButtons.forEach((button) => {
@@ -1385,9 +1385,12 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const root = document.documentElement;
+      const projectType = button.dataset.projectTypeFilter;
+      const shouldClearActiveFilter =
+        !floatingTypeFilter.contains(button) && activeProjectType === projectType;
       window.clearTimeout(filterScrollAnchorRestoreTimer);
       root.style.overflowAnchor = "none";
-      applyProjectTypeFilter(button.dataset.projectTypeFilter);
+      applyProjectTypeFilter(shouldClearActiveFilter ? "" : projectType);
       scrollToFilteredWork();
       filterScrollAnchorRestoreTimer = window.setTimeout(() => {
         root.style.removeProperty("overflow-anchor");
