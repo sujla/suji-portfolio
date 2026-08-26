@@ -1249,6 +1249,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   ];
   const typeFilterGroup = typeFilter?.querySelector(".pf-type-filter");
   const filterableWorks = [...pf.querySelectorAll(".pf-work[data-project-types]")];
+  const workGrid = pf.querySelector(".pf-work-grid");
   const filterEmptyState = pf.querySelector(".pf-filter-empty");
   let activeProjectType = "";
   let filterScrollAnchorRestoreTimer = 0;
@@ -1292,6 +1293,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       if (isVisible) visibleProjectCount += 1;
     });
 
+    workGrid?.classList.toggle("is-single-result", visibleProjectCount === 1);
     if (filterEmptyState) filterEmptyState.hidden = visibleProjectCount > 0;
   };
 
