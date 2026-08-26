@@ -152,7 +152,7 @@ export function HomePage() {
           <a href="https://github.com/sujla" target="_blank" rel="noreferrer">
             GitHub
           </a>
-          <a href="https://www.instagram.com/sujigd/" target="_blank" rel="noreferrer">
+          <a href="https://www.instagram.com/aintnobutter" target="_blank" rel="noreferrer">
             Instagram
           </a>
         </nav>
