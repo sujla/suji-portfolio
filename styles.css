@@ -1262,22 +1262,7 @@ html.is-pf-modal-open body {
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  transition:
-    opacity 220ms ease,
-    transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
   /* border-bottom: 1px solid var(--line); */
-}
-
-.index-gnb.is-hidden {
-  opacity: 0;
-  transform: translateY(-100%);
-  pointer-events: none;
-}
-
-:root.is-gnb-menu-scrolling .index-gnb {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
 }
 
 .site-mark {
@@ -1646,18 +1631,54 @@ html.is-pf-modal-open body {
 }
 
 .site-footer {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 30;
   display: flex;
   width: 100%;
+  height: 40px;
   align-items: center;
-  justify-content: flex-end;
-  padding: 28px 66px 40px;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 28px 2px;
+  border-top: 1px solid color-mix(in srgb, var(--bg) 85%, #000);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform: translate3d(0, 0, 0);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.site-footer-attribution {
+:root[data-theme="light"] .site-footer {
+  border-top-color: color-mix(in srgb, var(--bg) 96%, #000);
+}
+
+:root.is-footer-yielding-to-filter .site-footer {
+  transform: translate3d(0, 100%, 0);
+}
+
+.site-footer-meta,
+.site-footer-social {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
   color: var(--text-tertiary);
   font-family: "Google Sans Code", monospace;
   font-size: 11px;
   line-height: 1.5;
+  white-space: nowrap;
+}
+
+.site-footer-meta {
+  gap: 8px;
+}
+
+.site-footer-social {
+  gap: 20px;
+}
+
+.site-footer :is(a) {
+  color: inherit;
   text-decoration: none;
   transition: color 180ms ease;
 }
@@ -1808,7 +1829,7 @@ html.is-pf-modal-open body {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .site-footer-attribution:hover {
+  .site-footer a:hover {
     color: var(--text);
   }
 }
@@ -1925,10 +1946,6 @@ html.is-pf-modal-open body {
     max-height: 38px;
   }
 
-  .site-footer {
-    justify-content: flex-start;
-    padding: 28px 6px 32px;
-  }
 }
 
 .about-section {

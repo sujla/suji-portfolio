@@ -1245,6 +1245,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     ...floatingTypeFilter.querySelectorAll("[data-project-type-filter]"),
   ];
   const typeFilterGroup = typeFilter?.querySelector(".pf-type-filter");
+  const root = document.documentElement;
   const floatingFilterScroll = floatingTypeFilter.querySelector(
     ".pf-floating-filter-scroll",
   );
@@ -1256,6 +1257,38 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   const filterEmptyState = pf.querySelector(".pf-filter-empty");
   let activeProjectType = "";
   let filterScrollAnchorRestoreTimer = 0;
+  let floatingFilterShowTimer = 0;
+  let footerShowTimer = 0;
+  let isFloatingFilterRequestedVisible = false;
+
+  const clearFloatingFilterEntryTimers = () => {
+    window.clearTimeout(floatingFilterShowTimer);
+    window.clearTimeout(footerShowTimer);
+  };
+
+  const setFloatingFilterVisibility = (shouldShow) => {
+    if (shouldShow === isFloatingFilterRequestedVisible) return;
+
+    isFloatingFilterRequestedVisible = shouldShow;
+    clearFloatingFilterEntryTimers();
+
+    if (!shouldShow) {
+      floatingTypeFilter.classList.remove("is-visible");
+      footerShowTimer = window.setTimeout(() => {
+        if (!isFloatingFilterRequestedVisible) {
+          root.classList.remove("is-footer-yielding-to-filter");
+        }
+      }, 220);
+      return;
+    }
+
+    root.classList.add("is-footer-yielding-to-filter");
+    floatingFilterShowTimer = window.setTimeout(() => {
+      if (!isFloatingFilterRequestedVisible) return;
+
+      floatingTypeFilter.classList.add("is-visible");
+    }, 220);
+  };
 
   const updateFloatingFilterOverflow = () => {
     if (!floatingFilterScroll || !mobilePfMedia.matches) {
@@ -1309,8 +1342,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const pfBottom = pf.getBoundingClientRect().bottom;
     const exitLine = window.innerHeight * floatingFilterExitRatio;
 
-    floatingTypeFilter.classList.toggle(
-      "is-visible",
+    setFloatingFilterVisibility(
       window.scrollY > floatingFilterThreshold && pfBottom > exitLine,
     );
   };

@@ -15,7 +15,6 @@ const sideWip = document.querySelector("[data-side-wip]");
 const sideTitle = document.querySelector("[data-side-title]");
 const counterWip = document.querySelector("[data-counter-wip]");
 const yearRail = document.querySelector("[data-year-rail]");
-const indexGnb = document.querySelector(".index-gnb");
 const gnbScrollLinks = [...document.querySelectorAll("[data-gnb-scroll]")];
 const themeToggle = document.querySelector(".theme-toggle");
 const root = document.documentElement;
@@ -36,12 +35,6 @@ let mobileProjectViewportHeight = 0;
 let lastViewportWidth = 0;
 let aboutPhotoLoopTimer = 0;
 let aboutPhotoTransitionTimer = 0;
-let lastGnbScrollY = Math.max(0, window.scrollY);
-let gnbScrollDirection = 0;
-let gnbDirectionStartY = lastGnbScrollY;
-let isGnbMenuScrolling = false;
-let gnbMenuScrollEndTimer = 0;
-let gnbMenuScrollTargetY = 0;
 
 const shuffleAboutPhotos = () => {
   const frontPhoto = aboutPhotoStack?.lastElementChild;
@@ -411,62 +404,6 @@ const updateFocusedProject = () => {
   setActiveProject(nextIndex);
 };
 
-const finishGnbMenuScroll = () => {
-  window.clearTimeout(gnbMenuScrollEndTimer);
-  isGnbMenuScrolling = false;
-  root.classList.remove("is-gnb-menu-scrolling");
-  indexGnb?.classList.remove("is-hidden");
-  lastGnbScrollY = Math.max(0, window.scrollY);
-  gnbScrollDirection = 0;
-  gnbDirectionStartY = lastGnbScrollY;
-};
-
-const scheduleGnbMenuScrollEnd = (delay) => {
-  window.clearTimeout(gnbMenuScrollEndTimer);
-  gnbMenuScrollEndTimer = window.setTimeout(finishGnbMenuScroll, delay);
-};
-
-const updateGnbVisibility = () => {
-  if (!indexGnb) return;
-
-  const nextScrollY = Math.max(0, window.scrollY);
-
-  if (isGnbMenuScrolling) {
-    indexGnb.classList.remove("is-hidden");
-    lastGnbScrollY = nextScrollY;
-    gnbScrollDirection = 0;
-    gnbDirectionStartY = nextScrollY;
-    scheduleGnbMenuScrollEnd(
-      Math.abs(nextScrollY - gnbMenuScrollTargetY) <= 1 ? 160 : 1200,
-    );
-    return;
-  }
-
-  const scrollDelta = nextScrollY - lastGnbScrollY;
-  const nextDirection = Math.sign(scrollDelta);
-
-  if (nextScrollY <= 16) {
-    indexGnb.classList.remove("is-hidden");
-    gnbScrollDirection = 0;
-    gnbDirectionStartY = nextScrollY;
-  } else if (nextDirection !== 0) {
-    if (nextDirection !== gnbScrollDirection) {
-      gnbScrollDirection = nextDirection;
-      gnbDirectionStartY = lastGnbScrollY;
-    }
-
-    const directionDistance = Math.abs(nextScrollY - gnbDirectionStartY);
-
-    if (nextDirection > 0 && directionDistance >= 8) {
-      indexGnb.classList.add("is-hidden");
-    } else if (nextDirection < 0 && directionDistance >= 64) {
-      indexGnb.classList.remove("is-hidden");
-    }
-  }
-
-  lastGnbScrollY = nextScrollY;
-};
-
 const scrollToGnbSection = (target) => {
   const maxScrollY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
   const scrollOffset = gnbSectionScrollOffsets[target.id] ?? 0;
@@ -474,14 +411,10 @@ const scrollToGnbSection = (target) => {
     ? 0
     : target.getBoundingClientRect().top + window.scrollY - scrollOffset;
 
-  gnbMenuScrollTargetY = Math.min(
+  const gnbMenuScrollTargetY = Math.min(
     maxScrollY,
     Math.max(0, targetScrollY),
   );
-  isGnbMenuScrolling = true;
-  root.classList.add("is-gnb-menu-scrolling");
-  indexGnb?.classList.remove("is-hidden");
-  scheduleGnbMenuScrollEnd(1200);
 
   window.scrollTo({
     top: gnbMenuScrollTargetY,
@@ -565,7 +498,6 @@ projectList?.addEventListener("click", (event) => {
   runProjectTransition(link);
 });
 
-window.addEventListener("scroll", updateGnbVisibility, { passive: true });
 window.addEventListener("scroll", requestProjectUpdate, { passive: true });
 window.addEventListener("resize", () => {
   syncMobileProjectViewport();

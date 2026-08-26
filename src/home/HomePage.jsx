@@ -134,14 +134,28 @@ export function HomePage() {
       </section>
 
       <footer className="site-footer">
-        <a
-          className="site-footer-attribution"
-          href="https://skiper-ui.com/v1/skiper16"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Interaction by Skiper UI ↗
-        </a>
+        <div className="site-footer-meta">
+          <span>Designed &amp; Coded with AI</span>
+          <span className="site-footer-separator" aria-hidden="true">·</span>
+          <a href="https://skiper-ui.com/v1/skiper16" target="_blank" rel="noreferrer">
+            Skiper UI
+          </a>
+          <span className="site-footer-separator" aria-hidden="true">·</span>
+          <a href="https://github.com/shuding/cobe" target="_blank" rel="noreferrer">
+            Cobe
+          </a>
+        </div>
+        <nav className="site-footer-social" aria-label="Social links">
+          <a href="https://www.linkedin.com/in/suji-kweon/" target="_blank" rel="noreferrer">
+            LinkedIn
+          </a>
+          <a href="https://github.com/sujla" target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+          <a href="https://www.instagram.com/sujigd/" target="_blank" rel="noreferrer">
+            Instagram
+          </a>
+        </nav>
       </footer>
     </>
   );
