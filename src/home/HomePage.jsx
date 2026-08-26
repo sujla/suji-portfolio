@@ -92,6 +92,17 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      <footer className="site-footer">
+        <a
+          className="site-footer-attribution"
+          href="https://skiper-ui.com/v1/skiper16"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Interaction by Skiper UI ↗
+        </a>
+      </footer>
     </>
   );
 }

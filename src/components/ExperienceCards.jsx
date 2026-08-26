@@ -12,14 +12,14 @@ const experiences = [
   {
     company: "Taurus Labs",
     period: "2025 – Now",
-    role: "Senior Product Designer",
+    role: "Sr. Product Designer",
     logo: "./assets/logo/logo_tauruslabs.svg",
     theme: "taurus",
   },
   {
     company: "Olive Young",
     period: "2023 – 2025",
-    role: "Senior UI/UX Designer",
+    role: "Sr. UI/UX Designer",
     logo: "./assets/logo/logo_oliveyoung.svg",
     theme: "oliveyoung",
   },
@@ -108,7 +108,7 @@ function ExperienceStack() {
             index={index}
             key={experience.company}
             progress={scrollYProgress}
-            range={[Math.min(index * 0.22, 0.88), 1]}
+            range={[Math.min((index + 1) * 0.22, 0.88), 1]}
             targetScale={targetScale}
           />
         );
@@ -119,27 +119,39 @@ function ExperienceStack() {
 
 export function ExperienceSection() {
   return (
-    <section
-      className="experience-section"
-      id="experience"
-      aria-labelledby="experience-title"
-    >
-      <div className="experience-heading-column">
-        <div className="experience-heading">
-          <div className="experience-heading-content">
-            <h2 id="experience-title">Experience</h2>
-            <a
-              className="experience-attribution"
-              href="https://skiper-ui.com/v1/skiper16"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Interaction by Skiper UI ↗
-            </a>
+    <section className="experience-section" id="experience" aria-label="Experience">
+      <section
+        className="professional-experience-section"
+        aria-labelledby="professional-experience-title"
+      >
+        <div className="experience-heading-column">
+          <div className="experience-heading">
+            <div className="experience-heading-content">
+              <h2
+                className="experience-subsection-title"
+                id="professional-experience-title"
+              >
+                Professional Experience
+              </h2>
+            </div>
           </div>
         </div>
-      </div>
-      <ExperienceStack />
+        <ExperienceStack />
+      </section>
+
+      <section
+        className="life-experience-section"
+        aria-labelledby="life-experience-title"
+      >
+        <div className="life-experience-heading">
+          <h2
+            className="experience-subsection-title"
+            id="life-experience-title"
+          >
+            Life Experience
+          </h2>
+        </div>
+      </section>
     </section>
   );
 }
