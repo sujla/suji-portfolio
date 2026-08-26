@@ -1432,16 +1432,19 @@ html.is-pf-modal-open body {
 }
 
 .life-experience-section {
+  --life-experience-pause: 500px;
   display: grid;
   width: 100%;
-  min-height: 90svh;
+  height: calc(90svh + var(--life-experience-pause));
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 24px;
 }
 
 .life-globe-column {
-  position: relative;
+  position: sticky;
+  top: 5svh;
   min-width: 0;
+  height: 90svh;
   align-self: stretch;
   grid-column: 1;
   grid-row: 1;
@@ -1557,7 +1560,10 @@ html.is-pf-modal-open body {
 }
 
 .life-experience-heading-column {
+  position: sticky;
+  top: 5svh;
   min-width: 0;
+  height: 90svh;
   align-self: stretch;
   padding-top: 0;
   grid-column: 2;
@@ -1844,6 +1850,7 @@ html.is-pf-modal-open body {
   }
 
   .life-experience-section {
+    height: auto;
     min-height: auto;
     grid-template-columns: minmax(0, 1fr);
     column-gap: 0;
@@ -1851,6 +1858,9 @@ html.is-pf-modal-open body {
   }
 
   .life-experience-heading-column {
+    position: relative;
+    top: auto;
+    height: auto;
     align-self: auto;
     padding: 0 6px 24px;
     grid-column: 1;
@@ -1858,6 +1868,9 @@ html.is-pf-modal-open body {
   }
 
   .life-globe-column {
+    position: relative;
+    top: auto;
+    height: auto;
     grid-column: 1;
     grid-row: 2;
   }

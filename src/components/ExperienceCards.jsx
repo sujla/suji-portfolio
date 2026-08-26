@@ -93,9 +93,13 @@ function PlacesGlobe() {
 
     let isLight = document.documentElement.dataset.theme === "light";
     let palette = getGlobePalette(isLight);
-    const initialRotation = getRotation(globeLocations[0].coordinates);
+    const initialRotation = {
+      ...getRotation(globeLocations[0].coordinates),
+      phi: (-245 * Math.PI) / 180,
+    };
     let phi = initialRotation.phi;
     let previousTime = performance.now();
+    let isSectionVisible = false;
 
     const globe = createGlobe(canvas, {
       width: 640,
@@ -127,6 +131,18 @@ function PlacesGlobe() {
     resizeObserver.observe(container);
     resize();
 
+    const section = container.closest(".life-experience-section");
+    const sectionObserver = new IntersectionObserver(([entry]) => {
+      isSectionVisible = entry.isIntersecting;
+      previousTime = performance.now();
+    });
+
+    if (section) {
+      sectionObserver.observe(section);
+    } else {
+      isSectionVisible = true;
+    }
+
     const themeObserver = new MutationObserver(() => {
       const nextIsLight = document.documentElement.dataset.theme === "light";
 
@@ -154,7 +170,7 @@ function PlacesGlobe() {
       const elapsed = Math.min(time - previousTime, 32);
       previousTime = time;
 
-      if (pointerRef.current === null) {
+      if (isSectionVisible && pointerRef.current === null) {
         phi += elapsed * 0.00014;
       }
 
@@ -172,6 +188,7 @@ function PlacesGlobe() {
     return () => {
       cancelAnimationFrame(frameRef.current);
       resizeObserver.disconnect();
+      sectionObserver.disconnect();
       themeObserver.disconnect();
       globe.destroy();
     };
