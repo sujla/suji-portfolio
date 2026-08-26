@@ -148,28 +148,12 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     return getWorkMedia(project);
   };
 
-  const storeGuideImpactItems = [
-    {
-      image: "./assets/store-guide/impact-1.png",
-      title: "Flow-level Data Tracking",
-    },
-    {
-      image: "./assets/store-guide/impact-2.png",
-      title: "Increased Page Views",
-    },
-    {
-      image: "./assets/store-guide/impact-3.png",
-      title: "Pickup Conversion up to 11%",
-    },
-  ];
-
   const storeGuideVideoSegments = [
     { start: 0, end: 5 },
     { start: 18, end: 26 },
   ];
 
   const getBentoPlaceholder = (project, index) => {
-    const videoSegment = storeGuideVideoSegments[index];
     const publicTransportMedia =
       project.id === "public-transport"
         ? getPublicTransportModalVideo(index + 2)
@@ -201,20 +185,28 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           ][index]
         : "";
     const segmentVideo =
-      project.media === "store-guide" && videoSegment
+      project.media === "store-guide" && index === 0
         ? `
-          <video
-            class="pf-modal-bento-video pf-modal-segment-video"
-            autoplay
-            muted
-            playsinline
-            preload="auto"
-            poster="./assets/store-guide/solution-tobe1.png"
-            data-segment-start="${videoSegment.start}"
-            data-segment-end="${videoSegment.end}"
-          >
-            <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
-          </video>
+          <div class="pf-modal-store-finder-video-pair">
+            ${storeGuideVideoSegments
+              .map(
+                (segment) => `
+                  <video
+                    class="pf-modal-store-finder-video pf-modal-segment-video"
+                    autoplay
+                    muted
+                    playsinline
+                    preload="auto"
+                    poster="./assets/store-guide/solution-tobe1.png"
+                    data-segment-start="${segment.start}"
+                    data-segment-end="${segment.end}"
+                  >
+                    <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
+                  </video>
+                `,
+              )
+              .join("")}
+          </div>
         `
         : "";
     const ctaEnhancementVideo =
@@ -245,7 +237,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
                 <strong>321.3%</strong>
               </div>
               <div class="pf-modal-result-metric">
-                <p class="pf-modal-result-metric-title--nowrap">Total Amount of Pickup Orders</p>
+                <p class="pf-modal-result-metric-title--nowrap">Total Pickup Orders</p>
                 <strong>128.2%</strong>
               </div>
             </div>
@@ -269,29 +261,27 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         : project.id === "article-studio" && index === 1
           ? `<img class="pf-modal-article-studio-interface" src="./assets/article-studio/interface.png" alt="" />`
           : "";
-    const impactCards =
+    const storeFinderResult =
       project.media === "store-guide" && index === 2
         ? `
-          <div class="pf-modal-impact-list">
-            ${storeGuideImpactItems
-              .map(
-                (item) => `
-                  <article class="pf-modal-impact-card">
-                    <div class="pf-modal-impact-media">
-                      <img src="${item.image}" alt="" />
-                    </div>
-                    <h3>${item.title}</h3>
-                  </article>
-                `,
-              )
-              .join("")}
+          <div class="pf-modal-result">
+            <div class="pf-modal-result-metrics">
+              <div class="pf-modal-result-metric">
+                <p>Increase in Page Views</p>
+                <strong>+32.9%</strong>
+              </div>
+              <div class="pf-modal-result-metric">
+                <p>Pickup Conversion</p>
+                <strong>Up to 11%</strong>
+              </div>
+            </div>
           </div>
         `
         : "";
 
     return `
       <div class="pf-modal-bento-placeholder pf-modal-bento-placeholder--${index + 1}">
-        ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || articleStudioMedia || impactCards}
+        ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || articleStudioMedia || storeFinderResult}
       </div>
     `;
   };
@@ -806,7 +796,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const usesThreePartBento = isPublicTransportProject;
     const usesFourPartBento = !project.cta && !isPerpDexProject && !usesThreePartBento;
     const isWebProject = project.deviceType === "web" && !usesThreePartBento && !usesFourPartBento;
-    const usesSingleTopBento = project.id === "cta-enhancement";
+    const usesSingleTopBento = ["cta-enhancement", "store-finder"].includes(project.id);
     const getBentoSideMarkup = (placeholders) => {
       const stackTopMarkup = usesSingleTopBento
         ? placeholders[0]
