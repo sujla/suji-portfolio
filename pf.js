@@ -1206,22 +1206,26 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   floatingTypeFilter.dataset.pfFloatingFilter = "";
   floatingTypeFilter.setAttribute("role", "group");
   floatingTypeFilter.setAttribute("aria-label", "Filter projects by type");
-  floatingTypeFilter.innerHTML = [
-    { value: "", label: "All" },
-    ...projectTypeFilters,
-  ]
-    .map(
-      ({ value, label }) => `
-        <button
-          class="pf-floating-filter-button"
-          type="button"
-          data-project-type-filter="${value}"
-          aria-controls="pf-work-grid"
-          aria-pressed="false"
-        >${label}</button>
-      `,
-    )
-    .join("");
+  floatingTypeFilter.innerHTML = `
+    <div class="pf-floating-filter-scroll">
+      ${[
+        { value: "", label: "All" },
+        ...projectTypeFilters,
+      ]
+        .map(
+          ({ value, label }) => `
+            <button
+              class="pf-floating-filter-button"
+              type="button"
+              data-project-type-filter="${value}"
+              aria-controls="pf-work-grid"
+              aria-pressed="false"
+            >${label}</button>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
   document.body.append(floatingTypeFilter);
 
   pf.innerHTML = `
@@ -1238,11 +1242,65 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     ...floatingTypeFilter.querySelectorAll("[data-project-type-filter]"),
   ];
   const typeFilterGroup = typeFilter?.querySelector(".pf-type-filter");
+  const floatingFilterScroll = floatingTypeFilter.querySelector(
+    ".pf-floating-filter-scroll",
+  );
+  const floatingFilterButtons = [
+    ...floatingTypeFilter.querySelectorAll("[data-project-type-filter]"),
+  ];
   const filterableWorks = [...pf.querySelectorAll(".pf-work[data-project-types]")];
   const workGrid = pf.querySelector(".pf-work-grid");
   const filterEmptyState = pf.querySelector(".pf-filter-empty");
   let activeProjectType = "";
   let filterScrollAnchorRestoreTimer = 0;
+
+  const updateFloatingFilterOverflow = () => {
+    if (!floatingFilterScroll || !mobilePfMedia.matches) {
+      floatingTypeFilter.classList.remove("has-scroll-left", "has-scroll-right");
+      return;
+    }
+
+    const maxScrollLeft = Math.max(
+      0,
+      floatingFilterScroll.scrollWidth - floatingFilterScroll.clientWidth,
+    );
+    floatingTypeFilter.classList.toggle(
+      "has-scroll-left",
+      floatingFilterScroll.scrollLeft > 1,
+    );
+    floatingTypeFilter.classList.toggle(
+      "has-scroll-right",
+      floatingFilterScroll.scrollLeft < maxScrollLeft - 1,
+    );
+  };
+
+  const positionSelectedFloatingFilterButton = () => {
+    if (!floatingFilterScroll || !mobilePfMedia.matches) return;
+
+    const selectedButton = floatingFilterButtons.find(
+      (button) => button.getAttribute("aria-pressed") === "true",
+    );
+    const selectedIndex = floatingFilterButtons.indexOf(selectedButton);
+
+    if (!selectedButton) return;
+
+    const maxScrollLeft = Math.max(
+      0,
+      floatingFilterScroll.scrollWidth - floatingFilterScroll.clientWidth,
+    );
+    const targetScrollLeft =
+      selectedIndex < 2
+        ? 0
+        : selectedIndex >= floatingFilterButtons.length - 2
+          ? maxScrollLeft
+          : selectedButton.offsetLeft -
+            (floatingFilterScroll.clientWidth - selectedButton.offsetWidth) / 2;
+
+    floatingFilterScroll.scrollTo({
+      left: targetScrollLeft,
+      behavior: "smooth",
+    });
+  };
 
   const updateFloatingFilterVisibility = () => {
     const pfBottom = pf.getBoundingClientRect().bottom;
@@ -1274,6 +1332,8 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       );
     });
 
+    positionSelectedFloatingFilterButton();
+
     typeFilterGroup?.classList.toggle("is-filtering", Boolean(activeProjectType));
 
     filterableWorks.forEach((work) => {
@@ -1301,9 +1361,24 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   });
 
   window.addEventListener("scroll", updateFloatingFilterVisibility, { passive: true });
-  window.addEventListener("resize", updateFloatingFilterVisibility, { passive: true });
+  window.addEventListener(
+    "resize",
+    () => {
+      updateFloatingFilterVisibility();
+      updateFloatingFilterOverflow();
+    },
+    { passive: true },
+  );
+  floatingFilterScroll?.addEventListener("scroll", updateFloatingFilterOverflow, {
+    passive: true,
+  });
+  mobilePfMedia.addEventListener?.("change", () => {
+    updateFloatingFilterOverflow();
+    positionSelectedFloatingFilterButton();
+  });
   updateFloatingFilterVisibility();
   applyProjectTypeFilter("");
+  updateFloatingFilterOverflow();
 
   const rail = pf.querySelector("[data-pf-work-rail]");
   const workSets = rail ? [...rail.querySelectorAll(".pf-work-set")] : [];
