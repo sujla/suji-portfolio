@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import { ExperienceSection } from "../components/ExperienceCards.jsx";
 import { ThemeToggle } from "../components/ThemeToggle.jsx";
 
 const aboutPhotos = [
@@ -57,13 +58,7 @@ export function HomePage() {
 
       <section className="pf-section" id="work" data-pf />
 
-      <section
-        className="experience-section"
-        id="experience"
-        aria-labelledby="experience-title"
-      >
-        <h2 id="experience-title">Experience</h2>
-      </section>
+      <ExperienceSection />
 
       <section
         className="about-section"
