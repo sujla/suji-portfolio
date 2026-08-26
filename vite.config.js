@@ -1,5 +1,6 @@
 import { cp } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
+import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 const fromRoot = (path) => fileURLToPath(new URL(path, import.meta.url));
@@ -77,7 +78,7 @@ const emitLegacyProjectRedirects = {
 
 export default defineConfig({
   base: "/suji-portfolio/",
-  plugins: [copyRuntimeAssets, emitLegacyProjectRedirects],
+  plugins: [react(), copyRuntimeAssets, emitLegacyProjectRedirects],
   build: {
     outDir: "docs",
     rollupOptions: {

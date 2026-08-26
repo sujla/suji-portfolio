@@ -12,6 +12,9 @@ let overviewSnapAnimating = false;
 let touchStartY = 0;
 const lastProjectStorageKey = "portfolio-last-project-slug";
 const canUseOverviewSnap = window.matchMedia("(hover: hover) and (pointer: fine)");
+const usesReactDetailRuntime = Boolean(
+  document.querySelector("[data-react-detail-runtime]"),
+);
 
 const setSessionItem = (key, value) => {
   try {
@@ -61,7 +64,7 @@ const renderDetailNav = () => {
   `;
 };
 
-renderDetailNav();
+if (!usesReactDetailRuntime) renderDetailNav();
 
 const renderDetailHeader = () => {
   if (!detailShell || !currentProject || detailShell.querySelector(".detail-title-section")) return;
@@ -118,7 +121,7 @@ const renderDetailHeader = () => {
   detailShell.prepend(titleSection);
 };
 
-renderDetailHeader();
+if (!usesReactDetailRuntime) renderDetailHeader();
 
 const renderContributions = () => {
   if (!contributionList || !currentProject?.contribution?.length) return;
@@ -133,7 +136,7 @@ const renderContributions = () => {
   );
 };
 
-renderContributions();
+if (!usesReactDetailRuntime) renderContributions();
 
 const setupComingSoonTape = () => {
   if (!document.body.classList.contains("detail-coming-soon-page")) return;
