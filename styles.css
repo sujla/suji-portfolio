@@ -35,12 +35,12 @@
 }
 
 :root[data-theme="light"] {
-  --bg: #F9FAFB;
+  --bg: #fff;
   --text: #020508;
   --text-secondary: rgba(2, 5, 8, 0.72);
   --text-tertiary: rgba(2, 5, 8, 0.5);
-  --surface: #fff;
-  --surface-transparent: rgba(255, 255, 255, 0);
+  --surface: #F9FAFB;
+  --surface-transparent: rgba(249, 250, 251, 0);
   --muted: rgba(2, 5, 8, 0.32);
   --line: #D7d7d7;
   --rail-muted: rgba(2, 5, 8, 0.18);

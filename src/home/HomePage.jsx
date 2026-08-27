@@ -141,9 +141,20 @@ export function HomePage() {
             Skiper UI
           </a>
           <span className="site-footer-separator" aria-hidden="true">·</span>
-          <a href="https://github.com/shuding/cobe" target="_blank" rel="noreferrer">
-            Cobe
-          </a>
+          <span>
+            <a
+              href="https://v3.magicui.design/docs/components/globe"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Magic UI
+            </a>{" "}
+            (powered by{" "}
+            <a href="https://github.com/shuding/cobe" target="_blank" rel="noreferrer">
+              Cobe
+            </a>
+            )
+          </span>
         </div>
         <nav className="site-footer-social" aria-label="Social links">
           <a href="https://www.linkedin.com/in/suji-kweon/" target="_blank" rel="noreferrer">
