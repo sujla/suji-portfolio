@@ -676,9 +676,6 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         <h2>${project.title}</h2>
         ${renderWorkMetaLine(project)}
       </div>
-      <span class="pf-work-cursor-label" aria-hidden="true">
-        <span>View Details</span>
-      </span>
     `;
 
     if (isClone) {
@@ -1251,6 +1248,14 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     </div>
     <p class="pf-filter-empty" role="status" hidden>No projects in this category yet.</p>
   `;
+
+  document.querySelector("[data-pf-work-cursor]")?.remove();
+  const workCursor = document.createElement("span");
+  workCursor.className = "pf-work-cursor-label";
+  workCursor.dataset.pfWorkCursor = "";
+  workCursor.setAttribute("aria-hidden", "true");
+  workCursor.innerHTML = "<span>View Details</span>";
+  document.body.append(workCursor);
 
   const filterButtons = [
     ...(typeFilter
@@ -1861,41 +1866,85 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     true,
   );
 
+  const workCursorHideDelay = 70;
+  const workCursorOffset = 14;
+  const workCursorEdgeInset = 12;
+  let workCursorHideTimer = 0;
+  let workCursorWidth = workCursor.offsetWidth;
+  let workCursorHeight = workCursor.offsetHeight;
+
+  const syncWorkCursorSize = () => {
+    workCursorWidth = workCursor.offsetWidth;
+    workCursorHeight = workCursor.offsetHeight;
+  };
+
+  document.fonts?.ready.then(syncWorkCursorSize);
+
+  const hideWorkCursor = (delay = 0) => {
+    if (delay) {
+      if (workCursorHideTimer) return;
+
+      workCursorHideTimer = window.setTimeout(() => {
+        workCursorHideTimer = 0;
+        workCursor.classList.remove("is-visible");
+      }, delay);
+      return;
+    }
+
+    window.clearTimeout(workCursorHideTimer);
+    workCursorHideTimer = 0;
+    workCursor.classList.remove("is-visible");
+  };
+
+  const showWorkCursor = () => {
+    window.clearTimeout(workCursorHideTimer);
+    workCursorHideTimer = 0;
+    workCursor.classList.add("is-visible");
+  };
+
+  const moveWorkCursor = (event) => {
+    const labelHalfWidth = workCursorWidth / 2;
+    const cursorX = Math.min(
+      Math.max(labelHalfWidth + workCursorEdgeInset, event.clientX),
+      window.innerWidth - labelHalfWidth - workCursorEdgeInset,
+    );
+    const hasSpaceBelow =
+      event.clientY + workCursorOffset + workCursorHeight + workCursorEdgeInset <=
+      window.innerHeight;
+    const cursorY = hasSpaceBelow
+      ? event.clientY + workCursorOffset
+      : event.clientY - workCursorOffset - workCursorHeight;
+
+    workCursor.style.transform =
+      `translate3d(${cursorX}px, ${cursorY}px, 0) translateX(-50%)`;
+  };
+
+  pf.addEventListener("pointermove", (event) => {
+    if (event.pointerType !== "mouse") return;
+
+    moveWorkCursor(event);
+
+    const eventTarget = event.target instanceof Element ? event.target : null;
+    const hoveredWork = eventTarget?.closest(".pf-work");
+
+    if (hoveredWork && pf.contains(hoveredWork)) {
+      showWorkCursor();
+      return;
+    }
+
+    if (eventTarget && workGrid?.contains(eventTarget)) {
+      hideWorkCursor(workCursorHideDelay);
+      return;
+    }
+
+    hideWorkCursor();
+  });
+
+  pf.addEventListener("pointerleave", () => hideWorkCursor());
+  window.addEventListener("blur", () => hideWorkCursor());
+  window.addEventListener("scroll", () => hideWorkCursor(), { passive: true });
+
   pf.querySelectorAll(".pf-work").forEach((work) => {
-    const cursorLabel = work.querySelector(".pf-work-cursor-label");
-    let cursorFrameId = 0;
-    let cursorX = 0;
-    let cursorY = 0;
-
-    work.addEventListener("pointermove", (event) => {
-      if (event.pointerType !== "mouse" || !cursorLabel) return;
-
-      const workRect = work.getBoundingClientRect();
-      const cursorOffset = 14;
-      const edgeInset = 12;
-      const labelHalfWidth = cursorLabel.offsetWidth / 2;
-      cursorX = Math.min(
-        Math.max(labelHalfWidth + edgeInset, event.clientX - workRect.left),
-        workRect.width - labelHalfWidth - edgeInset,
-      );
-      cursorY = Math.min(
-        Math.max(edgeInset, event.clientY - workRect.top + cursorOffset),
-        workRect.height - cursorLabel.offsetHeight - edgeInset,
-      );
-
-      if (cursorFrameId) return;
-      cursorFrameId = requestAnimationFrame(() => {
-        cursorFrameId = 0;
-        work.style.setProperty("--pf-cursor-x", `${cursorX}px`);
-        work.style.setProperty("--pf-cursor-y", `${cursorY}px`);
-      });
-    });
-
-    work.addEventListener("pointerleave", () => {
-      if (cursorFrameId) cancelAnimationFrame(cursorFrameId);
-      cursorFrameId = 0;
-    });
-
     work.addEventListener("click", (event) => {
       if (!isPlainNavigationClick(event, work)) return;
 
@@ -1903,12 +1952,14 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       if (!project) return;
 
       trackPfWorkCardClick(project);
+      hideWorkCursor();
       event.preventDefault();
       openWorkModal(work, project);
     });
   });
 
   window.addEventListener("resize", () => {
+    syncWorkCursorSize();
     requestAnimationFrame(() => {
       syncInfiniteMetrics({ preservePosition: true });
       syncSecondaryInfiniteMetrics({ preservePosition: true });
