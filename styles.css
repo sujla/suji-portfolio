@@ -1415,7 +1415,7 @@ html.is-pf-modal-open body {
   display: grid;
   width: 100%;
   height: calc(90svh + var(--life-experience-pause));
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   column-gap: 24px;
 }
 
@@ -1441,11 +1441,14 @@ html.is-pf-modal-open body {
 
 .life-globe-frame {
   position: relative;
-  width: min(52vw, 720px);
+  width: min(100%, 720px);
   max-width: calc(100% - 24px);
   aspect-ratio: 1;
   filter: saturate(0.94);
-  transform: translateY(-50%);
+  transform:
+    translateY(-50%)
+    scale(var(--life-globe-entry-scale, 1));
+  transform-origin: center;
 }
 
 .places-globe-layer,
@@ -1563,9 +1566,8 @@ html.is-pf-modal-open body {
 .life-experience-heading-content {
   display: flex;
   width: 100%;
-  align-items: center;
   flex-direction: column;
-  padding-left: 0;
+  padding-left: 20px;
   text-align: center;
   transform: translateY(-50%);
 }
@@ -1866,13 +1868,15 @@ html.is-pf-modal-open body {
   .life-globe-frame {
     width: min(100%, 560px);
     max-width: calc(100% - 12px);
-    transform: none;
+    transform: scale(var(--life-globe-entry-scale-mobile, 1));
+    transform-origin: top center;
   }
 
   .life-experience-heading {
     position: relative;
     top: auto;
     width: auto;
+    height: auto;
     aspect-ratio: auto;
     box-sizing: border-box;
     align-items: flex-start;

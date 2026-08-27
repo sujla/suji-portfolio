@@ -73,7 +73,7 @@ function getLocationAnchors(palette) {
   }));
 }
 
-function PlacesGlobe() {
+function PlacesGlobe({ scrollRotation }) {
   const canvasRef = useRef(null);
   const frameRef = useRef(null);
   const pointerRef = useRef(null);
@@ -95,7 +95,7 @@ function PlacesGlobe() {
     let palette = getGlobePalette(isLight);
     const initialRotation = {
       ...getRotation(globeLocations[0].coordinates),
-      phi: (-245 * Math.PI) / 180,
+      phi: (-82 * Math.PI) / 180,
     };
     let phi = initialRotation.phi;
     let previousTime = performance.now();
@@ -175,7 +175,7 @@ function PlacesGlobe() {
       }
 
       globe.update({
-        phi: phi + dragSpring.get(),
+        phi: phi + dragSpring.get() + (scrollRotation?.get() ?? 0),
         theta: initialRotation.theta + Math.sin(time * 0.00035) * 0.01,
         scale: 1.06,
       });
@@ -192,7 +192,7 @@ function PlacesGlobe() {
       themeObserver.disconnect();
       globe.destroy();
     };
-  }, [dragSpring]);
+  }, [dragSpring, scrollRotation]);
 
   const startDragging = (event) => {
     pointerRef.current = event.clientX;
@@ -349,16 +349,48 @@ function ExperienceStack() {
 }
 
 function LifeExperience() {
+  const container = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start 65vh", "start 5vh"],
+  });
+  const entryProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 24,
+    mass: 0.35,
+  });
+  const globeScale = useTransform(entryProgress, [0, 1], [0.78, 1]);
+  const globeScaleMobile = useTransform(entryProgress, [0, 1], [0.9, 1]);
+  const scrollRotation = useTransform(
+    entryProgress,
+    [0, 1],
+    [0, Math.PI],
+  );
+
   return (
     <section
       className="life-experience-section"
       aria-labelledby="life-experience-title"
+      ref={container}
     >
       <div className="life-globe-column">
         <div className="life-globe-sticky">
-          <div className="life-globe-frame">
-            <PlacesGlobe />
-          </div>
+          <motion.div
+            className="life-globe-frame"
+            style={{
+              "--life-globe-entry-scale": prefersReducedMotion
+                ? 1
+                : globeScale,
+              "--life-globe-entry-scale-mobile": prefersReducedMotion
+                ? 1
+                : globeScaleMobile,
+            }}
+          >
+            <PlacesGlobe
+              scrollRotation={prefersReducedMotion ? null : scrollRotation}
+            />
+          </motion.div>
         </div>
       </div>
 
