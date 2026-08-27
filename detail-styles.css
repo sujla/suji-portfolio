@@ -26,15 +26,9 @@ li::marker {
 .detail-page {
   min-height: 100svh;
   padding-block: 0;
-  padding-inline: 32px;
+  padding-inline: 26px;
   background: var(--bg);
   color: var(--text);
-}
-
-.detail-page .theme-toggle {
-  position: relative;
-  top: auto;
-  right: auto;
 }
 
 .detail-page .theme-toggle:focus-visible {
@@ -44,130 +38,47 @@ li::marker {
 
 .detail-gnb {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding-top: clamp(8px, 1.55vw, 10px);
-  padding-bottom: clamp(9px, 1.65vw, 11px);
-  padding-left: clamp(6px, 1vw, 14px);
-  padding-right: clamp(8px, 1.2vw, 14px);
+  inset: 0 0 auto;
   z-index: 30;
-  display: grid;
-  grid-template-columns: 46px 1fr auto;
+  display: flex;
+  min-height: 66px;
   align-items: center;
-  border-bottom: 1px solid var(--line);
+  justify-content: space-between;
+  padding: 16px 20px;
   background: transparent;
   pointer-events: none;
-  transition: border-color var(--detail-line-transition);
 }
 
-.detail-gnb::before {
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 0;
-  height: 60px;
-  background: linear-gradient(
-    to bottom,
-    var(--bg) 0%,
-    rgba(0, 0, 0, 0) 30%
-  );
-  opacity: 0;
-  pointer-events: none;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    rgba(0, 0, 0, 0) 30%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    rgba(0, 0, 0, 0) 30%
-  );
-  transition: opacity 320ms ease;
-  content: "";
-}
-
-.detail-gnb.is-scrolled {
-  border-bottom-color: transparent;
-}
-
-.detail-gnb.is-scrolled::before {
-  opacity: 1;
-}
-
-.detail-back-icon {
-  --detail-back-icon-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.6667 5L4 12L10.6667 19M4 12L20 12' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-
-  position: fixed;
-  top: calc(clamp(8px, 1.55vw, 10px) + 4px);
-  left: clamp(6px, 1vw, 14px);
-  z-index: 29;
-  display: grid;
-  width: 46px;
-  height: 32px;
-  place-items: center;
-  color: #fff;
-  font-size: 26px;
-  font-weight: 600;
-  line-height: 1;
-  text-decoration: none;
+.detail-gnb .site-mark {
+  position: relative;
+  z-index: 1;
   pointer-events: auto;
 }
 
-.detail-back-icon::before {
-  grid-area: 1 / 1;
-  display: none;
-  width: clamp(22px, 3.9vw, 26px);
-  height: clamp(22px, 3.9vw, 26px);
-  pointer-events: none;
-  content: "";
-}
-
-.detail-nav-back-slot {
+.detail-gnb-center {
   position: relative;
   z-index: 1;
-  width: 46px;
-  height: 32px;
-  pointer-events: none;
+  width: max-content;
+  height: 24px;
+  margin-right: auto;
+  margin-left: 2px;
+  border-radius: 6px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
-.detail-back-icon svg {
-  grid-area: 1 / 1;
+.detail-gnb-title {
   display: block;
-  width: clamp(22px, 3.9vw, 26px);
-  height: clamp(22px, 3.9vw, 26px);
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-@supports ((backdrop-filter: invert(1)) or (-webkit-backdrop-filter: invert(1))) {
-  .detail-back-icon {
-    color: transparent;
-  }
-
-  .detail-back-icon::before {
-    display: block;
-    background: rgba(255, 255, 255, 0.01);
-    backdrop-filter: invert(1) contrast(1.08);
-    -webkit-backdrop-filter: invert(1) contrast(1.08);
-    mask: var(--detail-back-icon-mask) center / contain no-repeat;
-    -webkit-mask: var(--detail-back-icon-mask) center / contain no-repeat;
-  }
-
-  .detail-back-icon svg {
-    opacity: 0;
-  }
-}
-
-.detail-nav-spacer {
-  position: relative;
-  z-index: 1;
-  min-width: 0;
+  height: 24px;
+  padding: 5px 6px;
+  color: var(--text-tertiary);
+  font-family: "Google Sans Code", monospace;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.05;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .detail-gnb .theme-toggle {
@@ -227,7 +138,7 @@ li::marker {
 
 .detail-page[data-project-slug="store-guide"] .detail-toc ul {
   position: sticky;
-  top: 32px;
+  top: 40px;
 }
 
 .detail-page[data-project-slug="store-guide"] .detail-title-section {
@@ -410,8 +321,8 @@ li::marker {
   position: relative;
   inset: auto;
   z-index: auto;
-  width: calc(100% + 64px);
-  margin: 0 -32px;
+  width: calc(100% + 52px);
+  margin: 0 -26px;
   transform: none;
 }
 

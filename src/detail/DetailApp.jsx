@@ -40,6 +40,24 @@ function DetailThemeToggle() {
   );
 }
 
+function DetailNav() {
+  return (
+    <>
+      <a
+        className="site-mark"
+        href="../../"
+        aria-label="Back to Suji Kweon's portfolio"
+      >
+        SUJI KWEON
+      </a>
+      <div className="detail-gnb-center" aria-hidden="true">
+        <span className="detail-gnb-title">Case Study</span>
+      </div>
+      <DetailThemeToggle />
+    </>
+  );
+}
+
 function DetailTitle({ project }) {
   if (!project) return null;
 
@@ -85,33 +103,8 @@ export function DetailApp({ navRoot, titleRoot, contributionRoot }) {
 
   return (
     <>
-      <a className="detail-back-icon" href="../../" aria-label="Back to main">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M10.6667 5L4 12L10.6667 19M4 12L20 12"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </a>
-
       {navRoot &&
-        createPortal(
-          <>
-            <span className="detail-nav-back-slot" aria-hidden="true" />
-            <span className="detail-nav-spacer" aria-hidden="true" />
-            <DetailThemeToggle />
-          </>,
-          navRoot,
-        )}
+        createPortal(<DetailNav />, navRoot)}
 
       {titleRoot && createPortal(<DetailTitle project={project} />, titleRoot)}
 
