@@ -66,7 +66,7 @@ function DetailTitle({ project }) {
       <div className="detail-title-inner">
         <header className="detail-header">
           <p>{project.number}</p>
-          <h1>
+          <h1 className="display-title">
             {project.title.split("|").map((line, index) => (
               <span key={`${line}-${index}`}>
                 {index > 0 && <br />}

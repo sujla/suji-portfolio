@@ -10,8 +10,12 @@ let themeLineTimer;
 let overviewSnapTriggered = false;
 let overviewSnapAnimating = false;
 let touchStartY = 0;
+let previousNavScrollY = window.scrollY;
+let navScrollDirection = 0;
+let navScrollTravel = 0;
 const lastProjectStorageKey = "portfolio-last-project-slug";
 const canUseOverviewSnap = window.matchMedia("(hover: hover) and (pointer: fine)");
+const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
 const usesReactDetailRuntime = Boolean(
   document.querySelector("[data-react-detail-runtime]"),
 );
@@ -72,6 +76,7 @@ const renderDetailHeader = () => {
   number.textContent = currentProject.number;
 
   const title = document.createElement("h1");
+  title.className = "display-title";
   currentProject.title.split("|").forEach((line, index) => {
     if (index > 0) title.append(document.createElement("br"));
     title.append(document.createTextNode(line));
@@ -459,8 +464,39 @@ const triggerThemeLineSwap = () => {
   }, 360);
 };
 
+const setDetailNavHidden = (isHidden) => {
+  detailNav?.classList.toggle("is-scroll-hidden", isHidden);
+  root.classList.toggle("is-detail-nav-hidden", isHidden);
+};
+
 const syncDetailNav = () => {
-  detailNav?.classList.toggle("is-scrolled", window.scrollY > 50);
+  if (!detailNav) return;
+
+  const currentScrollY = Math.max(0, window.scrollY);
+  const scrollDelta = currentScrollY - previousNavScrollY;
+  const scrollDirection = Math.sign(scrollDelta);
+
+  detailNav.classList.toggle("is-scrolled", currentScrollY > 50);
+
+  if (currentScrollY <= 50) {
+    setDetailNavHidden(false);
+    navScrollDirection = 0;
+    navScrollTravel = 0;
+  } else if (scrollDirection !== 0) {
+    if (scrollDirection !== navScrollDirection) {
+      navScrollDirection = scrollDirection;
+      navScrollTravel = 0;
+    }
+
+    navScrollTravel += Math.abs(scrollDelta);
+
+    if (navScrollTravel >= 8) {
+      setDetailNavHidden(scrollDirection > 0);
+      navScrollTravel = 0;
+    }
+  }
+
+  previousNavScrollY = currentScrollY;
 };
 
 const tocTargets = tocLinks
@@ -1284,21 +1320,19 @@ const handleInitialKeyboardSnap = (event) => {
 };
 
 const jumpToTocTarget = (target) => {
-  const previousScrollBehavior = root.style.scrollBehavior;
+  const startY = window.scrollY;
+  const scrollMarginTop = Number.parseFloat(
+    window.getComputedStyle(target).scrollMarginTop,
+  ) || 0;
+  const maxScrollY = Math.max(0, root.scrollHeight - window.innerHeight);
+  const targetY = Math.min(
+    maxScrollY,
+    Math.max(0, target.getBoundingClientRect().top + startY - scrollMarginTop),
+  );
 
-  root.style.scrollBehavior = "auto";
-  target.scrollIntoView({ block: "start", behavior: "auto" });
-  document.querySelectorAll(".is-toc-jump-revealing").forEach((element) => {
-    element.classList.remove("is-toc-jump-revealing");
-  });
-  target.classList.remove("is-toc-jump-revealing");
-  void target.offsetHeight;
-  target.classList.add("is-toc-jump-revealing");
-  window.setTimeout(() => {
-    target.classList.remove("is-toc-jump-revealing");
-  }, 620);
-  window.requestAnimationFrame(() => {
-    root.style.scrollBehavior = previousScrollBehavior;
+  window.scrollTo({
+    top: targetY,
+    behavior: reducedMotionMedia.matches ? "auto" : "smooth",
   });
 };
 
@@ -1327,7 +1361,11 @@ tocLinks.forEach((link) => {
     event.preventDefault();
 
     const id = link.getAttribute("href")?.slice(1);
-    const target = id ? document.getElementById(id) : null;
+    const target = id === "project-overview"
+      ? document.body
+      : id
+        ? document.getElementById(id)
+        : null;
 
     if (!id || !target) return;
 

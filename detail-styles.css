@@ -5,6 +5,11 @@ html.detail-root body {
 
 html.detail-root {
   --detail-line-transition: 120ms ease;
+  --detail-nav-shift: 0px;
+}
+
+html.detail-root.is-detail-nav-hidden {
+  --detail-nav-shift: -44px;
 }
 
 html.detail-root.is-overview-snapping {
@@ -53,6 +58,8 @@ li::marker {
   position: relative;
   z-index: 1;
   pointer-events: auto;
+  transform: translateY(0);
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .detail-gnb-center {
@@ -65,6 +72,12 @@ li::marker {
   border-radius: 6px;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  transform: translateY(0);
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.detail-gnb.is-scroll-hidden :is(.site-mark, .detail-gnb-center) {
+  transform: translateY(calc(-100% - 20px));
 }
 
 .detail-gnb-title {
@@ -73,7 +86,7 @@ li::marker {
   padding: 5px 6px;
   color: var(--text-tertiary);
   font-family: "Google Sans Code", monospace;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.05;
   text-transform: uppercase;
@@ -108,7 +121,7 @@ li::marker {
 .detail-page[data-project-slug="store-guide"] .detail-shell {
   width: 100%;
   max-width: none;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 4fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 4fr) minmax(0, 1fr);
   border-right: 0;
   border-left: 0;
 }
@@ -132,13 +145,13 @@ li::marker {
   grid-column: 1;
   grid-row: 1;
   align-self: stretch;
-  justify-self: end;
   width: min(230px, 100%);
 }
 
 .detail-page[data-project-slug="store-guide"] .detail-toc ul {
   position: sticky;
-  top: 40px;
+  top: calc(54px + var(--detail-nav-shift, 0px));
+  transition: top 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .detail-page[data-project-slug="store-guide"] .detail-title-section {
@@ -148,10 +161,6 @@ li::marker {
 
 .detail-page[data-project-slug="store-guide"] .detail-title-inner {
   width: 100%;
-}
-
-.detail-page[data-project-slug="store-guide"] .detail-header h1 {
-  margin-top: 0;
 }
 
 .detail-page[data-project-slug="store-guide"] .detail-keywords {
@@ -166,7 +175,7 @@ li::marker {
   border: 0;
   border-radius: 0;
   background: transparent;
-  color: var(--text);
+  color: var(--text-secondary);
   font-family: "Google Sans Code", monospace;
   font-size: 14px;
   font-weight: 400;
@@ -204,10 +213,8 @@ li::marker {
   display: grid;
   width: min(100%, 1156px);
   margin: 0 auto;
-  padding-top: clamp(110px, 13vw, 150px);
-  padding-bottom: clamp(64px, 8.8vw, 100px);
-  padding-left: clamp(24px, 4vw, 48px);
-  padding-right: clamp(24px, 4vw, 48px);
+  padding-top: clamp(110px, 13vw, 140px);
+  padding-bottom: clamp(64px, 8.8vw, 80px);
   box-sizing: border-box;
 }
 
@@ -220,16 +227,14 @@ li::marker {
 
 .detail-header h1 {
   max-width: 980px;
-  margin: 16px 0 12px;
-  font-size: 68px;
-  font-weight: 700;
-  line-height: 1.05;
+  scroll-margin-top: 80px;
 }
 
 .detail-keywords {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  padding-inline: 2px;
 }
 
 .detail-keywords span {
@@ -240,7 +245,7 @@ li::marker {
   border: 1px solid #020508;
   border-radius: 999px;
   background: var(--project-color, var(--active-project-color));
-  color: var(--card-text);
+  color: var(--text-secondary);
   font-size: clamp(13px, 1.9vw ,14px);
   font-weight: 500;
 }
@@ -268,6 +273,7 @@ li::marker {
   min-height: 0;
   margin: 0 auto;
   overflow: hidden;
+  border-radius: 16px;
   background: var(--surface);
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.04);
 }
@@ -329,9 +335,10 @@ li::marker {
 .detail-toc {
   align-self: start;
   position: sticky;
-  top: 32px;
+  top: calc(32px + var(--detail-nav-shift, 0px));
   min-width: 0;
   padding: 0;
+  transition: top 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .detail-toc ul {
@@ -343,12 +350,12 @@ li::marker {
 }
 
 .detail-toc a {
-  display: block;
+  display: inline-block;
   width: auto;
   box-sizing: border-box;
   padding: 2px;
   color: var(--text-tertiary);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1;
   letter-spacing: 0.2px;
   text-decoration: none;
@@ -362,7 +369,7 @@ li::marker {
 }
 
 .detail-toc-label {
-  display: block;
+  display: inline-block;
 }
 
 .detail-toc-note {
@@ -389,40 +396,21 @@ li::marker {
 
 .detail-content-col {
   min-width: 0;
+  max-width: 900px;
+  margin: 0 auto;
   padding: 0 0 64px;
   border-left: 1px solid var(--line);
   transition: border-color var(--detail-line-transition);
 }
 
 .detail-content-col [id] {
-  scroll-margin-top: 28px;
+  scroll-margin-top: 80px;
 }
 
 .detail-content {
   display: grid;
   gap: 28px;
   padding: 0 0 90px;
-}
-
-@keyframes detail-toc-jump-rise {
-  from {
-    transform: translate3d(0, 50px, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .detail-content-col [id].is-toc-jump-revealing {
-    animation: detail-toc-jump-rise 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
-    will-change: transform;
-  }
-}
-
-.mgrl-48 {
-  margin: 0 48px;
 }
 
 .pdt-24 {
@@ -1868,13 +1856,8 @@ html.detail-root.is-theme-switching-lines::before {
     grid-template-columns: 1fr;
   }
 
-  .detail-header h1 {
-    font-size: clamp(40px, 9vw, 64px);
-  }
-
   .detail-media {
     aspect-ratio: 16 / 9;
-    border-radius: 0;
   }
 
   .detail-content-col {
@@ -2024,10 +2007,6 @@ html.detail-root.is-theme-switching-lines::before {
     margin: 14px 28px;
   }
 
-  .mgrl-48 {
-    margin-left: 36px;
-    margin-right: 36px;
-  }
 }
 
 
@@ -2151,11 +2130,6 @@ html.detail-root.is-theme-switching-lines::before {
     margin-bottom: 18px;
   }
 
-  .mgrl-48 {
-    margin-left: 28px;
-    margin-right: 28px;
-  }
-
   .hidden {
     display: none;
   }
@@ -2175,10 +2149,6 @@ html.detail-root.is-theme-switching-lines::before {
     gap: 20px;
   }
 
-  .detail-header h1 {
-    margin: 6px 0 0;
-  }
-  
   .detail-keywords {
     gap: 6px;
   }
@@ -2189,7 +2159,6 @@ html.detail-root.is-theme-switching-lines::before {
 
   .detail-media {
     aspect-ratio: 4 / 3;
-    border-radius: 0;
   }
 
   .body-image-frame {
@@ -2383,11 +2352,6 @@ html.detail-root.is-theme-switching-lines::before {
     padding: 42px 0;
     margin-left: 36px;
     height: 248px;
-  }
-
-  .mgrl-48 {
-    margin-left: 20px;
-    margin-right: 20px;
   }
 
   .detail-coming-soon-inner h2 {
