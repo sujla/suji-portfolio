@@ -305,7 +305,6 @@ li::marker {
   width: 100%;
   min-height: 0;
   margin: 0 auto;
-  padding: 0 40px;
   overflow: hidden;
 }
 
@@ -416,7 +415,7 @@ li::marker {
 .detail-content {
   display: grid;
   gap: 28px;
-  padding: 0 0 90px;
+  padding: 0 0 110px;
 }
 
 .pdt-24 {
@@ -437,9 +436,9 @@ li::marker {
   gap: 16px;
 }
 
-.gap-20 {
+.gap-26 {
   display: grid;
-  gap: clamp(14px, 3vw, 20px);
+  gap: clamp(14px, 3vw, 26px);
 }
 
 .detail-content ul {
@@ -462,13 +461,14 @@ li::marker {
 .detail-content h2 {
   margin: 0 0 6px;
   color: var(--text);
-  font-size: clamp(32px, 5vw, 36px);
-  font-weight: 700;
-  line-height: 1;
+  font-family: "Fjord One", Georgia, serif;
+  font-size: clamp(28px, 5vw, 32px);
+  font-weight: 400;
+  line-height: 1.35;
 }
 
 .detail-content .label {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -689,17 +689,14 @@ html.detail-coming-soon-root {
 .why-matter-heading {
   display: inline-block;
   margin: 0;
-  color: var(--red) !important;
-  font-size: 20px !important;
+  font-family: "Fjord One", Georgia, serif;
+  font-size: 24px !important;
+  font-weight: 400 !important;
 }
 
 .why-matter-list {
   display: grid;
-  margin: -22px 40px 24px;
   gap: 6px;
-  padding: 24px 28px;
-  border-radius: 24px;
-  background-color: var(--red-bg);
 }
 
 .why-matter-list li {
@@ -1877,14 +1874,6 @@ html.detail-root.is-theme-switching-lines::before {
     padding: 0 0 74px;
   }
 
-  .body-image-frame {
-    padding: 0 28px;
-  }
-
-  .why-matter-list {
-    margin: -22px 28px 24px;
-  }
-
   .affected-user-cards {
     flex-direction: column;
     gap: calc(var(--affected-card-gap) + 8px);
@@ -2173,16 +2162,6 @@ html.detail-root.is-theme-switching-lines::before {
 
   .detail-media {
     aspect-ratio: 4 / 3;
-  }
-
-  .body-image-frame {
-    padding: 0 14px;
-  }
-
-  .why-matter-list {
-    margin: -28px 14px 24px;
-    padding: 19px 22px 18px;
-    border-radius: 20px;
   }
 
   .affected-user-cards {
