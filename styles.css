@@ -9,8 +9,8 @@
   --line: #212121;
   --rail-muted: rgba(247, 248, 245, 0.2);
   --counter-muted: rgba(247, 248, 245, 0.46);
-  --toggle-bg: #282827;
-  --toggle-knob: rgba(247, 248, 245, 0.3);
+  --toggle-bg: color-mix(in srgb, var(--bg) 70%, transparent);
+  --toggle-knob: var(--surface);
   --card-text: #020508;
   --pf-cta-color: #020508;
   --green: #17ff2b;
@@ -39,14 +39,12 @@
   --text: #020508;
   --text-secondary: rgba(2, 5, 8, 0.72);
   --text-tertiary: rgba(2, 5, 8, 0.5);
-  --surface: #F9FAFB;
-  --surface-transparent: rgba(249, 250, 251, 0);
+  --surface: #F6F7F9;
+  --surface-transparent: rgba(246, 247, 249, 0);
   --muted: rgba(2, 5, 8, 0.32);
   --line: #D7d7d7;
   --rail-muted: rgba(2, 5, 8, 0.18);
   --counter-muted: rgba(2, 5, 8, 0.46);
-  --toggle-bg: rgba(227,228,232,0.7);
-  --toggle-knob: rgba(255, 255, 255, 1);
   --card-text: #020508;
   --pf-cta-color: #fff;
   --gnb-bg: rgba(231, 231, 230, 0.2);
@@ -386,7 +384,7 @@ html.is-pf-modal-open body {
   z-index: 1;
   overflow: hidden;
   color: var(--text);
-  background: var(--surface);
+  background: var(--bg);
   box-shadow: 0 32px 100px rgba(0, 0, 0, 0.34);
   will-change: transform, border-radius, opacity;
 }
@@ -1066,7 +1064,7 @@ html.is-pf-modal-open body {
   justify-content: space-between;
   gap: clamp(24px, 4vw, 72px);
   padding: 0 clamp(24px, 3vw, 72px);
-  background: var(--surface);
+  background: var(--bg);
   opacity: 0;
   pointer-events: none;
   transform: translateY(10px);
@@ -1262,16 +1260,14 @@ html.is-pf-modal-open body {
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  /* border-bottom: 1px solid var(--line); */
 }
 
 .site-mark {
   display: block;
   width: auto;
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 6px;
   color: var(--text);
-  background-color: color-mix(in srgb, var(--bg) 70%, transparent);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -1290,8 +1286,8 @@ html.is-pf-modal-open body {
   display: flex;
   align-items: center;
   gap: clamp(32px, 4vw, 40px);
-  border-radius: 4px;
-  background-color: color-mix(in srgb, var(--bg) 70%, transparent);
+  padding: 0 4px;
+  border-radius: 6px;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   transform: translate(-50%, -50%);
@@ -1325,6 +1321,8 @@ html.is-pf-modal-open body {
   background: var(--toggle-bg);
   color: var(--text);
   backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transform: translateY(-1px);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition:
