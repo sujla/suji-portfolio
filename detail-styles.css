@@ -88,8 +88,8 @@ li::marker {
   font-family: "Google Sans Code", monospace;
   font-size: 15px;
   font-weight: 400;
+  letter-spacing: -0.01em;
   line-height: 1.05;
-  text-transform: uppercase;
   white-space: nowrap;
   box-sizing: border-box;
 }
