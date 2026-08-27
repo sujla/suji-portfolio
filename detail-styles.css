@@ -188,6 +188,83 @@ li::marker {
   --project-sub-color: rgba(98, 254, 103, 0.18);
 }
 
+.detail-page[data-project-slug="store-guide"] .detail-gnb,
+.detail-page[data-project-slug="store-guide"] .detail-title-section {
+  border-bottom: 0;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-shell {
+  border-right: 0;
+  border-left: 0;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-content-col {
+  border-left: 0;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-content-section {
+  position: relative;
+  display: block;
+  grid-template-columns: minmax(0, 1fr);
+  padding-left: 230px;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-toc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 100%;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-toc ul {
+  position: sticky;
+  top: 32px;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-title-section {
+  width: 100%;
+  margin-left: 0;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-title-inner {
+  width: 100%;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-header h1 {
+  margin-top: 0;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-keywords {
+  gap: 8px;
+  align-items: center;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-keywords span {
+  display: inline;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: "Google Sans Code", monospace;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.detail-page[data-project-slug="store-guide"] .detail-keywords .detail-keyword-dot {
+  opacity: 0.4;
+}
+
+.detail-overview-brief {
+  display: grid;
+  max-width: 680px;
+  gap: 12px;
+  padding-top: 8px;
+}
+
 .detail-header {
   display: grid;
   gap: 12px;
@@ -1796,6 +1873,14 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 1024px) {
+  .detail-page[data-project-slug="store-guide"] .detail-content-section {
+    padding-left: 200px;
+  }
+
+  .detail-page[data-project-slug="store-guide"] .detail-toc {
+    width: 200px;
+  }
+
   .detail-title-inner {
     width: min(100%, 920px);
   }
@@ -1843,6 +1928,10 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 920px) {
+  .detail-page[data-project-slug="store-guide"] .detail-content-section {
+    padding-left: 0;
+  }
+
   .detail-shell {
     border-right: 0;
     border-left: 0;
