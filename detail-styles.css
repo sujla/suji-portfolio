@@ -403,8 +403,16 @@ li::marker {
   min-height: 420px;
   min-width: 0;
   scroll-margin-top: 12px;
-  border-bottom: 1px solid var(--line);
   transition: border-color var(--detail-line-transition);
+}
+
+.site-footer--detail {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  width: calc(100% + 64px);
+  margin: 0 -32px;
+  transform: none;
 }
 
 .detail-toc {

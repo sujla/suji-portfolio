@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 import { projects } from "../../data/projects.js";
+import { SiteFooter } from "../components/SiteFooter.jsx";
 
 function DetailThemeToggle() {
   return (
@@ -119,6 +120,8 @@ export function DetailApp({ navRoot, titleRoot, contributionRoot }) {
           project?.contribution?.map((item) => <li key={item}>{item}</li>) || null,
           contributionRoot,
         )}
+
+      <SiteFooter className="site-footer--detail" />
     </>
   );
 }

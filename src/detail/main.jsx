@@ -17,7 +17,7 @@ if (detailShell && !detailShell.querySelector(".detail-title-section")) {
 const runtimeRoot = document.createElement("div");
 runtimeRoot.dataset.reactDetailRuntime = "";
 runtimeRoot.style.display = "contents";
-document.body.prepend(runtimeRoot);
+document.body.append(runtimeRoot);
 
 createRoot(runtimeRoot).render(
   <DetailApp
