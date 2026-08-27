@@ -1122,16 +1122,12 @@ html.is-pf-modal-open body {
 .pf-work-modal.is-revealing .pf-modal-close,
 .pf-work-modal.is-revealing .pf-modal-footer {
   opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
 .pf-work-modal.is-revealing .pf-modal-footer {
   transition-delay: 60ms;
-}
-
-.pf-work-modal.is-ready .pf-modal-close,
-.pf-work-modal.is-ready .pf-modal-footer {
-  pointer-events: auto;
 }
 
 .pf-work-modal.is-closing .pf-modal-card-content,
@@ -3125,8 +3121,8 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .pf-modal-close {
-    top: 16px;
-    right: 16px;
+    top: max(16px, env(safe-area-inset-top, 0px));
+    right: max(16px, env(safe-area-inset-right, 0px));
   }
 
   .pf-modal-cta {

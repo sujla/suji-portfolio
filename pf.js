@@ -688,13 +688,16 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     return `<a class="pf-work pf-work--${project.id}" href="${project.href}" data-project-types="${projectTypes.join(" ")}" draggable="false" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
   };
 
-  const isPlainNavigationClick = (event, link) =>
+  const isUnmodifiedPrimaryClick = (event) =>
     event.button === 0 &&
     !event.defaultPrevented &&
     !event.metaKey &&
     !event.ctrlKey &&
     !event.shiftKey &&
-    !event.altKey &&
+    !event.altKey;
+
+  const isPlainNavigationClick = (event, link) =>
+    isUnmodifiedPrimaryClick(event) &&
     !link.target &&
     !link.hasAttribute("download");
 
@@ -920,7 +923,6 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const scrollIndicator = modal.querySelector(".pf-modal-scroll-indicator");
     let hasMountedBento = false;
     let isClosing = false;
-    let isHistoryClosePending = false;
     let scrollIndicatorFrame = 0;
 
     const updateScrollIndicator = () => {
@@ -1043,7 +1045,6 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const closeModal = () => {
       if (isClosing) return;
       isClosing = true;
-      isHistoryClosePending = false;
       modal.classList.add("is-closing");
       modal.classList.remove("is-revealing", "is-ready", "is-content-ready");
 
@@ -1089,32 +1090,45 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     };
 
     const requestModalClose = () => {
-      if (isClosing || isHistoryClosePending) return;
+      if (isClosing) return;
 
-      if (getModalHistoryProjectId() === project.id) {
-        isHistoryClosePending = true;
-        window.history.back();
-        return;
-      }
+      const shouldRestoreHistory = getModalHistoryProjectId() === project.id;
 
       closeModal();
+
+      if (!shouldRestoreHistory) return;
+
+      window.history.back();
+      window.setTimeout(() => {
+        if (getModalHistoryProjectId() !== project.id) return;
+
+        const currentState =
+          window.history.state && typeof window.history.state === "object"
+            ? { ...window.history.state }
+            : {};
+
+        delete currentState[modalHistoryStateKey];
+        window.history.replaceState(currentState, "");
+      }, 500);
     };
 
     const runModalNavigation = (event) => {
-      if (
-        !cta ||
-        project.cta?.newTab !== false ||
-        !isPlainNavigationClick(event, cta)
-      ) {
+      if (!cta) return;
+
+      if (project.cta?.newTab) {
+        if (isUnmodifiedPrimaryClick(event)) requestModalClose();
         return;
       }
 
-      event.preventDefault();
-      if (isClosing || isHistoryClosePending) return;
+      if (!isPlainNavigationClick(event, cta)) return;
 
+      event.preventDefault();
+      if (isClosing) return;
       isClosing = true;
       modal.classList.add("is-navigating");
       document.removeEventListener("keydown", handleModalKeydown);
+      modalAnimation.cancel();
+      backdropAnimation.cancel();
 
       if (getModalHistoryProjectId() === project.id) {
         window.location.replace(cta.href);
