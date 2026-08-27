@@ -232,11 +232,11 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         ? `
           <div class="pf-modal-result">
             <div class="pf-modal-result-metrics">
-              <div class="pf-modal-result-metric">
+              <div class="pf-modal-result-metric inner-shadow-md">
                 <p>Pickup Conversion</p>
                 <strong>321.3%</strong>
               </div>
-              <div class="pf-modal-result-metric">
+              <div class="pf-modal-result-metric inner-shadow-md">
                 <p class="pf-modal-result-metric-title--nowrap">Total Pickup Orders</p>
                 <strong>128.2%</strong>
               </div>
@@ -266,11 +266,11 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         ? `
           <div class="pf-modal-result">
             <div class="pf-modal-result-metrics">
-              <div class="pf-modal-result-metric">
+              <div class="pf-modal-result-metric inner-shadow-md">
                 <p>Increase in Page Views</p>
                 <strong>+32.9%</strong>
               </div>
-              <div class="pf-modal-result-metric">
+              <div class="pf-modal-result-metric inner-shadow-md">
                 <p>Pickup Conversion</p>
                 <strong>Up to 11%</strong>
               </div>
@@ -279,8 +279,13 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         `
         : "";
 
+    const innerShadowClass =
+      index === 0 && ["cta-enhancement", "store-finder"].includes(project.id)
+        ? " inner-shadow-lg"
+        : "";
+
     return `
-      <div class="pf-modal-bento-placeholder pf-modal-bento-placeholder--${index + 1}">
+      <div class="pf-modal-bento-placeholder pf-modal-bento-placeholder--${index + 1}${innerShadowClass}">
         ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || articleStudioMedia || storeFinderResult}
       </div>
     `;
