@@ -195,7 +195,7 @@ li::marker {
 
 .detail-header {
   display: grid;
-  gap: 12px;
+  gap: 16px;
 }
 
 .detail-title-section {
@@ -359,13 +359,19 @@ li::marker {
   line-height: 1;
   letter-spacing: 0.2px;
   text-decoration: none;
-  transition: color 220ms ease;
+  opacity: 0.82;
+  transition:
+    color 220ms ease,
+    opacity 220ms ease;
 }
 
 .detail-toc a[aria-current="true"],
 .detail-toc a:hover {
   color: var(--text);
-  font-weight: 500;
+}
+
+.detail-toc a[aria-current="true"] {
+  opacity: 1;
 }
 
 .detail-toc-label {
@@ -437,6 +443,8 @@ li::marker {
 }
 
 .detail-content ul {
+  display: grid;
+  gap: 2px;
   margin: 0;
   padding-left: 0.83em;
 }
@@ -449,10 +457,6 @@ li::marker {
   font-size: clamp(14px, 3vw ,15px);
   font-weight: 400;
   line-height: 1.45;
-}
-
-.detail-content li + li {
-  margin-top: 2px;
 }
 
 .detail-content h2 {
@@ -627,45 +631,49 @@ html.detail-coming-soon-root {
 }
 
 /* Project overview */
-.detail-overview-heading {
+.detail-overview-content {
   display: grid;
-  margin-top: 12px;
-  gap: 10px;
+  gap: 40px;
 }
 
 .detail-project-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
-  margin: 0;
-  font-size: clamp(14px, 3vw, 15px);
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  justify-content: space-between;
+  gap: clamp(20px, 4vw, 44px);
+  padding-bottom: 40px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+}
+
+.detail-project-meta-item {
+  min-width: 0;
+}
+
+.detail-project-meta-item > .strong,
+.detail-project-contributions > .strong {
+  margin-bottom: 8px;
+}
+
+.detail-project-meta-item p {
+  color: var(--text-secondary);
+}
+
+.detail-project-meta-item--company > div {
+  display: grid;
+  gap: 2px;
+}
+
+.detail-project-meta-list {
+  list-style: none;
+}
+
+.detail-content .detail-project-meta-list {
+  padding-left: 0;
 }
 
 .strong {
   color: var(--text) !important;
   font-weight: 500 !important;
-}
-
-.detail-project-meta span + span {
-  position: relative;
-}
-
-.detail-project-meta span + span::before {
-  position: absolute;
-  top: 49%;
-  left: -18px;
-  width: 1.2px;
-  height: 14px;
-  background: var(--muted);
-  opacity: 0.65;
-  transform: translateY(-50%);
-  content: "";
-}
-
-.detail-project-overview {
-  display: grid;
-  gap: 28px;
-  margin-top: 20px;
 }
 
 .detail-body-props {
@@ -2011,6 +2019,12 @@ html.detail-root.is-theme-switching-lines::before {
 
 
 @media (max-width: 760px) {
+  .detail-project-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+    gap: 28px 24px;
+  }
+
   .design-exploration-grid {
     grid-template-columns: 1fr;
     gap: 28px;
@@ -2141,8 +2155,8 @@ html.detail-root.is-theme-switching-lines::before {
     padding: 0 0 100px;
   }
 
-  .detail-overview-heading {
-    margin-top: 18px;
+  .detail-overview-content {
+    gap: 28px;
   }
 
   .detail-header {

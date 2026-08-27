@@ -4,6 +4,7 @@ import { DetailApp } from "./DetailApp.jsx";
 
 const navRoot = document.querySelector(".detail-gnb");
 const detailShell = document.querySelector(".detail-shell");
+const companyRoot = document.querySelector("[data-company-name]");
 const contributionRoot = document.querySelector("[data-contribution-list]");
 let titleRoot = null;
 
@@ -23,6 +24,7 @@ createRoot(runtimeRoot).render(
   <DetailApp
     navRoot={navRoot}
     titleRoot={titleRoot}
+    companyRoot={companyRoot}
     contributionRoot={contributionRoot}
   />,
 );

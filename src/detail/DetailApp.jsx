@@ -92,7 +92,7 @@ function DetailTitle({ project }) {
   );
 }
 
-export function DetailApp({ navRoot, titleRoot, contributionRoot }) {
+export function DetailApp({ navRoot, titleRoot, companyRoot, contributionRoot }) {
   const project = projects.find(
     (item) => item.slug === document.body.dataset.projectSlug,
   );
@@ -107,6 +107,8 @@ export function DetailApp({ navRoot, titleRoot, contributionRoot }) {
         createPortal(<DetailNav />, navRoot)}
 
       {titleRoot && createPortal(<DetailTitle project={project} />, titleRoot)}
+
+      {companyRoot && createPortal(project?.company || null, companyRoot)}
 
       {contributionRoot &&
         createPortal(

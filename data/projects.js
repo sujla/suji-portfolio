@@ -14,7 +14,7 @@ export const projects = [
     wip: false,
     number: "01",
     year: 2024,
-    company: "CJ Olive Young, Inc.",
+    company: "CJ Olive Young",
     companyLabel: "Olive Young",
     keywords: ["E-commerce", "Discovery Optimization", "Map-based UX"],
     title: "Store Discovery, Renewed",
