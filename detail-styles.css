@@ -25,7 +25,8 @@ li::marker {
 
 .detail-page {
   min-height: 100svh;
-  padding: 0;
+  padding-block: 0;
+  padding-inline: 32px;
   background: var(--bg);
   color: var(--text);
 }
@@ -194,6 +195,9 @@ li::marker {
 }
 
 .detail-page[data-project-slug="store-guide"] .detail-shell {
+  width: 100%;
+  max-width: none;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 4fr) minmax(0, 1fr);
   border-right: 0;
   border-left: 0;
 }
@@ -205,16 +209,20 @@ li::marker {
 .detail-page[data-project-slug="store-guide"] .detail-content-section {
   position: relative;
   display: block;
+  grid-column: 2;
+  grid-row: 1;
   grid-template-columns: minmax(0, 1fr);
-  padding-left: 230px;
+  padding-left: 0;
 }
 
 .detail-page[data-project-slug="store-guide"] .detail-toc {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 230px;
-  height: 100%;
+  position: relative;
+  top: auto;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: stretch;
+  justify-self: end;
+  width: min(230px, 100%);
 }
 
 .detail-page[data-project-slug="store-guide"] .detail-toc ul {
@@ -417,23 +425,19 @@ li::marker {
 
 .detail-toc a {
   display: block;
-  width: min(188px, calc(100% - 16px));
+  width: auto;
   box-sizing: border-box;
-  padding: 2px 2px 2px 14px;
-  border-left: 3px solid transparent;
+  padding: 2px;
   color: var(--text-tertiary);
   font-size: 14px;
   line-height: 1;
   letter-spacing: 0.2px;
   text-decoration: none;
-  transition:
-    border-color 220ms ease,
-    color 220ms ease;
+  transition: color 220ms ease;
 }
 
 .detail-toc a[aria-current="true"],
 .detail-toc a:hover {
-  border-left-color: var(--active-project-sub-color);
   color: var(--text);
   font-weight: 500;
 }
@@ -1873,12 +1877,8 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 1024px) {
-  .detail-page[data-project-slug="store-guide"] .detail-content-section {
-    padding-left: 200px;
-  }
-
   .detail-page[data-project-slug="store-guide"] .detail-toc {
-    width: 200px;
+    width: min(200px, 100%);
   }
 
   .detail-title-inner {
@@ -1928,8 +1928,12 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 920px) {
+  .detail-page[data-project-slug="store-guide"] .detail-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .detail-page[data-project-slug="store-guide"] .detail-content-section {
-    padding-left: 0;
+    grid-column: 1;
   }
 
   .detail-shell {

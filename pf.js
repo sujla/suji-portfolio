@@ -279,10 +279,10 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         `
         : "";
 
-    const innerShadowClass =
-      index === 0 && ["cta-enhancement", "store-finder"].includes(project.id)
-        ? " inner-shadow-lg"
-        : "";
+    const hasLargeInnerShadow =
+      (index === 0 && ["cta-enhancement", "store-finder"].includes(project.id)) ||
+      (project.id === "article-studio" && index === 1);
+    const innerShadowClass = hasLargeInnerShadow ? " inner-shadow-lg" : "";
 
     return `
       <div class="pf-modal-bento-placeholder pf-modal-bento-placeholder--${index + 1}${innerShadowClass}">

@@ -578,11 +578,11 @@ html.is-pf-modal-open body {
 }
 
 .inner-shadow-lg {
-  box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.04);
 }
 
 .inner-shadow-md {
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.03);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.02);
 }
 
 .pf-modal-bento-skeleton {
@@ -593,7 +593,13 @@ html.is-pf-modal-open body {
 }
 
 .pf-modal-card-content.is-skeleton .pf-modal-bento-skeleton {
-  min-height: 240px;
+  min-height: 230px;
+}
+
+.pf-work-modal:is(.pf-work--cta-enhancement, .pf-work--store-finder)
+  .pf-modal-card-content.is-skeleton
+  .pf-modal-bento-placeholder--3 {
+  min-height: 0;
 }
 
 .pf-modal-bento-skeleton::before,
@@ -663,6 +669,26 @@ html.is-pf-modal-open body {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.pf-work-modal.pf-work--article-studio .pf-modal-bento-placeholder--2 {
+  background: rgb(251, 251, 252);
+}
+
+.pf-work-modal.pf-work--article-studio
+  .pf-modal-bento-placeholder--2.inner-shadow-lg {
+  box-shadow: none;
+}
+
+.pf-work-modal.pf-work--article-studio
+  .pf-modal-bento-placeholder--2.inner-shadow-lg::after {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.04);
+  pointer-events: none;
+  content: "";
 }
 
 .pf-modal-article-studio-carousel {
@@ -891,7 +917,7 @@ html.is-pf-modal-open body {
   justify-content: center;
   gap: 8px;
   padding: clamp(12px, 1.35vw, 24px) clamp(20px, 2vw, 28px);
-  border: 1px solid color-mix(in srgb, var(--line) 20%, transparent);
+  border: 0;
   border-radius: 16px;
   background: var(--surface);
 }
@@ -1107,8 +1133,8 @@ html.is-pf-modal-open body {
   background: var(--bg);
   color: var(--text);
   box-shadow:
-    0 4px 14px rgba(0, 0, 0, 0.12),
-    0 1px 3px rgba(0, 0, 0, 0.08);
+    0 4px 14px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.02);
   cursor: pointer;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
