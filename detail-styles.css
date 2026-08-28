@@ -403,7 +403,7 @@ li::marker {
   min-width: 0;
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 0 64px;
+  padding: 0;
   border-left: 1px solid var(--line);
   transition: border-color var(--detail-line-transition);
 }
@@ -415,7 +415,7 @@ li::marker {
 .detail-content {
   display: grid;
   gap: 36px;
-  padding: 0 0 120px;
+  padding: 0 0 130px;
 }
 
 .gap-8 {
@@ -686,7 +686,7 @@ html.detail-coming-soon-root {
 .detail-body-props > p {
   max-width: 740px;
   margin-top: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 /* Problems */
@@ -1146,7 +1146,6 @@ ul.affected-user-card-detail {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  margin: 14px 40px 0;
 }
 
 .opportunity-card {
@@ -1241,30 +1240,40 @@ ul.affected-user-card-detail {
   color: var(--text-tertiary);
 }
 
-/* Early impact */
-.impact-points.opportunity-cards {
-  margin: 8px 40px 0px;
+/* Result */
+.result-card {
+  min-width: 0;
+  padding: 26px;
+  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
+  border-radius: var(--detail-card-radius);
+  background: var(--surface);
 }
 
-.impact-point-image-empty {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(-45deg, rgba(255, 255, 255, 0.08), transparent 66%),
-    color-mix(in srgb, var(--surface), var(--bg) 24%)
+.result-card-copy {
+  display: flex;
+  min-height: 110px;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
 }
 
-.impact-point-media {
-  aspect-ratio: 3 / 2;
-  background: #f5f5f5;
+.result-card-copy p {
+  margin: 0;
 }
 
-.impact-point-media img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.result-card-copy .result-card-label {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.result-card-copy .result-card-value {
+  color: var(--globe-place-color);
+  font-size: clamp(29px, 6vw, 45px);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
 /* UX goal */
@@ -1527,13 +1536,10 @@ ul.affected-user-card-detail {
   margin: 0;
   gap: 0;
   overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
   border-radius: var(--detail-card-radius);
-  background: #f5f5f5;
-  place-items: stretch center;
-}
-
-:root[data-theme="dark"] .design-exploration-media {
   background: var(--surface);
+  place-items: stretch center;
 }
 
 .design-exploration-image-stage {
@@ -1960,7 +1966,7 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .detail-content {
-    padding: 0 0 74px;
+    padding: 0 0 130px;
   }
 
   :is(.affected-user-cards, .why-mattered-cards) {
@@ -2040,10 +2046,6 @@ html.detail-root.is-theme-switching-lines::before {
     transform: none;
   }
 
-  .opportunity-cards {
-    margin: 14px 28px;
-  }
-
   .ux-goal-cards {
     margin: 8px 28px 0;
   }
@@ -2107,10 +2109,6 @@ html.detail-root.is-theme-switching-lines::before {
     margin-top: 16px;
   }
 
-  .impact-points.opportunity-cards {
-    margin: 14px 28px;
-  }
-
 }
 
 
@@ -2162,13 +2160,6 @@ html.detail-root.is-theme-switching-lines::before {
   .opportunity-card-media {
     height: 100%;
     aspect-ratio: 1.2 / 1;
-  }
-
-  .impact-point-card:nth-child(3) .impact-point-media img {
-    top: 50%;
-    bottom: auto;
-    height: auto;
-    transform: translateY(-50%);
   }
 
   .opportunity-card-copy {
@@ -2252,7 +2243,7 @@ html.detail-root.is-theme-switching-lines::before {
 
 @media (max-width: 530px) {
   .detail-content {
-    padding: 0 0 100px;
+    padding: 0 0 130px;
   }
 
   .detail-overview-content {
@@ -2289,7 +2280,6 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .opportunity-cards,.impact-points.opportunity-cards {
-    margin: 8px 14px;
     gap: 8px;
   }
 
@@ -2406,7 +2396,7 @@ html.detail-root.is-theme-switching-lines::before {
 @layer dark-letter-spacing {
   :root[data-theme="dark"] body :is(.detail-toc, .detail-keywords),
   :root[data-theme="dark"] body :is(.detail-toc, .detail-keywords) *,
-  :root[data-theme="dark"] body .impact-point-copy :is(h4, p) {
+  :root[data-theme="dark"] body .result-card-copy p {
     letter-spacing: normal;
   }
 }
