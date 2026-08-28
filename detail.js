@@ -874,6 +874,37 @@ const setupOpportunityCards = () => {
   });
 };
 
+const setupGoalsCards = () => {
+  document.querySelectorAll("[data-goals-cards]").forEach((container) => {
+    const cards = [...container.querySelectorAll("[data-goal-card]")];
+    if (!cards.length) return;
+
+    const defaultCard = cards[0];
+
+    const setActiveCard = (activeCard) => {
+      cards.forEach((card) => {
+        card.classList.toggle("is-active", card === activeCard);
+      });
+    };
+
+    setActiveCard(defaultCard);
+
+    cards.forEach((card) => {
+      card.addEventListener("pointerenter", () => {
+        setActiveCard(card);
+      });
+
+      card.addEventListener("click", () => {
+        setActiveCard(card);
+      });
+    });
+
+    container.addEventListener("pointerleave", () => {
+      setActiveCard(defaultCard);
+    });
+  });
+};
+
 const setupDesignExplorationMedia = () => {
   const mediaItems = [...document.querySelectorAll(".design-exploration-media")];
   const intervalDuration = 4000;
@@ -1335,6 +1366,7 @@ const jumpToTocTarget = (target) => {
 applyTheme(localStorage.getItem("portfolio-theme") || "light");
 setupAffectedUserActiveState();
 setupAffectedUserVideos();
+setupGoalsCards();
 setupOpportunityCards();
 setupDesignExplorationMedia();
 setupsolutionShowcase();

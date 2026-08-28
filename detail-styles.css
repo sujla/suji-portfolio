@@ -983,12 +983,82 @@ ul.affected-user-card-detail {
   gap: 12px;
 }
 
-.user-profile-cards--goals {
+.goals-cards {
+  --goals-card-collapsed-height: 80px;
+  --goals-card-expanded-height: clamp(240px, 38vw, 320px);
+
+  display: grid;
   grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
 }
 
-.user-profile-cards--goals .user-profile-card {
-  padding: 24px 30px;
+.goals-card {
+  display: grid;
+  grid-template-columns: minmax(0, 4.5fr) minmax(0, 5.5fr);
+  align-content: start;
+  align-items: start;
+  height: var(--goals-card-collapsed-height);
+  min-width: 0;
+  gap: 12px;
+  padding: 28px 28px 28px 24px;
+  overflow: hidden;
+  border-radius: var(--detail-card-radius);
+  background: var(--surface);
+  cursor: pointer;
+  transition: height 560ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: height;
+}
+
+.goals-card.is-active {
+  height: var(--goals-card-expanded-height);
+}
+
+.goals-card-copy {
+  display: grid;
+  gap: 1px;
+}
+
+.goals-card-subheading {
+  margin: 0;
+  color: var(--text);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: clamp(14px, 3vw, 15px);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.goals-card-detail {
+  display: grid;
+  gap: 20px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition:
+    max-height 460ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 220ms ease,
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.goals-card.is-active .goals-card-detail {
+  max-height: calc(var(--goals-card-expanded-height) - 56px);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition-delay: 80ms, 100ms, 80ms;
+}
+
+.goals-card-media {
+  width: 100%;
+  overflow: hidden;
+  border-radius: calc(var(--detail-card-radius) - 8px);
+}
+
+.goals-card-media > :is(img, video) {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .user-profile-card {
