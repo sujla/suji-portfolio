@@ -766,9 +766,8 @@ html.detail-coming-soon-root {
 }
 
 .affected-user-card {
-  display: grid;
-  gap: 8px;
-  grid-template-rows: minmax(0, 1fr) auto;
+  position: relative;
+  display: block;
   flex: 0 0 calc(50% - (var(--affected-card-gap) / 2));
   height: var(--affected-card-height);
   min-width: 0;
@@ -777,31 +776,38 @@ html.detail-coming-soon-root {
   border: 0;
   border-radius: 0;
   background: transparent;
+  cursor: pointer;
   transition:
     flex-basis 560ms cubic-bezier(0.16, 1, 0.3, 1),
     transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .affected-user-card--customers {
+  --affected-copy-height: 137px;
   --affected-image-position: center center;
   --affected-video-position: center 50%;
 }
 
 .affected-user-card--staff {
+  --affected-copy-height: 159px;
   --affected-image-position: center center;
   --affected-video-position: center center;
 }
 
 .affected-user-card-image {
-  position: relative;
-  grid-column: 1;
-  grid-row: 1;
+  position: absolute;
+  inset: 0 0 auto;
+  width: 100%;
+  height: calc(100% - var(--affected-copy-height) - 8px);
   min-width: 0;
   min-height: 0;
   overflow: hidden;
   border-radius: var(--detail-card-radius);
   background: var(--bg);
-  transition: border-radius 260ms ease;
+  transition:
+    height 560ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-radius 260ms ease;
+  will-change: height;
 }
 
 .affected-user-card-image::after {
@@ -867,7 +873,7 @@ html.detail-coming-soon-root {
 
 :is(.affected-user-cards, .why-mattered-cards).is-customer-active .affected-user-card:last-child .affected-user-card-image,
 :is(.affected-user-cards, .why-mattered-cards).is-staff-active .affected-user-card:first-child .affected-user-card-image {
-  grid-row: 1 / 3;
+  height: 100%;
 }
 
 .affected-user-image-name {
@@ -889,21 +895,24 @@ html.detail-coming-soon-root {
 
 .affected-user-card-copy {
   display: grid;
-  grid-column: 1;
-  grid-row: 2;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
   gap: 6px;
-  height: auto;
+  height: var(--affected-copy-height);
   max-height: none;
   min-height: 0;
   align-self: end;
   padding: 20px 24px;
-  overflow: visible;
+  overflow: hidden;
   border-radius: var(--detail-card-radius);
   background: var(--surface);
   transform: translateY(0);
   transition:
     opacity 280ms ease,
     transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 
 .affected-user-card-copy h4,
@@ -1916,6 +1925,16 @@ html.detail-root.is-theme-switching-lines::before {
   }
 }
 
+@media (min-width: 921px) and (max-width: 1024px) {
+  .affected-user-card--customers {
+    --affected-copy-height: clamp(137px, calc(405px - 26.2vw), 159px);
+  }
+
+  .affected-user-card--staff {
+    --affected-copy-height: clamp(159px, calc(415px - 25vw), 180px);
+  }
+}
+
 @media (max-height: 920px) and (min-width: 761px) {
   .solution-showcase-panel {
     gap: clamp(48px, 8vw, 108px);
@@ -1979,18 +1998,42 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .affected-user-card {
+    position: relative;
+    display: grid;
+    gap: 8px;
+    grid-template-rows: minmax(0, 1fr) auto;
     flex-basis: auto;
     height: auto;
     min-height: 0;
   }
 
   .affected-user-card-image {
+    position: relative;
+    inset: auto;
+    grid-column: 1;
+    grid-row: 1;
+    width: auto;
+    height: auto;
     aspect-ratio: 2 / 1;
+    will-change: auto;
   }
 
   :is(.affected-user-cards, .why-mattered-cards).is-customer-active .affected-user-card:last-child .affected-user-card-image,
   :is(.affected-user-cards, .why-mattered-cards).is-staff-active .affected-user-card:first-child .affected-user-card-image {
     grid-row: 1;
+    height: auto;
+  }
+
+  .affected-user-card-copy {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    grid-column: 1;
+    grid-row: 2;
+    height: auto;
+    overflow: visible;
+    will-change: auto;
   }
 
   .affected-user-card:not(:hover):not(.is-scroll-video-active) .affected-user-card-image img {
