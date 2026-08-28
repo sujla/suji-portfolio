@@ -984,11 +984,10 @@ ul.affected-user-card-detail {
 }
 
 .user-profile-cards--goals {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .user-profile-cards--goals .user-profile-card {
-  min-height: 200px;
   padding: 24px 30px;
 }
 
@@ -996,7 +995,6 @@ ul.affected-user-card-detail {
   display: grid;
   align-content: start;
   min-width: 0;
-  min-height: 220px;
   gap: 18px;
   padding: 28px 32px;
   overflow: hidden;
@@ -2330,7 +2328,6 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .user-profile-card {
-    min-height: 0;
     padding: 24px 20px 26px;
     border-radius: 16px;
   }
