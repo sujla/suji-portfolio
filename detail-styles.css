@@ -1005,12 +1005,12 @@ ul.affected-user-card-detail {
   border-radius: var(--detail-card-radius);
   background: var(--surface);
   cursor: pointer;
-  transition: height 560ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: height;
+  transition: min-height 560ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: min-height;
 }
 
 .goals-card.is-active {
-  height: var(--goals-card-expanded-height);
+  min-height: var(--goals-card-expanded-height);
 }
 
 .goals-card-copy {
