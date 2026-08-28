@@ -684,6 +684,8 @@ html.detail-coming-soon-root {
 }
 
 .detail-body-props > p {
+  max-width: 740px;
+  margin-top: 8px;
   margin-bottom: 8px;
 }
 
@@ -1499,8 +1501,8 @@ ul.affected-user-card-detail {
 .design-exploration-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 88px;
-  margin: 28px 40px;
+  gap: 56px;
+  margin: 0;
 }
 
 .design-exploration-card {
@@ -1510,8 +1512,12 @@ ul.affected-user-card-detail {
 }
 
 .design-exploration-card h3 {
-  margin: 0 8px 8px;
-  font-size: clamp(18px, 3vw, 22px);
+  margin: 0 0 6px;
+  color: var(--text);
+  font-family: "Fjord One", Georgia, serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.25;
 }
 
 .design-exploration-media {
@@ -1546,155 +1552,6 @@ ul.affected-user-card-detail {
   height: 100%;
   object-fit: cover;
   object-position: center;
-}
-
-.design-exploration-card:nth-child(3) .design-exploration-image-stage img {
-  padding-bottom: 20px;
-}
-
-.design-exploration-image {
-  opacity: 0;
-  transform: translate3d(0, 0, 0) scale(1);
-  transform-origin: 0 0;
-  transition:
-    opacity 520ms ease,
-    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.design-exploration-image.is-active {
-  opacity: 1;
-}
-
-.design-exploration-pagination {
-  display: grid;
-  justify-self: stretch;
-  width: 100%;
-  min-height: 28px;
-  place-items: start center;
-}
-
-.design-exploration-carousel {
-  --carousel-count: 1;
-  --carousel-gap: 14px;
-  --carousel-gap-total: 0px;
-  --exploration-carousel-track: var(--line);
-
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  gap: var(--carousel-gap);
-  margin-top: -12px;
-}
-
-:root[data-theme="dark"] .design-exploration-carousel {
-  --exploration-carousel-track: rgba(255,255,255,0.1);
-}
-
-.design-exploration-carousel-button {
-  --rotation-progress: 0%;
-
-  position: relative;
-  display: block;
-  flex: 0 1 min(
-    100px,
-    calc((100% - var(--carousel-gap-total)) / var(--carousel-count))
-  );
-  height: 24px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--text-tertiary);
-  cursor: pointer;
-}
-
-.design-exploration-carousel-button::before,
-.design-exploration-carousel-button::after {
-  position: absolute;
-  top: 11px;
-  left: 0;
-  height: 2px;
-  content: "";
-}
-
-.design-exploration-carousel-button::before {
-  width: 100%;
-  background: var(--exploration-carousel-track);
-  transition: background 180ms ease;
-}
-
-.design-exploration-carousel-button::after {
-  width: var(--rotation-progress);
-  background: var(--text);
-}
-
-.design-exploration-carousel-button:hover::before,
-.design-exploration-carousel-button:focus-visible::before {
-  background: var(--text-tertiary);
-}
-
-.design-exploration-carousel-button:focus-visible {
-  outline: 1px solid var(--line);
-  outline-offset: 2px;
-}
-
-.design-exploration-carousel-tooltip {
-  position: absolute;
-  bottom: calc(100% - 2px);
-  left: 50%;
-  z-index: 1;
-  padding: 4px 7px;
-  border-radius: 4px;
-  background: var(--text);
-  color: var(--bg);
-  font-size: 12px;
-  line-height: 1;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 4px);
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease;
-  white-space: nowrap;
-}
-
-.design-exploration-carousel-button:hover .design-exploration-carousel-tooltip,
-.design-exploration-carousel-button:focus-visible .design-exploration-carousel-tooltip {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-
-.design-exploration-copy {
-  display: grid;
-  gap: 10px;
-  height: auto;
-  max-height: none;
-  min-height: 0;
-  align-self: end;
-  margin: 0 0 2px;
-  padding: 22px 28px;
-  overflow: visible;
-  border-radius: var(--detail-card-radius);
-  background: var(--surface);
-  transform: translateY(0);
-  transition:
-    opacity 280ms ease,
-    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.design-exploration-copy h4 {
-  margin: 0;
-  min-width: 0;
-}
-
-.design-exploration-copy li {
-  padding-left: 2px;
-  color: var(--text-secondary);
-}
-
-.design-exploration-copy li::marker {
-  font-size: 0.98em;
 }
 
 /* Solution showcase: section */
@@ -2187,11 +2044,6 @@ html.detail-root.is-theme-switching-lines::before {
     margin: 14px 28px;
   }
 
-  .design-exploration-grid {
-    margin-right: 28px;
-    margin-left: 28px;
-  }
-
   .ux-goal-cards {
     margin: 8px 28px 0;
   }
@@ -2280,11 +2132,6 @@ html.detail-root.is-theme-switching-lines::before {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-content: stretch;
     gap: 28px 24px;
-  }
-
-  .design-exploration-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
   }
 
   .design-exploration-card {
@@ -2381,10 +2228,6 @@ html.detail-root.is-theme-switching-lines::before {
     font-size: 19px;
   }
 
-  .design-exploration-pagination {
-    min-height: clamp(30px, 4.5vw, 32px);
-  }
-
   .solution-showcase-list {
     gap: 36px;
     margin: 0 14px;
@@ -2445,81 +2288,9 @@ html.detail-root.is-theme-switching-lines::before {
     padding: 18px 20px;
   }
 
-  .design-exploration-copy {
-    padding: 18px 20px;
-  }
-
-  .design-exploration-image-stage {
-    --exploration-tooltip-x: 50%;
-    --exploration-tooltip-y: 50%;
-
-    cursor: grab;
-    touch-action: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-  }
-
-  .design-exploration-image-stage img {
-    -webkit-user-drag: none;
-  }
-
-  .design-exploration-image-stage::after {
-    position: absolute;
-    top: var(--exploration-tooltip-y);
-    left: var(--exploration-tooltip-x);
-    z-index: 3;
-    padding: 5px 8px 6px;
-    border-radius: 6px;
-    background: rgba(12, 12, 12, 0.86);
-    color: #fff;
-    content: "Hold & Drag";
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 1;
-    opacity: 0;
-    pointer-events: none;
-    transform: translate(16px, -50%);
-    transition:
-      opacity 140ms ease,
-      transform 140ms ease;
-    white-space: nowrap;
-  }
-
-  .design-exploration-image-stage.is-hover-tooltip-visible::after {
-    opacity: 1;
-    transform: translate(12px, -50%);
-  }
-
-  .design-exploration-image-stage.is-touch-zooming {
-    cursor: grabbing;
-  }
-
-  .design-exploration-image-stage.is-touch-zooming::after {
-    opacity: 0;
-  }
-
-  .design-exploration-image-stage.is-touch-zooming .design-exploration-image.is-active {
-    transform:
-      translate3d(
-        var(--exploration-zoom-x, 0),
-        var(--exploration-zoom-y, 0),
-        0
-      )
-      scale(var(--exploration-zoom-scale, 1));
-    transition: opacity 120ms ease;
-  }
-
   .opportunity-cards,.impact-points.opportunity-cards {
     margin: 8px 14px;
     gap: 8px;
-  }
-
-  .design-exploration-grid {
-    margin-right: 14px;
-    margin-left: 14px;
-    margin-bottom: 0;
-    gap: 44px;
   }
 
   .opportunity-card-media {

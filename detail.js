@@ -1388,7 +1388,6 @@ setupAffectedUserActiveState();
 setupAffectedUserVideos();
 setupGoalsCards();
 setupOpportunityCards();
-setupDesignExplorationMedia();
 setupsolutionShowcase();
 syncDetailNav();
 syncActiveToc();
