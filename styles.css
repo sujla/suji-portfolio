@@ -2330,7 +2330,7 @@ body.is-project-transitioning .is-transition-source .project-card {
 }
 
 .project-summary {
-  background: var(--project-color);
+  background: var(--active-project-color);
   border: 1px solid rgba(0,0,0,0.06);
 }
 

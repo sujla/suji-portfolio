@@ -28,8 +28,6 @@ export const projects = [
       "Integrated store info, inventory, and pickup flows into a map-based finder built around real shopping behavior",
       "Increased available-store list views by 32.9%, with pickup conversion reaching up to 11%",
     ],
-    keyColor: "#62FE67",
-    subColor: "#00DE07",
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(0, 176, 6, 0.22), 0 32px 72px rgba(0, 0, 0, 0.06)",
@@ -56,8 +54,6 @@ export const projects = [
       "Designed CTA logic by store availability",
       "Increased page conversion by 321.3%",
     ],
-    keyColor: "#87F88B",
-    subColor: "#89D98C",
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(49, 49, 49, 0.3), 0 32px 72px rgba(0, 0, 0, 0.06)",
@@ -82,8 +78,6 @@ export const projects = [
       "Enabled editor-led publishing",
       "Cut production from 2 weeks to 20 minutes",
     ],
-    keyColor: "#FFA250",
-    subColor: "#FF9537",
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(255, 133, 26, 0.10), 0 32px 72px rgba(0, 0, 0, 0.06)",

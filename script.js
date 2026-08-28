@@ -143,7 +143,6 @@ const createProjectTransitionClone = (card) => {
   const rect = card.getBoundingClientRect();
   const targetRect = getTransitionTargetRect();
   const computedStyle = window.getComputedStyle(card);
-  const projectStyle = window.getComputedStyle(card.closest(".project-section"));
   const mediaStyle = window.getComputedStyle(card.querySelector(".project-media"));
   const summary = card.querySelector(".project-summary");
   const gap = Number.parseFloat(computedStyle.rowGap || computedStyle.gap) || 0;
@@ -165,8 +164,6 @@ const createProjectTransitionClone = (card) => {
     gridTemplateRows: computedStyle.gridTemplateRows,
     maxHeight: "none",
   });
-  cardClone.style.setProperty("--project-color", projectStyle.getPropertyValue("--project-color"));
-  cardClone.style.setProperty("--project-sub-color", projectStyle.getPropertyValue("--project-sub-color"));
   cardClone.style.setProperty("--project-media-shadow", mediaStyle.boxShadow);
 
   layer.className = "project-transition-layer";
@@ -263,8 +260,6 @@ const renderProjects = () => {
           data-year="${project.year}"
           data-title="${project.sideTitle}"
           style="
-            --project-color: ${project.keyColor};
-            --project-sub-color: ${project.subColor || project.keyColor};
             --project-media-shadow-dark: ${getMediaShadow(project, "dark")};
             --project-media-shadow-light: ${getMediaShadow(project, "light")};
           "
@@ -375,8 +370,6 @@ const setActiveProject = (index) => {
   counterWip.textContent = project.wip ? "🚧" : "";
   sideTitle.innerHTML = project.sideTitle.split("|").join("<br />");
   counterLine.style.setProperty("--progress", `${fill}%`);
-  root.style.setProperty("--active-project-color", project.keyColor);
-  root.style.setProperty("--active-project-sub-color", project.subColor || project.keyColor);
   setSessionItem(lastProjectStorageKey, project.slug);
   renderYearRail(project);
 };

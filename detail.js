@@ -441,10 +441,6 @@ setupComingSoonTape();
 const themeToggle = document.querySelector(".theme-toggle");
 
 if (currentProject) {
-  root.style.setProperty("--active-project-color", currentProject.keyColor);
-  root.style.setProperty("--active-project-sub-color", currentProject.subColor || currentProject.keyColor);
-  detailShell?.style.setProperty("--project-color", currentProject.keyColor);
-  detailShell?.style.setProperty("--project-sub-color", currentProject.subColor || currentProject.keyColor);
   setSessionItem(lastProjectStorageKey, currentProject.slug);
 }
 

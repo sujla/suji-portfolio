@@ -19,8 +19,6 @@ Project fields:
     "Contribution item",
     "Contribution item",
   ],
-  keyColor: "#17ff2b",
-  subColor: "rgba(23, 255, 43, 0.18)",
   mediaShadow: {
     dark: "0 48px 130px rgba(0, 149, 5, 0.32), 0 8px 48px rgba(0, 0, 0, 0.08)",
     light: "0 48px 130px rgba(0, 149, 5, 0.18), 0 8px 48px rgba(0, 0, 0, 0.06)",

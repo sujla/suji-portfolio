@@ -113,11 +113,6 @@ li::marker {
   transition: border-color var(--detail-line-transition);
 }
 
-.detail-shell--store-guide {
-  --project-color: #62FE67;
-  --project-sub-color: rgba(98, 254, 103, 0.18);
-}
-
 .detail-page[data-project-slug="store-guide"] .detail-gnb,
 .detail-page[data-project-slug="store-guide"] .detail-title-section {
   border-bottom: 0;
