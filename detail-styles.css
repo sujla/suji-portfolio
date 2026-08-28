@@ -787,7 +787,7 @@ html.detail-coming-soon-root {
 }
 
 .affected-user-card--customers {
-  --affected-copy-height: 137px;
+  --affected-copy-height: 159px;
   --affected-image-position: center center;
   --affected-video-position: center 50%;
 }
@@ -1935,11 +1935,11 @@ html.detail-root.is-theme-switching-lines::before {
 
 @media (min-width: 921px) and (max-width: 1024px) {
   .affected-user-card--customers {
-    --affected-copy-height: clamp(137px, calc(405px - 26.2vw), 159px);
+    --affected-copy-height: 159px;
   }
 
   .affected-user-card--staff {
-    --affected-copy-height: clamp(159px, calc(415px - 25vw), 180px);
+    --affected-copy-height: 159px;
   }
 }
 
