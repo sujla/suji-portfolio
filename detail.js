@@ -880,18 +880,35 @@ const setupGoalsCards = () => {
     if (!cards.length) return;
 
     const defaultCard = cards[0];
+    const hoverMedia = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const hoverActivationDelay = 120;
+    let hoverTimer;
 
     const setActiveCard = (activeCard) => {
+      window.clearTimeout(hoverTimer);
+
       cards.forEach((card) => {
         card.classList.toggle("is-active", card === activeCard);
       });
+    };
+
+    const queueActiveCard = (card) => {
+      window.clearTimeout(hoverTimer);
+      hoverTimer = window.setTimeout(() => {
+        setActiveCard(card);
+      }, hoverActivationDelay);
     };
 
     setActiveCard(defaultCard);
 
     cards.forEach((card) => {
       card.addEventListener("pointerenter", () => {
-        setActiveCard(card);
+        if (!hoverMedia.matches || card.classList.contains("is-active")) return;
+        queueActiveCard(card);
+      });
+
+      card.addEventListener("pointerleave", () => {
+        window.clearTimeout(hoverTimer);
       });
 
       card.addEventListener("click", () => {
@@ -900,7 +917,7 @@ const setupGoalsCards = () => {
     });
 
     container.addEventListener("pointerleave", () => {
-      setActiveCard(defaultCard);
+      window.clearTimeout(hoverTimer);
     });
   });
 };
