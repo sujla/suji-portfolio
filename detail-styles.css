@@ -689,6 +689,10 @@ html.detail-coming-soon-root {
   margin-bottom: 12px;
 }
 
+#impact .detail-body-props > p {
+  margin-bottom: 0;
+}
+
 /* Problems */
 .problem-findings {
   display: grid;
@@ -1270,9 +1274,8 @@ ul.affected-user-card-detail {
 
 .result-card-copy .result-card-value {
   color: var(--globe-place-color);
-  font-size: clamp(29px, 6vw, 45px);
+  font-size: clamp(29px, 6vw, 44px);
   font-weight: 400;
-  letter-spacing: -0.04em;
   line-height: 1;
 }
 
