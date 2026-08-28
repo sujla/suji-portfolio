@@ -836,15 +836,13 @@ html.detail-coming-soon-root {
   height: 100%;
   object-fit: cover;
   object-position: var(--affected-image-position, center center);
-  transition:
-    filter 360ms ease,
-    opacity 260ms ease;
+  transition: filter 360ms ease;
 }
 
 .affected-user-card-video {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -854,12 +852,8 @@ html.detail-coming-soon-root {
   transition: opacity 260ms ease;
 }
 
-.affected-user-card.has-hover-video.is-video-hovering .affected-user-card-image img {
-  opacity: 0;
-}
-
-.affected-user-card.has-hover-video.is-scroll-video-active .affected-user-card-image img {
-  opacity: 0;
+.why-mattered-cards .affected-user-card--staff .affected-user-card-video {
+  transform: translateY(-3%) scale(1.2);
 }
 
 .affected-user-card.has-hover-video.is-video-hovering .affected-user-card-video {
@@ -867,6 +861,10 @@ html.detail-coming-soon-root {
 }
 
 .affected-user-card.has-hover-video.is-scroll-video-active .affected-user-card-video {
+  opacity: 1;
+}
+
+.why-mattered-cards.is-staff-active .affected-user-card--staff.has-hover-video .affected-user-card-video {
   opacity: 1;
 }
 

@@ -687,6 +687,7 @@ const setupAffectedUserActiveState = () => {
     const cards = [...container.querySelectorAll(".affected-user-card")];
     if (!cards.length) return;
 
+    const keepsLastActive = container.classList.contains("why-mattered-cards");
     let leaveTimer;
 
     const setActiveCard = (card) => {
@@ -709,6 +710,8 @@ const setupAffectedUserActiveState = () => {
 
     container.addEventListener("pointerleave", () => {
       window.clearTimeout(leaveTimer);
+      if (keepsLastActive) return;
+
       leaveTimer = window.setTimeout(() => {
         container.classList.remove("is-staff-active");
         container.classList.add("is-customer-active");
