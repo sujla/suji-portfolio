@@ -1081,7 +1081,6 @@ html.is-pf-modal-open body {
 
 .pf-work-modal .pf-work-meta h2 {
   font-size: clamp(22px, 1.35vw, 34px);
-  line-height: 0.98;
 }
 
 .pf-work-modal .pf-work-meta span {
@@ -3283,7 +3282,7 @@ body {
 
 .hero-title-column {
   min-width: 0;
-  padding-top: 101px;
+  padding-top: 90px;
   padding-left: 66px;
 }
 
@@ -3294,7 +3293,7 @@ body {
   font-size: 50px;
   font-weight: 400;
   letter-spacing: -0.01em;
-  line-height: 1.08;
+  line-height: 1.2;
 }
 
 .hero-copy {
@@ -3302,7 +3301,7 @@ body {
   min-width: 0;
   flex-direction: column;
   gap: 16px;
-  padding: 121px 12px 80px;
+  padding: 122px 12px 80px;
   color: var(--text);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;

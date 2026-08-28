@@ -19,7 +19,7 @@ const legacyProjectRedirects = [
   {
     fileName: "projects/nearby-stores-right-products/index.html",
     target: "../store-finder-renewal/",
-    label: "Store Finder Renewal",
+    label: "Store Finder Renewal for Business Impact",
   },
   {
     fileName: "projects/converting-intent-into-pickup/index.html",

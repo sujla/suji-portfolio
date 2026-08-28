@@ -44,7 +44,7 @@ export const pfProjects = [
     id: "store-finder",
     type: "e-commerce",
     href: "./projects/store-finder-renewal/",
-    title: "Map-based Store Finder Renewal",
+    title: "Store Finder Renewal for Business Impact",
     companyLabel: "CJ Olive Young",
     year: 2024,
     deviceType: "mobile",

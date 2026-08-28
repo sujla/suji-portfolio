@@ -16,9 +16,9 @@ export const projects = [
     year: 2024,
     company: "CJ Olive Young",
     companyLabel: "Olive Young",
-    keywords: ["E-commerce", "Discovery Optimization", "Map-based UX"],
-    title: "Store Discovery, Renewed",
-    sideTitle: "Map-based |Store Finder Renewal",
+    keywords: ["E-commerce", "Omnichannel Experience", "Operational Efficiency"],
+    title: "Store Finder Renewal |for Business Impact",
+    sideTitle: "Store Finder Renewal |for Business Impact",
     brief: [
       "This project aimed to transform Olive Young’s static store finder into a map-based shopping tool.",
       "The goal was to help customers connect product interest to nearby store availability and pickup, reducing friction between digital browsing and physical store purchase."
