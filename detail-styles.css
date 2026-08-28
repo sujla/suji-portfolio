@@ -435,9 +435,9 @@ li::marker {
   gap: 16px;
 }
 
-.gap-24 {
+.title-gap {
   display: grid;
-  gap: clamp(14px, 3vw, 24px);
+  gap: clamp(14px, 3vw, 18px);
 }
 
 .detail-content ul {
@@ -462,9 +462,9 @@ li::marker {
   max-width: 660px;
   color: var(--text);
   font-family: "Fjord One", Georgia, serif;
-  font-size: clamp(28px, 5vw, 36px);
+  font-size: clamp(28px, 5vw, 38px);
   font-weight: 400;
-  line-height: 1.35;
+  line-height: 1.25;
 }
 
 .detail-content .label,

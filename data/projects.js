@@ -24,9 +24,9 @@ export const projects = [
       "The goal was to help customers connect product interest to nearby store availability and pickup, reducing friction between digital browsing and physical store purchase."
     ],
     contribution: [
-      "Increased page views by 32.9%, with pickup conversion reaching 11%",
-      "Built a map-based finder around real shopping behavior",
-      "Integrated store info, inventory, and pickup flows",
+      "Led the end-to-end redesign of Olive Young’s store finder experience",
+      "Integrated store info, inventory, and pickup flows into a map-based finder built around real shopping behavior",
+      "Increased available-store list views by 32.9%, with pickup conversion reaching up to 11%",
     ],
     keyColor: "#62FE67",
     subColor: "#00DE07",
