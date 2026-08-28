@@ -423,14 +423,6 @@ li::marker {
   padding: 0 0 120px;
 }
 
-.pdt-24 {
-  padding-top: 24px;
-}
-
-.pdb-24 {
-  padding-bottom: 24px;
-}
-
 .gap-8 {
   display: grid;
   gap: 8px;
