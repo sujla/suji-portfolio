@@ -452,7 +452,7 @@ li::marker {
 
 .detail-content h2 {
   margin: 0 0 6px;
-  max-width: 660px;
+  max-width: 670px;
   color: var(--text);
   font-family: "Fjord One", Georgia, serif;
   font-size: clamp(28px, 5vw, 38px);
@@ -676,6 +676,10 @@ html.detail-coming-soon-root {
 .detail-body-props {
   display: grid;
   gap: 8px;
+}
+
+.detail-body-props > p {
+  margin-bottom: 8px;
 }
 
 /* Problems */
@@ -972,6 +976,10 @@ ul.affected-user-card-detail {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.user-profile-cards--goals {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .user-profile-card {
