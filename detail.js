@@ -687,7 +687,7 @@ const setupAffectedUserVideos = () => {
 };
 
 const setupAffectedUserActiveState = () => {
-  document.querySelectorAll(".affected-user-cards").forEach((container) => {
+  document.querySelectorAll(".affected-user-cards, .why-mattered-cards").forEach((container) => {
     const cards = [...container.querySelectorAll(".affected-user-card")];
     if (!cards.length) return;
 

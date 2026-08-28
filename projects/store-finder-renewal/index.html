@@ -53,8 +53,7 @@
           <li><a href="#problem"><span class="detail-toc-label">Problem</span></a></li>
           <li><a href="#why-it-mattered"><span class="detail-toc-label">Why It Mattered</span></a></li>
           <li><a href="#users"><span class="detail-toc-label">Users</span></a></li>
-          <li><a href="#business-opportunity"><span class="detail-toc-label">Biz Opportunity</span></a></li>
-          <li><a href="#goal"><span class="detail-toc-label">UX Goal</span></a></li>
+          <li><a href="#goals"><span class="detail-toc-label">Goals</span></a></li>
           <li><a href="#explorations"><span class="detail-toc-label">Explorations</span></a></li>
           <li><a href="#solution"><span class="detail-toc-label">Solution</span></a></li>
           <li><a href="#impact"><span class="detail-toc-label">Impact</span></a></li>
@@ -120,7 +119,7 @@
           <div class="detail-content" aria-label="Problem" id="problem">
             <div class="title-gap">
               <p class="label">Problem</p>
-              <div class="detail-body-props detail-problem-intro">
+              <div class="detail-body-props">
                 <h2>The old store guide was outdated, fragmented, and unclear.</h2>
               </div>
             </div>
@@ -159,64 +158,73 @@
               <p class="label">Why It Mattered</p>
               <h2>Unclear stock information created purchase friction and store workload.</h2>
             </div>
-            <div class="gap-8 why-matter-list">
-              <ul>
-                <li class="why-matter-item">High-intent customers could drop off before purchase.</li>
-                <li>Store staff absorbed repetitive inventory-check calls during daily operations.</li>
-              </ul>
+            <div class="why-mattered-cards is-customer-active pdb-24" aria-label="Why it mattered">
+              <figure class="affected-user-card affected-user-card--customers">
+                <div class="affected-user-card-image">
+                  <img src="../../assets/store-guide/store-finder-renewal-customers.png" alt="" />
+                  <video class="affected-user-card-video" muted loop playsinline preload="metadata">
+                    <source src="../../assets/store-guide/store-finder-renewal-customers-hover.mp4" type="video/mp4" />
+                  </video>
+                  <span class="affected-user-image-name">Customers</span>
+                </div>
+                <figcaption class="affected-user-card-copy">
+                  <h4><span class="affected-user-name label-strong">Customers</span></h4>
+                  <ul class="affected-user-card-detail">
+                    <li>Could not confirm if the product was available nearby</li>
+                    <li>Had to call stores for simple stock checks</li>
+                    <li>Could hesitate, delay purchase, or drop off</li>
+                  </ul>
+                </figcaption>
+              </figure>
+              <figure class="affected-user-card affected-user-card--staff">
+                <div class="affected-user-card-image">
+                  <img src="../../assets/store-guide/store-finder-renewal-staff.png" alt="" />
+                  <video class="affected-user-card-video" muted loop playsinline preload="metadata">
+                    <source src="../../assets/store-guide/store-finder-renewal-staff-hover.mp4" type="video/mp4" />
+                  </video>
+                  <span class="affected-user-image-name">Store Staff</span>
+                </div>
+                <figcaption class="affected-user-card-copy">
+                  <h4><span class="affected-user-name label-strong">Store Staff</span></h4>
+                  <ul class="affected-user-card-detail">
+                    <li>Had to handle calls on top of store operations</li>
+                    <li>Received many repetitive inventory-check inquiries</li>
+                    <li>Sometimes missed or avoided calls during busy hours, creating poor CX</li>
+                  </ul>
+                </figcaption>
+              </figure>
             </div>
           </div>
-          <div class="detail-content pdt-24" aria-label="Affected Users" id="users">
-            <div>
-              <div class="gap-8">
-                <p class="label">Affected Users</p>
-                <p>This fragmented experience created friction for two key user groups:</p>
-              </div>
-              <div class="affected-user-cards is-customer-active pdb-24" aria-label="Affected users">
-                <figure class="affected-user-card affected-user-card--customers">
-                  <div class="affected-user-card-image">
-                    <img src="../../assets/store-guide/store-finder-renewal-customers.png" alt="" />
-                    <video class="affected-user-card-video" muted loop playsinline preload="metadata">
-                      <source src="../../assets/store-guide/store-finder-renewal-customers-hover.mp4" type="video/mp4" />
-                    </video>
-                    <span class="affected-user-image-name">Customers</span>
-                  </div>
-                  <figcaption class="affected-user-card-copy">
-                    <h4>
-                      <span class="affected-user-name">Customers</span>
-                      <span class="affected-user-card-detail"> — needed a faster way to:</span>
-                    </h4>
-                    <ul class="affected-user-card-detail">
-                      <li>Find nearby stores based on location</li>
-                      <li>Check store-level product availability</li>
-                      <li>Move from product interest to store visit or pickup with confidence</li>
-                    </ul>
-                  </figcaption>
-                </figure>
-                <figure class="affected-user-card affected-user-card--staff">
-                  <div class="affected-user-card-image">
-                    <img src="../../assets/store-guide/store-finder-renewal-staff.png" alt="" />
-                    <video class="affected-user-card-video" muted loop playsinline preload="metadata">
-                      <source src="../../assets/store-guide/store-finder-renewal-staff-hover.mp4" type="video/mp4" />
-                    </video>
-                    <span class="affected-user-image-name">Store staff</span>
-                  </div>
-                  <figcaption class="affected-user-card-copy">
-                    <h4>
-                      <span class="affected-user-name">Store staff</span>
-                      <span class="affected-user-card-detail"> — needed a more efficient way to:</span>
-                    </h4>
-                    <ul class="affected-user-card-detail">
-                      <li>Reduce repetitive inventory-check calls</li>
-                      <li>Avoid interruptions during store operations</li>
-                      <li>Support customers without manually bridging digital information gaps</li>
-                    </ul>
-                  </figcaption>
-                </figure>
+          <div class="detail-content pdt-24" aria-label="Users" id="users">
+            <div class="title-gap">
+              <p class="label">Users</p>
+              <div class="detail-body-props">
+                <h2>The Users Who Needed<br />Clear Store Availability Most</h2>
+                <p class="users-section-intro">Data and store feedback showed strong usage patterns among women in their 20s and 30s, especially around cosmetics availability.</p>
               </div>
             </div>
+            <div class="user-profile-cards" aria-label="Customer and store staff profiles">
+              <article class="user-profile-card user-profile-card--customers">
+                <h3>Customers</h3>
+                <ul>
+                  <li>Women in their 20s and 30s</li>
+                  <li>Mobile-savvy</li>
+                  <li>Need products quickly</li>
+                  <li>Want to confirm nearby availability</li>
+                </ul>
+              </article>
+              <article class="user-profile-card user-profile-card--staff">
+                <h3>Store Staff</h3>
+                <ul>
+                  <li>Work in busy, often understaffed stores</li>
+                  <li>Already check and update inventory daily</li>
+                  <li>Still handle repeated stock calls</li>
+                  <li>Need to focus on in-store customers</li>
+                </ul>
+              </article>
+            </div>
           </div>
-          <div class="detail-content pdt-24" aria-label="Business Opportunity" id="business-opportunity">
+          <div class="detail-content pdt-24" aria-label="Goals" id="goals">
             <div>
               <div class="title-gap">
                 <p class="label">Business Opportunity</p>
@@ -263,8 +271,6 @@
                 </article>
               </div>
             </div>
-          </div>
-          <div class="detail-content" aria-label="Goal" id="goal">
             <div class="pdt-24 title-gap">
               <p class="label">UX Goal</p>
               <div class="detail-body-props">
