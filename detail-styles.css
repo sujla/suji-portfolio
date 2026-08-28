@@ -635,7 +635,7 @@ html.detail-coming-soon-root {
 /* Project overview */
 .detail-overview-content {
   display: grid;
-  gap: 40px;
+  gap: 48px;
 }
 
 .detail-project-meta {
@@ -643,7 +643,12 @@ html.detail-coming-soon-root {
   grid-template-columns: repeat(4, max-content);
   justify-content: space-between;
   gap: clamp(20px, 4vw, 44px);
-  padding-bottom: 40px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+}
+
+.detail-project-contributions {
+  padding-bottom: 48px;
   border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
 }
 
@@ -980,6 +985,11 @@ ul.affected-user-card-detail {
 
 .user-profile-cards--goals {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.user-profile-cards--goals .user-profile-card {
+  min-height: 200px;
+  padding: 24px 30px;
 }
 
 .user-profile-card {
@@ -2296,7 +2306,7 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .detail-overview-content {
-    gap: 28px;
+    gap: 48px;
   }
 
   .detail-header {
