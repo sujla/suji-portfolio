@@ -1247,18 +1247,25 @@ ul.affected-user-card-detail {
 }
 
 /* Result */
+.impact-points.opportunity-cards {
+  border-top: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+}
+
 .result-card {
   min-width: 0;
-  padding: 24px 28px 26px;
-  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
-  border-radius: var(--detail-card-radius);
-  background: var(--surface);
+  padding: 38px 22px 22px;
+}
+
+.result-card:not(:last-child) {
+  border-right: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
 }
 
 .result-card-copy {
   display: grid;
-  gap: 22px;
+  gap: 26px;
   padding: 0;
+  text-align: center;
 }
 
 .result-card-copy p {
@@ -1266,8 +1273,10 @@ ul.affected-user-card-detail {
 }
 
 .result-card-copy .result-card-label {
+  width: fit-content;
+  margin: 0 auto;
   color: var(--text-secondary);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 1.4;
   text-transform: capitalize;
@@ -1276,9 +1285,11 @@ ul.affected-user-card-detail {
 .result-card-copy .result-card-value {
   display: inline-flex;
   width: fit-content;
+  min-height: 42px;
   align-items: center;
   gap: 3px;
-  font-size: clamp(28px, 6vw, 40px);
+  margin: 0 auto;
+  font-size: clamp(28px, 6vw, 41px);
   font-weight: 400;
   line-height: 1;
 }
@@ -1318,6 +1329,8 @@ ul.affected-user-card-detail {
 .reflection-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
 }
 
 .reflection-item {
@@ -1325,12 +1338,13 @@ ul.affected-user-card-detail {
   align-content: start;
   gap: 12px;
   min-height: 168px;
-  padding: 4px 32px 32px 0;
+  padding: 34px 32px 32px 2px;
 }
 
 .reflection-item + .reflection-item {
   padding-right: 0;
   padding-left: 32px;
+  border-left: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
 }
 
 .reflection-item > p:last-child:not(.label-strong) {
@@ -2213,11 +2227,13 @@ html.detail-root.is-theme-switching-lines::before {
 
   .reflection-item {
     min-height: 0;
-    padding: 4px 0 28px;
+    padding: 24px 0 28px;
   }
 
   .reflection-item + .reflection-item {
-    padding: 4px 0 24px;
+    padding: 28px 0 24px;
+    border-top: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+    border-left: 0;
   }
 
   .opportunity-card {
