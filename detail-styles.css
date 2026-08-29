@@ -1107,9 +1107,18 @@ ul.affected-user-card-detail {
 
 .user-profile-card-media {
   width: 100%;
-  min-height: clamp(140px, 18vw, 180px);
+  min-height: 0;
+  aspect-ratio: 380 / 200;
+  overflow: hidden;
   border-radius: 12px;
   background: var(--bg);
+}
+
+.user-profile-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .user-profile-card-heading {
