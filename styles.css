@@ -6,7 +6,7 @@
   --surface: #202326;
   --surface-transparent: rgba(32, 35, 38, 0);
   --muted: rgba(247, 248, 245, 0.32);
-  --line: #212121;
+  --line: #424242;
   --rail-muted: rgba(247, 248, 245, 0.2);
   --counter-muted: rgba(247, 248, 245, 0.46);
   --toggle-bg: color-mix(in srgb, var(--bg) 70%, transparent);
