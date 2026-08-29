@@ -1490,6 +1490,7 @@ ul.affected-user-card-detail {
 
 /* Result */
 .impact-points.opportunity-cards {
+  grid-template-columns: minmax(0, 3.5fr) minmax(0, 3.5fr) minmax(0, 3fr);
   border-top: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
 }
@@ -2465,7 +2466,8 @@ html.detail-root.is-theme-switching-lines::before {
     min-height: 0;
   }
 
-  .opportunity-cards {
+  .opportunity-cards,
+  .impact-points.opportunity-cards {
     grid-template-columns: 1fr;
   }
 
