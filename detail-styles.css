@@ -950,6 +950,12 @@ ul.affected-user-card-detail {
   max-height: 120px;
 }
 
+.why-mattered-cards .affected-user-card--customers .affected-user-card-detail li:nth-child(3),
+.why-mattered-cards .affected-user-card--staff .affected-user-card-detail li:first-child {
+  color: var(--red);
+  font-weight: 500;
+}
+
 :is(.affected-user-cards, .why-mattered-cards).is-customer-active .affected-user-card:last-child .affected-user-card-copy,
 :is(.affected-user-cards, .why-mattered-cards).is-staff-active .affected-user-card:first-child .affected-user-card-copy {
   opacity: 0;
