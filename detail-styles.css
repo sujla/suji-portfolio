@@ -987,15 +987,215 @@ ul.affected-user-card-detail {
   gap: 20px;
 }
 
-.emotional-journey-map {
+.why-mattered-frame {
+  display: grid;
   width: 100%;
-  margin: 0;
+  min-height: 360px;
+  grid-template-rows: minmax(0, 1fr) 52px minmax(0, 1fr);
+  gap: 8px;
+  padding: 24px 28px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
+  border-radius: 16px;
+  background: var(--surface);
+  box-sizing: border-box;
 }
 
-.emotional-journey-map img {
-  display: block;
-  width: 100%;
-  height: auto;
+.why-mattered-behaviors {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.why-mattered-behaviors--staff {
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.why-mattered-behaviors--staff .why-mattered-row-label {
+  grid-row: 2;
+}
+
+.why-mattered-behaviors--staff .why-mattered-behavior-list {
+  grid-row: 1;
+}
+
+.detail-content .why-mattered-row-label {
+  color: var(--text-tertiary);
+  font-family: "Google Sans Code", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.why-mattered-behavior-list {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.detail-content .why-mattered-behavior {
+  --why-balloon-bg: var(--bg);
+
+  position: relative;
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--why-balloon-bg);
+  color: var(--text-secondary);
+  font-size: clamp(12px, 1.6vw, 14px);
+  line-height: 1.25;
+  place-items: center;
+  text-align: center;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.detail-content .why-mattered-behavior--critical {
+  --why-balloon-bg: color-mix(in srgb, var(--red) 9%, var(--bg));
+
+  color: var(--red);
+  font-weight: 500;
+}
+
+.why-mattered-emotion {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+}
+
+.why-mattered-emotion::before {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffc400 0%, #ffd45c 48%, #ff9480 76%, #f02d2d 100%);
+  content: "";
+}
+
+.why-mattered-emoji,
+.why-mattered-emoji-pair {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+}
+
+.why-mattered-emoji {
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(2, 5, 8, 0.14));
+}
+
+.why-mattered-emoji-pair {
+  width: clamp(44px, 5vw, 56px);
+  height: clamp(40px, 4.7vw, 52px);
+}
+
+.why-mattered-emoji-pair-primary,
+.why-mattered-emoji-pair-secondary {
+  position: absolute;
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(2, 5, 8, 0.14));
+}
+
+.why-mattered-emoji-pair-primary {
+  top: 2px;
+  left: 2px;
+  z-index: 2;
+}
+
+.why-mattered-emoji-pair-secondary {
+  right: 2px;
+  bottom: 2px;
+  z-index: 1;
+}
+
+@media (max-width: 600px) {
+  .why-mattered-frame {
+    min-height: 320px;
+    grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 2px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .why-mattered-behaviors {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .why-mattered-behaviors--staff {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .why-mattered-behaviors--staff .why-mattered-row-label {
+    grid-row: 1;
+  }
+
+  .why-mattered-behaviors--staff .why-mattered-behavior-list {
+    grid-row: 2;
+  }
+
+  .why-mattered-behavior-list {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(4, minmax(76px, auto));
+    gap: 12px;
+  }
+
+  .detail-content .why-mattered-row-label {
+    align-self: start;
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .detail-content .why-mattered-behavior {
+    padding: 12px;
+    border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
+    font-size: 13px;
+  }
+
+  .why-mattered-emotion {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    padding: 45% 0 0;
+  }
+
+  .why-mattered-emotion::before {
+    inset: 0 auto 0 50%;
+    width: 8px;
+    height: auto;
+    background: linear-gradient(180deg, #ffc400 0%, #ffd45c 48%, #ff9480 76%, #f02d2d 100%);
+    transform: translateX(-50%);
+  }
+
+  .why-mattered-emoji {
+    font-size: 26px;
+  }
+
+  .why-mattered-emoji-pair {
+    width: 46px;
+    height: 43px;
+  }
+
+  .why-mattered-emoji-pair-primary,
+  .why-mattered-emoji-pair-secondary {
+    font-size: 26px;
+  }
+
 }
 
 .detail-content .users-section-intro {
