@@ -689,10 +689,6 @@ html.detail-coming-soon-root {
   margin-bottom: 12px;
 }
 
-#impact .detail-body-props > p {
-  margin-bottom: 4px;
-}
-
 /* Problems */
 .problem-findings {
   display: grid;
@@ -1282,6 +1278,10 @@ ul.affected-user-card-detail {
   padding: 0;
   border: 0;
   background: transparent;
+}
+
+.result-card-copy .result-card-label {
+  font-size: 13px;
 }
 
 .result-card-copy .result-card-value {
