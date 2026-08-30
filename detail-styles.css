@@ -36,6 +36,7 @@ li::marker {
   padding-inline: 26px;
   background: var(--bg);
   color: var(--text);
+  overflow-x: clip;
 }
 
 .detail-page[data-project-slug="store-guide"] {
@@ -1844,9 +1845,11 @@ ul.affected-user-card-detail {
 
 /* Design explorations */
 .design-exploration-grid {
+  --design-exploration-grid-gap: 56px;
+
   display: grid;
   grid-template-columns: 1fr;
-  gap: 56px;
+  gap: var(--design-exploration-grid-gap);
   margin: 0;
 }
 
@@ -1856,10 +1859,34 @@ ul.affected-user-card-detail {
   gap: 8px;
 }
 
+.design-exploration-card--availability.is-availability-scroll-scrubbing {
+  gap: 0;
+}
+
+.design-exploration-card--availability.is-availability-scroll-scrubbing::after {
+  display: block;
+  height: var(--availability-pin-distance, 0px);
+  content: "";
+}
+
+.design-exploration-availability-stage {
+  display: grid;
+  min-width: 0;
+  gap: 24px;
+  align-content: center;
+}
+
 .design-exploration-availability-content {
   display: grid;
   min-width: 0;
+  margin-top: 16px;
   gap: 8px;
+}
+
+.design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-availability-stage {
+  position: sticky;
+  top: -14svh;
+  z-index: 1;
 }
 
 .design-exploration-card h3 {
@@ -1904,7 +1931,7 @@ ul.affected-user-card-detail {
 
 .design-exploration-media--availability {
   display: block;
-  padding: 4% 3% 2.5%;
+  padding: 4% 3% 3%;
   overflow-x: auto;
   box-sizing: border-box;
 }
@@ -1926,18 +1953,18 @@ ul.affected-user-card-detail {
 }
 
 .design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-option--muted {
-  animation: availability-option-muted 12800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: availability-option-muted 10000ms cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: var(--availability-scrub-time, 0ms);
   animation-play-state: paused;
 }
 
 @keyframes availability-option-muted {
-  0%, 15.8% {
+  0%, 70% {
     opacity: 1;
   }
 
-  19%, 100% {
-    opacity: 0.2;
+  74%, 100% {
+    opacity: 0.12;
   }
 }
 
@@ -1962,6 +1989,8 @@ ul.affected-user-card-detail {
 }
 
 .design-exploration-option > span {
+  padding: 3px 7px;
+  border-radius: 6px;
   color: var(--text-secondary);
   font-family: "Google Sans Code", monospace;
   font-size: 12px;
@@ -1974,65 +2003,28 @@ ul.affected-user-card-detail {
   display: inline-flex;
   align-items: center;
   justify-self: center;
-  gap: 4px;
-  padding-right: 6px;
+  transition: background-color 280ms ease, color 280ms ease;
 }
 
-.design-exploration-option--selected > span::before {
-  color: #1f7dff;
-  font-family: Arial, sans-serif;
-  font-size: 1.24em;
-  font-weight: 700;
-  line-height: 1;
-  opacity: 0;
-  transform: translateY(2px) scale(0.72);
-  content: "✓";
-}
-
-.design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-option--selected > span {
-  animation: availability-option-label 12800ms ease both;
-  animation-delay: var(--availability-scrub-time, 0ms);
-  animation-play-state: paused;
-}
-
-.design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-option--selected > span::before {
-  animation: availability-option-check 12800ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: var(--availability-scrub-time, 0ms);
-  animation-play-state: paused;
-}
-
-@keyframes availability-option-label {
-  0%, 17% {
-    color: var(--text-secondary);
-  }
-
-  20%, 100% {
-    color: var(--text);
-  }
-}
-
-@keyframes availability-option-check {
-  0%, 17% {
-    opacity: 0;
-    transform: translateY(2px) scale(0.72);
-  }
-
-  20%, 100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.design-exploration-card--availability.is-availability-option-selected .design-exploration-option--selected > span {
+  background: #2990ff;
+  color: #fff !important;
 }
 
 .design-exploration-feedback {
   position: absolute;
-  top: 3%;
-  right: 26%;
+  top: 9%;
+  right: 25%;
   z-index: 2;
   display: grid;
-  width: 35.5%;
-  gap: clamp(10px, 1.4vw, 22px);
+  width: 35%;
+  gap: clamp(10px, 1.4vw, 18px);
   justify-content: end;
+  justify-items: end;
+  opacity: 0;
   pointer-events: none;
+  transform: translateY(20px) scale(0.97);
+  transform-origin: center;
 }
 
 .design-exploration-feedback blockquote {
@@ -2041,48 +2033,28 @@ ul.affected-user-card-detail {
   margin: 0;
   padding: clamp(10px, 1.3vw, 14px) clamp(13px, 1.6vw, 20px) clamp(12px, 1.4vw, 16px);
   border-radius: clamp(16px, 2.3vw, 20px);
-  background: #020508;
-  box-shadow: 0 12px 30px rgba(2, 5, 8, 0.14);
-  color: #f7f8f5;
+  background: var(--bg);
+  box-shadow: 0 12px 30px rgba(2, 5, 8, 0.12);
+  color: var(--text);
   font-size: clamp(14px, 1.45vw, 15px);
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.35;
-  opacity: 0;
-  transform: translateY(14px) scale(0.97);
-  transform-origin: center;
 }
 
-.design-exploration-feedback blockquote:nth-child(2) {
-  --availability-feedback-delay: 55ms;
-}
-
-.design-exploration-feedback blockquote:nth-child(3) {
-  --availability-feedback-delay: 110ms;
-}
-
-.design-exploration-feedback blockquote:nth-child(4) {
-  --availability-feedback-delay: 165ms;
-}
-
-.design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-feedback blockquote {
-  animation: availability-feedback 12600ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--availability-scrub-time, 0ms) + var(--availability-feedback-delay, 0ms));
+.design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-feedback {
+  animation: availability-feedback 10000ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--availability-scrub-time, 0ms);
   animation-play-state: paused;
 }
 
 @keyframes availability-feedback {
-  0%, 15.87% {
+  0%, 70% {
     opacity: 0;
-    transform: translateY(14px) scale(0.97);
+    transform: translateY(20px) scale(0.97);
   }
 
-  19.05%, 98.41% {
+  92%, 100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  100% {
-    opacity: 0;
     transform: translateY(0) scale(1);
   }
 }
@@ -2092,7 +2064,7 @@ ul.affected-user-card-detail {
   right: 0;
   bottom: 0;
   left: 0;
-  height: 1px;
+  height: 2px;
   overflow: hidden;
   background: color-mix(in srgb, var(--line) 44%, transparent);
 }
@@ -2100,8 +2072,8 @@ ul.affected-user-card-detail {
 .design-exploration-scroll-progress-value {
   display: block;
   width: 100%;
-  height: 1px;
-  background: #1f7dff;
+  height: 2px;
+  background: #2990ff;
   transform: scaleX(var(--availability-scroll-progress, 0));
   transform-origin: left center;
 }

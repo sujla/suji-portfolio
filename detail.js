@@ -1190,20 +1190,40 @@ const setupAvailabilityExploration = () => {
   const card = document.querySelector("[data-availability-exploration]");
   if (!card) return;
 
-  const totalDuration = 12800;
+  const stage = card.querySelector(".design-exploration-availability-stage");
+  if (!stage) return;
+
+  const totalDuration = 10000;
+  const firstChangeTime = 7000;
+  const selectedOptionTime = firstChangeTime;
+  const feedbackCompleteProgress = 0.92;
+  const postFeedbackHoldProgress = 0.15;
+  const pinDistanceMultiplier = feedbackCompleteProgress / (1 - postFeedbackHoldProgress);
+  let animationDistance = 1;
+  let pinDistance = 1;
   let scrollFrameId;
+
+  const syncPinDistance = () => {
+    animationDistance = Math.max(1, stage.offsetHeight);
+    pinDistance = animationDistance * pinDistanceMultiplier;
+    card.style.setProperty("--availability-pin-distance", `${pinDistance}px`);
+  };
 
   const syncScrollProgress = () => {
     scrollFrameId = undefined;
 
     const rect = card.getBoundingClientRect();
-    const startLine = window.innerHeight * 0.82;
-    const endLine = window.innerHeight * 0.18;
-    const scrollRange = Math.max(1, startLine - endLine + rect.height);
-    const progress = Math.min(1, Math.max(0, (startLine - rect.top) / scrollRange));
+    const pinStartLine = window.innerHeight * -0.14;
+    const scrollDistance = pinStartLine - rect.top;
+    const progress = Math.min(1, Math.max(0, scrollDistance / pinDistance));
+    const animationProgress = Math.min(1, Math.max(0, scrollDistance / animationDistance));
 
+    card.classList.toggle(
+      "is-availability-option-selected",
+      animationProgress * totalDuration >= selectedOptionTime,
+    );
     card.style.setProperty("--availability-scroll-progress", progress.toFixed(4));
-    card.style.setProperty("--availability-scrub-time", `${progress * -totalDuration}ms`);
+    card.style.setProperty("--availability-scrub-time", `${animationProgress * -totalDuration}ms`);
   };
 
   const requestScrollProgressSync = () => {
@@ -1213,8 +1233,21 @@ const setupAvailabilityExploration = () => {
   };
 
   card.classList.add("is-availability-scroll-scrubbing");
+  syncPinDistance();
   window.addEventListener("scroll", requestScrollProgressSync, { passive: true });
-  window.addEventListener("resize", requestScrollProgressSync);
+  window.addEventListener("resize", () => {
+    syncPinDistance();
+    requestScrollProgressSync();
+  });
+
+  if ("ResizeObserver" in window) {
+    const resizeObserver = new ResizeObserver(() => {
+      syncPinDistance();
+      requestScrollProgressSync();
+    });
+    resizeObserver.observe(stage);
+  }
+
   syncScrollProgress();
 };
 
