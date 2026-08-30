@@ -1885,8 +1885,63 @@ ul.affected-user-card-detail {
 
 .design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-availability-stage {
   position: sticky;
-  top: -14svh;
+  top: var(--availability-sticky-top, -11svh);
   z-index: 1;
+}
+
+.design-exploration-sequence-stage {
+  display: grid;
+  min-width: 0;
+  gap: 24px;
+}
+
+.design-exploration-panel-stack {
+  display: grid;
+  min-width: 0;
+  gap: var(--design-exploration-grid-gap);
+}
+
+.design-exploration-grid--sequence.is-design-exploration-sequence-ready {
+  gap: 0;
+}
+
+.design-exploration-grid--sequence.is-design-exploration-sequence-ready::after {
+  display: block;
+  height: var(--design-exploration-sequence-distance, 0px);
+  content: "";
+}
+
+.design-exploration-grid--sequence.is-design-exploration-sequence-ready .design-exploration-sequence-stage {
+  position: sticky;
+  top: -11svh;
+  z-index: 1;
+}
+
+.design-exploration-grid--sequence.is-design-exploration-sequence-ready .design-exploration-panel-stack {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+.design-exploration-grid--sequence.is-design-exploration-sequence-ready .design-exploration-card {
+  grid-area: 1 / 1;
+  opacity: var(--design-exploration-panel-opacity, 0);
+  pointer-events: none;
+  transform: translateY(var(--design-exploration-panel-shift, 0px)) scale(var(--design-exploration-panel-scale, 1));
+  transform-origin: center center;
+  will-change: opacity, transform;
+}
+
+.design-exploration-grid--sequence.is-design-exploration-sequence-ready .design-exploration-card.is-design-exploration-panel-current {
+  pointer-events: auto;
+}
+
+.design-exploration-grid--sequence.is-design-exploration-sequence-ready .design-exploration-card--availability.is-availability-scroll-scrubbing::after {
+  display: none;
+}
+
+.design-exploration-grid--sequence.is-design-exploration-sequence-ready .design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-availability-stage {
+  position: static;
+  top: auto;
 }
 
 .design-exploration-card h3 {
