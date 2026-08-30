@@ -682,6 +682,20 @@ const setupAffectedUserVideos = () => {
   syncScrollVideo();
 };
 
+const setupDelayedLoopVideos = () => {
+  const loopDelay = 3000;
+
+  document.querySelectorAll("[data-delayed-loop-video]").forEach((video) => {
+    video.loop = false;
+    video.addEventListener("ended", () => {
+      window.setTimeout(() => {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      }, loopDelay);
+    });
+  });
+};
+
 const setupAffectedUserActiveState = () => {
   document.querySelectorAll(".affected-user-cards, .why-mattered-cards").forEach((container) => {
     const cards = [...container.querySelectorAll(".affected-user-card")];
@@ -1541,6 +1555,7 @@ const jumpToTocTarget = (target) => {
 applyTheme(localStorage.getItem("portfolio-theme") || "light");
 setupAffectedUserActiveState();
 setupAffectedUserVideos();
+setupDelayedLoopVideos();
 setupGoalsCards();
 setupOpportunityCards();
 setupAvailabilityExploration();
