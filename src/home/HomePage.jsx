@@ -123,6 +123,13 @@ export function HomePage() {
               past the surface, identify what matters most, and find patterns in
               complexity. That&apos;s how I approach both product and design.
             </p>
+            <a
+              className="about-contact-link"
+              href="mailto:kweonsuji@gmail.com"
+              data-cursor-label="Email Suji"
+            >
+              Let&apos;s talk!
+            </a>
           </div>
           <div className="about-photo-stack" aria-hidden="true">
             {aboutPhotos.map(([className, src]) => (

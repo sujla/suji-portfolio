@@ -2171,18 +2171,29 @@ html.is-pf-modal-open body {
 
 #about-title {
   margin-top: 0;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
   font-size: 40px;
   line-height: 1.2;
-  max-width: 560px;
+  max-width: 480px;
 }
 
 .about-body {
-  font-size: clamp(14px, 2vw, 16px);
+  font-size: clamp(14px, 2vw, 15px);
   line-height: 1.55;
   color: var(--text-secondary);
   max-width: 660px;
   margin: 0 0 20px;
+}
+
+.about-contact-link {
+  align-self: flex-start;
+  margin-top: 12px;
+  color: var(--text);
+  font-family: "Google Sans Code", monospace;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-decoration: none;
 }
 
 .project-section {
@@ -2930,7 +2941,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .about-body {
-    font-size: clamp(14.5px, 1vw, 16px);
+    font-size: clamp(14.5px, 1vw, 15px);
     line-height: 1.5;
   }
 
@@ -3337,7 +3348,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .about-body {
-    font-size: clamp(14.5px, 1vw, 16px);
+    font-size: clamp(14.5px, 1vw, 15px);
     line-height: 1.5;
     max-width: 320px;
   }

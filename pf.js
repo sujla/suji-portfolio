@@ -1272,6 +1272,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   workCursor.setAttribute("aria-hidden", "true");
   workCursor.innerHTML = "<span>View Details</span>";
   document.body.append(workCursor);
+  const workCursorText = workCursor.firstElementChild;
 
   const filterButtons = [
     ...(typeFilter
@@ -1894,6 +1895,13 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     workCursorHeight = workCursor.offsetHeight;
   };
 
+  const setWorkCursorLabel = (label) => {
+    if (!workCursorText || workCursorText.textContent === label) return;
+
+    workCursorText.textContent = label;
+    syncWorkCursorSize();
+  };
+
   document.fonts?.ready.then(syncWorkCursorSize);
 
   const hideWorkCursor = (delay = 0) => {
@@ -1935,15 +1943,23 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       `translate3d(${cursorX}px, ${cursorY}px, 0) translateX(-50%)`;
   };
 
-  pf.addEventListener("pointermove", (event) => {
+  document.addEventListener("pointermove", (event) => {
     if (event.pointerType !== "mouse") return;
 
-    moveWorkCursor(event);
-
     const eventTarget = event.target instanceof Element ? event.target : null;
+    const customCursorTarget = eventTarget?.closest("[data-cursor-label]");
     const hoveredWork = eventTarget?.closest(".pf-work");
 
+    if (customCursorTarget) {
+      setWorkCursorLabel(customCursorTarget.dataset.cursorLabel || "View Details");
+      moveWorkCursor(event);
+      showWorkCursor();
+      return;
+    }
+
     if (hoveredWork && pf.contains(hoveredWork)) {
+      setWorkCursorLabel("View Details");
+      moveWorkCursor(event);
       showWorkCursor();
       return;
     }
