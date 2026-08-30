@@ -1277,14 +1277,14 @@ ul.affected-user-card-detail {
 }
 
 .goals-ring-particles-left {
-  top: -40%;
-  left: -22%;
-  transform: scaleX(-0.94);
+  top: -31%;
+  left: -10%;
+  transform: scaleX(-1.2);
 }
 
 .goals-ring-particles-right {
-  top: -10%;
-  left: 35%;
+  top: -2%;
+  left: 27%;
 }
 
 .goals-cards.is-particle-canvas-ready .goals-ring-texture {
@@ -1298,9 +1298,9 @@ ul.affected-user-card-detail {
   grid-template-rows: auto 1fr;
   align-content: space-between;
   min-width: 0;
-  min-height: clamp(200px, 24vw, 260px);
+  min-height: 310px;
   gap: 40px;
-  padding: 26px 40px 26px 32px;
+  padding: 26px 36px 26px 32px;
 }
 
 .goals-card > p.label-strong {
@@ -1318,6 +1318,10 @@ ul.affected-user-card-detail {
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 1.4;
+}
+
+.goals-card-muted {
+  opacity: 0.6;
 }
 
 /* Success metrics */
