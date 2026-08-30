@@ -187,18 +187,20 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const segmentVideo =
       project.media === "store-guide" && index < storeGuideVideoSegments.length
         ? `
-          <video
-            class="pf-modal-store-finder-video pf-modal-segment-video"
-            autoplay
-            muted
-            playsinline
-            preload="auto"
-            poster="./assets/store-guide/solution-tobe1.png"
-            data-segment-start="${storeGuideVideoSegments[index].start}"
-            data-segment-end="${storeGuideVideoSegments[index].end}"
-          >
-            <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
-          </video>
+          <div class="pf-modal-store-finder-video-frame">
+            <video
+              class="pf-modal-store-finder-video pf-modal-segment-video"
+              autoplay
+              muted
+              playsinline
+              preload="auto"
+              poster="./assets/store-guide/solution-tobe1.png"
+              data-segment-start="${storeGuideVideoSegments[index].start}"
+              data-segment-end="${storeGuideVideoSegments[index].end}"
+            >
+              <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
+            </video>
+          </div>
         `
         : "";
     const ctaEnhancementVideo =
@@ -223,14 +225,14 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       project.id === "cta-enhancement" && index === 2
         ? `
           <div class="pf-modal-result">
-            <div class="pf-modal-result-metrics">
-              <div class="pf-modal-result-metric inner-shadow-md">
-                <p>Pickup Conversion</p>
-                <strong>321.3%</strong>
+            <div class="pf-modal-result-metrics pf-modal-result-metrics--summary pf-modal-result-metrics--cta inner-shadow-md">
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
+                <strong class="pf-modal-result-value--increase">226.2%</strong>
+                <p class="pf-modal-result-label">Pickup Conversion</p>
               </div>
-              <div class="pf-modal-result-metric inner-shadow-md">
-                <p class="pf-modal-result-metric-title--nowrap">Total Pickup Orders</p>
-                <strong>128.2%</strong>
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
+                <strong class="pf-modal-result-value--increase">32.6%</strong>
+                <p class="pf-modal-result-label">Total Pickup Orders</p>
               </div>
             </div>
           </div>
@@ -257,16 +259,16 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       project.media === "store-guide" && index === 2
         ? `
           <div class="pf-modal-result">
-            <div class="pf-modal-result-metrics pf-modal-result-metrics--store-finder inner-shadow-md">
-              <div class="pf-modal-result-metric pf-modal-result-metric--store-finder">
+            <div class="pf-modal-result-metrics pf-modal-result-metrics--summary pf-modal-result-metrics--store-finder inner-shadow-md">
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
                 <strong class="pf-modal-result-value--increase">32.9%</strong>
                 <p class="pf-modal-result-label">Availability Page Views</p>
               </div>
-              <div class="pf-modal-result-metric pf-modal-result-metric--store-finder">
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
                 <strong class="pf-modal-result-value--decrease">18%</strong>
                 <p class="pf-modal-result-label">Inquiry call volume</p>
               </div>
-              <div class="pf-modal-result-metric pf-modal-result-metric--store-finder">
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
                 <strong class="pf-modal-result-value--neutral">~11%</strong>
                 <p class="pf-modal-result-label">Pickup conversion</p>
               </div>

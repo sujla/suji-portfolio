@@ -957,11 +957,7 @@ html.is-pf-modal-open body {
   white-space: nowrap;
 }
 
-.pf-modal-result-metrics--store-finder {
-  grid-template-columns:
-    minmax(0, 3.5fr)
-    minmax(0, 3fr)
-    minmax(0, 3fr);
+.pf-modal-result-metrics--summary {
   gap: 0;
   padding: 20px 0;
   overflow: hidden;
@@ -969,7 +965,18 @@ html.is-pf-modal-open body {
   background: var(--surface);
 }
 
-.pf-modal-result-metrics--store-finder .pf-modal-result-metric--store-finder {
+.pf-modal-result-metrics--store-finder {
+  grid-template-columns:
+    minmax(0, 3.5fr)
+    minmax(0, 3fr)
+    minmax(0, 3fr);
+}
+
+.pf-modal-result-metrics--cta {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pf-modal-result-metrics--summary .pf-modal-result-metric--summary {
   align-items: center;
   gap: 8px;
   padding-block: 0;
@@ -978,7 +985,7 @@ html.is-pf-modal-open body {
   background: transparent;
 }
 
-.pf-modal-result-metrics--store-finder
+.pf-modal-result-metrics--summary
   :is(
     .pf-modal-result-value--increase,
     .pf-modal-result-value--decrease,
@@ -987,13 +994,13 @@ html.is-pf-modal-open body {
   padding-top: 6px;
 }
 
-.pf-modal-result-metrics--store-finder
-  .pf-modal-result-metric--store-finder
-  + .pf-modal-result-metric--store-finder {
+.pf-modal-result-metrics--summary
+  .pf-modal-result-metric--summary
+  + .pf-modal-result-metric--summary {
   border-left: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
 }
 
-.pf-modal-result-metrics--store-finder
+.pf-modal-result-metrics--summary
   :is(.pf-modal-result-value--increase, .pf-modal-result-value--decrease) {
   display: inline-flex;
   align-items: center;
@@ -1001,7 +1008,7 @@ html.is-pf-modal-open body {
   padding-left: 6px;
 }
 
-.pf-modal-result-metrics--store-finder
+.pf-modal-result-metrics--summary
   :is(.pf-modal-result-value--increase, .pf-modal-result-value--decrease)::after {
   width: clamp(24px, 3vw, 36px);
   height: clamp(24px, 3vw, 36px);
@@ -1012,27 +1019,27 @@ html.is-pf-modal-open body {
   content: "";
 }
 
-.pf-modal-result-metrics--store-finder .pf-modal-result-value--increase {
+.pf-modal-result-metrics--summary .pf-modal-result-value--increase {
   color: var(--globe-place-color);
 }
 
-.pf-modal-result-metrics--store-finder .pf-modal-result-value--increase::after {
+.pf-modal-result-metrics--summary .pf-modal-result-value--increase::after {
   transform: rotate(-90deg);
 }
 
-.pf-modal-result-metrics--store-finder .pf-modal-result-value--decrease {
+.pf-modal-result-metrics--summary .pf-modal-result-value--decrease {
   color: var(--red);
 }
 
-.pf-modal-result-metrics--store-finder .pf-modal-result-value--decrease::after {
+.pf-modal-result-metrics--summary .pf-modal-result-value--decrease::after {
   transform: rotate(90deg);
 }
 
-.pf-modal-result-metrics--store-finder .pf-modal-result-value--neutral {
+.pf-modal-result-metrics--summary .pf-modal-result-value--neutral {
   color: var(--text);
 }
 
-.pf-modal-result-metrics--store-finder .pf-modal-result-label {
+.pf-modal-result-metrics--summary .pf-modal-result-label {
   width: fit-content;
   max-width: 100%;
   margin: 0;
@@ -1123,16 +1130,27 @@ html.is-pf-modal-open body {
   padding: clamp(8px, 1vw, 16px);
 }
 
+.pf-modal-store-finder-video-frame {
+  position: relative;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  aspect-ratio: 1080 / 2340;
+  margin: 0 auto;
+  overflow: hidden;
+  clip-path: inset(0 round 18px);
+  border-radius: 18px;
+}
+
 .pf-modal-store-finder-video {
   display: block;
   width: 100%;
   height: 100%;
+  aspect-ratio: 1080 / 2340;
   min-width: 0;
   min-height: 0;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
-  clip-path: inset(0 1px 2px 0);
-  border-radius: 12px;
 }
 
 .pf-work-modal.pf-work--store-finder
@@ -2872,28 +2890,6 @@ body.is-project-transitioning .is-transition-source .project-card {
     .pf-modal-bento-placeholder--2
   )::before {
     display: none;
-  }
-
-  .pf-work-modal.pf-work--store-finder :is(
-    .pf-modal-bento-placeholder--1,
-    .pf-modal-bento-placeholder--2
-  ) .pf-modal-bento-video {
-    top: var(--store-finder-video-padding);
-    right: auto;
-    bottom: auto;
-    left: 50%;
-    width: auto;
-    max-width: calc(100% - (var(--store-finder-video-padding) * 2));
-    height: calc(100% - (var(--store-finder-video-padding) * 2));
-    object-fit: contain;
-    transform: translateX(-50%);
-    clip-path: none;
-    border-radius: 18px;
-    box-shadow:
-      0 calc(var(--store-finder-video-padding) * 0.25)
-      calc(var(--store-finder-video-padding) * 0.5)
-      rgba(0, 0, 0, 0.16);
-    filter: none;
   }
 
   .pf-work-modal.pf-work--store-finder .pf-modal-bento-placeholder--3 {
