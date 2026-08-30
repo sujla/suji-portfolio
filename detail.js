@@ -682,20 +682,6 @@ const setupAffectedUserVideos = () => {
   syncScrollVideo();
 };
 
-const setupDelayedLoopVideos = () => {
-  const loopDelay = 3000;
-
-  document.querySelectorAll("[data-delayed-loop-video]").forEach((video) => {
-    video.loop = false;
-    video.addEventListener("ended", () => {
-      window.setTimeout(() => {
-        video.currentTime = 0;
-        video.play().catch(() => {});
-      }, loopDelay);
-    });
-  });
-};
-
 const setupProblemFindingVideos = () => {
   const videos = [...document.querySelectorAll("[data-problem-video]")];
   if (!videos.length) return;
@@ -1711,7 +1697,6 @@ const jumpToTocTarget = (target) => {
 applyTheme(localStorage.getItem("portfolio-theme") || "light");
 setupAffectedUserActiveState();
 setupAffectedUserVideos();
-setupDelayedLoopVideos();
 setupProblemFindingVideos();
 setupGoalsCards();
 setupOpportunityCards();

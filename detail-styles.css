@@ -1333,33 +1333,19 @@ ul.affected-user-card-detail {
 /* Success metrics */
 .success-metrics-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: -16px;
 }
 
 .success-metric-card {
   display: grid;
   min-width: 0;
-  gap: 12px;
   margin: 0;
-  padding-bottom: 20px;
-  overflow: hidden;
-  border-radius: 16px;
-  background: var(--surface);
+  padding: 20px 0;
 }
 
-.success-metric-media {
-  position: relative;
-  aspect-ratio: 1.12 / 1;
-  overflow: hidden;
-  border-radius: 16px;
-}
-
-.success-metric-media video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.success-metric-card + .success-metric-card {
+  border-top: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
 }
 
 .user-profile-card {
@@ -1551,21 +1537,20 @@ ul.affected-user-card-detail {
   border-radius: 6px;
   background: var(--surface);
   color: var(--text-secondary);
-  font-family: "Google Sans Code", monospace;
-  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
   font-weight: 400;
+  letter-spacing: 0.03em;
   line-height: 1.4;
   text-transform: capitalize;
 }
 
 .success-metric-card h3 {
+  width: 100%;
+  margin: 0;
   padding: 0;
   border: 0;
   background: transparent;
-}
-
-.result-card-copy .result-card-label {
-  font-size: 13px;
 }
 
 .result-card-copy .result-card-value {
