@@ -1451,7 +1451,7 @@ ul.affected-user-card-detail {
 
 .result-card {
   min-width: 0;
-  padding: 40px 8px 20px;
+  padding: 40px 8px;
 }
 
 .result-card:not(:last-child) {
@@ -1460,7 +1460,7 @@ ul.affected-user-card-detail {
 
 .result-card-copy {
   display: grid;
-  gap: 32px;
+  gap: 14px;
   padding: 0;
   text-align: center;
 }
@@ -1469,17 +1469,13 @@ ul.affected-user-card-detail {
   margin: 0;
 }
 
-.success-metric-card h3,
 .result-card-copy .result-card-label {
   width: fit-content;
   margin: 0 auto;
   padding: 2px 8px;
-  border: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
-  border-radius: 6px;
-  background: var(--surface);
   color: var(--text-secondary);
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-family: "Google Sans Code", monospace;
+  font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.03em;
   line-height: 1.4;
@@ -1491,7 +1487,15 @@ ul.affected-user-card-detail {
   margin: 0;
   padding: 0;
   border: 0;
+  border-radius: 6px;
   background: transparent;
+  color: var(--text-secondary);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+  text-transform: capitalize;
 }
 
 .result-card-copy .result-card-value {
