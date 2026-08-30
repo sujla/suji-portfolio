@@ -1186,6 +1186,38 @@ const setupDesignExplorationMedia = () => {
   });
 };
 
+const setupAvailabilityExploration = () => {
+  const card = document.querySelector("[data-availability-exploration]");
+  if (!card) return;
+
+  const totalDuration = 12800;
+  let scrollFrameId;
+
+  const syncScrollProgress = () => {
+    scrollFrameId = undefined;
+
+    const rect = card.getBoundingClientRect();
+    const startLine = window.innerHeight * 0.82;
+    const endLine = window.innerHeight * 0.18;
+    const scrollRange = Math.max(1, startLine - endLine + rect.height);
+    const progress = Math.min(1, Math.max(0, (startLine - rect.top) / scrollRange));
+
+    card.style.setProperty("--availability-scroll-progress", progress.toFixed(4));
+    card.style.setProperty("--availability-scrub-time", `${progress * -totalDuration}ms`);
+  };
+
+  const requestScrollProgressSync = () => {
+    if (scrollFrameId !== undefined) return;
+
+    scrollFrameId = window.requestAnimationFrame(syncScrollProgress);
+  };
+
+  card.classList.add("is-availability-scroll-scrubbing");
+  window.addEventListener("scroll", requestScrollProgressSync, { passive: true });
+  window.addEventListener("resize", requestScrollProgressSync);
+  syncScrollProgress();
+};
+
 const setupsolutionShowcase = () => {
   const showcase = document.querySelector("[data-solution-showcase]");
   if (!showcase) return;
@@ -1388,6 +1420,7 @@ setupAffectedUserActiveState();
 setupAffectedUserVideos();
 setupGoalsCards();
 setupOpportunityCards();
+setupAvailabilityExploration();
 setupsolutionShowcase();
 syncDetailNav();
 syncActiveToc();

@@ -1856,6 +1856,12 @@ ul.affected-user-card-detail {
   gap: 8px;
 }
 
+.design-exploration-availability-content {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+}
+
 .design-exploration-card h3 {
   margin: 0 0 6px;
   color: var(--text);
@@ -1905,6 +1911,7 @@ ul.affected-user-card-detail {
 
 .design-exploration-options {
   display: grid;
+  position: relative;
   min-width: 0;
   grid-template-columns: minmax(0, 1.15fr) repeat(3, minmax(0, 1fr));
   gap: 8px;
@@ -1916,6 +1923,22 @@ ul.affected-user-card-detail {
   min-width: 0;
   gap: 4px;
   align-content: start;
+}
+
+.design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-option--muted {
+  animation: availability-option-muted 12800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--availability-scrub-time, 0ms);
+  animation-play-state: paused;
+}
+
+@keyframes availability-option-muted {
+  0%, 15.8% {
+    opacity: 1;
+  }
+
+  19%, 100% {
+    opacity: 0.2;
+  }
 }
 
 .design-exploration-option-image {
@@ -1938,13 +1961,149 @@ ul.affected-user-card-detail {
   object-fit: contain;
 }
 
-.design-exploration-option span {
+.design-exploration-option > span {
   color: var(--text-secondary);
   font-family: "Google Sans Code", monospace;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.4;
   text-align: center;
+}
+
+.design-exploration-option--selected > span {
+  display: inline-flex;
+  align-items: center;
+  justify-self: center;
+  gap: 4px;
+  padding-right: 6px;
+}
+
+.design-exploration-option--selected > span::before {
+  color: #1f7dff;
+  font-family: Arial, sans-serif;
+  font-size: 1.24em;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(2px) scale(0.72);
+  content: "✓";
+}
+
+.design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-option--selected > span {
+  animation: availability-option-label 12800ms ease both;
+  animation-delay: var(--availability-scrub-time, 0ms);
+  animation-play-state: paused;
+}
+
+.design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-option--selected > span::before {
+  animation: availability-option-check 12800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--availability-scrub-time, 0ms);
+  animation-play-state: paused;
+}
+
+@keyframes availability-option-label {
+  0%, 17% {
+    color: var(--text-secondary);
+  }
+
+  20%, 100% {
+    color: var(--text);
+  }
+}
+
+@keyframes availability-option-check {
+  0%, 17% {
+    opacity: 0;
+    transform: translateY(2px) scale(0.72);
+  }
+
+  20%, 100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.design-exploration-feedback {
+  position: absolute;
+  top: 3%;
+  right: 26%;
+  z-index: 2;
+  display: grid;
+  width: 35.5%;
+  gap: clamp(10px, 1.4vw, 22px);
+  justify-content: end;
+  pointer-events: none;
+}
+
+.design-exploration-feedback blockquote {
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  padding: clamp(10px, 1.3vw, 14px) clamp(13px, 1.6vw, 20px) clamp(12px, 1.4vw, 16px);
+  border-radius: clamp(16px, 2.3vw, 20px);
+  background: #020508;
+  box-shadow: 0 12px 30px rgba(2, 5, 8, 0.14);
+  color: #f7f8f5;
+  font-size: clamp(14px, 1.45vw, 15px);
+  font-weight: 400;
+  line-height: 1.35;
+  opacity: 0;
+  transform: translateY(14px) scale(0.97);
+  transform-origin: center;
+}
+
+.design-exploration-feedback blockquote:nth-child(2) {
+  --availability-feedback-delay: 55ms;
+}
+
+.design-exploration-feedback blockquote:nth-child(3) {
+  --availability-feedback-delay: 110ms;
+}
+
+.design-exploration-feedback blockquote:nth-child(4) {
+  --availability-feedback-delay: 165ms;
+}
+
+.design-exploration-card--availability.is-availability-scroll-scrubbing .design-exploration-feedback blockquote {
+  animation: availability-feedback 12600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--availability-scrub-time, 0ms) + var(--availability-feedback-delay, 0ms));
+  animation-play-state: paused;
+}
+
+@keyframes availability-feedback {
+  0%, 15.87% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+
+  19.05%, 98.41% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.design-exploration-scroll-progress {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--line) 44%, transparent);
+}
+
+.design-exploration-scroll-progress-value {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: #1f7dff;
+  transform: scaleX(var(--availability-scroll-progress, 0));
+  transform-origin: left center;
 }
 
 /* Solution showcase: section */
