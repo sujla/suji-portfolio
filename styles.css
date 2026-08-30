@@ -938,11 +938,100 @@ html.is-pf-modal-open body {
 
 .pf-modal-result-metric strong {
   color: #00b916;
-  font-size: clamp(24px, 2.55vw, 48px);
+  font-size: clamp(24px, 2.55vw, 32px);
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.04em;
   white-space: nowrap;
+}
+
+.pf-modal-result-metrics--store-finder {
+  grid-template-columns:
+    minmax(0, 3.5fr)
+    minmax(0, 3fr)
+    minmax(0, 3fr);
+  gap: 0;
+  padding: 20px 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.pf-modal-result-metrics--store-finder .pf-modal-result-metric--store-finder {
+  align-items: center;
+  gap: 8px;
+  padding-block: 0;
+  padding-inline: clamp(4px, 0.6vw, 10px);
+  border-radius: 0;
+  background: transparent;
+}
+
+.pf-modal-result-metrics--store-finder
+  :is(
+    .pf-modal-result-value--increase,
+    .pf-modal-result-value--decrease,
+    .pf-modal-result-value--neutral
+  ) {
+  padding-top: 6px;
+}
+
+.pf-modal-result-metrics--store-finder
+  .pf-modal-result-metric--store-finder
+  + .pf-modal-result-metric--store-finder {
+  border-left: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+}
+
+.pf-modal-result-metrics--store-finder
+  :is(.pf-modal-result-value--increase, .pf-modal-result-value--decrease) {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding-left: 6px;
+}
+
+.pf-modal-result-metrics--store-finder
+  :is(.pf-modal-result-value--increase, .pf-modal-result-value--decrease)::after {
+  width: clamp(24px, 3vw, 36px);
+  height: clamp(24px, 3vw, 36px);
+  flex: 0 0 clamp(24px, 3vw, 36px);
+  background: currentColor;
+  mask: url("assets/common/arrow_right_big.svg") center / contain no-repeat;
+  -webkit-mask: url("assets/common/arrow_right_big.svg") center / contain no-repeat;
+  content: "";
+}
+
+.pf-modal-result-metrics--store-finder .pf-modal-result-value--increase {
+  color: var(--globe-place-color);
+}
+
+.pf-modal-result-metrics--store-finder .pf-modal-result-value--increase::after {
+  transform: rotate(-90deg);
+}
+
+.pf-modal-result-metrics--store-finder .pf-modal-result-value--decrease {
+  color: var(--red);
+}
+
+.pf-modal-result-metrics--store-finder .pf-modal-result-value--decrease::after {
+  transform: rotate(90deg);
+}
+
+.pf-modal-result-metrics--store-finder .pf-modal-result-value--neutral {
+  color: var(--text);
+}
+
+.pf-modal-result-metrics--store-finder .pf-modal-result-label {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 2px 6px;
+  color: var(--text-secondary);
+  font-family: "Google Sans Code", monospace;
+  font-size: clamp(10px, 0.95vw, 12px);
+  line-height: 1.2;
+  text-align: center;
+  text-transform: capitalize;
+  white-space: normal;
 }
 
 .pf-work--store-finder :is(
@@ -992,7 +1081,17 @@ html.is-pf-modal-open body {
 }
 
 .pf-work-modal.pf-work--store-finder .pf-modal-bento-stack {
+  min-height: 0;
   grid-template-rows: minmax(0, 8fr) minmax(0, 2fr);
+}
+
+.pf-work-modal.pf-work--store-finder .pf-modal-bento-section {
+  height: 100%;
+  min-height: 0;
+}
+
+.pf-work-modal.pf-work--store-finder .pf-modal-bento-stack-top {
+  min-height: 0;
 }
 
 .pf-modal-bento-stack-top {
@@ -1006,13 +1105,10 @@ html.is-pf-modal-open body {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.pf-modal-store-finder-video-pair {
-  position: absolute;
-  inset: 0;
-  display: grid;
+.pf-work-modal.pf-work--store-finder
+  .pf-modal-bento-stack-top
+  > .pf-modal-bento-placeholder {
   padding: clamp(8px, 1vw, 16px);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
 }
 
 .pf-modal-store-finder-video {
@@ -1028,8 +1124,8 @@ html.is-pf-modal-open body {
 }
 
 .pf-work-modal.pf-work--store-finder
-  .pf-modal-bento-stack-top--single
-  .pf-modal-bento-placeholder--1::before {
+  .pf-modal-bento-stack-top
+  > .pf-modal-bento-placeholder::before {
   display: none;
 }
 
@@ -2726,7 +2822,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   .pf-work-modal.pf-work--store-finder .pf-modal-bento-section {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows:
-      repeat(2, var(--pf-modal-bento-item-height))
+      repeat(3, var(--pf-modal-bento-item-height))
       auto;
     grid-auto-rows: auto;
   }
@@ -2734,6 +2830,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   .pf-work-modal.pf-work--store-finder :is(
     .pf-modal-bento-feature,
     .pf-modal-bento-placeholder--1,
+    .pf-modal-bento-placeholder--2,
     .pf-modal-bento-placeholder--3
   ) {
     grid-column: 1 / -1;
@@ -3163,9 +3260,10 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .pf-work-modal.pf-work--store-finder .pf-modal-bento-section {
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows:
       auto
-      var(--pf-modal-bento-item-height)
+      repeat(2, var(--pf-modal-bento-item-height))
       auto;
   }
 

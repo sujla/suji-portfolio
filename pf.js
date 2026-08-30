@@ -185,28 +185,20 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           ][index]
         : "";
     const segmentVideo =
-      project.media === "store-guide" && index === 0
+      project.media === "store-guide" && index < storeGuideVideoSegments.length
         ? `
-          <div class="pf-modal-store-finder-video-pair">
-            ${storeGuideVideoSegments
-              .map(
-                (segment) => `
-                  <video
-                    class="pf-modal-store-finder-video pf-modal-segment-video"
-                    autoplay
-                    muted
-                    playsinline
-                    preload="auto"
-                    poster="./assets/store-guide/solution-tobe1.png"
-                    data-segment-start="${segment.start}"
-                    data-segment-end="${segment.end}"
-                  >
-                    <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
-                  </video>
-                `,
-              )
-              .join("")}
-          </div>
+          <video
+            class="pf-modal-store-finder-video pf-modal-segment-video"
+            autoplay
+            muted
+            playsinline
+            preload="auto"
+            poster="./assets/store-guide/solution-tobe1.png"
+            data-segment-start="${storeGuideVideoSegments[index].start}"
+            data-segment-end="${storeGuideVideoSegments[index].end}"
+          >
+            <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
+          </video>
         `
         : "";
     const ctaEnhancementVideo =
@@ -265,14 +257,18 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       project.media === "store-guide" && index === 2
         ? `
           <div class="pf-modal-result">
-            <div class="pf-modal-result-metrics">
-              <div class="pf-modal-result-metric inner-shadow-md">
-                <p>Increase in Page Views</p>
-                <strong>+32.9%</strong>
+            <div class="pf-modal-result-metrics pf-modal-result-metrics--store-finder inner-shadow-md">
+              <div class="pf-modal-result-metric pf-modal-result-metric--store-finder">
+                <strong class="pf-modal-result-value--increase">32.9%</strong>
+                <p class="pf-modal-result-label">Availability Page Views</p>
               </div>
-              <div class="pf-modal-result-metric inner-shadow-md">
-                <p>Pickup Conversion</p>
-                <strong>Up to 11%</strong>
+              <div class="pf-modal-result-metric pf-modal-result-metric--store-finder">
+                <strong class="pf-modal-result-value--decrease">18%</strong>
+                <p class="pf-modal-result-label">Inquiry call volume</p>
+              </div>
+              <div class="pf-modal-result-metric pf-modal-result-metric--store-finder">
+                <strong class="pf-modal-result-value--neutral">~11%</strong>
+                <p class="pf-modal-result-label">Pickup conversion</p>
               </div>
             </div>
           </div>
@@ -812,7 +808,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const usesThreePartBento = isPublicTransportProject;
     const usesFourPartBento = !project.cta && !isPerpDexProject && !usesThreePartBento;
     const isWebProject = project.deviceType === "web" && !usesThreePartBento && !usesFourPartBento;
-    const usesSingleTopBento = ["cta-enhancement", "store-finder"].includes(project.id);
+    const usesSingleTopBento = project.id === "cta-enhancement";
     const getBentoSideMarkup = (placeholders) => {
       const stackTopMarkup = usesSingleTopBento
         ? placeholders[0]
