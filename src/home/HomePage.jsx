@@ -110,19 +110,17 @@ export function HomePage() {
         <div className="about-content">
           <div className="about-copy">
             <h2 className="display-title" id="about-title">
-              Complex problems into clear product direction.
+              Built through complexity
             </h2>
-            <p className="about-body">Here&apos;s a little about me.👋</p>
             <p className="about-body">
-              I was born in Korea and have lived in India, the U.S., and Singapore. My
-              career has also taken me across mobility, fintech, B2B SaaS, e-commerce,
-              and internal tools.
+              I&apos;ve lived across Korea, India, the U.S., and Singapore, and designed
+              across mobility, fintech, B2B SaaS, e-commerce, and internal tools.
             </p>
             <p className="about-body">
-              Being exposed to different cultures and industries has trained me to look
-              past the surface, identify what matters most, and find patterns in
-              complexity. That&apos;s how I approach both product and design.
+              That range taught me to find patterns in complexity, turn ambiguity into
+              clear product direction, and design with measurable impact in mind.
             </p>
+            <p className="about-body">Curious to know more?</p>
             <a
               className="about-contact-link"
               href="mailto:kweonsuji@gmail.com"
