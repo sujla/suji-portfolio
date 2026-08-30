@@ -696,6 +696,119 @@ const setupDelayedLoopVideos = () => {
   });
 };
 
+const setupProblemFindingVideos = () => {
+  const videos = [...document.querySelectorAll("[data-problem-video]")];
+  if (!videos.length) return;
+
+  const getRange = (video) => {
+    const startTime = Number.parseFloat(video.dataset.startTime) || 0;
+    const requestedEndTime = Number.parseFloat(video.dataset.endTime);
+    const endTime = Number.isFinite(requestedEndTime)
+      ? Math.min(requestedEndTime, video.duration || requestedEndTime)
+      : video.duration;
+
+    return { startTime, endTime };
+  };
+
+  const seekToStart = (video) => {
+    const { startTime } = getRange(video);
+    const maxStartTime = Number.isFinite(video.duration) && video.duration > 0
+      ? Math.max(0, video.duration - 0.05)
+      : startTime;
+    video.currentTime = Math.min(startTime, maxStartTime);
+  };
+
+  videos.forEach((video) => {
+    const stack = video.closest(".solution-phone-screen-stack");
+    const frame = video.closest(".problem-frame");
+    const button = frame?.querySelector("[data-solution-video-toggle]");
+    const replayButton = frame?.querySelector("[data-solution-video-replay]");
+
+    video.muted = true;
+    video.playsInline = true;
+    video.playbackRate = 1;
+
+    const syncVideoButton = () => {
+      const isPlaying = !video.paused && !video.ended;
+      const { startTime } = getRange(video);
+      const hasStarted = isPlaying || video.currentTime > startTime + 0.01;
+
+      stack?.classList.toggle("has-video-started", hasStarted);
+      button?.classList.toggle("is-playing", isPlaying);
+      button?.setAttribute("aria-label", isPlaying ? "Pause solution video" : "Play solution video");
+      button?.setAttribute("aria-pressed", String(isPlaying));
+    };
+
+    button?.addEventListener("click", () => {
+      if (!video.paused && !video.ended) {
+        video.pause();
+        return;
+      }
+
+      const { startTime, endTime } = getRange(video);
+      if (video.currentTime < startTime || (Number.isFinite(endTime) && video.currentTime >= endTime)) {
+        seekToStart(video);
+      }
+      video.play().catch(syncVideoButton);
+      syncVideoButton();
+    });
+
+    replayButton?.addEventListener("click", () => {
+      seekToStart(video);
+      video.play().catch(syncVideoButton);
+      syncVideoButton();
+    });
+
+    video.addEventListener("loadedmetadata", () => {
+      seekToStart(video);
+      syncVideoButton();
+    });
+    video.addEventListener("timeupdate", () => {
+      const { endTime } = getRange(video);
+      if (!Number.isFinite(endTime) || video.currentTime < endTime) return;
+
+      seekToStart(video);
+      video.play().catch(syncVideoButton);
+    });
+    video.addEventListener("play", syncVideoButton);
+    video.addEventListener("pause", syncVideoButton);
+    video.addEventListener("ended", syncVideoButton);
+
+    if (video.readyState >= 1) seekToStart(video);
+    syncVideoButton();
+  });
+
+  const setVideosPlaying = (shouldPlay) => {
+    videos.forEach((video) => {
+      if (!shouldPlay) {
+        video.pause();
+        return;
+      }
+
+      const { startTime, endTime } = getRange(video);
+      if (
+        video.readyState >= 1
+        && (video.currentTime < startTime || (Number.isFinite(endTime) && video.currentTime >= endTime))
+      ) {
+        seekToStart(video);
+      }
+      video.play().catch(() => {});
+    });
+  };
+
+  const section = videos[0].closest("#problem") || videos[0].parentElement;
+  if (section && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      ([entry]) => setVideosPlaying(entry.isIntersecting),
+      { threshold: 0.15 },
+    );
+    observer.observe(section);
+    return;
+  }
+
+  setVideosPlaying(true);
+};
+
 const setupAffectedUserActiveState = () => {
   document.querySelectorAll(".affected-user-cards, .why-mattered-cards").forEach((container) => {
     const cards = [...container.querySelectorAll(".affected-user-card")];
@@ -1355,9 +1468,28 @@ const setupsolutionShowcase = () => {
       const replayButton = frame?.querySelector("[data-solution-video-replay]");
       if (!stack || !button || !replayButton) return;
 
+      const getRange = () => {
+        const startTime = Number.parseFloat(video.dataset.startTime) || 0;
+        const requestedEndTime = Number.parseFloat(video.dataset.endTime);
+        const endTime = Number.isFinite(requestedEndTime)
+          ? Math.min(requestedEndTime, video.duration || requestedEndTime)
+          : video.duration;
+
+        return { startTime, endTime };
+      };
+
+      const seekToStart = () => {
+        const { startTime } = getRange();
+        const maxStartTime = Number.isFinite(video.duration) && video.duration > 0
+          ? Math.max(0, video.duration - 0.05)
+          : startTime;
+        video.currentTime = Math.min(startTime, maxStartTime);
+      };
+
       const syncVideoButton = () => {
         const isPlaying = !video.paused && !video.ended;
-        const hasStarted = isPlaying || video.currentTime > 0 || video.ended;
+        const { startTime } = getRange();
+        const hasStarted = isPlaying || video.currentTime > startTime + 0.01;
 
         stack.classList.toggle("is-video-playing", isPlaying);
         stack.classList.toggle("has-video-started", hasStarted);
@@ -1372,8 +1504,12 @@ const setupsolutionShowcase = () => {
           return;
         }
 
-        if (video.ended || (video.duration && video.currentTime >= video.duration - 0.1)) {
-          video.currentTime = 0;
+        const { startTime, endTime } = getRange();
+        if (
+          video.currentTime < startTime
+          || (Number.isFinite(endTime) && video.currentTime >= endTime)
+        ) {
+          seekToStart();
         }
 
         video.play().catch(syncVideoButton);
@@ -1381,7 +1517,7 @@ const setupsolutionShowcase = () => {
       });
 
       replayButton.addEventListener("click", () => {
-        video.currentTime = 0;
+        seekToStart();
         video.play().catch(syncVideoButton);
         syncVideoButton();
       });
@@ -1389,7 +1525,18 @@ const setupsolutionShowcase = () => {
       video.addEventListener("play", syncVideoButton);
       video.addEventListener("pause", syncVideoButton);
       video.addEventListener("ended", syncVideoButton);
-      video.addEventListener("loadedmetadata", syncVideoButton);
+      video.addEventListener("loadedmetadata", () => {
+        seekToStart();
+        syncVideoButton();
+      });
+      video.addEventListener("timeupdate", () => {
+        const { endTime } = getRange();
+        if (!Number.isFinite(endTime) || video.currentTime < endTime) return;
+
+        seekToStart();
+        video.play().catch(syncVideoButton);
+      });
+      if (video.readyState >= 1) seekToStart();
       syncVideoButton();
     });
 
@@ -1409,8 +1556,17 @@ const setupsolutionShowcase = () => {
         return;
       }
 
-      if (video.ended || (video.duration && video.currentTime >= video.duration - 0.1)) {
-        video.currentTime = 0;
+      const startTime = Number.parseFloat(video.dataset.startTime) || 0;
+      const requestedEndTime = Number.parseFloat(video.dataset.endTime);
+      const endTime = Number.isFinite(requestedEndTime)
+        ? Math.min(requestedEndTime, video.duration || requestedEndTime)
+        : video.duration;
+
+      if (
+        video.currentTime < startTime
+        || (Number.isFinite(endTime) && video.currentTime >= endTime)
+      ) {
+        video.currentTime = startTime;
       }
 
       video.play().catch(() => {});
@@ -1556,6 +1712,7 @@ applyTheme(localStorage.getItem("portfolio-theme") || "light");
 setupAffectedUserActiveState();
 setupAffectedUserVideos();
 setupDelayedLoopVideos();
+setupProblemFindingVideos();
 setupGoalsCards();
 setupOpportunityCards();
 setupAvailabilityExploration();

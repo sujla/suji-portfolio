@@ -704,32 +704,40 @@ html.detail-coming-soon-root {
 }
 
 .problem-finding-media {
-  display: grid;
-  height: 360px;
-  margin: 0;
-  overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
-  border-radius: 16px;
-  background: var(--surface);
-  place-items: start center;
-}
-
-.problem-finding-media img {
-  display: block;
-  width: min(229px, calc(100% - 32px));
+  --solution-phone-width: 190px;
   height: auto;
+  margin: 0;
 }
 
-.problem-finding--outdated .problem-finding-media,
-.problem-finding--unclear .problem-finding-media {
-  padding: 16px 0;
-  place-items: center;
+.problem-finding-media .solution-phone--asis {
+  width: min(100%, var(--solution-phone-width));
 }
 
-.problem-finding--outdated .problem-finding-media img,
-.problem-finding--unclear .problem-finding-media img {
-  max-height: 100%;
-  object-fit: contain;
+.problem-finding-media .problem-finding-phone--available-stores {
+  transform: translateY(-18px) scale(1.35);
+  transform-origin: center bottom;
+}
+
+.problem-finding-media .solution-phone-screen-stack {
+  border-radius: 24px;
+}
+
+.problem-finding-media .solution-phone-video {
+  border-radius: 22px;
+}
+
+.problem-finding-label {
+  justify-self: center;
+  width: 100%;
+  margin: 0;
+  color: var(--text-tertiary);
+  font-family: "Google Sans Code", monospace;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .problem-finding-copy {
@@ -2238,7 +2246,7 @@ ul.affected-user-card-detail {
 }
 
 .solution-showcase-panel--comparison {
-  --solution-phone-width: 240px;
+  --solution-phone-width: 190px;
   grid-template-columns: 1fr;
   padding-right: 0;
   padding-left: 0;
@@ -2358,10 +2366,10 @@ ul.affected-user-card-detail {
   color: var(--surface);
 }
 
-.solution-asis-tobe-comparison {
+.solution-tobe-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(8px, 2vw, 16px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
   align-items: start;
   width: 100%;
 }
@@ -2379,7 +2387,7 @@ ul.affected-user-card-detail {
   margin: 0;
   color: var(--text-tertiary);
   font-family: "Google Sans Code", monospace;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.02em;
   line-height: 1.35;
@@ -2391,8 +2399,21 @@ ul.affected-user-card-detail {
   position: relative;
   display: grid;
   min-width: 0;
-  gap: 22px;
-  padding: clamp(24px, 3vw, 48px) clamp(16px, 3vw, 32px) clamp(14px, 3vw, 26px);
+  gap: 16px;
+  padding: clamp(24px, 3.8vw, 56px) clamp(16px, 3vw, 32px) clamp(14px, 3vw, 24px);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
+  border-radius: 24px;
+  background: var(--surface);
+  place-items: start center;
+}
+
+.problem-frame {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  gap: 20px;
+  padding: clamp(24px, 3.8vw, 40px) clamp(16px, 3vw, 32px) clamp(14px, 3vw, 28px);
   overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
   border-radius: 24px;
@@ -2453,7 +2474,7 @@ ul.affected-user-card-detail {
   width: 100%;
   height: 100%;
   background: #050506;
-  border-radius: 28px;
+  border-radius: 22px;
   object-fit: cover;
   opacity: 0;
   pointer-events: none;
@@ -2466,12 +2487,22 @@ ul.affected-user-card-detail {
 
 .solution-video-controls {
   position: absolute;
-  right: calc(min(1.3vw, 20px) - 2px);
-  bottom: calc(min(1.3vw, 20px) - 2px);
+  right: calc(min(1.3vw, 20px) - 8px);
+  bottom: calc(min(1.3vw, 20px) - 8px);
   z-index: 4;
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.problem-frame .solution-video-controls {
+  top: calc(min(1.3vw, 20px) - 8px);
+  bottom: auto;
+}
+
+.solution-tobe-grid .solution-video-controls {
+  top: calc(min(1.3vw, 20px) - 8px);
+  bottom: auto;
 }
 
 .solution-phone-play-toggle,
@@ -2599,7 +2630,7 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .solution-showcase-panel--comparison {
-    --solution-phone-width: 240px;
+    --solution-phone-width: 190px;
   }
 }
 
@@ -2771,7 +2802,7 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .solution-showcase-panel--comparison {
-    --solution-phone-width: 240px;
+    --solution-phone-width: 190px;
   }
 
   .solution-view-toggle {
@@ -2922,6 +2953,10 @@ html.detail-root.is-theme-switching-lines::before {
 
   .solution-showcase-panel--comparison {
     --solution-phone-width: 240px;
+  }
+
+  .solution-tobe-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .solution-view-toggle {

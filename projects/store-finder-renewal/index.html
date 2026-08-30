@@ -127,8 +127,21 @@
             </div>
             <div class="problem-findings">
               <article class="problem-finding problem-finding--outdated">
-                <figure class="problem-finding-media">
-                  <img src="../../assets/store-guide/store-finder-renewal-problem01.png" alt="Previous Olive Young store finder interface" />
+                <figure class="problem-finding-media solution-comparison-item problem-frame">
+                  <div class="solution-phone solution-phone--asis">
+                    <div class="solution-phone-screen-stack solution-phone-screen-stack--asis">
+                      <img class="solution-phone-screen solution-phone-screen--asis is-active" src="../../assets/store-guide/solution-asis-1.png" alt="" />
+                      <video class="solution-phone-video problem-finding-video" data-problem-video data-start-time="6.05" data-end-time="10" muted playsinline preload="metadata" poster="../../assets/store-guide/solution-asis-1.png">
+                        <source src="../../assets/store-guide/solution-final-asis.mp4" type="video/mp4">
+                      </video>
+                    </div>
+                    <img class="solution-phone-frame-image" src="../../assets/store-guide/solution-showcase-phone-frame.png" alt="">
+                  </div>
+                  <div class="solution-video-controls" aria-label="AS-IS video controls">
+                    <button class="solution-phone-play-toggle" type="button" data-solution-video-toggle aria-label="Pause solution video" aria-pressed="false"></button>
+                    <button class="solution-phone-replay" type="button" data-solution-video-replay aria-label="Replay solution video"></button>
+                  </div>
+                  <figcaption class="problem-finding-label">Store Info</figcaption>
                 </figure>
                 <div class="problem-finding-copy">
                   <p class="label-strong">Outdated</p>
@@ -136,8 +149,21 @@
                 </div>
               </article>
               <article class="problem-finding problem-finding--fragmented">
-                <figure class="problem-finding-media">
-                  <img src="../../assets/store-guide/solution-asis-1.png" alt="Previous Olive Young store finder interface" />
+                <figure class="problem-finding-media solution-comparison-item problem-frame">
+                  <div class="solution-phone solution-phone--asis">
+                    <div class="solution-phone-screen-stack solution-phone-screen-stack--asis">
+                      <img class="solution-phone-screen solution-phone-screen--asis is-active" src="../../assets/store-guide/solution-asis-1.png" alt="" />
+                      <video class="solution-phone-video problem-finding-video" data-problem-video data-start-time="0" data-end-time="5.5" muted playsinline preload="metadata" poster="../../assets/store-guide/solution-asis-1.png">
+                        <source src="../../assets/store-guide/solution-final-asis.mp4" type="video/mp4">
+                      </video>
+                    </div>
+                    <img class="solution-phone-frame-image" src="../../assets/store-guide/solution-showcase-phone-frame.png" alt="">
+                  </div>
+                  <div class="solution-video-controls" aria-label="AS-IS video controls">
+                    <button class="solution-phone-play-toggle" type="button" data-solution-video-toggle aria-label="Pause solution video" aria-pressed="false"></button>
+                    <button class="solution-phone-replay" type="button" data-solution-video-replay aria-label="Replay solution video"></button>
+                  </div>
+                  <figcaption class="problem-finding-label">Fragmented Search</figcaption>
                 </figure>
                 <div class="problem-finding-copy">
                   <p class="label-strong">Fragmented</p>
@@ -145,8 +171,14 @@
                 </div>
               </article>
               <article class="problem-finding problem-finding--unclear">
-                <figure class="problem-finding-media">
-                  <img src="../../assets/store-guide/store-finder-renewal-problem03.png" alt="Previous Olive Young store finder interface" />
+                <figure class="problem-finding-media solution-comparison-item problem-frame">
+                  <div class="solution-phone solution-phone--asis problem-finding-phone--available-stores">
+                    <div class="solution-phone-screen-stack solution-phone-screen-stack--asis">
+                      <img class="solution-phone-screen solution-phone-screen--asis is-active" src="../../assets/store-guide/store-finder-renewal-problem03.png" alt="" />
+                    </div>
+                    <img class="solution-phone-frame-image" src="../../assets/store-guide/solution-showcase-phone-frame.png" alt="">
+                  </div>
+                  <figcaption class="problem-finding-label">Available Stores</figcaption>
                 </figure>
                 <div class="problem-finding-copy">
                   <p class="label-strong">Unclear</p>
@@ -434,38 +466,54 @@
                 <div class="solution-showcase-list">
                   <article class="solution-showcase-panel solution-showcase-panel--comparison" data-solution-panel>
                     <div class="solution-phone-stage solution-phone-stage--comparison">
-                      <div class="solution-asis-tobe-comparison">
-                        <figure class="solution-comparison-item solution-comparison-frame">
-                          <div class="solution-phone solution-phone--asis">
-                            <div class="solution-phone-screen-stack solution-phone-screen-stack--asis">
-                              <img class="solution-phone-screen solution-phone-screen--asis is-active" src="../../assets/store-guide/solution-asis-1.png" alt="">
-                              <video class="solution-phone-video" data-solution-video muted playsinline preload="metadata" poster="../../assets/store-guide/solution-asis-1.png">
-                                <source src="../../assets/store-guide/solution-final-asis.mp4" type="video/mp4">
-                              </video>
-                            </div>
-                            <img class="solution-phone-frame-image" src="../../assets/store-guide/solution-showcase-phone-frame.png" alt="">
-                          </div>
-                          <div class="solution-video-controls" aria-label="AS-IS video controls">
-                            <button class="solution-phone-play-toggle" type="button" data-solution-video-toggle aria-label="Pause solution video" aria-pressed="false"></button>
-                            <button class="solution-phone-replay" type="button" data-solution-video-replay aria-label="Replay solution video"></button>
-                          </div>
-                          <figcaption class="solution-comparison-label">AS-IS</figcaption>
-                        </figure>
+                      <div class="solution-tobe-grid">
                         <figure class="solution-comparison-item solution-comparison-frame">
                           <div class="solution-phone solution-phone--tobe">
                             <div class="solution-phone-screen-stack solution-phone-screen-stack--tobe">
                               <img class="solution-phone-screen solution-phone-screen--tobe is-active" src="../../assets/store-guide/solution-tobe1.png" alt="">
-                              <video class="solution-phone-video" data-solution-video muted playsinline preload="metadata" poster="../../assets/store-guide/solution-tobe1.png">
+                              <video class="solution-phone-video" data-solution-video data-start-time="0" data-end-time="7" muted playsinline preload="metadata" poster="../../assets/store-guide/solution-tobe1.png">
                                 <source src="../../assets/store-guide/solution-final-scroll.mp4" type="video/mp4">
                               </video>
                             </div>
                             <img class="solution-phone-frame-image" src="../../assets/store-guide/solution-showcase-phone-frame.png" alt="">
                           </div>
-                          <div class="solution-video-controls" aria-label="TO-BE video controls">
+                          <div class="solution-video-controls" aria-label="TO-BE video controls 1">
                             <button class="solution-phone-play-toggle" type="button" data-solution-video-toggle aria-label="Pause solution video" aria-pressed="false"></button>
                             <button class="solution-phone-replay" type="button" data-solution-video-replay aria-label="Replay solution video"></button>
                           </div>
-                          <figcaption class="solution-comparison-label">TO-BE</figcaption>
+                          <figcaption class="solution-comparison-label">Map-List UX</figcaption>
+                        </figure>
+                        <figure class="solution-comparison-item solution-comparison-frame">
+                          <div class="solution-phone solution-phone--tobe">
+                            <div class="solution-phone-screen-stack solution-phone-screen-stack--tobe">
+                              <img class="solution-phone-screen solution-phone-screen--tobe is-active" src="../../assets/store-guide/solution-tobe1.png" alt="">
+                              <video class="solution-phone-video" data-solution-video data-start-time="7" data-end-time="13" muted playsinline preload="metadata" poster="../../assets/store-guide/solution-tobe1.png">
+                                <source src="../../assets/store-guide/solution-final-scroll.mp4" type="video/mp4">
+                              </video>
+                            </div>
+                            <img class="solution-phone-frame-image" src="../../assets/store-guide/solution-showcase-phone-frame.png" alt="">
+                          </div>
+                          <div class="solution-video-controls" aria-label="TO-BE video controls 2">
+                            <button class="solution-phone-play-toggle" type="button" data-solution-video-toggle aria-label="Pause solution video" aria-pressed="false"></button>
+                            <button class="solution-phone-replay" type="button" data-solution-video-replay aria-label="Replay solution video"></button>
+                          </div>
+                          <figcaption class="solution-comparison-label">Store Info</figcaption>
+                        </figure>
+                        <figure class="solution-comparison-item solution-comparison-frame">
+                          <div class="solution-phone solution-phone--tobe">
+                            <div class="solution-phone-screen-stack solution-phone-screen-stack--tobe">
+                              <img class="solution-phone-screen solution-phone-screen--tobe is-active" src="../../assets/store-guide/solution-tobe1.png" alt="">
+                              <video class="solution-phone-video" data-solution-video data-start-time="18" data-end-time="28.9" muted playsinline preload="metadata" poster="../../assets/store-guide/solution-tobe1.png">
+                                <source src="../../assets/store-guide/solution-final-scroll.mp4" type="video/mp4">
+                              </video>
+                            </div>
+                            <img class="solution-phone-frame-image" src="../../assets/store-guide/solution-showcase-phone-frame.png" alt="">
+                          </div>
+                          <div class="solution-video-controls" aria-label="TO-BE video controls 3">
+                            <button class="solution-phone-play-toggle" type="button" data-solution-video-toggle aria-label="Pause solution video" aria-pressed="false"></button>
+                            <button class="solution-phone-replay" type="button" data-solution-video-replay aria-label="Replay solution video"></button>
+                          </div>
+                          <figcaption class="solution-comparison-label">Available Stores</figcaption>
                         </figure>
                       </div>
                     </div>
