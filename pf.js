@@ -796,6 +796,9 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       : "";
     const isPerpDexProject = project.id === "perp-dex";
     const isPublicTransportProject = project.id === "public-transport";
+    const modalBadgeMarkup = isPublicTransportProject
+      ? '<span class="pf-work-badge pf-work-badge--modal">AI-built</span>'
+      : "";
     const placeholderCount = isPerpDexProject ? 4 : isPublicTransportProject ? 2 : 3;
     const bentoPlaceholders = Array.from({ length: placeholderCount }, (_, index) =>
       getBentoPlaceholder(project, index),
@@ -879,7 +882,10 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       <button class="pf-modal-close" type="button" aria-label="Close project preview"></button>
       <div class="pf-modal-footer${ctaMarkup ? "" : " pf-modal-footer--no-cta"}">
         <div class="pf-work-meta">
-          <h2 id="${titleId}">${project.title}</h2>
+          <div class="pf-modal-title-row">
+            <h2 id="${titleId}">${project.title}</h2>
+            ${modalBadgeMarkup}
+          </div>
           ${renderWorkMetaLine(project)}
         </div>
         ${ctaMarkup || descriptionMarkup}

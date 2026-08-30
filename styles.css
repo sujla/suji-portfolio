@@ -1083,12 +1083,32 @@ html.is-pf-modal-open body {
   font-size: clamp(22px, 1.35vw, 34px);
 }
 
+.pf-modal-title-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
 .pf-work-modal .pf-work-meta span {
   margin-top: 10px;
   margin-bottom: 2px;
   color: var(--text-tertiary);
   font-family: "Google Sans Code", monospace;
   font-size: 15px;
+}
+
+.pf-work-modal .pf-work-meta .pf-work-badge--modal {
+  position: relative;
+  top: auto;
+  right: auto;
+  display: inline-flex;
+  flex: 0 0 auto;
+  padding: 7px 12px;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
 }
 
 .pf-modal-close {
