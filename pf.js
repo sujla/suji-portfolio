@@ -288,19 +288,14 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   };
 
   const initializeMediaMatchedBentoBackgrounds = (modal) => {
+    if (!modal.matches(".pf-work--article-studio")) return;
+
     const hasDedicatedBackground = (container) =>
       container.matches(`
         .pf-work--article-studio :is(
           .pf-modal-bento-placeholder--1,
           .pf-modal-bento-placeholder--2
-        ),
-        .pf-work--public-transport :is(
-          .pf-modal-bento-feature,
-          .pf-modal-bento-placeholder--1,
-          .pf-modal-bento-placeholder--2
-        ),
-        .pf-work--perp-dex .pf-modal-bento-placeholder,
-        .pf-work--cta-enhancement .pf-modal-bento-placeholder--3
+        )
       `);
 
     const getEdgeColor = (media) => {

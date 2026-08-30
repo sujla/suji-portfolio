@@ -577,6 +577,18 @@ html.is-pf-modal-open body {
   background: var(--surface);
 }
 
+.pf-work-modal.pf-work--article-studio
+  :is(
+    .pf-modal-bento-feature.has-media-sampled-background,
+    .pf-modal-bento-placeholder.has-media-sampled-background
+  ) {
+  background: var(--pf-modal-media-background, var(--surface));
+}
+
+.pf-work-modal.pf-work--perp-dex .pf-modal-bento-placeholder {
+  background: #0b0f0e;
+}
+
 .inner-shadow-lg {
   box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.04);
 }
