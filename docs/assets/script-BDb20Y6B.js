@@ -63,18 +63,20 @@ import{p as Qo,a as io}from"./projects-KnV3ap8A.js";const Zo=[{id:"store-finder"
                 <source src="./assets/perp-dex/trading.mov" />
               </video>
             `][t]:"",l=e.media==="store-guide"&&t<Me.length?`
-          <video
-            class="pf-modal-store-finder-video pf-modal-segment-video"
-            autoplay
-            muted
-            playsinline
-            preload="auto"
-            poster="./assets/store-guide/solution-tobe1.png"
-            data-segment-start="${Me[t].start}"
-            data-segment-end="${Me[t].end}"
-          >
-            <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
-          </video>
+          <div class="pf-modal-store-finder-video-frame">
+            <video
+              class="pf-modal-store-finder-video pf-modal-segment-video"
+              autoplay
+              muted
+              playsinline
+              preload="auto"
+              poster="./assets/store-guide/solution-tobe1.png"
+              data-segment-start="${Me[t].start}"
+              data-segment-end="${Me[t].end}"
+            >
+              <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
+            </video>
+          </div>
         `:"",f=e.id==="cta-enhancement"&&t===0?`
           <div class="pf-modal-bento-video-frame">
             <video
@@ -91,14 +93,14 @@ import{p as Qo,a as io}from"./projects-KnV3ap8A.js";const Zo=[{id:"store-finder"
           </div>
         `:"",m=e.id==="cta-enhancement"&&t===2?`
           <div class="pf-modal-result">
-            <div class="pf-modal-result-metrics">
-              <div class="pf-modal-result-metric inner-shadow-md">
-                <p>Pickup Conversion</p>
-                <strong>321.3%</strong>
+            <div class="pf-modal-result-metrics pf-modal-result-metrics--summary pf-modal-result-metrics--cta inner-shadow-md">
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
+                <strong class="pf-modal-result-value--increase">226.2%</strong>
+                <p class="pf-modal-result-label">Pickup Conversion</p>
               </div>
-              <div class="pf-modal-result-metric inner-shadow-md">
-                <p class="pf-modal-result-metric-title--nowrap">Total Pickup Orders</p>
-                <strong>128.2%</strong>
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
+                <strong class="pf-modal-result-value--increase">32.6%</strong>
+                <p class="pf-modal-result-label">Total Pickup Orders</p>
               </div>
             </div>
           </div>
@@ -115,16 +117,16 @@ import{p as Qo,a as io}from"./projects-KnV3ap8A.js";const Zo=[{id:"store-finder"
           </div>
         `:e.id==="article-studio"&&t===1?'<img class="pf-modal-article-studio-interface" src="./assets/article-studio/interface.png" alt="" />':"",L=e.media==="store-guide"&&t===2?`
           <div class="pf-modal-result">
-            <div class="pf-modal-result-metrics pf-modal-result-metrics--store-finder inner-shadow-md">
-              <div class="pf-modal-result-metric pf-modal-result-metric--store-finder">
+            <div class="pf-modal-result-metrics pf-modal-result-metrics--summary pf-modal-result-metrics--store-finder inner-shadow-md">
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
                 <strong class="pf-modal-result-value--increase">32.9%</strong>
                 <p class="pf-modal-result-label">Availability Page Views</p>
               </div>
-              <div class="pf-modal-result-metric pf-modal-result-metric--store-finder">
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
                 <strong class="pf-modal-result-value--decrease">18%</strong>
                 <p class="pf-modal-result-label">Inquiry call volume</p>
               </div>
-              <div class="pf-modal-result-metric pf-modal-result-metric--store-finder">
+              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
                 <strong class="pf-modal-result-value--neutral">~11%</strong>
                 <p class="pf-modal-result-label">Pickup conversion</p>
               </div>
@@ -134,18 +136,11 @@ import{p as Qo,a as io}from"./projects-KnV3ap8A.js";const Zo=[{id:"store-finder"
       <div class="pf-modal-bento-placeholder pf-modal-bento-placeholder--${t+1}${b}">
         ${s||i||l||f||m||T||L}
       </div>
-    `},vo=e=>{const t=i=>i.matches(`
+    `},vo=e=>{if(!e.matches(".pf-work--article-studio"))return;const t=i=>i.matches(`
         .pf-work--article-studio :is(
           .pf-modal-bento-placeholder--1,
           .pf-modal-bento-placeholder--2
-        ),
-        .pf-work--public-transport :is(
-          .pf-modal-bento-feature,
-          .pf-modal-bento-placeholder--1,
-          .pf-modal-bento-placeholder--2
-        ),
-        .pf-work--perp-dex .pf-modal-bento-placeholder,
-        .pf-work--cta-enhancement .pf-modal-bento-placeholder--3
+        )
       `),s=i=>{const l=i.videoWidth||i.naturalWidth||i.width,f=i.videoHeight||i.naturalHeight||i.height;if(!l||!f)return null;const m=16,T=document.createElement("canvas"),L=T.getContext("2d",{willReadFrequently:!0});if(!L)return null;T.width=m,T.height=m;try{L.drawImage(i,0,0,m,m);const y=L.getImageData(0,0,m,m).data;let b=0,r=0,k=0,a=0;for(let g=0;g<m;g+=1)for(let w=0;w<m;w+=1){if(w>1&&w<m-2&&g>1&&g<m-2)continue;const A=(g*m+w)*4,E=y[A+3]/255;E<.2||(b+=y[A]*E,r+=y[A+1]*E,k+=y[A+2]*E,a+=E)}return a?`rgb(${Math.round(b/a)} ${Math.round(r/a)} ${Math.round(k/a)})`:null}catch{return null}};e.querySelectorAll(".pf-modal-bento-feature, .pf-modal-bento-placeholder").forEach(i=>{if(t(i))return;const l=i.querySelector("img, video, canvas");if(!l)return;const f=()=>{if(!i.isConnected)return;const m=s(l);m&&(i.style.setProperty("--pf-modal-media-background",m),i.classList.add("has-media-sampled-background"))};if(l instanceof HTMLImageElement){l.complete&&l.naturalWidth?f():l.addEventListener("load",f,{once:!0});return}if(l instanceof HTMLVideoElement){l.readyState>=2?f():l.addEventListener("loadeddata",f,{once:!0});return}window.requestAnimationFrame(f)})},yo=e=>{e.querySelectorAll(".pf-modal-segment-video").forEach(t=>{const s=Number(t.dataset.segmentStart),i=Number(t.dataset.segmentEnd),l=()=>{t.currentTime=s,t.play().catch(()=>{})},f=()=>{t.currentTime=s,t.classList.add("is-ready"),t.play().catch(()=>{})};t.addEventListener("loadedmetadata",f,{once:!0}),t.addEventListener("timeupdate",()=>{t.currentTime>=i&&l()}),t.addEventListener("ended",l),t.readyState>=1&&f()})},bo=e=>{const t=window.matchMedia("(max-width: 920px)").matches,i=(t?[1,2,3,4]:[4,1,2,3]).map(a=>e.querySelector(`.pf-modal-bento-placeholder--${a}`)).filter(Boolean).map(a=>({container:a,video:a.querySelector("[data-perp-video]"),gif:a.querySelector("[data-perp-gif]")}));if(!i.length)return;if(t){i.forEach(a=>{if(a.container.classList.add("is-playing"),a.video){const g=()=>{e.isConnected&&(a.video.loop=!0,a.video.currentTime=0,a.video.play().catch(()=>{}))};a.video.readyState>=1?g():a.video.addEventListener("loadedmetadata",g,{once:!0})}if(a.gif){const g=a.gif.querySelector("[data-perp-gif-player]"),w=a.gif.dataset.perpGifSrc;g&&w&&(g.src=w)}});return}let l=null,f=0,m=0,T=0,L=null;const y=a=>{if(a.container.classList.remove("is-playing"),a.video){const g=Number(a.video.dataset.perpThumbnailTime||0);a.video.loop=!1,a.video.pause(),a.video.readyState>=2&&(a.video.currentTime=Math.min(g,Number.isFinite(a.video.duration)?a.video.duration:g))}a.gif&&a.gif.querySelector("[data-perp-gif-player]")?.removeAttribute("src")},b=()=>{window.clearTimeout(m),i.forEach(y)},r=()=>{f=(f+1)%i.length,k(i[f],!0)},k=(a,g=!1)=>{const w=++T;if(b(),l=a,a.container.classList.add("is-playing"),a.video){const A=()=>{w!==T||!e.isConnected||(a.video.loop=!g,a.video.currentTime=0,a.video.play().catch(()=>{}))};a.video.readyState>=1?A():a.video.addEventListener("loadedmetadata",A,{once:!0})}if(a.gif){const A=a.gif.querySelector("[data-perp-gif-player]"),E=a.gif.dataset.perpGifSrc;A&&E&&(A.src=`${E}?play=${w}`),g&&(m=window.setTimeout(()=>{w===T&&!L&&e.isConnected&&r()},Number(a.gif.dataset.perpGifDuration||6600)))}};i.forEach(a=>{if(a.video&&a.video.addEventListener("ended",()=>{a===l&&!L&&e.isConnected&&r()}),a.gif){const g=a.gif.querySelector("[data-perp-gif-frame]"),w=new Image;w.addEventListener("load",()=>{g.width=w.naturalWidth,g.height=w.naturalHeight,g.getContext("2d")?.drawImage(w,0,0)},{once:!0}),w.src=a.gif.dataset.perpGifSrc}a.container.addEventListener("mouseenter",()=>{L=a,k(a)}),a.container.addEventListener("mouseleave",()=>{L===a&&(L=null,f=(i.indexOf(a)+1)%i.length,k(i[f],!0))})}),i.forEach(y),k(i[f],!0)},So=e=>{const t=window.matchMedia("(max-width: 920px)").matches,s=[...e.querySelectorAll("[data-public-transport-video]")].map(r=>({video:r,order:Number(r.dataset.publicTransportVideoOrder),container:r.closest(".pf-modal-bento-feature, .pf-modal-bento-placeholder")})).filter(r=>r.container).sort((r,k)=>r.order-k.order);if(!s.length)return;if(t){s.forEach(r=>{r.container.classList.add("is-playing"),r.video.loop=!0;const k=()=>{e.isConnected&&(r.video.currentTime=0,r.video.play().catch(()=>{}))};r.video.readyState>=1?k():r.video.addEventListener("loadedmetadata",k,{once:!0})});return}let i=null,l=0,f=null,m=0;const T=r=>{r.container.classList.remove("is-playing"),r.video.loop=!1,r.video.pause(),r.video.readyState>=2&&(r.video.currentTime=0)},L=()=>s.forEach(T),y=()=>{l=(l+1)%s.length,b(s[l],!0)},b=(r,k=!1)=>{const a=++m;L(),i=r,r.container.classList.add("is-playing");const g=()=>{a!==m||!e.isConnected||(r.video.loop=!k,r.video.currentTime=0,r.video.play().catch(()=>{}))};r.video.readyState>=1?g():r.video.addEventListener("loadedmetadata",g,{once:!0})};s.forEach(r=>{r.video.addEventListener("ended",()=>{r===i&&!f&&e.isConnected&&y()}),r.container.addEventListener("mouseenter",()=>{f=r,b(r)}),r.container.addEventListener("mouseleave",()=>{f===r&&(f=null,l=(s.indexOf(r)+1)%s.length,b(s[l],!0))})}),s.forEach(T),b(s[l],!0)},Lo=(e,t=!1)=>{const s=e.types?.length?e.types:[e.type||"others"],i=e.id==="public-transport"?'<span class="pf-work-badge">AI-built</span>':"",l=`
       <div class="pf-work-card">
         ${nt(e)}
