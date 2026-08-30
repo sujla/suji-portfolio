@@ -1201,6 +1201,8 @@ const setupAvailabilityExploration = () => {
   const pinDistanceMultiplier = feedbackCompleteProgress / (1 - postFeedbackHoldProgress);
   const transitionDistanceRatio = 1.16;
   const panelDistanceMultipliers = [1, 1.5];
+  const imageSwapStartProgress = 0.4;
+  const imageSwapDurationProgress = 0.06;
   let animationDistance = 1;
   let panelDistance = 1;
   let transitionDistance = 1;
@@ -1226,16 +1228,23 @@ const setupAvailabilityExploration = () => {
     sequence.style.setProperty("--design-exploration-sequence-distance", `${sequenceDistance}px`);
   };
 
-  const syncPanelAnimation = (panel, panelScrollDistance, distanceMultiplier) => {
+  const syncPanelAnimation = (panel, panelScrollDistance, distanceMultiplier, swapsImages = false) => {
     const progress = clampProgress(panelScrollDistance / (panelDistance * distanceMultiplier));
     const animationProgress = clampProgress(panelScrollDistance / (animationDistance * distanceMultiplier));
+    const imageSwapProgress = swapsImages
+      ? clampProgress((animationProgress - imageSwapStartProgress) / imageSwapDurationProgress)
+      : 0;
+    const isOptionSelected = animationProgress * totalDuration >= selectedOptionTime;
+    const optionLabelState = isOptionSelected ? "final" : imageSwapProgress >= 0.5 ? "list" : "map";
 
-    panel.classList.toggle(
-      "is-availability-option-selected",
-      animationProgress * totalDuration >= selectedOptionTime,
-    );
+    panel.classList.toggle("is-availability-option-selected", isOptionSelected);
+    panel.querySelectorAll("[data-exploration-option-label]").forEach((label) => {
+      const nextLabel = label.dataset[`${optionLabelState}Label`];
+      if (nextLabel && label.textContent !== nextLabel) label.textContent = nextLabel;
+    });
     panel.style.setProperty("--availability-scroll-progress", progress.toFixed(4));
     panel.style.setProperty("--availability-scrub-time", `${animationProgress * -totalDuration}ms`);
+    panel.style.setProperty("--design-exploration-image-swap-progress", imageSwapProgress.toFixed(4));
   };
 
   const syncScrollProgress = () => {
@@ -1251,7 +1260,7 @@ const setupAvailabilityExploration = () => {
     const secondPanelStart = panelDistance + transitionDistance;
 
     syncPanelAnimation(panels[0], scrollDistance, panelDistanceMultipliers[0]);
-    syncPanelAnimation(panels[1], scrollDistance - secondPanelStart, panelDistanceMultipliers[1]);
+    syncPanelAnimation(panels[1], scrollDistance - secondPanelStart, panelDistanceMultipliers[1], true);
 
     panels[0].style.setProperty("--design-exploration-panel-opacity", (1 - firstPanelFade).toFixed(4));
     panels[0].style.setProperty("--design-exploration-panel-shift", `${firstPanelMotion * -88}px`);

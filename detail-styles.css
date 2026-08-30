@@ -2024,6 +2024,7 @@ ul.affected-user-card-detail {
 }
 
 .design-exploration-option-image {
+  position: relative;
   width: 100%;
   aspect-ratio: 449 / 844;
   justify-self: center;
@@ -2041,6 +2042,36 @@ ul.affected-user-card-detail {
   height: 100%;
   border-radius: 12px;
   object-fit: contain;
+}
+
+.design-exploration-option-image img[data-exploration-image-next] {
+  position: absolute;
+  inset: 0;
+  opacity: var(--design-exploration-image-swap-progress, 0);
+}
+
+.design-exploration-option-image img[data-exploration-final-image] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.design-exploration-card--map-list.is-availability-scroll-scrubbing
+  .design-exploration-option-image
+  img[data-exploration-final-image] {
+  animation: availability-final-image 10000ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--availability-scrub-time, 0ms);
+  animation-play-state: paused;
+}
+
+@keyframes availability-final-image {
+  0%, 70% {
+    opacity: 0;
+  }
+
+  74%, 100% {
+    opacity: 1;
+  }
 }
 
 .design-exploration-option > span {
@@ -2064,6 +2095,26 @@ ul.affected-user-card-detail {
 .design-exploration-card--availability.is-availability-option-selected .design-exploration-option--selected > span {
   background: #2990ff;
   color: #fff !important;
+}
+
+.design-exploration-card--map-list .design-exploration-feedback {
+  top: 12%;
+  right: 1.5%;
+  width: 22%;
+  justify-content: start;
+  justify-items: start;
+}
+
+.design-exploration-card--map-list .design-exploration-feedback blockquote {
+  width: max-content;
+  max-width: 100%;
+  text-align: left;
+}
+
+@media (min-width: 761px) {
+  .design-exploration-card--map-list .design-exploration-media--availability {
+    overflow-x: clip;
+  }
 }
 
 .design-exploration-feedback {
