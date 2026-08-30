@@ -108,16 +108,9 @@ export function HomePage() {
         aria-labelledby="about-title"
       >
         <div className="about-content">
-          <div className="about-photo-stack" aria-hidden="true">
-            {aboutPhotos.map(([className, src]) => (
-              <div className={`about-photo ${className}`} key={src}>
-                <img src={src} alt="" />
-              </div>
-            ))}
-          </div>
           <div className="about-copy">
-            <h2 id="about-title">
-              Turning complex problems into clear product direction.
+            <h2 className="display-title" id="about-title">
+              Complex problems into clear product direction.
             </h2>
             <p className="about-body">Here&apos;s a little about me.👋</p>
             <p className="about-body">
@@ -130,6 +123,13 @@ export function HomePage() {
               past the surface, identify what matters most, and find patterns in
               complexity. That&apos;s how I approach both product and design.
             </p>
+          </div>
+          <div className="about-photo-stack" aria-hidden="true">
+            {aboutPhotos.map(([className, src]) => (
+              <div className={`about-photo ${className}`} key={src}>
+                <img src={src} alt="" />
+              </div>
+            ))}
           </div>
         </div>
       </section>

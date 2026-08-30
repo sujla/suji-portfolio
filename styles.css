@@ -2055,7 +2055,7 @@ html.is-pf-modal-open body {
 .about-content {
   display: grid;
   width: 100%;
-  grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(40px, 3vw, 68px);
 }
 
@@ -2166,6 +2166,7 @@ html.is-pf-modal-open body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-left: 16%;
 }
 
 #about-title {
@@ -2920,7 +2921,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .about-copy {
-    grid-row: 2;
+    grid-row: 1;
   }
 
   #about-title {
@@ -2934,7 +2935,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .about-photo-stack {
-    grid-row: 1;
+    grid-row: 2;
     width: min(70%, 36svh, 360px);
     min-width: 220px;
   }
