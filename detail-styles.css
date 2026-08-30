@@ -746,6 +746,10 @@ html.detail-coming-soon-root {
   margin-bottom: 10px;
 }
 
+.problem-finding-copy .label-strong {
+  color: var(--red);
+}
+
 .why-matter-heading {
   display: inline-block;
   margin: 0;
