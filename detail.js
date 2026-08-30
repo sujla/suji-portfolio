@@ -990,54 +990,6 @@ const setupOpportunityCards = () => {
   });
 };
 
-const setupGoalsCards = () => {
-  document.querySelectorAll("[data-goals-cards]").forEach((container) => {
-    const cards = [...container.querySelectorAll("[data-goal-card]")];
-    if (!cards.length) return;
-
-    const defaultCard = cards[0];
-    const hoverMedia = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const hoverActivationDelay = 120;
-    let hoverTimer;
-
-    const setActiveCard = (activeCard) => {
-      window.clearTimeout(hoverTimer);
-
-      cards.forEach((card) => {
-        card.classList.toggle("is-active", card === activeCard);
-      });
-    };
-
-    const queueActiveCard = (card) => {
-      window.clearTimeout(hoverTimer);
-      hoverTimer = window.setTimeout(() => {
-        setActiveCard(card);
-      }, hoverActivationDelay);
-    };
-
-    setActiveCard(defaultCard);
-
-    cards.forEach((card) => {
-      card.addEventListener("pointerenter", () => {
-        if (!hoverMedia.matches || card.classList.contains("is-active")) return;
-        queueActiveCard(card);
-      });
-
-      card.addEventListener("pointerleave", () => {
-        window.clearTimeout(hoverTimer);
-      });
-
-      card.addEventListener("click", () => {
-        setActiveCard(card);
-      });
-    });
-
-    container.addEventListener("pointerleave", () => {
-      window.clearTimeout(hoverTimer);
-    });
-  });
-};
-
 const setupDesignExplorationMedia = () => {
   const mediaItems = [...document.querySelectorAll(".design-exploration-media")];
   const intervalDuration = 4000;
@@ -1698,7 +1650,6 @@ applyTheme(localStorage.getItem("portfolio-theme") || "light");
 setupAffectedUserActiveState();
 setupAffectedUserVideos();
 setupProblemFindingVideos();
-setupGoalsCards();
 setupOpportunityCards();
 setupAvailabilityExploration();
 setupsolutionShowcase();

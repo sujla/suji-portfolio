@@ -1234,100 +1234,37 @@ ul.affected-user-card-detail {
 }
 
 .goals-cards {
-  --goals-card-collapsed-height: 80px;
-  --goals-card-expanded-height: clamp(240px, 38vw, 320px);
-
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .goals-card {
   display: grid;
-  grid-template-columns: minmax(0, 4.5fr) minmax(0, 5.5fr);
-  align-content: start;
-  align-items: center;
-  height: auto;
-  min-height: var(--goals-card-collapsed-height);
+  grid-template-rows: auto 1fr;
+  align-content: space-between;
   min-width: 0;
-  gap: 12px;
-  padding: 28px;
-  overflow: hidden;
+  min-height: clamp(200px, 24vw, 260px);
+  gap: 40px;
+  padding: 26px 40px 26px 32px;
   border-radius: var(--detail-card-radius);
   background: var(--surface);
-  cursor: pointer;
-  transition: min-height 560ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: min-height;
 }
 
 .goals-card > p.label-strong {
   opacity: 0.5;
-}
-
-.goals-card.is-active {
-  align-items: start;
-  min-height: var(--goals-card-expanded-height);
-}
-
-.goals-card-copy {
-  display: grid;
-  gap: 1px;
+  font-family: "Google Sans Code", monospace;
 }
 
 .goals-card-subheading {
+  align-self: end;
   margin: 0;
   color: var(--text);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: clamp(14px, 3vw, 15px);
+  font-size: 16px;
   font-weight: 400;
-  line-height: 1.45;
-}
-
-.goals-card-detail {
-  display: grid;
-  gap: 20px;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(6px);
-  transition:
-    max-height 460ms cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 220ms ease,
-    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.detail-content .goals-card-detail p {
-  color: var(--text-tertiary);
-}
-
-.goals-card.is-active .goals-card-subheading,
-.detail-content .goals-card.is-active .goals-card-detail p {
-  font-size: 18px;
-}
-
-.detail-content .goals-card.is-active .goals-card-detail p {
-  color: var(--text);
-}
-
-.goals-card.is-active .goals-card-detail {
-  max-height: calc(var(--goals-card-expanded-height) - 56px);
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-  transition-delay: 80ms, 100ms, 80ms;
-}
-
-.goals-card-media {
-  width: 100%;
-  overflow: hidden;
-  border-radius: calc(var(--detail-card-radius) - 8px);
-}
-
-.goals-card-media > :is(img, video) {
-  display: block;
-  width: 100%;
-  height: auto;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
 }
 
 /* Success metrics */
@@ -2805,6 +2742,14 @@ html.detail-root.is-theme-switching-lines::before {
 
   .user-profile-cards {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .goals-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .goals-card {
+    min-height: 200px;
   }
 
   .success-metrics-grid {
