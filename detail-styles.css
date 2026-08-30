@@ -1238,14 +1238,62 @@ ul.affected-user-card-detail {
 }
 
 .goals-cards {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
+  overflow: hidden;
   border-radius: 16px;
   background: var(--text);
+  isolation: isolate;
+}
+
+.goals-ring-texture {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  display: block;
+  width: min(43%, 326px);
+  height: auto;
+  opacity: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 180ms ease;
+}
+
+:root[data-theme="dark"] .goals-ring-texture {
+  filter: invert(1);
+}
+
+.goals-ring-particles {
+  position: absolute;
+  z-index: 0;
+  display: block;
+  width: min(80%, 650%);
+  height: auto;
+  aspect-ratio: 430 / 238;
+  pointer-events: none;
+}
+
+.goals-ring-particles-left {
+  top: -40%;
+  left: -22%;
+  transform: scaleX(-0.94);
+}
+
+.goals-ring-particles-right {
+  top: -10%;
+  left: 35%;
+}
+
+.goals-cards.is-particle-canvas-ready .goals-ring-texture {
+  opacity: 0;
 }
 
 .goals-card {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-rows: auto 1fr;
   align-content: space-between;
@@ -2759,6 +2807,10 @@ html.detail-root.is-theme-switching-lines::before {
 
   .goals-cards {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .goals-ring-texture {
+    width: min(92%, 326px);
   }
 
   .goals-card {

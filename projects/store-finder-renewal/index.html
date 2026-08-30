@@ -41,7 +41,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../../styles.css?v=exploration-rotation-progress" />
-    <link rel="stylesheet" href="../../detail-styles.css?v=availability-review-scroll-scrub-v39" />
+    <link rel="stylesheet" href="../../detail-styles.css?v=goals-particles-v3" />
   </head>
   <body class="detail-page" data-project-slug="store-guide">
     <nav class="detail-gnb" aria-label="Project navigation"></nav>
@@ -293,6 +293,49 @@
               </div>
             </div>
             <div class="goals-cards" aria-label="Business goals">
+              <svg class="goals-ring-texture" aria-hidden="true" focusable="false" width="326" height="134" viewBox="0 0 326 134" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <filter id="goals-ring-effects" x="-27.2" y="-27.2" width="380.4" height="188.4" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="13.6" result="wide-spread" />
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="core-spread" />
+                    <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="2" seed="27" result="density-noise" />
+                    <feColorMatrix in="density-noise" type="saturate" values="0" result="density-mono" />
+                    <feComponentTransfer in="density-mono" result="density-contrast">
+                      <feFuncR type="linear" slope="1.8" intercept="-0.1" />
+                      <feFuncG type="linear" slope="1.8" intercept="-0.1" />
+                      <feFuncB type="linear" slope="1.8" intercept="-0.1" />
+                    </feComponentTransfer>
+                    <feColorMatrix in="density-contrast" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.333 0.333 0.333 0 0" result="density-alpha" />
+                    <feTurbulence type="fractalNoise" baseFrequency="1.35 1.35" numOctaves="1" seed="6" result="fine-noise" />
+                    <feColorMatrix in="fine-noise" type="saturate" values="0" result="fine-mono" />
+                    <feComponentTransfer in="fine-mono" result="fine-contrast">
+                      <feFuncR type="linear" slope="3" intercept="-0.95" />
+                      <feFuncG type="linear" slope="3" intercept="-0.95" />
+                      <feFuncB type="linear" slope="3" intercept="-0.95" />
+                    </feComponentTransfer>
+                    <feColorMatrix in="fine-contrast" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.333 0.333 0.333 0 0" result="fine-alpha" />
+                    <feComposite in="fine-alpha" in2="density-alpha" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="modulated-grain" />
+                    <feComposite in="modulated-grain" in2="wide-spread" operator="in" result="wide-particles" />
+                    <feComponentTransfer in="wide-particles" result="wide-particles-opacity">
+                      <feFuncA type="linear" slope="0.65" />
+                    </feComponentTransfer>
+                    <feComposite in="modulated-grain" in2="core-spread" operator="in" result="core-particles" />
+                    <feComponentTransfer in="core-particles" result="core-particles-opacity">
+                      <feFuncA type="linear" slope="1" />
+                    </feComponentTransfer>
+                    <feMerge>
+                      <feMergeNode in="wide-particles-opacity" />
+                      <feMergeNode in="core-particles-opacity" />
+                    </feMerge>
+                  </filter>
+                  <clipPath id="goals-ring-clip">
+                    <rect width="326" height="134" fill="white" />
+                  </clipPath>
+                </defs>
+                <g class="goals-ring-texture-art" style="mix-blend-mode: exclusion" clip-path="url(#goals-ring-clip)" filter="url(#goals-ring-effects)">
+                  <path d="M215.619 119.617C198.758 117.169 180.358 113.148 161.37 107.531C159.8 107.067 158.24 106.592 156.689 106.114C177.352 112.019 197.284 116.529 215.619 119.617ZM174.708 25.3759C176.571 25.9269 178.422 26.4869 180.263 27.0506C112.11 7.69918 52.6147 9.05086 46.2872 30.4411C39.9654 51.8135 89.0643 85.2733 156.689 106.114C154.895 105.601 153.094 105.081 151.29 104.548C67.9675 79.9013 5.66378 42.1984 12.1306 20.3358C18.5974 -1.52683 91.3859 0.729709 174.708 25.3759ZM236.719 47.6523C286.685 69.2471 318.586 93.634 313.867 109.588C309.154 125.524 269.203 128.641 215.619 119.617C260.942 126.197 295.159 121.384 299.873 105.45C304.592 89.4946 278.423 66.8023 236.719 47.6523ZM184.789 28.3597C203.709 33.9562 221.279 40.5624 236.719 47.6523C219.743 40.3155 200.682 33.3021 180.263 27.0506C181.767 27.4777 183.276 27.9124 184.789 28.3597Z" fill="white" />
+                </g>
+              </svg>
               <article class="goals-card">
                 <p class="label-strong">User Goal</p>
                 <h3 class="goals-card-subheading">Help customers find available stores faster without calling the store.</h3>

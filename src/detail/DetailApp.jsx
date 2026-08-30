@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 
 import { projects } from "../../data/projects.js";
 import { SiteFooter } from "../components/SiteFooter.jsx";
+import { initGoalsParticles } from "./goalsParticles.js";
 
 function DetailThemeToggle() {
   return (
@@ -99,6 +100,7 @@ export function DetailApp({ navRoot, titleRoot, companyRoot, contributionRoot })
 
   useEffect(() => {
     import("../../detail.js");
+    return initGoalsParticles();
   }, []);
 
   return (
