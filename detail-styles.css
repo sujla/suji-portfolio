@@ -2204,7 +2204,7 @@ ul.affected-user-card-detail {
 .solution-showcase-list {
   display: grid;
   gap: 56px;
-  margin: 0 32px;
+  margin: 0;
 }
 
 /* Solution showcase: panels */
@@ -2214,7 +2214,7 @@ ul.affected-user-card-detail {
   grid-template-columns: minmax(0, 1fr) minmax(260px, 0.76fr);
   gap: clamp(8px, 2vw, 16px);
   align-items: start;
-  padding: 32px 0;
+  padding: 32px 0 0;
   border-radius: 24px;
   color: var(--solution-text);
 }
@@ -2222,8 +2222,8 @@ ul.affected-user-card-detail {
 .solution-showcase-panel--comparison {
   --solution-phone-width: 320px;
   grid-template-columns: 1fr;
-  padding-right: clamp(42px, 7vw, 96px);
-  padding-left: clamp(42px, 7vw, 96px);
+  padding-right: 0;
+  padding-left: 0;
 }
 
 /* Solution showcase: device */
@@ -2235,7 +2235,7 @@ ul.affected-user-card-detail {
 
 .solution-phone-stage--comparison {
   justify-self: center;
-  width: min(100%, 820px);
+  width: 100%;
 }
 
 .solution-view-toggle {
@@ -2342,9 +2342,44 @@ ul.affected-user-card-detail {
 
 .solution-asis-tobe-comparison {
   display: grid;
-  grid-template-areas: "device";
-  place-items: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 2vw, 16px);
+  align-items: start;
   width: 100%;
+}
+
+.solution-comparison-item {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  gap: 10px;
+}
+
+.solution-comparison-label {
+  justify-self: center;
+  width: 100%;
+  margin: 0;
+  color: var(--text-tertiary);
+  font-family: "Google Sans Code", monospace;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.solution-comparison-frame {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  gap: 22px;
+  padding: clamp(24px, 3vw, 48px) clamp(16px, 3vw, 32px) clamp(14px, 3vw, 26px);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
+  border-radius: 24px;
+  background: var(--surface);
+  place-items: start center;
 }
 
 .solution-phone {
@@ -2357,8 +2392,7 @@ ul.affected-user-card-detail {
 
 .solution-showcase-panel--comparison .solution-phone--asis,
 .solution-showcase-panel--comparison .solution-phone--tobe {
-  grid-area: device;
-  width: var(--solution-phone-width);
+  width: min(100%, var(--solution-phone-width));
 }
 
 .solution-showcase-panel[data-active-view="asis"] .solution-phone--tobe,
@@ -2408,71 +2442,74 @@ ul.affected-user-card-detail {
   transition: opacity 180ms ease;
 }
 
-.solution-phone-screen-stack.is-video-playing .solution-phone-video {
+.solution-phone-screen-stack.has-video-started .solution-phone-video {
   opacity: 1;
 }
 
-.solution-phone-play-toggle {
+.solution-video-controls {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 3;
+  right: min(1.3vw, 20px);
+  bottom: min(1.3vw, 20px);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.solution-phone-play-toggle,
+.solution-phone-replay {
+  position: relative;
   display: grid;
-  width: 62px;
-  height: 62px;
+  width: 40px;
+  height: 40px;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.42);
-  border-radius: 50%;
-  background: rgba(2, 5, 8, 0.52);
-  color: #fff;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-tertiary);
   cursor: pointer;
-  transform: translate(-50%, -50%);
-  transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    opacity 180ms ease,
-    transform 180ms ease;
+  opacity: 0.82;
+  transition: opacity 180ms ease;
 }
 
 .solution-phone-play-toggle::before {
-  width: 0;
-  height: 0;
-  margin-left: 4px;
-  border-top: 11px solid transparent;
-  border-bottom: 11px solid transparent;
-  border-left: 17px solid currentColor;
+  width: 20.52px;
+  height: 20.52px;
+  background: currentColor;
+  -webkit-mask: url("assets/common/play.svg") center / contain no-repeat;
+  mask: url("assets/common/play.svg") center / contain no-repeat;
   content: "";
 }
 
-.solution-phone-play-toggle:hover {
-  border-color: rgba(255, 255, 255, 0.72);
-  background: rgba(2, 5, 8, 0.68);
-}
-
-.solution-phone-play-toggle:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
-}
-
-.solution-phone-screen-stack.is-video-playing .solution-phone-play-toggle {
-  top: auto;
-  right: 16px;
-  bottom: 16px;
-  left: auto;
-  width: 44px;
-  height: 44px;
-  opacity: 0.74;
-  transform: none;
-}
-
-.solution-phone-screen-stack.is-video-playing .solution-phone-play-toggle::before {
-  width: 14px;
-  height: 18px;
-  margin-left: 0;
-  border: 0;
+.solution-phone-play-toggle.is-playing::before {
+  width: 12px;
+  height: 16px;
+  -webkit-mask: none;
+  mask: none;
   background:
-    linear-gradient(currentColor 0 0) left / 5px 100% no-repeat,
-    linear-gradient(currentColor 0 0) right / 5px 100% no-repeat;
+    linear-gradient(currentColor 0 0) left / 4px 100% no-repeat,
+    linear-gradient(currentColor 0 0) right / 4px 100% no-repeat;
+}
+
+.solution-phone-replay::before {
+  width: 24px;
+  height: 24px;
+  background: currentColor;
+  -webkit-mask: url("assets/common/replay.svg") center / contain no-repeat;
+  mask: url("assets/common/replay.svg") center / contain no-repeat;
+  content: "";
+}
+
+.solution-phone-play-toggle:hover,
+.solution-phone-replay:hover {
+  opacity: 1;
+}
+
+.solution-phone-play-toggle:focus-visible,
+.solution-phone-replay:focus-visible {
+  outline: 1px solid var(--text-tertiary);
+  outline-offset: 1px;
 }
 
 .solution-phone-frame-image {
@@ -2528,15 +2565,15 @@ html.detail-root.is-theme-switching-lines::before {
 
   .solution-showcase-panel--comparison {
     grid-template-columns: 1fr;
-    padding-right: 64px;
-    padding-left: 64px;
+    padding-right: 0;
+    padding-left: 0;
   }
 }
 
 @media (max-height: 920px) and (min-width: 761px) {
   .solution-showcase-panel {
     gap: clamp(48px, 8vw, 108px);
-    padding: 40px 0 56px;
+    padding: 40px 0 0;
   }
 
   .solution-phone {
@@ -2702,13 +2739,13 @@ html.detail-root.is-theme-switching-lines::before {
   .solution-showcase-panel {
     grid-template-columns: minmax(0, 1fr) minmax(200px, 0.7fr);
     gap: 30px;
-    padding: 40px 0;
+    padding: 40px 0 0;
   }
 
   .solution-showcase-panel--comparison {
     grid-template-columns: 1fr;
-    padding-right: 38px;
-    padding-left: 38px;
+    padding-right: 0;
+    padding-left: 0;
   }
 
   .solution-phone {
@@ -2855,7 +2892,7 @@ html.detail-root.is-theme-switching-lines::before {
 
   .solution-showcase-list {
     gap: 36px;
-    margin: 0 14px;
+    margin: 0;
   }
 
   .solution-showcase-panel {
@@ -2863,6 +2900,10 @@ html.detail-root.is-theme-switching-lines::before {
     grid-template-rows: auto minmax(0, 1fr);
     gap: 22px;
     align-items: start;
+  }
+
+  .solution-showcase-panel--comparison {
+    --solution-phone-width: 250px;
   }
 
   .solution-view-toggle {
@@ -2955,7 +2996,7 @@ html.detail-root.is-theme-switching-lines::before {
   .solution-showcase-panel--comparison {
     width: auto;
     /* height: min(80dvh, calc(var(--solution-phone-width) * 860 / 430)); */
-    padding: 36px 12px 0;
+    padding: 36px 0 0;
   }
 
   .solution-view-toggle-button {

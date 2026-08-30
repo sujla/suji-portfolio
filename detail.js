@@ -1328,17 +1328,26 @@ const setupsolutionShowcase = () => {
   };
 
   panels.forEach((panel) => {
-    setPanelActiveView(panel, panel.dataset.activeView || "tobe");
+    const viewButtons = [...panel.querySelectorAll("[data-solution-view-toggle]")];
+
+    if (viewButtons.length) {
+      setPanelActiveView(panel, panel.dataset.activeView || "tobe");
+    }
 
     panel.querySelectorAll("[data-solution-video]").forEach((video) => {
       const stack = video.closest(".solution-phone-screen-stack");
-      const button = stack?.querySelector("[data-solution-video-toggle]");
-      if (!stack || !button) return;
+      const frame = video.closest(".solution-comparison-frame");
+      const button = frame?.querySelector("[data-solution-video-toggle]");
+      const replayButton = frame?.querySelector("[data-solution-video-replay]");
+      if (!stack || !button || !replayButton) return;
 
       const syncVideoButton = () => {
         const isPlaying = !video.paused && !video.ended;
+        const hasStarted = isPlaying || video.currentTime > 0 || video.ended;
 
         stack.classList.toggle("is-video-playing", isPlaying);
+        stack.classList.toggle("has-video-started", hasStarted);
+        button.classList.toggle("is-playing", isPlaying);
         button.setAttribute("aria-label", isPlaying ? "Pause solution video" : "Play solution video");
         button.setAttribute("aria-pressed", String(isPlaying));
       };
@@ -1357,6 +1366,12 @@ const setupsolutionShowcase = () => {
         syncVideoButton();
       });
 
+      replayButton.addEventListener("click", () => {
+        video.currentTime = 0;
+        video.play().catch(syncVideoButton);
+        syncVideoButton();
+      });
+
       video.addEventListener("play", syncVideoButton);
       video.addEventListener("pause", syncVideoButton);
       video.addEventListener("ended", syncVideoButton);
@@ -1364,12 +1379,40 @@ const setupsolutionShowcase = () => {
       syncVideoButton();
     });
 
-    panel.querySelectorAll("[data-solution-view-toggle]").forEach((button) => {
+    viewButtons.forEach((button) => {
       button.addEventListener("click", () => {
         setPanelActiveView(panel, button.dataset.solutionViewToggle);
       });
     });
   });
+
+  const videos = [...showcase.querySelectorAll("[data-solution-video]")];
+  const section = showcase.closest("#solution") || showcase;
+  const setVideosPlaying = (shouldPlay) => {
+    videos.forEach((video) => {
+      if (!shouldPlay) {
+        video.pause();
+        return;
+      }
+
+      if (video.ended || (video.duration && video.currentTime >= video.duration - 0.1)) {
+        video.currentTime = 0;
+      }
+
+      video.play().catch(() => {});
+    });
+  };
+
+  if ("IntersectionObserver" in window) {
+    const solutionObserver = new IntersectionObserver(
+      ([entry]) => setVideosPlaying(entry.isIntersecting),
+      { threshold: 0.2 },
+    );
+
+    solutionObserver.observe(section);
+  } else {
+    setVideosPlaying(true);
+  }
 };
 
 const getProjectOverviewTarget = () => document.getElementById("project-overview");
