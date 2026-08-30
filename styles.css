@@ -3657,19 +3657,63 @@ body {
   transition: opacity 180ms ease;
 }
 
+@property --pf-work-badge-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 135deg;
+}
+
 .pf-work-badge {
   position: absolute;
   top: 14px;
   right: 18px;
   z-index: 3;
   padding: 8px 12px;
+  overflow: hidden;
   border-radius: 999px;
-  background: var(--text);
-  color: var(--bg);
+  background: var(--surface);
+  color: var(--text);
   font-family: "Google Sans Code", monospace;
   font-size: 13px;
+  isolation: isolate;
   line-height: 1;
   pointer-events: none;
+}
+
+.pf-work-badge::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    var(--pf-work-badge-angle),
+    #6d28d9,
+    #0755ff,
+    #35ffa1,
+    #6d28d9
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  content: "";
+  pointer-events: none;
+  animation: pf-work-badge-border 4s linear infinite;
+}
+
+@keyframes pf-work-badge-border {
+  from {
+    --pf-work-badge-angle: 135deg;
+  }
+
+  to {
+    --pf-work-badge-angle: 495deg;
+  }
 }
 
 .pf-work-cursor-label {
