@@ -1241,6 +1241,8 @@ ul.affected-user-card-detail {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
+  border-radius: 16px;
+  background: var(--text);
 }
 
 .goals-card {
@@ -1251,19 +1253,18 @@ ul.affected-user-card-detail {
   min-height: clamp(200px, 24vw, 260px);
   gap: 40px;
   padding: 26px 40px 26px 32px;
-  border-radius: var(--detail-card-radius);
-  background: var(--surface);
 }
 
 .goals-card > p.label-strong {
-  opacity: 0.5;
+  color: var(--bg);
+  opacity: 0.6;
   font-family: "Google Sans Code", monospace;
 }
 
 .goals-card-subheading {
   align-self: end;
   margin: 0;
-  color: var(--text);
+  color: var(--surface);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   font-weight: 400;
