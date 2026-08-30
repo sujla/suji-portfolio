@@ -3657,6 +3657,21 @@ body {
   transition: opacity 180ms ease;
 }
 
+.pf-work-badge {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 3;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font-family: "Google Sans Code", monospace;
+  font-size: 13px;
+  line-height: 1;
+  pointer-events: none;
+}
+
 .pf-work-cursor-label {
   position: fixed;
   top: 0;

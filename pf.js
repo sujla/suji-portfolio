@@ -673,9 +673,14 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const projectTypes = project.types?.length
       ? project.types
       : [project.type || "others"];
+    const badge =
+      project.id === "public-transport"
+        ? '<span class="pf-work-badge">AI-built</span>'
+        : "";
     const content = `
       <div class="pf-work-card">
         ${getWorkMedia(project)}
+        ${badge}
       </div>
       <div class="pf-work-meta">
         <h2>${project.title}</h2>
