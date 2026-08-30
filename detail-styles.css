@@ -2220,7 +2220,7 @@ ul.affected-user-card-detail {
 }
 
 .solution-showcase-panel--comparison {
-  --solution-phone-width: 320px;
+  --solution-phone-width: 240px;
   grid-template-columns: 1fr;
   padding-right: 0;
   padding-left: 0;
@@ -2581,7 +2581,7 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .solution-showcase-panel--comparison {
-    --solution-phone-width: 300px;
+    --solution-phone-width: 240px;
   }
 }
 
@@ -2753,7 +2753,7 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .solution-showcase-panel--comparison {
-    --solution-phone-width: 300px;
+    --solution-phone-width: 240px;
   }
 
   .solution-view-toggle {
@@ -2903,7 +2903,7 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .solution-showcase-panel--comparison {
-    --solution-phone-width: 250px;
+    --solution-phone-width: 240px;
   }
 
   .solution-view-toggle {
