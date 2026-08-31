@@ -2470,22 +2470,12 @@ ul.affected-user-card-detail {
 
 .solution-video-controls {
   position: absolute;
-  right: calc(min(1.3vw, 20px) - 8px);
-  bottom: calc(min(1.3vw, 20px) - 8px);
+  right: min(1.3vw, 20px);
+  bottom: calc(min(1.3vw, 20px) - 2px);
   z-index: 4;
   display: flex;
   align-items: center;
   gap: 4px;
-}
-
-.problem-frame .solution-video-controls {
-  top: calc(min(1.3vw, 20px) - 8px);
-  bottom: auto;
-}
-
-.solution-tobe-grid .solution-video-controls {
-  top: calc(min(1.3vw, 20px) - 8px);
-  bottom: auto;
 }
 
 .solution-phone-play-toggle,

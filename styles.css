@@ -571,15 +571,7 @@ html.is-pf-modal-open body {
   z-index: 5;
   display: flex;
   align-items: center;
-  gap: 2px;
-  padding: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 10px;
-  background: rgba(2, 5, 8, 0.58);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
-  color: #fff;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  gap: 4px;
 }
 
 .pf-modal-media-play-toggle,
@@ -591,19 +583,25 @@ html.is-pf-modal-open body {
   place-items: center;
   padding: 0;
   border: 0;
-  border-radius: 7px;
+  border-radius: 6px;
   background: transparent;
-  color: inherit;
+  color: var(--text-tertiary);
   cursor: pointer;
-  opacity: 0.76;
-  transition:
-    background-color 160ms ease,
-    opacity 160ms ease;
+  opacity: 0.82;
+  transition: opacity 180ms ease;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.pf-modal-media-play-toggle::before,
+.pf-modal-media-replay::before {
+  color: #fff;
+  mix-blend-mode: difference;
 }
 
 .pf-modal-media-play-toggle::before {
-  width: 17px;
-  height: 17px;
+  width: 18.88px;
+  height: 18.88px;
   background: currentColor;
   -webkit-mask: url("assets/common/play.svg") center / contain no-repeat;
   mask: url("assets/common/play.svg") center / contain no-repeat;
@@ -611,18 +609,18 @@ html.is-pf-modal-open body {
 }
 
 .pf-modal-media-play-toggle.is-playing::before {
-  width: 11px;
-  height: 15px;
+  width: 11.04px;
+  height: 14.72px;
   -webkit-mask: none;
   mask: none;
   background:
-    linear-gradient(currentColor 0 0) left / 3px 100% no-repeat,
-    linear-gradient(currentColor 0 0) right / 3px 100% no-repeat;
+    linear-gradient(currentColor 0 0) left / 3.68px 100% no-repeat,
+    linear-gradient(currentColor 0 0) right / 3.68px 100% no-repeat;
 }
 
 .pf-modal-media-replay::before {
-  width: 19px;
-  height: 19px;
+  width: 22.08px;
+  height: 22.08px;
   background: currentColor;
   -webkit-mask: url("assets/common/replay.svg") center / contain no-repeat;
   mask: url("assets/common/replay.svg") center / contain no-repeat;
@@ -631,15 +629,14 @@ html.is-pf-modal-open body {
 
 .pf-modal-media-play-toggle:focus-visible,
 .pf-modal-media-replay:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: -2px;
+  outline: 1px solid var(--text-tertiary);
+  outline-offset: 1px;
   opacity: 1;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .pf-modal-media-play-toggle:hover,
   .pf-modal-media-replay:hover {
-    background: rgba(255, 255, 255, 0.12);
     opacity: 1;
   }
 }
