@@ -113,6 +113,24 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     },
   ];
 
+  const getModalMediaControls = (label, mediaType = "video") => `
+    <div class="pf-modal-media-controls" role="group" aria-label="${label} controls">
+      <button
+        class="pf-modal-media-play-toggle"
+        type="button"
+        aria-label="Play ${mediaType}"
+        aria-pressed="false"
+        data-modal-media-play-toggle
+      ></button>
+      <button
+        class="pf-modal-media-replay"
+        type="button"
+        aria-label="Replay ${mediaType}"
+        data-modal-media-replay
+      ></button>
+    </div>
+  `;
+
   const getPublicTransportModalVideo = (order) => {
     const item = publicTransportModalVideos[order - 1];
 
@@ -133,6 +151,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         </div>
         <p class="pf-modal-public-transport-caption">${item.label}</p>
       </div>
+      ${getModalMediaControls(item.label)}
     `;
   };
 
@@ -165,22 +184,26 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
               <video class="pf-modal-perp-media" muted playsinline preload="auto" poster="./assets/perp-dex/logo-intro-poster.jpg" data-perp-video data-perp-thumbnail-time="3.44">
                 <source src="./assets/perp-dex/logo-intro.mp4" type="video/mp4" />
               </video>
+              ${getModalMediaControls("Logo introduction")}
             `,
             `
               <video class="pf-modal-perp-media" muted playsinline preload="auto" poster="./assets/perp-dex/sltp-poster.jpg" data-perp-video>
                 <source src="./assets/perp-dex/sltp.mp4" type="video/mp4" />
               </video>
+              ${getModalMediaControls("Stop loss and take profit")}
             `,
             `
               <div class="pf-modal-perp-media pf-modal-perp-gif" data-perp-gif data-perp-gif-src="./assets/perp-dex/multiwallet.gif" data-perp-gif-duration="6600">
                 <canvas class="pf-modal-perp-gif-frame" data-perp-gif-frame></canvas>
                 <img class="pf-modal-perp-gif-frame pf-modal-perp-gif-player" alt="" data-perp-gif-player />
               </div>
+              ${getModalMediaControls("Multi-wallet animation", "animation")}
             `,
             `
               <video class="pf-modal-perp-media pf-modal-perp-media--trading" muted playsinline preload="auto" poster="./assets/perp-dex/trading-poster.jpg" data-perp-video>
                 <source src="./assets/perp-dex/trading.mov" />
               </video>
+              ${getModalMediaControls("Perpetual trading")}
             `,
           ][index]
         : "";
@@ -413,253 +436,177 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     });
   };
 
+  const waitForVideoMetadata = (video) => {
+    if (video.readyState >= 1) return Promise.resolve();
+
+    return new Promise((resolve) => {
+      video.addEventListener("loadedmetadata", resolve, { once: true });
+      video.addEventListener("error", resolve, { once: true });
+    });
+  };
+
+  const initializeModalVideoEntry = (entry) => {
+    const { container, video } = entry;
+    const playButton = container.querySelector("[data-modal-media-play-toggle]");
+    const replayButton = container.querySelector("[data-modal-media-replay]");
+
+    video.loop = false;
+
+    const syncControls = () => {
+      const isPlaying = !video.paused && !video.ended;
+      container.classList.toggle("is-playing", isPlaying);
+      playButton?.classList.toggle("is-playing", isPlaying);
+      playButton?.setAttribute("aria-label", isPlaying ? "Pause video" : "Play video");
+      playButton?.setAttribute("aria-pressed", String(isPlaying));
+    };
+
+    const startFromBeginning = () => {
+      if (!container.isConnected) return;
+      video.currentTime = 0;
+      video.play().catch(syncControls);
+      syncControls();
+    };
+
+    playButton?.addEventListener("click", () => {
+      if (!video.paused && !video.ended) {
+        video.pause();
+        return;
+      }
+
+      if (video.ended) video.currentTime = 0;
+      video.play().catch(syncControls);
+      syncControls();
+    });
+    replayButton?.addEventListener("click", startFromBeginning);
+    video.addEventListener("play", syncControls);
+    video.addEventListener("pause", syncControls);
+    video.addEventListener("ended", syncControls);
+    video.addEventListener("loadedmetadata", syncControls);
+    syncControls();
+
+    return { ...entry, startFromBeginning };
+  };
+
+  const initializePerpGifEntry = (entry) => {
+    const { container, gif } = entry;
+    const canvas = gif.querySelector("[data-perp-gif-frame]");
+    const player = gif.querySelector("[data-perp-gif-player]");
+    const playButton = container.querySelector("[data-modal-media-play-toggle]");
+    const replayButton = container.querySelector("[data-modal-media-replay]");
+    const source = gif.dataset.perpGifSrc;
+    const duration = Number(gif.dataset.perpGifDuration || 6600);
+    const context = canvas?.getContext("2d");
+    let timer = 0;
+    let playbackToken = 0;
+    let isPlaying = false;
+
+    const syncControls = () => {
+      container.classList.toggle("is-playing", isPlaying);
+      playButton?.classList.toggle("is-playing", isPlaying);
+      playButton?.setAttribute("aria-label", isPlaying ? "Pause animation" : "Play animation");
+      playButton?.setAttribute("aria-pressed", String(isPlaying));
+    };
+
+    const captureCurrentFrame = () => {
+      if (!canvas || !context || !player?.naturalWidth) return;
+      if (!canvas.width || !canvas.height) {
+        canvas.width = player.naturalWidth;
+        canvas.height = player.naturalHeight;
+      }
+
+      try {
+        context.drawImage(player, 0, 0, canvas.width, canvas.height);
+      } catch {
+        // Keep the last available static frame if the GIF cannot be sampled.
+      }
+    };
+
+    const stop = () => {
+      window.clearTimeout(timer);
+      captureCurrentFrame();
+      player?.removeAttribute("src");
+      isPlaying = false;
+      syncControls();
+    };
+
+    const startFromBeginning = () => {
+      if (!container.isConnected || !player || !source) return;
+      window.clearTimeout(timer);
+      const token = ++playbackToken;
+      player.removeAttribute("src");
+      player.src = `${source}?play=${token}`;
+      isPlaying = true;
+      syncControls();
+      timer = window.setTimeout(() => {
+        if (token === playbackToken && container.isConnected) stop();
+      }, duration);
+    };
+
+    const image = new Image();
+    image.addEventListener(
+      "load",
+      () => {
+        if (!canvas || !context) return;
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        context.drawImage(image, 0, 0);
+      },
+      { once: true },
+    );
+    image.src = source;
+
+    playButton?.addEventListener("click", () => {
+      if (isPlaying) stop();
+      else startFromBeginning();
+    });
+    replayButton?.addEventListener("click", startFromBeginning);
+    syncControls();
+
+    return { ...entry, startFromBeginning };
+  };
+
   const initializePerpDexMediaPlayback = (modal) => {
-    const playSimultaneously = window.matchMedia("(max-width: 920px)").matches;
-    const playbackOrder = playSimultaneously ? [1, 2, 3, 4] : [4, 1, 2, 3];
-    const sequence = playbackOrder
-      .map((index) => modal.querySelector(`.pf-modal-bento-placeholder--${index}`))
-      .filter(Boolean)
+    if (!modal.matches(".pf-work--perp-dex")) return;
+
+    const entries = [...modal.querySelectorAll(".pf-modal-bento-placeholder")]
       .map((container) => ({
         container,
         video: container.querySelector("[data-perp-video]"),
         gif: container.querySelector("[data-perp-gif]"),
-      }));
+      }))
+      .filter((entry) => entry.video || entry.gif)
+      .map((entry) =>
+        entry.video ? initializeModalVideoEntry(entry) : initializePerpGifEntry(entry),
+      );
 
-    if (!sequence.length) return;
+    if (!entries.length) return;
 
-    if (playSimultaneously) {
-      sequence.forEach((entry) => {
-        entry.container.classList.add("is-playing");
-
-        if (entry.video) {
-          const startVideo = () => {
-            if (!modal.isConnected) return;
-            entry.video.loop = true;
-            entry.video.currentTime = 0;
-            entry.video.play().catch(() => {
-              // Muted playback can still be blocked until the next user interaction.
-            });
-          };
-
-          if (entry.video.readyState >= 1) startVideo();
-          else entry.video.addEventListener("loadedmetadata", startVideo, { once: true });
-        }
-
-        if (entry.gif) {
-          const player = entry.gif.querySelector("[data-perp-gif-player]");
-          const source = entry.gif.dataset.perpGifSrc;
-
-          if (player && source) player.src = source;
-        }
+    Promise.all(entries.filter((entry) => entry.video).map((entry) => waitForVideoMetadata(entry.video)))
+      .then(() => {
+        if (!modal.isConnected) return;
+        entries.forEach((entry) => entry.startFromBeginning());
       });
-      return;
-    }
-
-    let activeEntry = null;
-    let autoIndex = 0;
-    let gifTimer = 0;
-    let playbackToken = 0;
-    let hoveredEntry = null;
-
-    const showStaticFrame = (entry) => {
-      entry.container.classList.remove("is-playing");
-
-      if (entry.video) {
-        const thumbnailTime = Number(entry.video.dataset.perpThumbnailTime || 0);
-        entry.video.loop = false;
-        entry.video.pause();
-
-        if (entry.video.readyState >= 2) {
-          entry.video.currentTime = Math.min(
-            thumbnailTime,
-            Number.isFinite(entry.video.duration) ? entry.video.duration : thumbnailTime,
-          );
-        }
-      }
-
-      if (entry.gif) {
-        const player = entry.gif.querySelector("[data-perp-gif-player]");
-        player?.removeAttribute("src");
-      }
-    };
-
-    const stopAll = () => {
-      window.clearTimeout(gifTimer);
-      sequence.forEach(showStaticFrame);
-    };
-
-    const advanceAuto = () => {
-      autoIndex = (autoIndex + 1) % sequence.length;
-      playEntry(sequence[autoIndex], true);
-    };
-
-    const playEntry = (entry, isAutoPlay = false) => {
-      const token = ++playbackToken;
-      stopAll();
-      activeEntry = entry;
-      entry.container.classList.add("is-playing");
-
-      if (entry.video) {
-        const startVideo = () => {
-          if (token !== playbackToken || !modal.isConnected) return;
-          entry.video.loop = !isAutoPlay;
-          entry.video.currentTime = 0;
-          entry.video.play().catch(() => {
-            // Muted playback can still be blocked until the next user interaction.
-          });
-        };
-
-        if (entry.video.readyState >= 1) startVideo();
-        else entry.video.addEventListener("loadedmetadata", startVideo, { once: true });
-      }
-
-      if (entry.gif) {
-        const player = entry.gif.querySelector("[data-perp-gif-player]");
-        const source = entry.gif.dataset.perpGifSrc;
-
-        if (player && source) {
-          player.src = `${source}?play=${token}`;
-        }
-
-        if (isAutoPlay) {
-          gifTimer = window.setTimeout(() => {
-            if (token === playbackToken && !hoveredEntry && modal.isConnected) advanceAuto();
-          }, Number(entry.gif.dataset.perpGifDuration || 6600));
-        }
-      }
-    };
-
-    sequence.forEach((entry) => {
-      if (entry.video) {
-        entry.video.addEventListener("ended", () => {
-          if (entry === activeEntry && !hoveredEntry && modal.isConnected) advanceAuto();
-        });
-      }
-
-      if (entry.gif) {
-        const canvas = entry.gif.querySelector("[data-perp-gif-frame]");
-        const image = new Image();
-
-        image.addEventListener(
-          "load",
-          () => {
-            canvas.width = image.naturalWidth;
-            canvas.height = image.naturalHeight;
-            canvas.getContext("2d")?.drawImage(image, 0, 0);
-          },
-          { once: true },
-        );
-        image.src = entry.gif.dataset.perpGifSrc;
-      }
-
-      entry.container.addEventListener("mouseenter", () => {
-        hoveredEntry = entry;
-        playEntry(entry);
-      });
-
-      entry.container.addEventListener("mouseleave", () => {
-        if (hoveredEntry !== entry) return;
-        hoveredEntry = null;
-        autoIndex = (sequence.indexOf(entry) + 1) % sequence.length;
-        playEntry(sequence[autoIndex], true);
-      });
-    });
-
-    sequence.forEach(showStaticFrame);
-    playEntry(sequence[autoIndex], true);
   };
 
   const initializePublicTransportMediaPlayback = (modal) => {
-    const playSimultaneously = window.matchMedia("(max-width: 920px)").matches;
-    const sequence = [...modal.querySelectorAll("[data-public-transport-video]")]
+    if (!modal.matches(".pf-work--public-transport")) return;
+
+    const entries = [...modal.querySelectorAll("[data-public-transport-video]")]
       .map((video) => ({
         video,
         order: Number(video.dataset.publicTransportVideoOrder),
         container: video.closest(".pf-modal-bento-feature, .pf-modal-bento-placeholder"),
       }))
       .filter((entry) => entry.container)
-      .sort((a, b) => a.order - b.order);
+      .sort((a, b) => a.order - b.order)
+      .map(initializeModalVideoEntry);
 
-    if (!sequence.length) return;
+    if (!entries.length) return;
 
-    if (playSimultaneously) {
-      sequence.forEach((entry) => {
-        entry.container.classList.add("is-playing");
-        entry.video.loop = true;
-
-        const startVideo = () => {
-          if (!modal.isConnected) return;
-          entry.video.currentTime = 0;
-          entry.video.play().catch(() => {
-            // Muted playback can still be blocked until the next user interaction.
-          });
-        };
-
-        if (entry.video.readyState >= 1) startVideo();
-        else entry.video.addEventListener("loadedmetadata", startVideo, { once: true });
-      });
-      return;
-    }
-
-    let activeEntry = null;
-    let autoIndex = 0;
-    let hoveredEntry = null;
-    let playbackToken = 0;
-
-    const showStaticFrame = (entry) => {
-      entry.container.classList.remove("is-playing");
-      entry.video.loop = false;
-      entry.video.pause();
-
-      if (entry.video.readyState >= 2) entry.video.currentTime = 0;
-    };
-
-    const stopAll = () => sequence.forEach(showStaticFrame);
-
-    const advanceAuto = () => {
-      autoIndex = (autoIndex + 1) % sequence.length;
-      playEntry(sequence[autoIndex], true);
-    };
-
-    const playEntry = (entry, isAutoPlay = false) => {
-      const token = ++playbackToken;
-      stopAll();
-      activeEntry = entry;
-      entry.container.classList.add("is-playing");
-
-      const startVideo = () => {
-        if (token !== playbackToken || !modal.isConnected) return;
-        entry.video.loop = !isAutoPlay;
-        entry.video.currentTime = 0;
-        entry.video.play().catch(() => {
-          // Muted playback can still be blocked until the next user interaction.
-        });
-      };
-
-      if (entry.video.readyState >= 1) startVideo();
-      else entry.video.addEventListener("loadedmetadata", startVideo, { once: true });
-    };
-
-    sequence.forEach((entry) => {
-      entry.video.addEventListener("ended", () => {
-        if (entry === activeEntry && !hoveredEntry && modal.isConnected) advanceAuto();
-      });
-
-      entry.container.addEventListener("mouseenter", () => {
-        hoveredEntry = entry;
-        playEntry(entry);
-      });
-
-      entry.container.addEventListener("mouseleave", () => {
-        if (hoveredEntry !== entry) return;
-        hoveredEntry = null;
-        autoIndex = (sequence.indexOf(entry) + 1) % sequence.length;
-        playEntry(sequence[autoIndex], true);
-      });
+    Promise.all(entries.map((entry) => waitForVideoMetadata(entry.video))).then(() => {
+      if (!modal.isConnected) return;
+      entries.forEach((entry) => entry.startFromBeginning());
     });
-
-    sequence.forEach(showStaticFrame);
-    playEntry(sequence[autoIndex], true);
   };
 
   const renderWorkCard = (project, isClone = false) => {
@@ -846,8 +793,10 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           ${getProjectMedia(project)}
         </div>
       `;
+    const bentoAccessibilityAttribute =
+      isPerpDexProject || isPublicTransportProject ? "" : ' aria-hidden="true"';
     const bentoMarkup = `
-      <section class="pf-modal-bento-section${isWebProject ? " pf-modal-bento-section--web" : ""}${usesThreePartBento ? " pf-modal-bento-section--three-up" : ""}${usesFourPartBento ? " pf-modal-bento-section--four-up" : ""}${isPerpDexProject ? " pf-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
+      <section class="pf-modal-bento-section${isWebProject ? " pf-modal-bento-section--web" : ""}${usesThreePartBento ? " pf-modal-bento-section--three-up" : ""}${usesFourPartBento ? " pf-modal-bento-section--four-up" : ""}${isPerpDexProject ? " pf-modal-bento-section--perp-dex" : ""}"${bentoAccessibilityAttribute}>
         ${bentoFeatureMarkup}
         ${bentoSideMarkup}
       </section>
