@@ -28,7 +28,7 @@ import{p as or,a as lo}from"./projects-KnV3ap8A.js";const rr=[{id:"store-finder"
             <img class="pf-phone-frame" src="./assets/common/pf-mobile-frame.png" alt="" />
           </div>
         </div>
-      `:'<div class="pf-work-empty" aria-hidden="true"></div>',wo=[{source:"./assets/public-transport/bus-route.mp4",poster:"./assets/public-transport/bus-route-poster.jpg",label:"Bus timings & route"},{source:"./assets/public-transport/mrt-route.mp4",poster:"./assets/public-transport/mrt-route-poster.jpg",label:"Simple & shortest MRT route options"},{source:"./assets/public-transport/google-map-share.mp4",poster:"./assets/public-transport/google-map-share-poster.jpg",label:"Locations shared via Google Maps"}],Z=(e,t="video")=>`
+      `:'<div class="pf-work-empty" aria-hidden="true"></div>',wo=[{source:"./assets/public-transport/bus-route.mp4",poster:"./assets/public-transport/bus-route-poster.jpg",label:"Bus timings & route"},{source:"./assets/public-transport/mrt-route.mp4",poster:"./assets/public-transport/mrt-route-poster.jpg",label:"Simple & Short MRT Routes"},{source:"./assets/public-transport/google-map-share.mp4",poster:"./assets/public-transport/google-map-share-poster.jpg",label:"Locations shared via Google Maps"}],Z=(e,t="video")=>`
     <div class="pf-modal-media-controls" role="group" aria-label="${e} controls">
       <button
         class="pf-modal-media-play-toggle"

@@ -104,7 +104,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     {
       source: "./assets/public-transport/mrt-route.mp4",
       poster: "./assets/public-transport/mrt-route-poster.jpg",
-      label: "Simple & shortest MRT route options",
+      label: "Simple & Short MRT Routes",
     },
     {
       source: "./assets/public-transport/google-map-share.mp4",

@@ -916,10 +916,12 @@ html.is-pf-modal-open body {
   max-width: 100%;
   margin: 10px 0 6px;
   color: var(--text-secondary);
-  font-size: clamp(12px, 0.72vw, 15px);
+  font-family: "Google Sans Code", monospace;
+  font-size: clamp(13px, 0.72vw, 15px);
   font-weight: 500;
   line-height: 1.2;
   text-align: center;
+  text-transform: capitalize;
 }
 
 .pf-modal-bento-video {
