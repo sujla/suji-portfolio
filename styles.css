@@ -3090,6 +3090,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   }
 
   .pf-work-modal.pf-work--store-finder .pf-modal-bento-section {
+    height: auto;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows:
       repeat(3, var(--pf-modal-bento-item-height))
