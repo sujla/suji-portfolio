@@ -1509,6 +1509,12 @@ html.is-pf-modal-open body {
   white-space: nowrap;
 }
 
+.site-mark:focus-visible,
+.index-gnb-link:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
 .theme-toggle {
   position: fixed;
   top: 16px;
@@ -1536,9 +1542,9 @@ html.is-pf-modal-open body {
 }
 
 .theme-toggle:focus-visible {
-  outline: 1px solid var(--active-project-color);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--active-project-color) 34%, transparent);
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+  box-shadow: none;
 }
 
 .theme-toggle::before {
@@ -3632,7 +3638,7 @@ body {
 .pf-type-filter-button {
   padding: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: 4px;
   background: transparent;
   color: var(--text);
   font-family: "Google Sans Code", monospace;
