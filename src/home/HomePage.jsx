@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ExperienceSection } from "../components/ExperienceCards.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
@@ -11,6 +11,81 @@ const aboutPhotos = [
   ["about-photo--5", "./assets/about5.jpeg"],
   ["about-photo--6", "./assets/about6.jpeg"],
 ];
+
+const mobileNavItems = [
+  ["Work", "#work"],
+  ["Experience", "#experience"],
+  ["About", "#about"],
+];
+
+function MobileNavigation() {
+  const [isOpen, setIsOpen] = useState(false);
+  const mobileNavRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  useEffect(() => {
+    const desktopMedia = window.matchMedia("(min-width: 601px)");
+    const closeOnDesktop = () => {
+      if (desktopMedia.matches) setIsOpen(false);
+    };
+    const closeOnOutsidePress = (event) => {
+      if (!mobileNavRef.current?.contains(event.target)) setIsOpen(false);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key !== "Escape") return;
+      setIsOpen(false);
+      toggleRef.current?.focus();
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsidePress);
+    document.addEventListener("keydown", closeOnEscape);
+    desktopMedia.addEventListener?.("change", closeOnDesktop);
+
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsidePress);
+      document.removeEventListener("keydown", closeOnEscape);
+      desktopMedia.removeEventListener?.("change", closeOnDesktop);
+    };
+  }, []);
+
+  return (
+    <div className="mobile-nav" ref={mobileNavRef}>
+      <button
+        className="mobile-nav-toggle"
+        type="button"
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={isOpen}
+        aria-controls="mobile-primary-navigation"
+        onClick={() => setIsOpen((open) => !open)}
+        ref={toggleRef}
+      >
+        <span className="mobile-nav-toggle-icon" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </span>
+      </button>
+      <nav
+        className="mobile-nav-panel"
+        id="mobile-primary-navigation"
+        aria-label="Mobile primary navigation"
+        hidden={!isOpen}
+      >
+        {mobileNavItems.map(([label, href]) => (
+          <a
+            className="mobile-nav-link"
+            href={href}
+            data-gnb-scroll
+            onClick={() => setIsOpen(false)}
+            key={href}
+          >
+            {label}
+          </a>
+        ))}
+      </nav>
+    </div>
+  );
+}
 
 export function HomePage() {
   useEffect(() => {
@@ -42,6 +117,7 @@ export function HomePage() {
       </header>
 
       <ThemeToggle />
+      <MobileNavigation />
 
       {/* Squircle filter adapted from https://skiper-ui.com/v1/skiper63 */}
       <svg

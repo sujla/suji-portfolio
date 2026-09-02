@@ -355,13 +355,27 @@ function LifeExperience() {
     target: container,
     offset: ["start 65vh", "start 5vh"],
   });
+  const { scrollYProgress: mobileGapScrollProgress } = useScroll({
+    target: container,
+    offset: ["start 65vh", "start 14vh"],
+  });
   const entryProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 24,
+    mass: 0.35,
+  });
+  const mobileGapProgress = useSpring(mobileGapScrollProgress, {
     stiffness: 120,
     damping: 24,
     mass: 0.35,
   });
   const globeScale = useTransform(entryProgress, [0, 1], [0.78, 1]);
   const globeScaleMobile = useTransform(entryProgress, [0, 1], [0.9, 1]);
+  const mobileHeadingGlobeGap = useTransform(
+    mobileGapProgress,
+    [0, 1],
+    ["16px", "4px"],
+  );
   const scrollRotation = useTransform(
     entryProgress,
     [0, 1],
@@ -369,10 +383,15 @@ function LifeExperience() {
   );
 
   return (
-    <section
+    <motion.section
       className="life-experience-section"
       aria-labelledby="life-experience-title"
       ref={container}
+      style={{
+        "--life-mobile-heading-globe-gap": prefersReducedMotion
+          ? "16px"
+          : mobileHeadingGlobeGap,
+      }}
     >
       <div className="life-globe-column">
         <div className="life-globe-sticky">
@@ -408,7 +427,7 @@ function LifeExperience() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
