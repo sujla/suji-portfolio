@@ -1277,14 +1277,14 @@ ul.affected-user-card-detail {
 }
 
 .goals-ring-particles-left {
-  top: -31%;
-  left: -10%;
-  transform: scaleX(-1.2);
+  top: -8%;
+  left: -4%;
+  transform: scaleX(-1.3) scaleY(1.3);
 }
 
 .goals-ring-particles-right {
-  top: -2%;
-  left: 27%;
+  top: 10%;
+  left: 32%;
 }
 
 .goals-cards.is-particle-canvas-ready .goals-ring-texture {
@@ -2801,6 +2801,7 @@ html.detail-root.is-theme-switching-lines::before {
 
   .goals-cards {
     grid-template-columns: minmax(0, 1fr);
+    gap: 0;
   }
 
   .goals-ring-texture {
@@ -2808,7 +2809,28 @@ html.detail-root.is-theme-switching-lines::before {
   }
 
   .goals-card {
-    min-height: 200px;
+    min-height: auto;
+    gap: 14px;
+    padding: 36px;
+  }
+
+  .goals-card-subheading {
+    max-width: 430px;
+    font-size: 20px;
+  }
+
+  .goals-ring-particles-left {
+    top: 13%;
+    left: -4%;
+    rotate: -14deg;
+    transform: scaleX(-1.5) scaleY(1.8);
+  }
+
+  .goals-ring-particles-right {
+    top: 32%;
+    left: 31%;
+    rotate: 10deg;
+    transform: scaleX(1.2) scaleY(1.8);
   }
 
   .success-metrics-grid {
@@ -2833,8 +2855,7 @@ html.detail-root.is-theme-switching-lines::before {
     min-width: 680px;
   }
 
-  .opportunity-cards,
-  .impact-points.opportunity-cards {
+  .opportunity-cards:not(.impact-points) {
     grid-template-columns: 1fr;
   }
 
@@ -2959,6 +2980,38 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 530px) {
+  .impact-points.opportunity-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .result-card {
+    padding: 28px;
+  }
+
+  .result-card:not(:last-child) {
+    border-right: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+  }
+
+  .result-card-copy {
+    gap: 8px;
+  }
+
+  .result-card-copy .result-card-value {
+    font-size: 34px;
+  }
+
+  .result-card-copy .result-card-label {
+    color: var(--text-tertiary);
+  }
+
+  .result-card-value--increase::after,
+  .result-card-value--decrease::after {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
   .detail-content {
     padding: 0 0 130px;
   }
