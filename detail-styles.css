@@ -1144,6 +1144,11 @@ ul.affected-user-card-detail {
 }
 
 @media (max-width: 760px) {
+
+  .problem-findings {
+    gap: 32px;
+  }
+
   .why-mattered-frame {
     min-height: 320px;
     grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1fr);
@@ -2980,6 +2985,11 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 @media (max-width: 530px) {
+
+  .problem-findings {
+    gap: 40px;
+  }
+
   .impact-points.opportunity-cards {
     grid-template-columns: 1fr;
   }
