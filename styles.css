@@ -4178,6 +4178,7 @@ body {
 @media (max-width: 850px) {
   .hero-section {
     grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
   }
 
   .hero-title-column {
@@ -4237,7 +4238,7 @@ body {
   }
 
   .hero-section {
-    gap: 0;
+    gap: 8px;
   }
 
   .display-title {
