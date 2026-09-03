@@ -1143,7 +1143,7 @@ ul.affected-user-card-detail {
   z-index: 1;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 760px) {
   .why-mattered-frame {
     min-height: 320px;
     grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1fr);
@@ -2646,6 +2646,73 @@ html.detail-root.is-theme-switching-lines::before {
     padding: 0 0 130px;
   }
 
+  .ux-goal-cards {
+    margin: 8px 28px 0;
+  }
+
+  .ux-goal-card,
+  .ux-goal-card--finder {
+    min-height: 0;
+  }
+
+  .ux-goal-card--finder {
+    background-size: 410px auto;
+    background-position: right -6% center;
+  }
+
+  .ux-goal-card-content {
+    padding: 42px 28px 41px 50px;
+  }
+
+  .ux-goal-card-grid {
+    gap: 4px;
+  }
+
+  .ux-goal-card-rail, .ux-goal-card--finder::before, .ux-goal-card--store::after {
+    left: 28px;
+    --ux-goal-rail-node-1-top: 66.5%;
+    --ux-goal-rail-node-2-top: 80.5%;
+  }
+
+  .ux-goal-card--finder .ux-goal-card-rail {
+    --ux-goal-rail-node-1-top: 47.3%;
+    --ux-goal-rail-node-2-top: 56.3%;
+    --ux-goal-rail-node-3-top: 66%;
+    --ux-goal-rail-node-4-top: 75%;
+  }
+
+  .ux-goal-card-list li {
+    font-size: 15px;
+  }
+
+  .solution-showcase-panel {
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 0.7fr);
+    gap: 30px;
+    padding: 40px 0 0;
+  }
+
+  .solution-showcase-panel--comparison {
+    grid-template-columns: 1fr;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .solution-phone {
+    width: 248px;
+  }
+
+  .solution-showcase-panel--comparison {
+    --solution-phone-width: 190px;
+  }
+
+  .solution-view-toggle {
+    margin-top: 16px;
+  }
+
+}
+
+
+@media (max-width: 760px) {
   :is(.affected-user-cards, .why-mattered-cards) {
     flex-direction: column;
     gap: calc(var(--affected-card-gap) + 8px);
@@ -2723,73 +2790,6 @@ html.detail-root.is-theme-switching-lines::before {
     transform: none;
   }
 
-  .ux-goal-cards {
-    margin: 8px 28px 0;
-  }
-
-  .ux-goal-card,
-  .ux-goal-card--finder {
-    min-height: 0;
-  }
-
-  .ux-goal-card--finder {
-    background-size: 410px auto;
-    background-position: right -6% center;
-  }
-
-  .ux-goal-card-content {
-    padding: 42px 28px 41px 50px;
-  }
-
-  .ux-goal-card-grid {
-    gap: 4px;
-  }
-
-  .ux-goal-card-rail, .ux-goal-card--finder::before, .ux-goal-card--store::after {
-    left: 28px;
-    --ux-goal-rail-node-1-top: 66.5%;
-    --ux-goal-rail-node-2-top: 80.5%;
-  }
-
-  .ux-goal-card--finder .ux-goal-card-rail {
-    --ux-goal-rail-node-1-top: 47.3%;
-    --ux-goal-rail-node-2-top: 56.3%;
-    --ux-goal-rail-node-3-top: 66%;
-    --ux-goal-rail-node-4-top: 75%;
-  }
-
-  .ux-goal-card-list li {
-    font-size: 15px;
-  }
-
-  .solution-showcase-panel {
-    grid-template-columns: minmax(0, 1fr) minmax(200px, 0.7fr);
-    gap: 30px;
-    padding: 40px 0 0;
-  }
-
-  .solution-showcase-panel--comparison {
-    grid-template-columns: 1fr;
-    padding-right: 0;
-    padding-left: 0;
-  }
-
-  .solution-phone {
-    width: 248px;
-  }
-
-  .solution-showcase-panel--comparison {
-    --solution-phone-width: 190px;
-  }
-
-  .solution-view-toggle {
-    margin-top: 16px;
-  }
-
-}
-
-
-@media (max-width: 760px) {
   .problem-finding {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
