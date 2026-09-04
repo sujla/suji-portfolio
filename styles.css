@@ -654,7 +654,7 @@ html.is-pf-modal-open body {
   background: var(--surface);
 }
 
-.pf-work-modal.pf-work--article-studio
+.pf-work-modal.pf-work--modular-editorial-system
   :is(
     .pf-modal-bento-feature.has-media-sampled-background,
     .pf-modal-bento-placeholder.has-media-sampled-background
@@ -722,8 +722,8 @@ html.is-pf-modal-open body {
   object-fit: cover;
 }
 
-.pf-modal-article-studio-roller {
-  --article-studio-rotation-duration: 8s;
+.pf-modal-modular-editorial-system-roller {
+  --modular-editorial-system-rotation-duration: 8s;
 
   position: absolute;
   inset: 0;
@@ -731,16 +731,16 @@ html.is-pf-modal-open body {
   background: rgb(250, 250, 252);
 }
 
-.pf-modal-article-studio-track {
+.pf-modal-modular-editorial-system-track {
   display: grid;
   width: 100%;
   height: 200%;
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  animation: pf-article-studio-roll var(--article-studio-rotation-duration) cubic-bezier(0.76, 0, 0.24, 1) infinite;
+  animation: pf-modular-editorial-system-roll var(--modular-editorial-system-rotation-duration) cubic-bezier(0.76, 0, 0.24, 1) infinite;
 }
 
-.pf-modal-article-studio-track img,
-.pf-modal-article-studio-interface {
+.pf-modal-modular-editorial-system-track img,
+.pf-modal-modular-editorial-system-interface {
   display: block;
   width: auto;
   max-width: none;
@@ -749,27 +749,27 @@ html.is-pf-modal-open body {
   object-position: center;
 }
 
-.pf-modal-article-studio-track img {
+.pf-modal-modular-editorial-system-track img {
   justify-self: center;
 }
 
-.pf-modal-article-studio-interface {
+.pf-modal-modular-editorial-system-interface {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.pf-work-modal.pf-work--article-studio .pf-modal-bento-placeholder--2 {
+.pf-work-modal.pf-work--modular-editorial-system .pf-modal-bento-placeholder--2 {
   background: rgb(251, 251, 252);
 }
 
-.pf-work-modal.pf-work--article-studio
+.pf-work-modal.pf-work--modular-editorial-system
   .pf-modal-bento-placeholder--2.inner-shadow-lg {
   box-shadow: none;
 }
 
-.pf-work-modal.pf-work--article-studio
+.pf-work-modal.pf-work--modular-editorial-system
   .pf-modal-bento-placeholder--2.inner-shadow-lg::after {
   position: absolute;
   inset: 0;
@@ -780,7 +780,7 @@ html.is-pf-modal-open body {
   content: "";
 }
 
-.pf-modal-article-studio-carousel {
+.pf-modal-modular-editorial-system-carousel {
   position: absolute;
   bottom: 4px;
   left: 50%;
@@ -792,15 +792,15 @@ html.is-pf-modal-open body {
   transform: translateX(-50%);
 }
 
-.pf-modal-article-studio-carousel-segment {
+.pf-modal-modular-editorial-system-carousel-segment {
   position: relative;
   display: block;
   flex: 1 1 100px;
   height: 24px;
 }
 
-.pf-modal-article-studio-carousel-segment::before,
-.pf-modal-article-studio-carousel-segment::after {
+.pf-modal-modular-editorial-system-carousel-segment::before,
+.pf-modal-modular-editorial-system-carousel-segment::after {
   position: absolute;
   top: 11px;
   left: 0;
@@ -808,25 +808,25 @@ html.is-pf-modal-open body {
   content: "";
 }
 
-.pf-modal-article-studio-carousel-segment::before {
+.pf-modal-modular-editorial-system-carousel-segment::before {
   width: 100%;
   background: rgba(0, 0, 0, 0.12);
 }
 
-.pf-modal-article-studio-carousel-segment::after {
+.pf-modal-modular-editorial-system-carousel-segment::after {
   width: 0;
   background: #111;
 }
 
-.pf-modal-article-studio-carousel-segment--1::after {
-  animation: pf-article-studio-progress-1 var(--article-studio-rotation-duration) linear infinite;
+.pf-modal-modular-editorial-system-carousel-segment--1::after {
+  animation: pf-modular-editorial-system-progress-1 var(--modular-editorial-system-rotation-duration) linear infinite;
 }
 
-.pf-modal-article-studio-carousel-segment--2::after {
-  animation: pf-article-studio-progress-2 var(--article-studio-rotation-duration) linear infinite;
+.pf-modal-modular-editorial-system-carousel-segment--2::after {
+  animation: pf-modular-editorial-system-progress-2 var(--modular-editorial-system-rotation-duration) linear infinite;
 }
 
-@keyframes pf-article-studio-roll {
+@keyframes pf-modular-editorial-system-roll {
   0%,
   40% {
     transform: translateY(0);
@@ -842,7 +842,7 @@ html.is-pf-modal-open body {
   }
 }
 
-@keyframes pf-article-studio-progress-1 {
+@keyframes pf-modular-editorial-system-progress-1 {
   0% {
     width: 0;
   }
@@ -858,7 +858,7 @@ html.is-pf-modal-open body {
   }
 }
 
-@keyframes pf-article-studio-progress-2 {
+@keyframes pf-modular-editorial-system-progress-2 {
   0%,
   50% {
     width: 0;
@@ -871,12 +871,12 @@ html.is-pf-modal-open body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pf-modal-article-studio-track,
-  .pf-modal-article-studio-carousel-segment::after {
+  .pf-modal-modular-editorial-system-track,
+  .pf-modal-modular-editorial-system-carousel-segment::after {
     animation: none;
   }
 
-  .pf-modal-article-studio-carousel-segment--1::after {
+  .pf-modal-modular-editorial-system-carousel-segment--1::after {
     width: 100%;
   }
 }
@@ -3170,13 +3170,13 @@ body.is-project-transitioning .is-transition-source .project-card {
     min-height: 110px;
   }
 
-  .pf-work-modal.pf-work--article-studio .pf-modal-bento-section,
+  .pf-work-modal.pf-work--modular-editorial-system .pf-modal-bento-section,
   .pf-work-modal.pf-work--perp-dex .pf-modal-bento-section {
     grid-template-rows: none;
     grid-auto-rows: auto;
   }
 
-  .pf-work-modal.pf-work--article-studio :is(
+  .pf-work-modal.pf-work--modular-editorial-system :is(
     .pf-modal-bento-feature,
     .pf-modal-bento-placeholder
   ),
@@ -3185,41 +3185,41 @@ body.is-project-transitioning .is-transition-source .project-card {
     max-height: none;
   }
 
-  .pf-work-modal.pf-work--article-studio .pf-modal-project-media {
+  .pf-work-modal.pf-work--modular-editorial-system .pf-modal-project-media {
     position: static;
     width: 100%;
     height: auto;
     object-fit: contain;
   }
 
-  .pf-work-modal.pf-work--article-studio .pf-modal-article-studio-roller {
+  .pf-work-modal.pf-work--modular-editorial-system .pf-modal-modular-editorial-system-roller {
     position: relative;
     inset: auto;
     width: 100%;
     height: auto;
   }
 
-  .pf-work-modal.pf-work--article-studio .pf-modal-article-studio-track {
+  .pf-work-modal.pf-work--modular-editorial-system .pf-modal-modular-editorial-system-track {
     position: relative;
     display: block;
     width: 100%;
     height: auto;
-    animation-name: pf-article-studio-roll-content-fit;
+    animation-name: pf-modular-editorial-system-roll-content-fit;
   }
 
-  .pf-work-modal.pf-work--article-studio .pf-modal-article-studio-track img {
+  .pf-work-modal.pf-work--modular-editorial-system .pf-modal-modular-editorial-system-track img {
     width: 100%;
     max-width: none;
     height: auto;
   }
 
-  .pf-work-modal.pf-work--article-studio .pf-modal-article-studio-track img:nth-child(2) {
+  .pf-work-modal.pf-work--modular-editorial-system .pf-modal-modular-editorial-system-track img:nth-child(2) {
     position: absolute;
     top: 100%;
     left: 0;
   }
 
-  .pf-work-modal.pf-work--article-studio .pf-modal-article-studio-interface {
+  .pf-work-modal.pf-work--modular-editorial-system .pf-modal-modular-editorial-system-interface {
     position: static;
     width: 100%;
     max-width: none;
@@ -3254,7 +3254,7 @@ body.is-project-transitioning .is-transition-source .project-card {
     clip-path: inset(15px 0 0 0 round 16px);
   }
 
-  @keyframes pf-article-studio-roll-content-fit {
+  @keyframes pf-modular-editorial-system-roll-content-fit {
     0%,
     40% {
       transform: translateY(0);
@@ -3370,7 +3370,7 @@ body.is-project-transitioning .is-transition-source .project-card {
 }
 
 @media (max-width: 850px) and (prefers-reduced-motion: reduce) {
-  .pf-work-modal.pf-work--article-studio .pf-modal-article-studio-track {
+  .pf-work-modal.pf-work--modular-editorial-system .pf-modal-modular-editorial-system-track {
     animation: none;
   }
 }

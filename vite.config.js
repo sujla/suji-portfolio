@@ -36,11 +36,6 @@ const legacyProjectRedirects = [
     target: "../modular-editorial-system/",
     label: "Modular Editorial System",
   },
-  {
-    fileName: "projects/from-weeks-to-minutes/susususupanova.html",
-    target: "../modular-editorial-system/susususupanova.html",
-    label: "its new URL",
-  },
 ];
 
 const createLegacyRedirectHtml = ({ target, label }) => `<!doctype html>
@@ -90,9 +85,8 @@ export default defineConfig({
         convertingIntentNova: fromRoot(
           "./projects/cta-enhancement/susususupanova.html",
         ),
-        articleStudio: fromRoot("./projects/modular-editorial-system/index.html"),
-        articleStudioNova: fromRoot(
-          "./projects/modular-editorial-system/susususupanova.html",
+        modularEditorialSystem: fromRoot(
+          "./projects/modular-editorial-system/index.html",
         ),
         storeGuide: fromRoot(
           "./projects/store-finder-renewal/index.html",

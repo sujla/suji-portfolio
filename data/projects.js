@@ -61,8 +61,8 @@ export const projects = [
     image: "./assets/common/cta-enh-main.avif",
   },
   {
-    slug: "article-studio",
-    analyticsId: "article_studio_revamp",
+    slug: "modular-editorial-system",
+    analyticsId: "modular_editorial_system",
     detailSlug: "modular-editorial-system",
     wip: true,
     number: "03",
@@ -73,7 +73,7 @@ export const projects = [
     brief: [
     ],
     contribution: [
-      "Led UX/UI design for the internal tool, Article Studio",
+      "Led UX/UI design for the Modular Editorial System",
       "Designed flexible modular structures",
       "Enabled editor-led publishing",
       "Cut production from 2 weeks to 20 minutes",
@@ -82,6 +82,6 @@ export const projects = [
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(255, 133, 26, 0.10), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
-    image: "./assets/common/article-studio-main.avif",
+    image: "./assets/common/modular-editorial-system-main.avif",
   },
 ];

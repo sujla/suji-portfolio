@@ -16,18 +16,18 @@ export const pfProjects = [
     },
   },
   {
-    id: "article-studio",
+    id: "modular-editorial-system",
     type: "enterprise",
     href: "./projects/modular-editorial-system/",
     title: "Editorial Workflow: From Weeks to Minutes",
     companyLabel: "CJ Olive Young",
     year: 2024,
     deviceType: "web",
-    projectMedia: "./assets/common/article-studio-main.avif",
+    projectMedia: "./assets/common/modular-editorial-system-main.avif",
     cta: {
       label: "View Case Study",
-      href: "https://sujikweon.framer.website/article-studio",
-      newTab: true,
+      href: "./projects/modular-editorial-system/",
+      newTab: false,
     },
   },
   {

@@ -47,7 +47,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       return `
         <div class="pf-project-mockups pf-project-mockups--web" aria-hidden="true">
           <div class="pf-web-mockup">
-            <img class="pf-web-screen" src="./assets/article-studio/main.png" alt="" />
+            <img class="pf-web-screen" src="./assets/modular-editorial-system/main.png" alt="" />
             <img class="pf-web-frame" src="./assets/common/laptop.png" alt="" />
           </div>
         </div>
@@ -261,22 +261,22 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           </div>
         `
         : "";
-    const articleStudioMedia =
-      project.id === "article-studio" && index === 0
+    const modularEditorialSystemMedia =
+      project.id === "modular-editorial-system" && index === 0
         ? `
-          <div class="pf-modal-article-studio-roller">
-            <div class="pf-modal-article-studio-track">
-              <img src="./assets/article-studio/structure.png" alt="" />
-              <img src="./assets/article-studio/props.png" alt="" />
+          <div class="pf-modal-modular-editorial-system-roller">
+            <div class="pf-modal-modular-editorial-system-track">
+              <img src="./assets/modular-editorial-system/structure.png" alt="" />
+              <img src="./assets/modular-editorial-system/props.png" alt="" />
             </div>
-            <div class="pf-modal-article-studio-carousel">
-              <span class="pf-modal-article-studio-carousel-segment pf-modal-article-studio-carousel-segment--1"></span>
-              <span class="pf-modal-article-studio-carousel-segment pf-modal-article-studio-carousel-segment--2"></span>
+            <div class="pf-modal-modular-editorial-system-carousel">
+              <span class="pf-modal-modular-editorial-system-carousel-segment pf-modal-modular-editorial-system-carousel-segment--1"></span>
+              <span class="pf-modal-modular-editorial-system-carousel-segment pf-modal-modular-editorial-system-carousel-segment--2"></span>
             </div>
           </div>
         `
-        : project.id === "article-studio" && index === 1
-          ? `<img class="pf-modal-article-studio-interface" src="./assets/article-studio/interface.png" alt="" />`
+        : project.id === "modular-editorial-system" && index === 1
+          ? `<img class="pf-modal-modular-editorial-system-interface" src="./assets/modular-editorial-system/interface.png" alt="" />`
           : "";
     const storeFinderResult =
       project.media === "store-guide" && index === 2
@@ -302,22 +302,22 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
     const hasLargeInnerShadow =
       (index === 0 && ["cta-enhancement", "store-finder"].includes(project.id)) ||
-      (project.id === "article-studio" && index === 1);
+      (project.id === "modular-editorial-system" && index === 1);
     const innerShadowClass = hasLargeInnerShadow ? " inner-shadow-lg" : "";
 
     return `
       <div class="pf-modal-bento-placeholder pf-modal-bento-placeholder--${index + 1}${innerShadowClass}">
-        ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || articleStudioMedia || storeFinderResult}
+        ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || modularEditorialSystemMedia || storeFinderResult}
       </div>
     `;
   };
 
   const initializeMediaMatchedBentoBackgrounds = (modal) => {
-    if (!modal.matches(".pf-work--article-studio")) return;
+    if (!modal.matches(".pf-work--modular-editorial-system")) return;
 
     const hasDedicatedBackground = (container) =>
       container.matches(`
-        .pf-work--article-studio :is(
+        .pf-work--modular-editorial-system :is(
           .pf-modal-bento-placeholder--1,
           .pf-modal-bento-placeholder--2
         )
