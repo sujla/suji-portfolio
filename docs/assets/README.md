@@ -3,13 +3,13 @@ Add main/project-card images and shared assets in `assets/common/`.
 Example:
 
 ```js
-image: "./assets/common/store-guide-main.avif"
+image: "./assets/common/store-finder-renewal-main.avif"
 ```
 
 Place detail-page-only assets in a slug folder:
 
 ```text
-assets/store-guide/
+assets/store-finder-renewal/
 ```
 
 Theme logo files in `assets/common/`:

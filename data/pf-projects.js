@@ -7,8 +7,8 @@ export const pfProjects = [
     companyLabel: "CJ Olive Young",
     year: 2024,
     deviceType: "mobile",
-    media: "store-guide",
-    projectMedia: "./assets/common/store-guide-main.avif",
+    media: "store-finder-renewal",
+    projectMedia: "./assets/common/store-finder-renewal-main.avif",
     cta: {
       label: "View Case Study",
       href: "./projects/store-finder-renewal/",

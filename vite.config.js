@@ -88,7 +88,7 @@ export default defineConfig({
         modularEditorialSystem: fromRoot(
           "./projects/modular-editorial-system/index.html",
         ),
-        storeGuide: fromRoot(
+        storeFinderRenewal: fromRoot(
           "./projects/store-finder-renewal/index.html",
         ),
       },

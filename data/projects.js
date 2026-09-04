@@ -8,7 +8,7 @@ export const projectSettings = {
 
 export const projects = [
   {
-    slug: "store-guide",
+    slug: "store-finder-renewal",
     analyticsId: "olive_young_store_finder",
     detailSlug: "store-finder-renewal",
     wip: false,
@@ -32,7 +32,7 @@ export const projects = [
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(0, 176, 6, 0.22), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
-    image: "./assets/common/store-guide-main.avif",
+    image: "./assets/common/store-finder-renewal-main.avif",
   },
   {
     slug: "cta-enhancement",

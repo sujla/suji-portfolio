@@ -56,10 +56,10 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
     if (project.deviceType === "mobile") {
       const screenMedia =
-        project.media === "store-guide"
+        project.media === "store-finder-renewal"
           ? `
-            <video class="pf-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/store-guide/solution-tobe1.png">
-              <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
+            <video class="pf-phone-screen" autoplay muted loop playsinline preload="metadata" poster="./assets/store-finder-renewal/solution-tobe1.png">
+              <source src="./assets/store-finder-renewal/solution-final-scroll.mp4" type="video/mp4" />
             </video>
           `
           : project.id === "cta-enhancement"
@@ -167,7 +167,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     return getWorkMedia(project);
   };
 
-  const storeGuideVideoSegments = [
+  const storeFinderRenewalVideoSegments = [
     { start: 0, end: 5 },
     { start: 18, end: 26 },
   ];
@@ -208,7 +208,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           ][index]
         : "";
     const segmentVideo =
-      project.media === "store-guide" && index < storeGuideVideoSegments.length
+      project.media === "store-finder-renewal" && index < storeFinderRenewalVideoSegments.length
         ? `
           <div class="pf-modal-store-finder-video-frame">
             <video
@@ -217,11 +217,11 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
               muted
               playsinline
               preload="auto"
-              poster="./assets/store-guide/solution-tobe1.png"
-              data-segment-start="${storeGuideVideoSegments[index].start}"
-              data-segment-end="${storeGuideVideoSegments[index].end}"
+              poster="./assets/store-finder-renewal/solution-tobe1.png"
+              data-segment-start="${storeFinderRenewalVideoSegments[index].start}"
+              data-segment-end="${storeFinderRenewalVideoSegments[index].end}"
             >
-              <source src="./assets/store-guide/solution-final-scroll.mp4" type="video/mp4" />
+              <source src="./assets/store-finder-renewal/solution-final-scroll.mp4" type="video/mp4" />
             </video>
           </div>
         `
@@ -279,7 +279,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           ? `<img class="pf-modal-modular-editorial-system-interface" src="./assets/modular-editorial-system/interface.png" alt="" />`
           : "";
     const storeFinderResult =
-      project.media === "store-guide" && index === 2
+      project.media === "store-finder-renewal" && index === 2
         ? `
           <div class="pf-modal-result">
             <div class="pf-modal-result-metrics pf-modal-result-metrics--summary pf-modal-result-metrics--store-finder inner-shadow-md">
