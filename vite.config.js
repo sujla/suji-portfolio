@@ -24,7 +24,7 @@ const legacyProjectRedirects = [
   {
     fileName: "projects/converting-intent-into-pickup/index.html",
     target: "../cta-enhancement/",
-    label: "CTA Enhancement",
+    label: "Pickup Order UX Enhancement",
   },
   {
     fileName: "projects/converting-intent-into-pickup/susususupanova.html",
@@ -79,10 +79,10 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: fromRoot("./index.html"),
-        convertingIntent: fromRoot(
+        ctaEnhancement: fromRoot(
           "./projects/cta-enhancement/index.html",
         ),
-        convertingIntentNova: fromRoot(
+        ctaEnhancementNova: fromRoot(
           "./projects/cta-enhancement/susususupanova.html",
         ),
         modularEditorialSystem: fromRoot(

@@ -62,7 +62,7 @@ export const projects = [
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
       light: "0 80px 130px rgba(49, 49, 49, 0.3), 0 32px 72px rgba(0, 0, 0, 0.06)",
     },
-    image: "./assets/common/cta-enh-main.avif",
+    image: "./assets/common/cta-enhancement-main.avif",
   },
   {
     slug: "modular-editorial-system",
