@@ -85,6 +85,7 @@ export default defineConfig({
         ctaEnhancementNova: fromRoot(
           "./projects/cta-enhancement/susususupanova.html",
         ),
+        editorialPrototype: fromRoot("./projects/modular-editorial-system/prototype/index.html"),
         modularEditorialSystem: fromRoot(
           "./projects/modular-editorial-system/index.html",
         ),
