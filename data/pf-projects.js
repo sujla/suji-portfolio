@@ -19,7 +19,7 @@ export const pfProjects = [
     id: "modular-editorial-system",
     type: "enterprise",
     href: "./projects/modular-editorial-system/",
-    title: "Editorial Workflow: From Weeks to Minutes",
+    title: "Editorial Workflow: From 2 Weeks to 20 Minutes",
     companyLabel: "CJ Olive Young",
     year: 2024,
     deviceType: "web",

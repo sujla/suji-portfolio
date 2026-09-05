@@ -1,3 +1,7 @@
+import { pfProjects } from "./pf-projects.js";
+
+const pfProjectById = Object.fromEntries(pfProjects.map((project) => [project.id, project]));
+
 export const projectSettings = {
   totalProjectCount: 3,
   yearRange: {
@@ -17,8 +21,8 @@ export const projects = [
     company: "CJ Olive Young",
     companyLabel: "Olive Young",
     keywords: ["E-commerce", "Omnichannel Experience", "Operational Efficiency"],
-    title: "Store Finder Renewal |for Business Impact",
-    sideTitle: "Store Finder Renewal |for Business Impact",
+    title: pfProjectById["store-finder"].title,
+    sideTitle: pfProjectById["store-finder"].title,
     brief: [
       "This project aimed to transform Olive Young’s static store finder into a map-based shopping tool.",
       "The goal was to help customers connect product interest to nearby store availability and pickup, reducing friction between digital browsing and physical store purchase."
@@ -42,8 +46,8 @@ export const projects = [
     number: "02",
     year: 2025,
     keywords: ["E-commerce", "Data-driven Design", "Conversion Optimization"],
-    title: "Converting Intent |into Pickup",
-    sideTitle: "Pickup Order UX Enhancement",
+    title: pfProjectById["cta-enhancement"].title,
+    sideTitle: pfProjectById["cta-enhancement"].title,
     brief: [
       "This data-driven enhancement focused on customers with clear purchase intent who needed a clearer final step toward pickup.",
       "By clarifying pickup CTAs and actions by store availability, the goal was to convert purchase intent into pickup more quickly and confidently."
@@ -66,17 +70,21 @@ export const projects = [
     detailSlug: "modular-editorial-system",
     wip: true,
     number: "03",
-    year: 2023,
-    keywords: ["Workflow Automation", "Modular System"],
-    title: "From Weeks |to Minutes",
-    sideTitle: "Internal Editorial Tool Revamp",
+    year: 2024,
+    company: "CJ Olive Young",
+    companyLabel: "Olive Young",
+    keywords: ["Internal Tool", "Editorial Workflow", "Modular System"],
+    title: pfProjectById["modular-editorial-system"].title,
+    sideTitle: pfProjectById["modular-editorial-system"].title,
     brief: [
+      "This project gave content editors a direct way to create, edit, and publish magazine articles without depending on designers or publishers.",
+      "A scalable modular structure and intuitive editing workflow reduced article production time from two weeks to 20 minutes.",
     ],
     contribution: [
-      "Led UX/UI design for the Modular Editorial System",
-      "Designed flexible modular structures",
-      "Enabled editor-led publishing",
-      "Cut production from 2 weeks to 20 minutes",
+      "Led UI/UX design for Olive Young’s modular editorial system",
+      "Built reusable content modules with standardized editing controls",
+      "Enabled content editors to create and publish articles independently",
+      "Cut production time from 2 weeks to 20 minutes",
     ],
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",

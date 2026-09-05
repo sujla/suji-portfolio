@@ -4257,6 +4257,42 @@ body {
   }
 }
 
+/* Keep light-mode Helvetica tracking separate from the other typefaces. */
+:root[data-theme="light"] body.index-page,
+:root[data-theme="light"] .index-page :is(
+  .hero-copy,
+  .fixed-project-meta,
+  .fixed-project-meta h4,
+  .project-summary h3,
+  .summary-copy,
+  .keyword-badges span,
+  .pf-modal-result-metric strong
+) {
+  letter-spacing: 0.016em;
+}
+
+:root[data-theme="light"] .index-page :is(
+  .pf-modal-public-transport-caption,
+  .pf-modal-result-metrics--summary .pf-modal-result-label,
+  .pf-work-modal .pf-work-meta span,
+  .experience-subsection-title,
+  .site-footer-meta,
+  .site-footer-social,
+  .experience-card-meta p:first-child,
+  .about-contact-link,
+  .fixed-project-meta p,
+  .year-rail-item,
+  .project-counter,
+  .pf-type-filter-button,
+  .pf-type-filter-dot,
+  .pf-floating-filter-button,
+  .pf-work-badge,
+  .pf-work-cursor-label > span,
+  .pf-work-grid .pf-work-meta span
+) {
+  letter-spacing: normal;
+}
+
 @layer dark-letter-spacing {
   :root[data-theme="dark"] body * {
     letter-spacing: 0.3px;
