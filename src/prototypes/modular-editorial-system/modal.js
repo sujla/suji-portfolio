@@ -1,8 +1,33 @@
 import './modal.css';
 const trigger = document.querySelector('[data-editorial-prototype]');
 if (trigger) {
+  if (trigger.getAttribute('aria-disabled') === 'true') {
+    const cursor = document.createElement('span');
+    cursor.className = 'pf-work-cursor-label';
+    cursor.setAttribute('aria-hidden', 'true');
+    cursor.innerHTML = '<span>Coming Soon</span>';
+    document.body.append(cursor);
+    const hideCursor = () => cursor.classList.remove('is-visible');
+    trigger.addEventListener('pointermove', event => {
+      if (event.pointerType !== 'mouse') return;
+      const halfWidth = cursor.offsetWidth / 2;
+      const x = Math.min(Math.max(halfWidth + 12, event.clientX), window.innerWidth - halfWidth - 12);
+      const y = event.clientY + 18 + cursor.offsetHeight + 12 <= window.innerHeight
+        ? event.clientY + 18
+        : event.clientY - 18 - cursor.offsetHeight;
+      cursor.style.transform = `translate3d(${x}px, ${y}px, 0) translateX(-50%)`;
+      cursor.classList.add('is-visible');
+    });
+    trigger.addEventListener('pointerleave', hideCursor);
+    window.addEventListener('blur', hideCursor);
+    window.addEventListener('scroll', hideCursor, { passive: true });
+  }
   let dialog;
   trigger.addEventListener('click', event => {
+    if (trigger.getAttribute('aria-disabled') === 'true') {
+      event.preventDefault();
+      return;
+    }
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     if (dialog) return;

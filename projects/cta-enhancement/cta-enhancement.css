@@ -1,5 +1,6 @@
 /* CTA case study additions to the shared Store Finder detail layout. */
 [data-project-slug="cta-enhancement"] .detail-body-props > p { max-width: 800px; }
+[data-project-slug="cta-enhancement"] #hypotheses h2 { max-width: none; }
 [data-project-slug="cta-enhancement"] .cta-insight-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 [data-project-slug="cta-enhancement"] .cta-insight { border-top: 1px solid var(--line); padding-top: 24px; }
 [data-project-slug="cta-enhancement"] .cta-insight h3 { font-size: 20px; line-height: 1.3; margin: 0 0 12px; }
@@ -69,20 +70,6 @@
 [data-project-slug="cta-enhancement"] .cta-result-bento .result-card-value {
   color: var(--globe-place-color);
 }
-[data-project-slug="cta-enhancement"] .cta-result-takeaway {
-  padding: clamp(28px, 5vw, 48px) clamp(24px, 5vw, 56px);
-  border-radius: var(--detail-card-radius);
-  background: #00b400;
-  text-align: center;
-}
-[data-project-slug="cta-enhancement"] .cta-result-takeaway p {
-  margin: 0;
-  color: #fff;
-  font-size: clamp(18px, 2vw, 22px);
-  font-weight: 500;
-  line-height: 1.5;
-}
-
 [data-project-slug="cta-enhancement"] .cta-result-featured .body-image {
   box-sizing: border-box;
   border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);

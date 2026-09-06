@@ -79,6 +79,10 @@
   box-sizing: border-box;
 }
 
+:focus-visible {
+  outline-color: var(--text);
+}
+
 img {
   user-select: none;
   -webkit-user-drag: none;
@@ -629,7 +633,7 @@ html.is-pf-modal-open body {
 
 .pf-modal-media-play-toggle:focus-visible,
 .pf-modal-media-replay:focus-visible {
-  outline: 1px solid var(--text-tertiary);
+  outline: 1px solid var(--text);
   outline-offset: 1px;
   opacity: 1;
 }
@@ -1106,6 +1110,14 @@ html.is-pf-modal-open body {
   transform: rotate(-90deg);
 }
 
+.pf-modal-result-metrics--cta .pf-modal-result-value--increase {
+  padding-left: 0;
+}
+
+.pf-modal-result-metrics--cta .pf-modal-result-value--increase::after {
+  content: none;
+}
+
 .pf-modal-result-metrics--summary .pf-modal-result-value--decrease {
   color: var(--red);
 }
@@ -1180,12 +1192,13 @@ html.is-pf-modal-open body {
 
 .pf-work-modal.pf-work--store-finder .pf-modal-bento-stack {
   min-height: 0;
-  grid-template-rows: minmax(0, 8fr) minmax(0, 2fr);
+  grid-template-rows: minmax(0, 1fr);
 }
 
 .pf-work-modal.pf-work--store-finder .pf-modal-bento-section {
   height: 100%;
   min-height: 0;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
 }
 
 .pf-work-modal.pf-work--store-finder .pf-modal-bento-stack-top {
@@ -3092,9 +3105,7 @@ body.is-project-transitioning .is-transition-source .project-card {
   .pf-work-modal.pf-work--store-finder .pf-modal-bento-section {
     height: auto;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows:
-      repeat(3, var(--pf-modal-bento-item-height))
-      auto;
+    grid-template-rows: repeat(3, var(--pf-modal-bento-item-height));
     grid-auto-rows: auto;
   }
 

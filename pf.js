@@ -250,11 +250,11 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           <div class="pf-modal-result">
             <div class="pf-modal-result-metrics pf-modal-result-metrics--summary pf-modal-result-metrics--cta inner-shadow-md">
               <div class="pf-modal-result-metric pf-modal-result-metric--summary">
-                <strong class="pf-modal-result-value--increase">226.2%</strong>
+                <strong class="pf-modal-result-value--increase">326.2%</strong>
                 <p class="pf-modal-result-label">Pickup Conversion</p>
               </div>
               <div class="pf-modal-result-metric pf-modal-result-metric--summary">
-                <strong class="pf-modal-result-value--increase">32.6%</strong>
+                <strong class="pf-modal-result-value--increase">132.6%</strong>
                 <p class="pf-modal-result-label">Total Pickup Orders</p>
               </div>
             </div>
@@ -278,28 +278,6 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         : project.id === "modular-editorial-system" && index === 1
           ? `<img class="pf-modal-modular-editorial-system-interface" src="./assets/modular-editorial-system/interface.png" alt="" />`
           : "";
-    const storeFinderResult =
-      project.media === "store-finder-renewal" && index === 2
-        ? `
-          <div class="pf-modal-result">
-            <div class="pf-modal-result-metrics pf-modal-result-metrics--summary pf-modal-result-metrics--store-finder inner-shadow-md">
-              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
-                <strong class="pf-modal-result-value--increase">32.9%</strong>
-                <p class="pf-modal-result-label">Availability Page Views</p>
-              </div>
-              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
-                <strong class="pf-modal-result-value--decrease">18%</strong>
-                <p class="pf-modal-result-label">Inquiry call volume</p>
-              </div>
-              <div class="pf-modal-result-metric pf-modal-result-metric--summary">
-                <strong class="pf-modal-result-value--neutral">~11%</strong>
-                <p class="pf-modal-result-label">Pickup conversion</p>
-              </div>
-            </div>
-          </div>
-        `
-        : "";
-
     const hasLargeInnerShadow =
       (index === 0 && ["cta-enhancement", "store-finder"].includes(project.id)) ||
       (project.id === "modular-editorial-system" && index === 1);
@@ -307,7 +285,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
     return `
       <div class="pf-modal-bento-placeholder pf-modal-bento-placeholder--${index + 1}${innerShadowClass}">
-        ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || modularEditorialSystemMedia || storeFinderResult}
+        ${publicTransportMedia || perpDexMedia || segmentVideo || ctaEnhancementVideo || ctaEnhancementResult || modularEditorialSystemMedia}
       </div>
     `;
   };
@@ -739,7 +717,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const modalBadgeMarkup = isPublicTransportProject
       ? '<span class="pf-work-badge pf-work-badge--modal">AI-built</span>'
       : "";
-    const placeholderCount = isPerpDexProject ? 4 : isPublicTransportProject ? 2 : 3;
+    const placeholderCount = isPerpDexProject ? 4 : (isPublicTransportProject || project.id === "store-finder") ? 2 : 3;
     const bentoPlaceholders = Array.from({ length: placeholderCount }, (_, index) =>
       getBentoPlaceholder(project, index),
     );
@@ -780,7 +758,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
             <div class="pf-modal-bento-stack-top${usesSingleTopBento ? " pf-modal-bento-stack-top--single" : ""}">
               ${stackTopMarkup}
             </div>
-            ${placeholders[2]}
+            ${placeholders[2] || ""}
           </div>
         `;
     };
