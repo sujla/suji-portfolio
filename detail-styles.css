@@ -3434,18 +3434,37 @@ html.detail-root.is-theme-switching-lines::before {
   gap: 12px;
 }
 
-.editorial-goal-card-topline img {
+.editorial-goal-card-topline svg {
   display: block;
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
+  width: 56px;
+  height: 56px;
+  color: var(--globe-place-color);
 }
 
-.editorial-detail-page .detail-content :is(.editorial-hypothesis-question, .editorial-hypothesis-statement) {
+.editorial-detail-page .detail-content .editorial-hypothesis-question {
   text-align: left;
   padding: 0;
   margin: 0 0 6px;
   justify-self: start;
+}
+
+.editorial-direction-group {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.editorial-direction-group .editorial-hypothesis-statement {
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+  border-radius: var(--detail-card-radius);
+  background: color-mix(in srgb, var(--globe-place-color) 8%, transparent);
+  color: var(--globe-place-color);
+  text-align: center;
 }
 
 .editorial-detail-page .editorial-hypothesis-highlight {
@@ -3454,12 +3473,11 @@ html.detail-root.is-theme-switching-lines::before {
 
 .editorial-hypothesis-media {
   width: 100%;
-  max-width: 780px;
-  margin: 0;
+  margin: 0 auto;
   aspect-ratio: 1262 / 386;
   overflow: hidden;
   border-radius: var(--detail-card-radius);
-  background: var(--bg) url("./assets/modular-editorial-system/core-idea-image.png") center / contain no-repeat;
+  background: var(--bg) url("./assets/modular-editorial-system/core-idea-image.png") center / min(100%, 850px) auto no-repeat;
 }
 
 .editorial-detail-page #goals h2 {
@@ -3503,9 +3521,10 @@ html.detail-root.is-theme-switching-lines::before {
   gap: 10px;
 }
 
-.success-metric-card--editorial > p:last-child {
+.detail-content .success-metric-card--editorial .success-metric-title {
   margin: 0;
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
+  font-size: 16px;
 }
 
 .editorial-solution-list,
@@ -3515,6 +3534,7 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 .editorial-solution-list {
+  margin-top: 16px;
   row-gap: 64px;
 }
 
@@ -3528,7 +3548,7 @@ html.detail-root.is-theme-switching-lines::before {
 .editorial-solution-copy {
   display: grid;
   align-content: center;
-  gap: 16px;
+  gap: 8px;
   padding: 0;
 }
 
