@@ -1563,10 +1563,6 @@ ul.affected-user-card-detail {
   text-transform: capitalize;
 }
 
-.detail-content .detail-list-text {
-  font-size: clamp(15px, 3vw, 16px);
-}
-
 .result-card-copy .result-card-value {
   display: inline-flex;
   width: fit-content;
@@ -3229,14 +3225,14 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 .detail-content h2.editorial-problem-emphasis {
-  padding: 12px 0;
+  padding: 12px 0 0;
   color: var(--red);
 }
 
 .editorial-card-grid,
 .editorial-user-grid {
   display: grid;
-  gap: 32px;
+  gap: 24px;
 }
 
 .editorial-card-grid--two,
@@ -3262,7 +3258,6 @@ html.detail-root.is-theme-switching-lines::before {
 .editorial-insight-card,
 .editorial-goal-card {
   gap: 11px;
-  min-height: 210px;
   padding: clamp(24px, 4vw, 34px);
 }
 
@@ -3274,18 +3269,25 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 .editorial-insight-card.editorial-cost-card {
-  gap: 20px;
+  gap: 16px;
   padding: 0;
   border: 0;
   background: transparent;
 }
 
+.editorial-cost-heading {
+  display: grid;
+  gap: 8px;
+  padding: 0 0 8px;
+}
+
 .detail-content .editorial-cost-label {
   margin: 0;
-  padding-left: 2px;
-  color: var(--text-secondary);
+  padding: 24px 6px 0;
+  border-top: 1px solid var(--red);
+  color: var(--red);
   font-family: "Google Sans Code", monospace;
-  font-size: clamp(14px, 1.2vw, 15px);
+  font-size: clamp(13px, 1.2vw, 14px);
   font-weight: 400;
   line-height: 1.5;
 }
@@ -3294,9 +3296,10 @@ html.detail-root.is-theme-switching-lines::before {
   display: grid;
   gap: 0;
   margin: 0;
-  padding: 20px 2px;
-  border-top: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+  padding: 20px 12px;
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--text) 8%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 30%, transparent);
   list-style: none;
 }
 
@@ -3306,11 +3309,12 @@ html.detail-root.is-theme-switching-lines::before {
   column-gap: 12px;
   align-items: baseline;
   margin: 0;
-  padding: 8px 0;
+  padding: 6px 4px;
 }
 
 .editorial-cost-number {
-  color: var(--red);
+  color: var(--text-tertiary);
+  text-align: center;
   font-family: "Google Sans Code", monospace;
   font-size: 13px;
 }
@@ -3319,12 +3323,14 @@ html.detail-root.is-theme-switching-lines::before {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.detail-content .editorial-cost-list li:first-child {
-  padding-top: 0;
-}
-
-.detail-content .editorial-cost-list li:last-child {
-  padding-bottom: 0;
+.detail-content .editorial-cost-summary {
+  margin: 0;
+  padding-inline: 6px;
+  color: var(--text);
+  font-family: "Fjord One", Georgia, serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.25;
 }
 
 .editorial-detail-page :is(.editorial-insight-card, .editorial-goal-card, .editorial-user-card, .editorial-solution-copy) h3 {
@@ -3548,8 +3554,6 @@ html.detail-root.is-theme-switching-lines::before {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .editorial-insight-card,
-  .editorial-goal-card,
   .editorial-user-card {
     min-height: 0;
   }
