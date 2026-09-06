@@ -49,11 +49,11 @@ export const pfProjects = [
     companyLabel: "CJ Olive Young",
     year: 2025,
     deviceType: "mobile",
-    projectMedia: "./assets/common/cta-enhancement-main.avif",
+    projectMedia: "./assets/cta-enhancement/cta-enhancement-main.avif",
     cta: {
       label: "View Case Study",
-      href: "https://sujikweon.framer.website/cta-enhancement",
-      newTab: true,
+      href: "./projects/cta-enhancement/",
+      newTab: false,
     },
   },
   {

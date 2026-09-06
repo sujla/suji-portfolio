@@ -1,0 +1,12 @@
+/* CTA case study additions to the shared Store Finder detail layout. */
+[data-project-slug="cta-enhancement"] .cta-insight-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+[data-project-slug="cta-enhancement"] .cta-insight { border-top: 1px solid var(--line); padding-top: 24px; }
+[data-project-slug="cta-enhancement"] .cta-insight h3 { font-size: 20px; line-height: 1.3; margin: 0 0 12px; }
+[data-project-slug="cta-enhancement"] .cta-insight p { margin: 0; color: var(--text-secondary); }
+[data-project-slug="cta-enhancement"] .cta-demo { display: grid; justify-items: center; gap: 20px; margin: 0; padding: 40px 24px; border-radius: var(--detail-card-radius); background: var(--surface); }
+[data-project-slug="cta-enhancement"] .cta-demo video { display: block; width: min(100%, 360px); max-height: 680px; border-radius: 24px; }
+[data-project-slug="cta-enhancement"] .cta-demo figcaption, [data-project-slug="cta-enhancement"] .cta-source-note { color: var(--text-secondary); font-size: 14px; }
+[data-project-slug="cta-enhancement"] .cta-source-note a { color: inherit; text-underline-offset: 3px; }
+@media (max-width: 700px) { [data-project-slug="cta-enhancement"] .cta-insight-grid { grid-template-columns: 1fr; } }
+
+[data-project-slug="cta-enhancement"] .body-image { display: block; height: auto; }
