@@ -5,7 +5,7 @@ import './prototype.css';
 
 const assetRoot = `${import.meta.env.BASE_URL}assets/modular-editorial-system/`;
 function SampleImage({ variant = 'cushion' }) {
-  return <div className={`sample-photo sample-photo--${variant}`}><img src={`${assetRoot}image-module.png`} alt={variant === 'beauty' ? 'Cushion foundation detail' : 'AMUSE cushion foundation'} /></div>;
+  return <div className={`sample-photo sample-photo--${variant}`}><img src={`${assetRoot}modular-result-02.png`} alt={variant === 'beauty' ? 'Cushion foundation detail' : 'AMUSE cushion foundation'} /></div>;
 }
 function ImagePreview({ module }) {
   const [slide, setSlide] = useState(0);

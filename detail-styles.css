@@ -3571,36 +3571,17 @@ html.detail-root.is-theme-switching-lines::before {
   object-fit: contain;
 }
 
-.editorial-screen-card {
-  border: 1px solid color-mix(in srgb, var(--line) 46%, transparent);
-}
-
 .editorial-screen-card img {
   background: #f4f5f6;
 }
 
-.editorial-screen-card figcaption {
-  display: flex;
+.editorial-result-grid .result-card {
+  display: grid;
   align-items: center;
-  gap: 10px;
-  padding: 17px 20px 18px;
-  color: var(--text-secondary);
-  font-size: 14px;
 }
 
-.editorial-screen-card figcaption span {
-  color: var(--editorial-blue);
-  font-family: "Google Sans Code", monospace;
-  font-size: 12px;
-}
-
-.editorial-result-value {
-  color: var(--editorial-blue);
-}
-
-.editorial-result-grid s {
-  color: var(--text-tertiary);
-  text-decoration-thickness: 1px;
+.editorial-detail-page .editorial-result-grid .result-card-value {
+  color: var(--globe-place-color);
 }
 
 @media (max-width: 760px) {
