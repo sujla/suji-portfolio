@@ -459,7 +459,7 @@ li::marker {
 
 .detail-content h2 {
   margin: 0 0 6px;
-  max-width: 670px;
+  max-width: 760px;
   color: var(--text);
   font-family: "Fjord One", Georgia, serif;
   font-size: clamp(28px, 5vw, 38px);
@@ -1561,6 +1561,10 @@ ul.affected-user-card-detail {
   letter-spacing: 0.03em;
   line-height: 1.4;
   text-transform: capitalize;
+}
+
+.detail-content .detail-list-text {
+  font-size: clamp(15px, 3vw, 16px);
 }
 
 .result-card-copy .result-card-value {
@@ -3216,18 +3220,23 @@ html.detail-root.is-theme-switching-lines::before {
 
 .editorial-wide-media {
   padding: clamp(24px, 5vw, 48px);
-  background: #f8f8f8;
+  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
+  background: var(--surface);
 }
 
 .editorial-process-media {
-  padding: clamp(20px, 4vw, 40px);
-  border: 1px solid color-mix(in srgb, var(--line) 46%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
+}
+
+.detail-content h2.editorial-problem-emphasis {
+  padding: 12px 0;
+  color: var(--red);
 }
 
 .editorial-card-grid,
 .editorial-user-grid {
   display: grid;
-  gap: 10px;
+  gap: 32px;
 }
 
 .editorial-card-grid--two,
@@ -3245,7 +3254,7 @@ html.detail-root.is-theme-switching-lines::before {
   display: grid;
   min-width: 0;
   align-content: start;
-  border: 1px solid color-mix(in srgb, var(--line) 46%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
   border-radius: var(--detail-card-radius);
   background: var(--editorial-card-bg);
 }
@@ -3262,6 +3271,59 @@ html.detail-root.is-theme-switching-lines::before {
   font-family: "Google Sans Code", monospace;
   font-size: 13px !important;
   line-height: 1 !important;
+}
+
+.editorial-insight-card.editorial-cost-card {
+  gap: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.detail-content .editorial-cost-label {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: "Google Sans Code", monospace;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.detail-content .editorial-cost-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 20px 2px;
+  border-top: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+  list-style: none;
+}
+
+.detail-content .editorial-cost-list li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: baseline;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.editorial-cost-number {
+  color: var(--red);
+  font-family: "Google Sans Code", monospace;
+  font-size: 13px;
+}
+
+.detail-content .editorial-cost-list p {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.detail-content .editorial-cost-list li:first-child {
+  padding-top: 0;
+}
+
+.detail-content .editorial-cost-list li:last-child {
+  padding-bottom: 0;
 }
 
 .editorial-detail-page :is(.editorial-insight-card, .editorial-goal-card, .editorial-user-card, .editorial-solution-copy) h3 {
@@ -3284,7 +3346,6 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 .editorial-user-card--primary {
-  border-color: color-mix(in srgb, var(--editorial-blue) 46%, var(--line));
   background: var(--editorial-blue-soft);
 }
 
@@ -3392,7 +3453,7 @@ html.detail-root.is-theme-switching-lines::before {
   grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.6fr);
   min-width: 0;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--line) 46%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 16%, transparent);
   border-radius: var(--detail-card-radius);
   background: var(--editorial-card-bg);
 }
