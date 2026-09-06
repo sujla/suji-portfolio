@@ -376,6 +376,7 @@ li::marker {
 
 .detail-toc-label {
   display: inline-block;
+  text-transform: capitalize;
 }
 
 .detail-toc-note {
@@ -3534,14 +3535,13 @@ html.detail-root.is-theme-switching-lines::before {
 }
 
 .editorial-solution-list {
-  margin-top: 16px;
   row-gap: 64px;
 }
 
 .editorial-solution-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
+  gap: 32px;
   min-width: 0;
 }
 

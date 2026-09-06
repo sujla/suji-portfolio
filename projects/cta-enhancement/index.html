@@ -52,6 +52,8 @@
     <main class="detail-shell">
       <aside class="detail-toc" aria-label="Project sections"><ul><li><a href="#project-overview" aria-current="true"><span class="detail-toc-label">Overview</span></a></li>
 <li><a href="#problem"><span class="detail-toc-label">Problem</span></a></li>
+<li><a href="#behavioral-signals"><span class="detail-toc-label">Behavioral signals</span></a></li>
+<li><a href="#ux-analysis"><span class="detail-toc-label">UX analysis</span></a></li>
 <li><a href="#goals"><span class="detail-toc-label">Goals</span></a></li>
 <li><a href="#solution"><span class="detail-toc-label">Final Solution</span></a></li>
 <li><a href="#success-metrics"><span class="detail-toc-label">Success Metrics</span></a></li>
@@ -67,23 +69,61 @@
           <section class="detail-overview-content">
             <div class="detail-project-meta" aria-label="Project details">
               <section class="detail-project-meta-item detail-project-meta-item--company"><p class="label-strong">Project</p><div><p data-company-name></p><p>Dec 2024 – Jan 2025</p></div></section>
-              <section class="detail-project-meta-item"><p class="label-strong">Role</p><p>UI/UX Design Lead</p></section>
+              <section class="detail-project-meta-item"><p class="label-strong">Role</p><p>Product Design Lead</p></section>
               <section class="detail-project-meta-item"><p class="label-strong">Team</p><ul class="detail-project-meta-list"><li>1 Product Manager</li><li>2 Software Engineers</li></ul></section>
               <section class="detail-project-meta-item"><p class="label-strong">Platform</p><p>Mobile Web</p></section>
             </div>
-            <div class="detail-body-props"><p>After the store finder renewal, customers were checking stock but missing the next step. I made pickup actions easier to find and clarified which stores and products supported pickup.</p></div>
             <section class="detail-project-contributions"><p class="label-strong">Contributions</p><ul data-contribution-list></ul></section>
           </section>
         </div>
         <div class="detail-content" aria-label="Problem" id="problem">
-          <div class="title-gap"><p class="label">Problem</p><div class="detail-body-props"><h2>Customers wanted pickup.<br />The interface sent them elsewhere.</h2><p>Funnel and event-stream data showed customers opening store details, then returning to the stock-checking page within one or two minutes. This suggested a mismatch between what they expected and what the store card did.</p></div></div>
-          <figure class="body-image-frame"><img class="body-image" src="../../assets/cta-enhancement/cta-enhancement-user-loop.png" alt="CTA Enhancement — navigation from the stock-checking page to store details and back" width="2433" height="1758" loading="lazy" /></figure>
-          <div class="cta-insight-grid">
-            <article class="cta-insight"><h3>01 · Easy to miss</h3><p>The small, pale pickup icon did not look like a clear next step.</p></article>
-            <article class="cta-insight"><h3>02 · Easy to misread</h3><p>The store card looked like a path to pickup, but opened store information.</p></article>
-            <article class="cta-insight"><h3>03 · Hard to decide</h3><p>Pickup eligibility was hidden, and missing buttons had no explanation.</p></article>
+          <div class="title-gap"><p class="label">Problem</p><div class="detail-body-props"><h2>Customers checking store availability were close to pickup,</h2><h2 class="editorial-problem-emphasis">but the next action was unclear.</h2><p>Among users checking stock availability, 51.5% took active shopping actions such as searching, filtering, or selecting store cards. However, the interface did not clearly guide these high-intent users toward pickup.</p></div></div>
+          <figure class="body-image-frame"><img class="body-image" src="../../assets/cta-enhancement/cta-enhancement-context.png" alt="Renewed store finder and a chart showing 51.5% of users took active shopping actions" width="1800" height="1076" loading="lazy" /></figure>
+        </div>
+        <div class="detail-content" aria-label="Behavioral signals" id="behavioral-signals">
+          <div class="title-gap"><p class="label">Behavioral signals</p><div class="detail-body-props"><h2>This intent-action gap was reflected<br />in user behavior.</h2></div></div>
+          <div class="editorial-solution-list">
+            <article class="editorial-solution-card">
+              <div class="editorial-solution-copy cta-problem-copy">
+                <h3>1. Strong engagement, weak add-to-cart</h3>
+                <p>Active shopping behavior was high, but add-to-cart remained low.</p>
+              </div>
+              <figure class="body-image-frame cta-signal-01-media"><img class="body-image" src="../../assets/cta-enhancement/cta-enhancement-signal-01.png" alt="Stock availability page behavior: changing product options 20.1%, searching stores 14.6%, selecting store cards 14.6%, and adding to cart 0.55%" width="1622" height="1088" loading="lazy" /></figure>
+            </article>
+            <article class="editorial-solution-card">
+              <div class="editorial-solution-copy cta-problem-copy">
+                <h3>2. High store interest, but rapid return</h3>
+                <p>Despite strong store-detail views, over 80% of users returned to the previous page within 1–2 minutes.</p>
+              </div>
+              <figure class="body-image-frame"><img class="body-image" src="../../assets/cta-enhancement/cta-enhancement-signal-02.png" alt="Customers select a store card, land on the store info page, and rapidly return to the available stores page" width="1898" height="998" loading="lazy" /></figure>
+            </article>
           </div>
-          <figure class="body-image-frame"><img class="body-image" src="../../assets/cta-enhancement/cta-enhancement-expectation-gap.png" alt="CTA Enhancement — expected pickup order flow compared with the actual store information destination" width="4100" height="2422" loading="lazy" /></figure>
+        </div>
+        <div class="detail-content" aria-label="UX analysis" id="ux-analysis">
+          <div class="title-gap"><p class="label">UX analysis</p><div class="detail-body-props"><h2>The interface did not clearly guide users toward pickup.</h2></div></div>
+          <div class="editorial-solution-list">
+            <article class="editorial-solution-card">
+              <div class="editorial-solution-copy cta-problem-copy">
+                <h3>1. Pickup CTA lacked visibility</h3>
+                <p>The pickup action competed with other information and was easy to miss.</p>
+              </div>
+              <figure class="body-image-frame"><img class="body-image" src="../../assets/cta-enhancement/cta-enhancement-analysis-01.png" alt="Store list showing pickup icons overshadowed by store photos, stock information, and Notify Me buttons" width="2070" height="900" loading="lazy" /></figure>
+            </article>
+            <article class="editorial-solution-card">
+              <div class="editorial-solution-copy cta-problem-copy">
+                <h3>2. Store cards suggested the wrong action</h3>
+                <p>Users frequently selected store cards expecting the next step toward purchase, but the interaction led them elsewhere.</p>
+              </div>
+              <figure class="body-image-frame"><img class="body-image" src="../../assets/cta-enhancement/cta-enhancement-analysis-02.png" alt="Store cards highlighting the large area that opens store information and the separate small pickup order button" width="2070" height="856" loading="lazy" /></figure>
+            </article>
+            <article class="editorial-solution-card">
+              <div class="editorial-solution-copy cta-problem-copy">
+                <h3>3. Actions did not reflect store availability</h3>
+                <p>Different stock and pickup conditions were not translated into clear, contextual actions for users.</p>
+              </div>
+              <figure class="body-image-frame"><img class="body-image" src="../../assets/cta-enhancement/cta-enhancement-analysis-03.png" alt="Store card showing available stock, with pickup unavailability revealed only after opening the pickup order panel" width="2070" height="800" loading="lazy" /></figure>
+            </article>
+          </div>
         </div>
         <div class="detail-content" aria-label="Goals" id="goals">
           <div class="title-gap"><p class="label">Goals</p><div class="detail-body-props"><h2>Make the next step obvious.</h2><p>Help customers move from checking stock to ordering pickup without unnecessary detours.</p></div></div>

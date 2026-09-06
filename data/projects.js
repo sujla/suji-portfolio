@@ -55,10 +55,10 @@ export const projects = [
       "By clarifying pickup CTAs and actions by store availability, the goal was to convert purchase intent into pickup more quickly and confidently."
     ],
     contribution: [
-      "Identified friction after product decision",
-      "Analyzed mistaken store-card clicks",
-      "Designed CTA logic by store availability",
-      "Clarified pickup eligibility and in-store-only purchases",
+      "Identified pickup friction through funnel and event-stream data",
+      "Redesigned pickup CTAs and store-card logic by availability",
+      "Clarified pickup and in-store-only purchase states",
+      "Increased page pickup conversion by 326.2%, with total pickup orders up 136.6%",
     ],
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
