@@ -613,6 +613,22 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     return `<a class="pf-work pf-work--${project.id}" href="${project.href}" data-project-types="${projectTypes.join(" ")}" draggable="false" aria-label="${getPlainTitle(project.title)} project detail">${content}</a>`;
   };
 
+  const renderCaseStudyCard = (project) => `
+    <a class="pf-work pf-work--${project.id} pf-work--featured"
+       href="${project.href}" data-project-types="${(project.types || [project.type]).join(" ")}"
+       data-cursor-label="View Case Study" draggable="false">
+      <div class="pf-work-card pf-featured-image">
+        <img src="${project.projectMedia}" alt="" loading="lazy" decoding="async" />
+      </div>
+      <div class="pf-featured-caption">
+        <div class="pf-featured-copy">
+          <h2>${project.title}</h2>
+          ${renderWorkMetaLine(project)}
+        </div>
+      </div>
+    </a>
+  `;
+
   const isUnmodifiedPrimaryClick = (event) =>
     event.button === 0 &&
     !event.defaultPrevented &&
@@ -1179,8 +1195,23 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   document.body.append(floatingTypeFilter);
 
   pf.innerHTML = `
-    <div class="pf-work-grid" id="pf-work-grid">
-      ${pfProjects.map((project) => renderWorkCard(project)).join("")}
+    <div class="pf-work-grid pf-work-collection" id="pf-work-grid">
+      <div class="pf-work-group pf-featured-section" data-work-group>
+        <div class="pf-featured-sticky">
+          <div class="pf-featured-viewport">
+            <div class="pf-featured-grid">
+              <div class="pf-featured-intro"><span>Selected projects / 01—03</span><h2>Selected<br>work</h2><p>Product design with<br>measurable impact.</p></div>
+              ${pfProjects.filter((project) => project.cta).map(renderCaseStudyCard).join("")}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pf-work-group pf-work-group--secondary" data-work-group>
+        <div class="pf-group-heading"><h2>More work</h2></div>
+        <div class="pf-secondary-grid">
+          ${pfProjects.filter((project) => !project.cta).map((project) => renderWorkCard(project)).join("")}
+        </div>
+      </div>
     </div>
     <p class="pf-filter-empty" role="status" hidden>No projects in this category yet.</p>
   `;
@@ -1211,6 +1242,56 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   const filterableWorks = [...pf.querySelectorAll(".pf-work[data-project-types]")];
   const workGrid = pf.querySelector(".pf-work-grid");
   const filterEmptyState = pf.querySelector(".pf-filter-empty");
+  const featuredSection = pf.querySelector(".pf-featured-section");
+  const featuredSticky = pf.querySelector(".pf-featured-sticky");
+  const featuredViewport = pf.querySelector(".pf-featured-viewport");
+  const featuredTrack = pf.querySelector(".pf-featured-grid");
+  let featuredTravel = 0;
+  let featuredFrame = 0;
+  let featuredStart = 0;
+  let featuredPosition = 0;
+  let featuredLastTime = 0;
+
+  const updateFeaturedPosition = (time) => {
+    featuredFrame = 0;
+    if (featuredSection.hidden) {
+      featuredLastTime = 0;
+      return;
+    }
+    const distance = Math.min(featuredTravel, Math.max(0, window.scrollY - featuredStart));
+    const elapsed = featuredLastTime ? Math.min(time - featuredLastTime, 64) : 16.67;
+    featuredLastTime = time;
+    // Time-based damping keeps wheel steps smooth at different refresh rates.
+    featuredPosition += (distance - featuredPosition) * (1 - Math.exp(-elapsed / 85));
+    if (Math.abs(distance - featuredPosition) < 0.1) featuredPosition = distance;
+    // Finish the horizontal journey before the sticky section releases.
+    if (window.scrollY >= featuredStart + featuredTravel) featuredPosition = featuredTravel;
+    featuredTrack.style.transform = `translate3d(${-featuredPosition}px, 0, 0)`;
+    if (featuredPosition !== distance) {
+      featuredFrame = requestAnimationFrame(updateFeaturedPosition);
+    } else {
+      featuredLastTime = 0;
+    }
+  };
+  const measureFeatured = () => {
+    if (featuredSection.hidden) return;
+    featuredTravel = Math.max(0, featuredTrack.scrollWidth - featuredViewport.clientWidth);
+    const stickyTop = parseFloat(getComputedStyle(featuredSticky).top) || 0;
+    featuredStart = featuredSection.getBoundingClientRect().top + window.scrollY
+      - stickyTop;
+    featuredSection.style.height = `${featuredSticky.offsetHeight + featuredTravel}px`;
+    featuredPosition = Math.min(featuredTravel, Math.max(0, window.scrollY - featuredStart));
+    featuredTrack.style.transform = `translate3d(${-featuredPosition}px, 0, 0)`;
+    featuredLastTime = 0;
+  };
+  window.addEventListener("scroll", () => {
+    if (!featuredFrame) featuredFrame = requestAnimationFrame(updateFeaturedPosition);
+  }, { passive: true });
+  window.addEventListener("resize", measureFeatured, { passive: true });
+  const featuredResizeObserver = new ResizeObserver(measureFeatured);
+  featuredResizeObserver.observe(featuredViewport);
+  featuredResizeObserver.observe(featuredTrack);
+  document.fonts.ready.then(measureFeatured);
   let activeProjectType = "";
   let filterScrollAnchorRestoreTimer = 0;
   let floatingFilterShowTimer = 0;
@@ -1335,6 +1416,10 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     });
 
     workGrid?.classList.toggle("is-single-result", visibleProjectCount === 1);
+    pf.querySelectorAll("[data-work-group]").forEach((group) => {
+      group.hidden = !group.querySelector(".pf-work:not([hidden])");
+    });
+    measureFeatured();
     if (filterEmptyState) filterEmptyState.hidden = visibleProjectCount > 0;
   };
 
@@ -1905,6 +1990,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
       trackPfWorkCardClick(project);
       hideWorkCursor();
+      if (work.classList.contains("pf-work--featured")) return;
       event.preventDefault();
       openWorkModal(work, project);
     });

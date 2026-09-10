@@ -1,0 +1,13 @@
+{
+  "method": "Reference-camera fit, silhouette deformation, projected appearance texture",
+  "cameraMeanErrorPx": 17.835017263499235,
+  "cameraMaxErrorPx": 51.64031002633659,
+  "silhouetteIoU": 0.9935418101666896,
+  "vertices": 21306,
+  "gravity": false,
+  "limitations": [
+    "Hidden geometry remains inferred",
+    "Appearance texture includes source lighting; reflections are not fully relit",
+    "Cage intersections in generated reference are not perfectly consistent with an ideal cube"
+  ]
+}

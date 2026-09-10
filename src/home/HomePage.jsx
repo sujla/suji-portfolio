@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ExperienceSection } from "../components/ExperienceCards.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { ThemeToggle } from "../components/ThemeToggle.jsx";
+import { HeroVisual } from "./hero-concepts/SculptureVisual.jsx";
 
 const aboutPhotos = [
   ["about-photo--1", "./assets/about.jpg"],
@@ -160,16 +161,17 @@ export function HomePage() {
       </svg>
 
       <section className="hero-section" aria-labelledby="hero-title">
-        <div className="hero-title-column">
-          <h1 className="display-title" id="hero-title">
-            Senior
-            <br />
-            Product Designer
-          </h1>
-        </div>
-        <div className="hero-copy">
-          <p>Driving measurable impact across enterprise and consumer products</p>
-          <div data-pf-type-filter />
+        <HeroVisual />
+        <div className="hero-text-grid">
+          <div className="hero-title-column">
+            <h1 className="display-title" id="hero-title">
+              Senior product designer based in Singapore 🇸🇬
+            </h1>
+          </div>
+          <div className="hero-copy">
+            <p>I drive measurable impact across enterprise and consumer products</p>
+          </div>
+          <div className="hero-filter-column" data-pf-type-filter />
         </div>
       </section>
 

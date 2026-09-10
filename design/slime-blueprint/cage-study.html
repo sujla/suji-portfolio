@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Slime + Cage · Model study</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f8f9fb;color:#19232d;font:14px/1.5 system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:28px 32px}header{display:flex;justify-content:space-between;align-items:baseline;gap:20px}h1{font-size:22px;font-weight:500;letter-spacing:-.04em;margin:0}p{margin:8px 0;color:#637080}.workspace{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;margin-top:24px}.panel{background:white;border:1px solid #e0e4e9;border-radius:12px;overflow:hidden}.panel-title{padding:16px 20px;display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #edf0f2}.scene{height:min(66vh,700px);min-height:320px;position:relative}.scene canvas{display:block;width:100%;height:100%;touch-action:none}.reference{width:100%;display:block}.controls{display:flex;gap:8px;flex-wrap:wrap;padding:16px 20px;border-top:1px solid #edf0f2}button{font:inherit;padding:7px 13px;background:white;border:1px solid #d9dfe5;border-radius:6px;cursor:pointer}button[aria-pressed=true]{background:#163ddd;border-color:#163ddd;color:white}footer{margin-top:20px;color:#637080;display:flex;gap:24px;flex-wrap:wrap}a{color:#1643ca}.note{padding:16px 20px;margin:0}.dimensions{font-variant-numeric:tabular-nums} @media(max-width:800px){main{padding:20px}.workspace{grid-template-columns:1fr}.scene{height:50vh}header{display:block}}
+  </style>
+</head>
+<body>
+<main>
+<header><h1>Slime + Cage / 모델 제작</h1><p>철조망 + 슬라임 · 중력 없음</p></header>
+<div class="workspace">
+<section class="panel">
+<div class="panel-title"><span id="model-status">슬라임 로딩 중</span><span>드래그하여 회전</span></div>
+<div id="scene" class="scene"><img id="reference-overlay" src="../../assets/hero-concepts/grid-v3.png" alt="" hidden style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.5;pointer-events:none;z-index:1" /></div>
+<div class="controls"><button data-merge="0" disabled>27개로 분리</button><button data-merge="1" disabled>합치기</button><label style="display:flex;align-items:center;gap:8px">합치기 정도 <input id="merge-range" type="range" min="0" max="100" value="0" disabled style="width:120px" /><output id="merge-output">0%</output></label></div>
+<div class="controls" id="objects">
+<button data-display="both" aria-pressed="true" disabled>전체</button><button data-display="cage" aria-pressed="false" disabled>철조망만</button><button data-display="slime" aria-pressed="false" disabled>슬라임만</button>
+</div>
+<div class="controls" id="views">
+<button data-view="reference" aria-pressed="true">기준 시점</button><button data-view="front" aria-pressed="false">정면</button><button data-view="side" aria-pressed="false">측면</button><button data-view="top" aria-pressed="false">평면</button><button id="overlay-toggle" aria-pressed="false">원본 겹쳐보기</button><button id="material" aria-pressed="false">구조선 보기</button>
+</div>
+</section>
+<section class="panel">
+<div class="panel-title"><span>외형 기준 이미지</span></div>
+<img class="reference" src="../../assets/hero-concepts/grid-v3.png" alt="얇은 금속 그리드와 블루 슬라임 기준 이미지" />
+<p class="note">철조망과 슬라임은 독립된 3D 오브젝트입니다. 전체 또는 개별 형태를 선택하고 회전해서 확인할 수 있습니다. 27개 셀의 둥근 덩어리가 붙으며 격자 바깥으로 부풀어 나옵니다. 봉에 닿는 부분은 눌리고, 열린 칸 사이로 표면이 이어집니다. 중력 없이 형태를 제어하는 모델입니다.</p>
+</section>
+</div>
+<footer class="dimensions"><span>한 변 100 U</span><span>면당 3 × 3칸</span><span>봉 Ø 0.95 U</span><span>이음새 Ø 3.4 U</span><a href="./cage-structure.svg">좌표 기반 도면</a><a href="./cage-structure.json">철조망 좌표</a><a href="./cell-merged.obj">슬라임 OBJ</a></footer>
+<p>치수는 원본에서 실측한 값이 아닌 모델링 시작값입니다.</p>
+</main>
+<script type="module" src="./cage-study.js"></script>
+</body>
+</html>

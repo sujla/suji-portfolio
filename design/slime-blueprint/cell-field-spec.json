@@ -1,0 +1,12 @@
+{
+  "resolution": 88,
+  "extent": 90,
+  "cells": 27,
+  "sphereRadius": 13.5,
+  "mergedCellRadius": 24.5,
+  "unionBlend": 6,
+  "wirePressureDepth": 2.0,
+  "targetSource": "27 overlapping round cell volumes with exterior wire contact; no reference silhouette or texture",
+  "gravity": false,
+  "simulation": "Art-directed implicit surface; not a volume-conserving fluid solver"
+}
