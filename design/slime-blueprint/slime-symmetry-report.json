@@ -1,8 +1,0 @@
-{
-  "method": "Preserve visible reference surface; reflect visible radial profiles into hidden areas with seam blending",
-  "protectedVertices": 12307,
-  "hiddenVerticesUpdated": 8999,
-  "maxProtectedDisplacement": 0.0,
-  "globalSymmetry": false,
-  "gravity": false
-}
