@@ -49,11 +49,9 @@ function DetailNav() {
         href="../../"
         aria-label="Back to Suji Kweon's portfolio"
       >
+        <span className="site-mark-back" aria-hidden="true" />
         SUJI KWEON
       </a>
-      <div className="detail-gnb-center" aria-hidden="true">
-        <span className="detail-gnb-title">Case Study</span>
-      </div>
       <DetailThemeToggle />
     </>
   );

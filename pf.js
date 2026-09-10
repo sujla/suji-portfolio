@@ -3,6 +3,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
   const modalTransitionDuration = 760;
   const modalHistoryStateKey = "portfolioPfModalProject";
+  const listHistoryStateKey = "portfolioPfList";
   const projectTypeMap = {
     AI: "ai",
     "Enterprise/SaaS": "enterprise",
@@ -15,8 +16,13 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   );
   let activeModal = null;
 
-  const renderWorkMetaLine = (project) => {
-    const metaItems = [project.companyLabel, project.year].filter(Boolean);
+  const renderWorkMetaLine = (project, isCaseStudy = false) => {
+    const projectTypes = project.types?.length ? project.types : [project.type];
+    const category = projectTypes
+      .filter(Boolean)
+      .map((type) => projectTypeFilters.find((filter) => filter.value === type)?.label || type)
+      .join(", ");
+    const metaItems = [category, isCaseStudy && project.companyLabel, project.year].filter(Boolean);
     return metaItems.length ? `<span>${metaItems.join(" · ")}</span>` : "";
   };
 
@@ -614,6 +620,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   };
 
   const renderCaseStudyCard = (project) => `
+    <div class="pf-featured-cell">
     <a class="pf-work pf-work--${project.id} pf-work--featured"
        href="${project.href}" data-project-types="${(project.types || [project.type]).join(" ")}"
        data-cursor-label="View Case Study" draggable="false">
@@ -623,10 +630,11 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       <div class="pf-featured-caption">
         <div class="pf-featured-copy">
           <h2>${project.title}</h2>
-          ${renderWorkMetaLine(project)}
+          ${renderWorkMetaLine(project, true)}
         </div>
       </div>
     </a>
+    </div>
   `;
 
   const isUnmodifiedPrimaryClick = (event) =>
@@ -1186,7 +1194,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
               data-project-type-filter="${value}"
               aria-controls="pf-work-grid"
               aria-pressed="false"
-            >${label}</button>
+            >${label}<span data-pf-filter-count></span></button>
           `,
         )
         .join("")}
@@ -1404,16 +1412,26 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       );
     });
 
-    positionSelectedFloatingFilterButton();
-
     typeFilterGroup?.classList.toggle("is-filtering", Boolean(activeProjectType));
 
     filterableWorks.forEach((work) => {
       const projectTypes = work.dataset.projectTypes.split(" ");
       const isVisible = !activeProjectType || projectTypes.includes(activeProjectType);
       work.hidden = !isVisible;
+      if (work.parentElement.classList.contains("pf-featured-cell")) {
+        work.parentElement.hidden = !isVisible;
+      }
       if (isVisible) visibleProjectCount += 1;
     });
+
+    floatingFilterButtons.forEach((button) => {
+      button.querySelector("[data-pf-filter-count]").textContent =
+        button.dataset.projectTypeFilter === activeProjectType
+          ? ` ${visibleProjectCount}`
+          : "";
+    });
+    positionSelectedFloatingFilterButton();
+    updateFloatingFilterOverflow();
 
     workGrid?.classList.toggle("is-single-result", visibleProjectCount === 1);
     pf.querySelectorAll("[data-work-group]").forEach((group) => {
@@ -1456,8 +1474,26 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     positionSelectedFloatingFilterButton();
   });
   updateFloatingFilterVisibility();
-  applyProjectTypeFilter("");
+  const savedListState =
+    window.performance.getEntriesByType("navigation")[0]?.type === "back_forward"
+      ? window.history.state?.[listHistoryStateKey]
+      : null;
+  applyProjectTypeFilter(savedListState?.projectType || "");
+  if (Number.isFinite(savedListState?.scrollY)) {
+    window.scrollTo({ top: savedListState.scrollY, behavior: "instant" });
+    measureFeatured();
+  }
   updateFloatingFilterOverflow();
+
+  window.addEventListener("pagehide", () => {
+    window.history.replaceState({
+      ...window.history.state,
+      [listHistoryStateKey]: {
+        projectType: activeProjectType,
+        scrollY: window.scrollY,
+      },
+    }, "");
+  });
 
   const rail = pf.querySelector("[data-pf-work-rail]");
   const workSets = rail ? [...rail.querySelectorAll(".pf-work-set")] : [];
@@ -1904,6 +1940,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     if (!workCursorText || workCursorText.textContent === label) return;
 
     workCursorText.textContent = label;
+    workCursor.classList.toggle("is-case-study", label === "View Case Study");
     syncWorkCursorSize();
   };
 

@@ -41,10 +41,10 @@ const renderDetailNav = () => {
   if (!detailNav || !currentProject) return;
 
   detailNav.innerHTML = `
-    <a class="site-mark" href="../../" aria-label="Back to Suji Kweon's portfolio">SUJI KWEON</a>
-    <div class="detail-gnb-center" aria-hidden="true">
-      <span class="detail-gnb-title">Case Study</span>
-    </div>
+    <a class="site-mark" href="../../" aria-label="Back to Suji Kweon's portfolio">
+      <span class="site-mark-back" aria-hidden="true"></span>
+      SUJI KWEON
+    </a>
     <button class="theme-toggle" type="button" aria-label="Toggle dark and light mode" aria-pressed="false">
       <span class="theme-icon theme-icon-sun" aria-hidden="true">
         <img class="theme-icon-image theme-icon-image-dark" src="../../assets/common/theme-toggle-sun-dark.svg" alt="" />
@@ -59,6 +59,18 @@ const renderDetailNav = () => {
 };
 
 if (!usesReactDetailRuntime) renderDetailNav();
+
+detailNav?.addEventListener("click", (event) => {
+  const link = event.target.closest(".site-mark");
+  if (
+    !link || event.defaultPrevented || event.button !== 0 ||
+    event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ||
+    window.history.length <= 1
+  ) return;
+
+  event.preventDefault();
+  window.history.back();
+});
 
 const renderDetailHeader = () => {
   if (!detailShell || !currentProject || detailShell.querySelector(".detail-title-section")) return;

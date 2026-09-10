@@ -5,14 +5,6 @@ import { SiteFooter } from "../components/SiteFooter.jsx";
 import { ThemeToggle } from "../components/ThemeToggle.jsx";
 import { HeroVisual } from "./hero-concepts/SculptureVisual.jsx";
 
-const aboutPhotos = [
-  ["about-photo--1", "./assets/about.jpg"],
-  ["about-photo--2", "./assets/about2.jpg"],
-  ["about-photo--4", "./assets/about4.jpeg"],
-  ["about-photo--5", "./assets/about5.jpeg"],
-  ["about-photo--6", "./assets/about6.jpeg"],
-];
-
 const mobileNavItems = [
   ["Work", "#work"],
   ["Experience", "#experience"],
@@ -188,7 +180,7 @@ export function HomePage() {
         <div className="about-content">
           <div className="about-copy">
             <h2 className="display-title" id="about-title">
-              Built through complexity
+              Built through diversity
             </h2>
             <p className="about-body">
               I&apos;ve lived across Korea, India, the U.S., and Singapore, and designed
@@ -207,13 +199,7 @@ export function HomePage() {
               Let&apos;s talk!
             </a>
           </div>
-          <div className="about-photo-stack" aria-hidden="true">
-            {aboutPhotos.map(([className, src]) => (
-              <div className={`about-photo ${className}`} key={src}>
-                <img src={src} alt="" />
-              </div>
-            ))}
-          </div>
+
         </div>
       </section>
 
