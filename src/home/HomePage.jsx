@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { ExperienceSection } from "../components/ExperienceCards.jsx";
 import { SiteFooter } from "../components/SiteFooter.jsx";
 import { ThemeToggle } from "../components/ThemeToggle.jsx";
-import { HeroVisual } from "./hero-concepts/SculptureVisual.jsx";
+import { AboutPaperContact } from "./hero-concepts/AboutPaperContact.jsx";
+import { TearOffFlyer } from "./hero-concepts/TearOffFlyer.jsx";
 
 const mobileNavItems = [
   ["Work", "#work"],
@@ -81,6 +82,29 @@ function MobileNavigation() {
 }
 
 export function HomePage() {
+  const aboutRef = useRef(null);
+  useEffect(() => {
+    const about = aboutRef.current;
+    const heading = document.getElementById('professional-experience-title');
+    if (!about || !heading) return;
+    let disposed = false;
+    const alignAboutCopy = () => {
+      if (disposed) return;
+      const inset = Math.max(0, heading.getBoundingClientRect().left - about.getBoundingClientRect().left);
+      about.style.setProperty('--about-copy-inset', `${inset}px`);
+    };
+    const observer = new ResizeObserver(alignAboutCopy);
+    observer.observe(heading);
+    observer.observe(about);
+    window.addEventListener('resize', alignAboutCopy);
+    document.fonts.ready.then(alignAboutCopy);
+    alignAboutCopy();
+    return () => {
+      disposed = true;
+      observer.disconnect();
+      window.removeEventListener('resize', alignAboutCopy);
+    };
+  }, []);
   useEffect(() => {
     import("../../script.js");
   }, []);
@@ -152,19 +176,8 @@ export function HomePage() {
         </defs>
       </svg>
 
-      <section className="hero-section" aria-labelledby="hero-title">
-        <HeroVisual />
-        <div className="hero-text-grid">
-          <div className="hero-title-column">
-            <h1 className="display-title" id="hero-title">
-              Senior product designer based in Singapore 🇸🇬
-            </h1>
-          </div>
-          <div className="hero-copy">
-            <p>I drive measurable impact across enterprise and consumer products</p>
-          </div>
-          <div className="hero-filter-column" data-pf-type-filter />
-        </div>
+      <section className="hero-section hero-section--flyer" aria-labelledby="hero-title">
+        <TearOffFlyer />
       </section>
 
       <section className="pf-section" id="work" data-pf />
@@ -173,6 +186,7 @@ export function HomePage() {
 
       <section
         className="about-section"
+        ref={aboutRef}
         id="about"
         data-about
         aria-labelledby="about-title"
@@ -190,16 +204,10 @@ export function HomePage() {
               That range taught me to find patterns in complexity, turn ambiguity into
               clear product direction, and design with measurable impact in mind.
             </p>
-            <p className="about-body">Curious to know more?</p>
-            <a
-              className="about-contact-link"
-              href="mailto:kweonsuji@gmail.com"
-              data-cursor-label="Email Suji"
-            >
-              Let&apos;s talk!
-            </a>
           </div>
-
+          <div className="about-contact-column">
+            <AboutPaperContact />
+          </div>
         </div>
       </section>
 

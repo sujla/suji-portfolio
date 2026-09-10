@@ -1154,24 +1154,30 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   const floatingFilterExitRatio = 0.36;
 
   if (typeFilter) {
+    const isFlyerFilter = typeFilter.hasAttribute("data-flyer-filters");
     typeFilter.innerHTML = `
-      <div class="pf-type-filter" role="group" aria-label="Filter projects by type">
+      <div class="${isFlyerFilter ? "flyer-tabs" : "pf-type-filter"}" role="group" aria-label="Filter projects by type">
       ${projectTypeFilters
         .map(
           ({ value, label }, index) => `
-            ${index > 0 ? '<span class="pf-type-filter-dot" aria-hidden="true">•</span>' : ""}
+            ${!isFlyerFilter && index > 0 ? '<span class="pf-type-filter-dot" aria-hidden="true">•</span>' : ""}
             <button
-              class="pf-type-filter-button"
+              class="${isFlyerFilter ? "flyer-tab" : "pf-type-filter-button"}"
               type="button"
               data-project-type-filter="${value}"
               aria-controls="pf-work-grid"
               aria-pressed="false"
-            >${label}</button>
+            >${isFlyerFilter ? `<span class="flyer-tab-label">${label}</span>` : label}</button>
           `,
         )
         .join("")}
       </div>
     `;
+    if (isFlyerFilter) {
+      import("./src/home/hero-concepts/flyer-flutter.js")
+        .then(({ mountFlyerFlutter }) => mountFlyerFlutter(typeFilter.querySelector(".flyer-tabs")))
+        .catch(() => { /* Keep the HTML tabs if WebGL cannot initialize. */ });
+    }
   }
 
   document.querySelector("[data-pf-floating-filter]")?.remove();
@@ -1239,7 +1245,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       : []),
     ...floatingTypeFilter.querySelectorAll("[data-project-type-filter]"),
   ];
-  const typeFilterGroup = typeFilter?.querySelector(".pf-type-filter");
+  const typeFilterGroup = typeFilter?.querySelector(".pf-type-filter, .flyer-tabs");
   const root = document.documentElement;
   const floatingFilterScroll = floatingTypeFilter.querySelector(
     ".pf-floating-filter-scroll",
@@ -1250,6 +1256,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   const filterableWorks = [...pf.querySelectorAll(".pf-work[data-project-types]")];
   const workGrid = pf.querySelector(".pf-work-grid");
   const filterEmptyState = pf.querySelector(".pf-filter-empty");
+  const moreWorkHeading = pf.querySelector(".pf-work-group--secondary .pf-group-heading");
   const featuredSection = pf.querySelector(".pf-featured-section");
   const featuredSticky = pf.querySelector(".pf-featured-sticky");
   const featuredViewport = pf.querySelector(".pf-featured-viewport");
@@ -1403,6 +1410,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
   const applyProjectTypeFilter = (projectType) => {
     activeProjectType = projectType;
+    if (moreWorkHeading) moreWorkHeading.hidden = Boolean(activeProjectType);
     let visibleProjectCount = 0;
 
     filterButtons.forEach((button) => {
@@ -1441,8 +1449,31 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     if (filterEmptyState) filterEmptyState.hidden = visibleProjectCount > 0;
   };
 
+  let filterAction = 0;
+  let flyerTearPending = false;
   filterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
+      const isFlyerTab = button.classList.contains("flyer-tab");
+      if (isFlyerTab && flyerTearPending) return;
+      const action = ++filterAction;
+      if (isFlyerTab) {
+        // Lock before importing so rapid clicks cannot cancel the first tear.
+        flyerTearPending = true;
+        const group = button.closest(".flyer-tabs");
+        const lockedButtons = [...group.querySelectorAll(".flyer-tab")].map(tab => [tab, tab.disabled]);
+        group.classList.add("is-tear-locked");
+        lockedButtons.forEach(([tab]) => { tab.disabled = true; });
+        try {
+          const { playFlyerTear } = await import("./src/home/hero-concepts/flyer-flutter.js");
+          if (!await playFlyerTear(button)) return;
+        } catch { /* Filtering still works if the animation module cannot load. */ }
+        finally {
+          lockedButtons.forEach(([tab, wasDisabled]) => { tab.disabled = wasDisabled; });
+          group.classList.remove("is-tear-locked");
+          flyerTearPending = false;
+        }
+        if (action !== filterAction || !button.isConnected) return;
+      }
       const root = document.documentElement;
       const projectType = button.dataset.projectTypeFilter;
       const shouldClearActiveFilter =
