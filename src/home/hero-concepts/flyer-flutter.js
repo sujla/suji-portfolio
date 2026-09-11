@@ -91,6 +91,9 @@ export function mountFlyerFlutter(group) {
   let pointerX = 0;
   let active = -1;
   let previewed = -1;
+  let pointerPreviewing = false;
+  let sequentialPreviewTimer = 0;
+  let sequentialPreviewIndex = -1;
   let gesture = null;
   let suppressedClick = null;
   let dragCanvas = false;
@@ -199,25 +202,34 @@ export function mountFlyerFlutter(group) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#171717';
-    const lines = [];
-    for (const hardLine of label.innerText.split('\n')) {
-      let line = '';
-      for (const part of hardLine.split(/(?<=[/\-\s])/)) {
-        if (line && ctx.measureText(line + part).width > tab.width - 12) {
-          lines.push(line.trim()); line = '';
-        }
-        for (const char of part) {
-          if (line && ctx.measureText(line + char).width > tab.width - 12) {
+    const isVertical = style.writingMode.startsWith('vertical');
+    ctx.globalCompositeOperation = 'color-burn';
+    if (isVertical) {
+      ctx.save();
+      ctx.translate(tab.width / 2, 84);
+      ctx.rotate(Math.PI / 2);
+      ctx.fillText(label.textContent.trim(), 0, 0);
+      ctx.restore();
+    } else {
+      const lines = [];
+      for (const hardLine of label.innerText.split('\n')) {
+        let line = '';
+        for (const part of hardLine.split(/(?<=[/\-\s])/)) {
+          if (line && ctx.measureText(line + part).width > tab.width - 12) {
             lines.push(line.trim()); line = '';
           }
-          line += char;
+          for (const char of part) {
+            if (line && ctx.measureText(line + char).width > tab.width - 12) {
+              lines.push(line.trim()); line = '';
+            }
+            line += char;
+          }
         }
+        if (line) lines.push(line.trim());
       }
-      if (line) lines.push(line.trim());
+      const lineHeight = parseFloat(style.lineHeight);
+      lines.forEach((text, i) => ctx.fillText(text, tab.width / 2, 88 + (i - (lines.length - 1) / 2) * lineHeight));
     }
-    const lineHeight = parseFloat(style.lineHeight);
-    ctx.globalCompositeOperation = 'color-burn';
-    lines.forEach((text, i) => ctx.fillText(text, tab.width / 2, 88 + (i - (lines.length - 1) / 2) * lineHeight));
     ctx.globalCompositeOperation = 'source-over';
     tab.baseCanvas.width = canvas.width;
     tab.baseCanvas.height = canvas.height;
@@ -319,6 +331,7 @@ export function mountFlyerFlutter(group) {
     const paperReverse = tab.geometry.attributes.paperReverse;
     const step = 160 / rows;
     const tipLift = THREE.MathUtils.clamp((tab.bend - .025) / .925, 0, 1) * (1 - tearProgress);
+    const steadyCompactHover = sequentialPreviewMedia.matches && tearProgress === 0;
     let y = 0;
     let z = 0;
     for (let row = 0; row <= rows; row++) {
@@ -326,7 +339,10 @@ export function mountFlyerFlutter(group) {
       // Integrating a curved spine keeps the paper length constant and its top pinned.
       // Curl only the final fifth past 90 degrees, revealing a narrow white reverse.
       const tipCurl = THREE.MathUtils.smoothstep(t, .8, 1) * .95 * tipLift;
-      const angle = tab.bend * (t * 1.35 + Math.sin(t * Math.PI * 2 - time * 7 + tab.left * .025) * t * .12) + tipCurl;
+      const flutter = steadyCompactHover
+        ? 0
+        : Math.sin(t * Math.PI * 2 - time * 7 + tab.left * .025) * t * .12;
+      const angle = tab.bend * (t * 1.35 + flutter) + tipCurl;
       if (row) { y += Math.cos(angle) * step; z += Math.sin(angle) * step; }
       for (let col = 0; col <= columns; col++) {
         const across = col / columns - .5;
@@ -448,9 +464,10 @@ export function mountFlyerFlutter(group) {
       }
       const target = tab.tear ? .08 + Math.sin(tab.separation * Math.PI) * .45 : index === active ? (torn ? .18 : .95) : .025;
       const twistTarget = !tab.tear && index === active ? (.14 + pointerX * .6) * (torn ? .3 : 1) : 0;
-      tab.velocity += ((target - tab.bend) * 65 - tab.velocity * 10) * dt;
+      const compactDamping = sequentialPreviewMedia.matches && !tab.tear;
+      tab.velocity += ((target - tab.bend) * 65 - tab.velocity * (compactDamping ? 18 : 10)) * dt;
       tab.bend += tab.velocity * dt;
-      tab.twistVelocity += ((twistTarget - tab.twist) * 55 - tab.twistVelocity * 9) * dt;
+      tab.twistVelocity += ((twistTarget - tab.twist) * 55 - tab.twistVelocity * (compactDamping ? 16 : 9)) * dt;
       tab.twist += tab.twistVelocity * dt;
       const lifted = tab.separation > .002;
       // Composite each lifted sheet AFTER its shadow, above the resting neighbors.
@@ -489,6 +506,39 @@ export function mountFlyerFlutter(group) {
   }
 
   function wake() { if (!frame && (visible || tabs.some(tab => tab.tear || tab.dragX || tab.dragY)) && !disposed) { lastTime = 0; frame = requestAnimationFrame(animate); } }
+  const sequentialPreviewMedia = window.matchMedia('(max-width: 920px)');
+  function showPreview(index) {
+    active = index;
+    pointerX = 0;
+    if (previewed !== index) {
+      previewed = index;
+      group.closest('.tear-flyer')?.dispatchEvent(new CustomEvent('flyer-filter-preview', {
+        detail: { type: index === -1 ? '' : buttons[index].dataset.projectTypeFilter },
+      }));
+    }
+    wake();
+  }
+  function stopSequentialPreview() {
+    window.clearInterval(sequentialPreviewTimer);
+    sequentialPreviewTimer = 0;
+  }
+  function startSequentialPreview() {
+    stopSequentialPreview();
+    if (!sequentialPreviewMedia.matches || !visible || pointerPreviewing || disposed) return;
+    const advance = () => {
+      sequentialPreviewIndex = (sequentialPreviewIndex + 1) % buttons.length;
+      showPreview(sequentialPreviewIndex);
+    };
+    advance();
+    sequentialPreviewTimer = window.setInterval(advance, 3200);
+  }
+  function syncSequentialPreview() {
+    if (sequentialPreviewMedia.matches) startSequentialPreview();
+    else {
+      stopSequentialPreview();
+      if (!pointerPreviewing) showPreview(-1);
+    }
+  }
   function tear(button) {
     const tab = tabs.find(tab => tab.button === button);
     if (!tab || disposed) return Promise.resolve(false);
@@ -504,14 +554,10 @@ export function mountFlyerFlutter(group) {
   }
   function move(event) {
     if (event.pointerType === 'touch' || group.classList.contains('is-tear-locked')) return;
+    pointerPreviewing = true;
+    stopSequentialPreview();
     const index = buttons.indexOf(event.target.closest('.flyer-tab'));
-    active = index;
-    if (previewed !== index) {
-      previewed = index;
-      group.closest('.tear-flyer')?.dispatchEvent(new CustomEvent('flyer-filter-preview', {
-        detail: { type: index === -1 ? '' : buttons[index].dataset.projectTypeFilter },
-      }));
-    }
+    showPreview(index);
     if (index !== -1) {
       const rect = buttons[index].getBoundingClientRect();
       pointerX = (event.clientX - rect.left) / rect.width - .5;
@@ -519,10 +565,9 @@ export function mountFlyerFlutter(group) {
     wake();
   }
   function leave() {
-    active = -1;
-    previewed = -1;
-    group.closest('.tear-flyer')?.dispatchEvent(new CustomEvent('flyer-filter-preview', { detail: { type: '' } }));
-    wake();
+    pointerPreviewing = false;
+    if (sequentialPreviewMedia.matches) startSequentialPreview();
+    else showPreview(-1);
   }
   function press(event) {
     if (event.button !== 0 || !event.isPrimary || gesture) return;
@@ -631,8 +676,14 @@ export function mountFlyerFlutter(group) {
   const stateObserver = new MutationObserver(() => { tabs.forEach(paint); wake(); });
   const intersectionObserver = new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
-    if (visible) wake();
-    else { active = -1; if (!tabs.some(tab => tab.tear || tab.dragX || tab.dragY)) { cancelAnimationFrame(frame); frame = 0; } }
+    if (visible) {
+      syncSequentialPreview();
+      wake();
+    } else {
+      stopSequentialPreview();
+      showPreview(-1);
+      if (!tabs.some(tab => tab.tear || tab.dragX || tab.dragY)) { cancelAnimationFrame(frame); frame = 0; }
+    }
   });
   group.addEventListener('pointermove', move);
   group.addEventListener('pointerleave', leave);
@@ -641,6 +692,7 @@ export function mountFlyerFlutter(group) {
   window.addEventListener('pointermove', dragMove, { passive: false });
   window.addEventListener('pointerup', finishDrag);
   window.addEventListener('pointercancel', finishDrag);
+  sequentialPreviewMedia.addEventListener('change', syncSequentialPreview);
   resizeObserver.observe(group);
   stateObserver.observe(group, { attributes: true, subtree: true, attributeFilter: ['aria-pressed', 'class'] });
   intersectionObserver.observe(group);
@@ -649,6 +701,7 @@ export function mountFlyerFlutter(group) {
   cancelAnimationFrame(frame);
   animate(performance.now());
   group.classList.add('has-flutter');
+  syncSequentialPreview();
   renderer.domElement.addEventListener('webglcontextlost', dispose);
   window.addEventListener('pagehide', dispose, { once: true });
 
@@ -657,6 +710,7 @@ export function mountFlyerFlutter(group) {
     disposed = true;
     paperImage.onload = null;
     cancelAnimationFrame(frame);
+    stopSequentialPreview();
     resizeObserver.disconnect(); stateObserver.disconnect(); intersectionObserver.disconnect();
     group.removeEventListener('pointermove', move);
     group.removeEventListener('pointerleave', leave);
@@ -665,6 +719,7 @@ export function mountFlyerFlutter(group) {
     window.removeEventListener('pointermove', dragMove);
     window.removeEventListener('pointerup', finishDrag);
     window.removeEventListener('pointercancel', finishDrag);
+    sequentialPreviewMedia.removeEventListener('change', syncSequentialPreview);
     gesture?.locked.forEach(([button, wasDisabled]) => { button.disabled = wasDisabled; });
     gesture = null;
     suppressedClick = null;

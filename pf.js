@@ -1216,7 +1216,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         <div class="pf-featured-sticky">
           <div class="pf-featured-viewport">
             <div class="pf-featured-grid">
-              <div class="pf-featured-intro"><span>Selected projects / 01—03</span><h2>Selected<br>work</h2><p>Product design with<br>measurable impact.</p></div>
+              <div class="pf-featured-intro"><span>Case Studies 01—03</span><h2>Selected<br>work</h2><p>Product design with<br>measurable impact.</p></div>
               ${pfProjects.filter((project) => project.cta).map(renderCaseStudyCard).join("")}
             </div>
           </div>
@@ -1268,9 +1268,15 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   let featuredStart = 0;
   let featuredPosition = 0;
   let featuredLastTime = 0;
+  const featuredRowMedia = window.matchMedia("(max-width: 920px)");
 
   const updateFeaturedPosition = (time) => {
     featuredFrame = 0;
+    if (featuredRowMedia.matches) {
+      featuredTrack.style.transform = "none";
+      featuredLastTime = 0;
+      return;
+    }
     if (featuredSection.hidden) {
       featuredLastTime = 0;
       return;
@@ -1292,6 +1298,14 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   };
   const measureFeatured = () => {
     if (featuredSection.hidden) return;
+    if (featuredRowMedia.matches) {
+      featuredTravel = 0;
+      featuredPosition = 0;
+      featuredSection.style.height = "auto";
+      featuredTrack.style.transform = "none";
+      featuredLastTime = 0;
+      return;
+    }
     featuredTravel = Math.max(0, featuredTrack.scrollWidth - featuredViewport.clientWidth);
     const stickyTop = parseFloat(getComputedStyle(featuredSticky).top) || 0;
     featuredStart = featuredSection.getBoundingClientRect().top + window.scrollY
@@ -1305,6 +1319,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     if (!featuredFrame) featuredFrame = requestAnimationFrame(updateFeaturedPosition);
   }, { passive: true });
   window.addEventListener("resize", measureFeatured, { passive: true });
+  featuredRowMedia.addEventListener?.("change", measureFeatured);
   const featuredResizeObserver = new ResizeObserver(measureFeatured);
   featuredResizeObserver.observe(featuredViewport);
   featuredResizeObserver.observe(featuredTrack);

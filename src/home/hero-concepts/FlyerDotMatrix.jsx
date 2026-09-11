@@ -82,18 +82,18 @@ const movingShapeContains = (shape, trackWidth, origins, x, y, offset, direction
 function cellStrength(type, x, y, elapsed) {
   const starDistance = sparkleDistance(x, y);
   if (type === 'ai' && Number.isFinite(starDistance)) {
-    const cycle = elapsed % 2700;
-    const reveal = ease(cycle / 900 - starDistance * .12);
-    const fade = 1 - ease((cycle - 2300) / 300);
+    const cycle = elapsed % 2300;
+    const reveal = ease(cycle / 650 - starDistance * .12);
+    const fade = 1 - ease((cycle - 1900) / 300);
     return reveal * fade;
   }
 
   if (type === 'enterprise') {
     const key = `${x},${y}`;
     if (!enterpriseTopCells.has(key) && !enterpriseThreeCells.has(key)) return 0;
-    const cycle = elapsed % 2600;
-    const reveal = ease(cycle / 760 - y * .1);
-    const fade = 1 - ease((cycle - 2200) / 300);
+    const cycle = elapsed % 2300;
+    const reveal = ease(cycle / 550 - y * .1);
+    const fade = 1 - ease((cycle - 1900) / 300);
     return reveal * fade;
   }
 
