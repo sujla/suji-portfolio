@@ -28,7 +28,7 @@
   --gnb-bg: rgba(24, 24, 24, 0.5);
   --pf-nav-height: 64px;
   --pf-frame-gutter: 16px;
-  --selection-bg: rgba(198, 198, 247, 0.4);
+  --selection-bg: rgba(223, 223, 223, 0.4);
 }
 
 :root[data-theme="light"] {
@@ -47,7 +47,7 @@
   --gnb-bg: rgba(231, 231, 230, 0.2);
   --red: #f04b4b;
   --red-bg: rgba(223, 78, 78, 0.12);
-  --selection-bg: rgba(214, 214, 249, 0.4);
+  --selection-bg: rgba(232, 232, 232, 0.5);
   --globe-place-color: #05b833;
 }
 
@@ -3681,7 +3681,7 @@ body {
   width: 100%;
   height: 86vh;
   margin: 0 0 8px;
-  padding: 100px clamp(14px, 4.8vw, 66px) 40px;
+  padding: 104px clamp(14px, 4.8vw, 66px) 40px;
   grid-template-rows: minmax(0, 1fr) auto;
   gap: 32px;
   background: var(--bg);
@@ -3890,7 +3890,15 @@ body {
 
 .pf-floating-filter-button[aria-pressed="true"] {
   border-color: color-mix(in srgb, var(--text) 4%, transparent);
-  background: var(--selection-bg);
+  background: #B7ECD9;
+}
+
+:root[data-theme="dark"] .pf-floating-filter-button[aria-pressed="true"] {
+  color: #020508;
+}
+
+:root[data-theme="dark"] .pf-floating-filter-button[aria-pressed="true"] [data-pf-filter-count] {
+  color: rgba(2, 5, 8, 0.5);
 }
 
 .pf-floating-filter-button:focus-visible {
@@ -4184,7 +4192,7 @@ body {
 
 @media (max-width: 850px) {
   .hero-section {
-    padding: 100px 14px 24px;
+    padding: 104px 14px 24px;
     gap: 24px;
   }
 

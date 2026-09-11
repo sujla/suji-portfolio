@@ -1167,7 +1167,9 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
               data-project-type-filter="${value}"
               aria-controls="pf-work-grid"
               aria-pressed="false"
-            >${isFlyerFilter ? `<span class="flyer-tab-label">${label}</span>` : label}</button>
+            >${isFlyerFilter
+              ? `<span class="flyer-tab-label">${value === "enterprise" ? "Enterprise<br>/SaaS" : value === "e-commerce" ? "E-Commerce" : label}</span>`
+              : label}</button>
           `,
         )
         .join("")}

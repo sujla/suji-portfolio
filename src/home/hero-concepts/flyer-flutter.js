@@ -90,6 +90,7 @@ export function mountFlyerFlutter(group) {
   let disposed = false;
   let pointerX = 0;
   let active = -1;
+  let previewed = -1;
   let gesture = null;
   let suppressedClick = null;
   let dragCanvas = false;
@@ -103,7 +104,28 @@ export function mountFlyerFlutter(group) {
     texture.colorSpace = THREE.SRGBColorSpace;
     const geometry = new THREE.PlaneGeometry(1, 160, columns, rows);
     const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, vertexColors: true, transparent: true, depthTest: false, depthWrite: false });
+    // Draw rows from the pinned edge to the curled tip in one pass. The default
+    // back-then-front passes would paint the front over the overlapping white tip.
+    material.forceSinglePass = true;
+    // The reverse of the paper is unprinted; retain the texture's cutout alpha.
+    material.onBeforeCompile = (shader) => {
+      shader.vertexShader = 'attribute float paperReverse;\nvarying float vPaperReverse;\nvarying float vPaperTipDistance;\n' + shader.vertexShader.replace(
+        '#include <begin_vertex>',
+        '#include <begin_vertex>\nvPaperReverse = paperReverse;\nvPaperTipDistance = uv.y;',
+      );
+      shader.fragmentShader = 'varying float vPaperReverse;\nvarying float vPaperTipDistance;\n' + shader.fragmentShader.replace(
+        '#include <color_fragment>',
+        `#include <color_fragment>
+        if (!gl_FrontFacing || vPaperReverse > 0.5) {
+          // The raised tip is the top of the visible reverse; the fold is below it.
+          float foldShade = pow(clamp(vPaperTipDistance / 0.14, 0.0, 1.0), 0.55);
+          diffuseColor.rgb = mix(vec3(1.0), vec3(0.38), foldShade);
+        }`,
+      );
+    };
+    material.customProgramCacheKey = () => 'flyer-gradient-curled-tip';
     geometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array((columns + 1) * (rows + 1) * 3).fill(1), 3));
+    geometry.setAttribute('paperReverse', new THREE.BufferAttribute(new Float32Array((columns + 1) * (rows + 1)), 1));
     const mesh = new THREE.Mesh(geometry, material);
     mesh.frustumCulled = false;
     mesh.renderOrder = 1;
@@ -111,10 +133,9 @@ export function mountFlyerFlutter(group) {
     // Layer faint, offset silhouettes to soften the shadow around the torn outline.
     const shadowMaterial = new THREE.MeshBasicMaterial({ color: '#392b34', transparent: true,
       opacity: 0, side: THREE.DoubleSide, depthWrite: false, depthTest: false });
-    const shadows = Array.from({ length: 9 }, (_, i) => {
+    const shadows = Array.from({ length: 25 }, () => {
       const shadow = new THREE.Mesh(geometry, shadowMaterial);
-      const angle = i / 8 * Math.PI * 2;
-      shadow.position.set(2 + (i ? Math.cos(angle) * 3 : 0), -4 + (i ? Math.sin(angle) * 3 : 0), -40);
+      shadow.position.set(2, -4, -40);
       shadow.frustumCulled = false;
       scene.add(shadow);
       return shadow;
@@ -179,19 +200,21 @@ export function mountFlyerFlutter(group) {
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#171717';
     const lines = [];
-    let line = '';
-    for (const part of label.textContent.split(/(?<=[/\-\s])/)) {
-      if (line && ctx.measureText(line + part).width > tab.width - 12) {
-        lines.push(line.trim()); line = '';
-      }
-      for (const char of part) {
-        if (line && ctx.measureText(line + char).width > tab.width - 12) {
+    for (const hardLine of label.innerText.split('\n')) {
+      let line = '';
+      for (const part of hardLine.split(/(?<=[/\-\s])/)) {
+        if (line && ctx.measureText(line + part).width > tab.width - 12) {
           lines.push(line.trim()); line = '';
         }
-        line += char;
+        for (const char of part) {
+          if (line && ctx.measureText(line + char).width > tab.width - 12) {
+            lines.push(line.trim()); line = '';
+          }
+          line += char;
+        }
       }
+      if (line) lines.push(line.trim());
     }
-    if (line) lines.push(line.trim());
     const lineHeight = parseFloat(style.lineHeight);
     ctx.globalCompositeOperation = 'color-burn';
     lines.forEach((text, i) => ctx.fillText(text, tab.width / 2, 88 + (i - (lines.length - 1) / 2) * lineHeight));
@@ -231,9 +254,9 @@ export function mountFlyerFlutter(group) {
 
   function sizeCanvas(expanded) {
     dragCanvas = expanded;
-    const side = expanded ? Math.ceil(Math.max(256, ...tabs.map(tab => Math.abs(tab.dragX) + 48)) / 128) * 128 : 24;
-    const top = expanded ? Math.ceil(Math.max(256, ...tabs.map(tab => -tab.dragY + 48)) / 128) * 128 : 0;
-    const bottom = expanded ? Math.ceil(Math.max(416, ...tabs.map(tab => tab.dragY + 208)) / 128) * 128 : 208;
+    const side = expanded ? Math.ceil(Math.max(256, ...tabs.map(tab => Math.abs(tab.dragX) + 56)) / 128) * 128 : 56;
+    const top = expanded ? Math.ceil(Math.max(256, ...tabs.map(tab => -tab.dragY + 48)) / 128) * 128 : 40;
+    const bottom = expanded ? Math.ceil(Math.max(416, ...tabs.map(tab => tab.dragY + 240)) / 128) * 128 : 240;
     const bounds = `${width}:${side}:${top}:${bottom}`;
     if (bounds === canvasBounds) return;
     canvasBounds = bounds;
@@ -293,13 +316,17 @@ export function mountFlyerFlutter(group) {
   function deform(tab, time, tearProgress = 0) {
     const positions = tab.geometry.attributes.position;
     const colors = tab.geometry.attributes.color;
+    const paperReverse = tab.geometry.attributes.paperReverse;
     const step = 160 / rows;
+    const tipLift = THREE.MathUtils.clamp((tab.bend - .025) / .925, 0, 1) * (1 - tearProgress);
     let y = 0;
     let z = 0;
     for (let row = 0; row <= rows; row++) {
       const t = row / rows;
       // Integrating a curved spine keeps the paper length constant and its top pinned.
-      const angle = tab.bend * (t * 1.35 + Math.sin(t * Math.PI * 2 - time * 7 + tab.left * .025) * t * .12);
+      // Curl only the final fifth past 90 degrees, revealing a narrow white reverse.
+      const tipCurl = THREE.MathUtils.smoothstep(t, .8, 1) * .95 * tipLift;
+      const angle = tab.bend * (t * 1.35 + Math.sin(t * Math.PI * 2 - time * 7 + tab.left * .025) * t * .12) + tipCurl;
       if (row) { y += Math.cos(angle) * step; z += Math.sin(angle) * step; }
       for (let col = 0; col <= columns; col++) {
         const across = col / columns - .5;
@@ -329,13 +356,19 @@ export function mountFlyerFlutter(group) {
           py = px * Math.sin(angle) + pivotY * Math.cos(angle) - 94;
           px = rotatedX + tab.tearShift * settled;
         }
-        positions.setXYZ(idx, tab.left + tab.width / 2 + px + tab.dragX, py - tab.dragY, pz);
+        // Add perspective to the orthographic scene so a lifted tip approaches the viewer.
+        // Keep the perforation pinned and fade this cue out as the tab is torn off.
+        const perspective = 1 + Math.max(0, pz) / 600 * (1 - tearProgress);
+        positions.setXYZ(idx, tab.left + tab.width / 2 + px * perspective + tab.dragX, py * perspective - tab.dragY, pz);
         const shade = 1 - Math.min(.10, Math.abs(angle) * .06) + across * twist * .04;
         colors.setXYZ(idx, shade, shade, shade);
+        // Explicitly mark the folded tip: screen-space winding alone can miss the curl.
+        paperReverse.setX(idx, tipCurl > 0 ? THREE.MathUtils.smoothstep(angle, 1.4, 1.6) : 0);
       }
     }
     positions.needsUpdate = true;
     colors.needsUpdate = true;
+    paperReverse.needsUpdate = true;
   }
 
   function updateHeaderEdge() {
@@ -422,11 +455,19 @@ export function mountFlyerFlutter(group) {
       const lifted = tab.separation > .002;
       // Composite each lifted sheet AFTER its shadow, above the resting neighbors.
       // Previously every shadow was behind every sheet, hiding the overlap cue.
-      const layer = beingMoved ? 30 : lifted ? 10 + index * 2 : 0;
-      tab.shadows.forEach(shadow => { shadow.renderOrder = layer; });
+      const hoverLift = THREE.MathUtils.clamp((tab.bend - .025) / .925, 0, 1) * (1 - tab.separation);
+      const layer = beingMoved ? 30 : lifted ? 10 + index * 2 : hoverLift > .01 ? 2 : 0;
+      tab.shadows.forEach((shadow, i) => {
+        // Distribute soft shadow samples over a disk that grows as the paper lifts.
+        const angle = i * 2.399963229728653;
+        const radius = Math.sqrt(i / (tab.shadows.length - 1)) * (3 + 29 * hoverLift);
+        shadow.position.set(2 + 8 * hoverLift + Math.cos(angle) * radius,
+          -4 - 16 * hoverLift + Math.sin(angle) * radius, -40);
+        shadow.renderOrder = layer;
+      });
       tab.mesh.renderOrder = layer + 1;
       tab.button.style.zIndex = String(layer + 1);
-      tab.shadowMaterial.opacity = .024 * tab.separation;
+      tab.shadowMaterial.opacity = (.024 * tab.separation + .022 * hoverLift) * 9 / tab.shadows.length;
       paintTornEdge(tab);
       deform(tab, now / 1000, tab.separation);
       if (tab.tear) {
@@ -465,13 +506,24 @@ export function mountFlyerFlutter(group) {
     if (event.pointerType === 'touch' || group.classList.contains('is-tear-locked')) return;
     const index = buttons.indexOf(event.target.closest('.flyer-tab'));
     active = index;
+    if (previewed !== index) {
+      previewed = index;
+      group.closest('.tear-flyer')?.dispatchEvent(new CustomEvent('flyer-filter-preview', {
+        detail: { type: index === -1 ? '' : buttons[index].dataset.projectTypeFilter },
+      }));
+    }
     if (index !== -1) {
       const rect = buttons[index].getBoundingClientRect();
       pointerX = (event.clientX - rect.left) / rect.width - .5;
     }
     wake();
   }
-  function leave() { active = -1; wake(); }
+  function leave() {
+    active = -1;
+    previewed = -1;
+    group.closest('.tear-flyer')?.dispatchEvent(new CustomEvent('flyer-filter-preview', { detail: { type: '' } }));
+    wake();
+  }
   function press(event) {
     if (event.button !== 0 || !event.isPrimary || gesture) return;
     suppressedClick = null;
