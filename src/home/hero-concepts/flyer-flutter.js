@@ -208,7 +208,9 @@ export function mountFlyerFlutter(group) {
       ctx.save();
       ctx.translate(tab.width / 2, 84);
       ctx.rotate(Math.PI / 2);
-      ctx.fillText(label.textContent.trim(), 0, 0);
+      const lines = label.innerText.split('\n').map(line => line.trim()).filter(Boolean);
+      const lineHeight = parseFloat(style.lineHeight);
+      lines.forEach((text, i) => ctx.fillText(text, 0, (i - (lines.length - 1) / 2) * lineHeight));
       ctx.restore();
     } else {
       const lines = [];

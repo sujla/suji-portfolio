@@ -237,13 +237,15 @@
 .flyer-tab-label {
   min-width: 0;
   max-width: 100%;
-  white-space: normal;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  white-space: nowrap;
   overflow-wrap: anywhere;
   text-align: center;
   line-height: 1.15;
 }
 
-.flyer-tab-label { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; letter-spacing: normal; }
+.flyer-tab-label { font-family: "Google Sans Code", monospace; font-size: 16px; font-weight: 400; letter-spacing: normal; }
 .flyer-tab.is-torn {
   transform: translate(var(--tear-shift), 14px) rotate(var(--tear-angle));
   transform-origin: center;
@@ -328,8 +330,6 @@
   .flyer-body { justify-content: flex-end; }
   .flyer-caption { grid-template-columns: auto minmax(80px, 1fr) minmax(0, 76px); }
   .flyer-caption-label:last-child { white-space: normal; line-height: 1.15; }
-  .flyer-tab-label { writing-mode: vertical-rl; text-orientation: mixed; white-space: nowrap; }
-  .flyer-tab-label br { display: none; }
   .flyer-copy { --headline-size: clamp(30px, 10vw, 58px); }
 }
 

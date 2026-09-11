@@ -2434,7 +2434,7 @@ html.is-pf-modal-open body {
 
 #about-title {
   text-transform: capitalize;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Fjord One", Georgia, serif;
   margin-top: 0;
   margin-bottom: 40px;
   line-height: 1.2;
@@ -3729,7 +3729,7 @@ body {
 
 .index-page .display-title,
 .index-page .experience-subsection-title {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Fjord One", Georgia, serif;
 }
 
 .index-page .pf-featured-intro > span,
@@ -4379,13 +4379,14 @@ body {
 }
 
 .index-page .experience-section .display-title {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Fjord One", Georgia, serif;
   font-size: clamp(48px, 6.5vw, 56px);
 }
 
 .pf-featured-intro h2 {
-  margin: 24px 0;
-  font-size: clamp(48px, 6.5vw, 100px);
+  margin: 24px 0 18px;
+  font-family: "Fjord One", Georgia, serif;
+  font-size: clamp(48px, 6.5vw, 92px);
   font-weight: 400;
   line-height: .95;
   letter-spacing: -0.03em;
@@ -4548,7 +4549,7 @@ body {
 }
 
 .pf-work-group--secondary .pf-group-heading h2 {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Fjord One", Georgia, serif;
   font-size: 32px;
   letter-spacing: normal;
 }
