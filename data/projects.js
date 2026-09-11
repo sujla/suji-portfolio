@@ -30,7 +30,7 @@ export const projects = [
     contribution: [
       "Led the end-to-end redesign of Olive Young’s store finder experience",
       "Integrated store info, inventory, and pickup flows into a map-based finder built around real shopping behavior",
-      "Increased available-store list views by 32.9%, with pickup conversion reaching up to 11%",
+      "Increased availability page views by 32.9% and established an event logging foundation for future improvements",
     ],
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
