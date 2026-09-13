@@ -3450,6 +3450,10 @@ body.is-project-transitioning .is-transition-source .project-card {
     --pf-modal-footer-space: 0px;
   }
 
+  .pf-modal-scroll-indicator {
+    right: -10px;
+  }
+
   .pf-work-modal--has-description {
     --pf-modal-footer-height: 260px;
   }
@@ -4686,11 +4690,11 @@ body {
     margin-bottom: 24px;
   }
   .pf-featured-cell {
-    --featured-card-margin-inline: 20px;
-    width: 98vw;
+    --featured-card-margin-inline: clamp(20px, 4vw, 36px);
+    width: 100%;
   }
   .pf-work-collection .pf-featured-grid .pf-work--featured {
-    gap: 20px;
+    gap: 16px;
     margin-block: 28px;
   }
   .pf-featured-intro {
@@ -4738,6 +4742,16 @@ body {
   }
   .pf-work-collection .pf-secondary-grid .pf-work {
     width: 100%;
+  }
+  .pf-secondary-grid .pf-work-card {
+    filter: none;
+  }
+  .pf-work-grid .pf-secondary-grid .pf-work-meta h2 {
+    font-size: 18px;
+    line-height: 1.12;
+  }
+  .pf-work-grid .pf-secondary-grid .pf-work-meta span {
+    font-size: 12px;
   }
 }
 

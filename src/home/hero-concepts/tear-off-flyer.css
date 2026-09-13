@@ -163,7 +163,7 @@
 }
 
 .flyer-copy {
-  --headline-size: clamp(40px, 6.8vw, 82px);
+  --headline-size: clamp(45px, 6.8vw, 82px);
   display: grid;
   grid-template-columns: 3.05em minmax(0, 1fr);
   grid-template-rows: .9em .9em minmax(.9em, max-content) auto auto;
@@ -218,7 +218,8 @@
   font: inherit;
   cursor: grab;
   appearance: none;
-  touch-action: none;
+  /* Upward finger motion scrolls down the page; downward pulls stay with the tab. */
+  touch-action: pan-down;
   user-select: none;
   transform-origin: center top;
   transition: transform 220ms ease, background-color 220ms ease, box-shadow 220ms ease;
@@ -247,6 +248,7 @@
 
 .flyer-tab-label { font-family: "Google Sans Code", monospace; font-size: 16px; font-weight: 400; letter-spacing: normal; }
 .flyer-tab.is-torn {
+  touch-action: none;
   transform: translate(var(--tear-shift), 14px) rotate(var(--tear-angle));
   transform-origin: center;
   box-shadow: 2px 4px 7px #392b341a;
@@ -330,7 +332,7 @@
   .flyer-body { justify-content: flex-end; }
   .flyer-caption { grid-template-columns: auto minmax(80px, 1fr) minmax(0, 76px); }
   .flyer-caption-label:last-child { white-space: normal; line-height: 1.15; }
-  .flyer-copy { --headline-size: clamp(30px, 10vw, 58px); }
+  .flyer-copy { --headline-size: clamp(45px, 10vw, 58px); }
 }
 
 .flyer-tabs.is-tear-locked .flyer-tab { cursor: grabbing; }

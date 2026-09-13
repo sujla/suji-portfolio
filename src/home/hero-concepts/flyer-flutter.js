@@ -581,7 +581,7 @@ export function mountFlyerFlutter(group) {
       tab.velocity += 3;
       const transform = new DOMMatrixReadOnly(getComputedStyle(group.closest('.flyer-stack')).transform);
       gesture = { tab, pointerId: event.pointerId, x: event.clientX, y: event.clientY,
-        startX: tab.dragX, startY: tab.dragY,
+        startX: tab.dragX, startY: tab.dragY, pointerType: event.pointerType, rejected: false,
         kind: tab.button.classList.contains('is-torn') ? 'reattach' : 'tear',
         inverse: transform.inverse(), dragging: false, locked: [] };
 
@@ -589,9 +589,18 @@ export function mountFlyerFlutter(group) {
     }
   }
   function dragMove(event) {
-    if (!gesture || event.pointerId !== gesture.pointerId) return;
-    const distance = Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y);
-    if (!gesture.dragging && distance < 6) return;
+    if (!gesture || event.pointerId !== gesture.pointerId || gesture.rejected) return;
+    const dx = event.clientX - gesture.x;
+    const dy = event.clientY - gesture.y;
+    const distance = Math.hypot(dx, dy);
+    const threshold = gesture.pointerType === 'touch' ? 12 : 6;
+    if (!gesture.dragging && distance < threshold) return;
+    if (!gesture.dragging && gesture.kind === 'tear' && (dy < threshold || dy < Math.abs(dx) * 1.25)) {
+      // Once a gesture starts upward or sideways, it cannot turn into a tear.
+      gesture.rejected = true;
+      suppressedClick = gesture.tab.button;
+      return;
+    }
     const { tab } = gesture;
     if (!gesture.dragging) {
       gesture.dragging = true;
@@ -616,8 +625,8 @@ export function mountFlyerFlutter(group) {
       sizeCanvas(true);
       tab.dragVX = tab.dragVY = 0;
     } else {
-      // During an initial tear, reversing the pointer does not reattach the paper.
-      tab.separation = Math.max(tab.separation, Math.min(1, (distance - 6) / 110));
+      // Pull progress follows downward travel; returning toward the slot cancels it.
+      tab.separation = Math.max(0, Math.min(1, (dy - threshold) / 110));
       tab.separationVelocity = 0;
     }
     event.preventDefault();
@@ -627,7 +636,13 @@ export function mountFlyerFlutter(group) {
     if (!gesture || event.pointerId !== gesture.pointerId) return;
     const current = gesture;
     gesture = null;
-    if (!current.dragging) return; // A press and release stays a normal click.
+    const threshold = current.pointerType === 'touch' ? 12 : 6;
+    const movedOnRelease = Math.hypot(event.clientX - current.x, event.clientY - current.y) >= threshold;
+    // Allow a deliberate tap, including slight finger jitter, but never a swipe's click.
+    if (current.rejected || current.dragging || movedOnRelease || event.type === 'pointercancel') {
+      suppressedClick = current.tab.button;
+    }
+    if (!current.dragging) return;
     const { tab } = current;
     if (tab.button.hasPointerCapture(current.pointerId)) tab.button.releasePointerCapture(current.pointerId);
     current.locked.forEach(([button, wasDisabled]) => { button.disabled = wasDisabled; });
@@ -649,7 +664,8 @@ export function mountFlyerFlutter(group) {
       wake();
       return;
     }
-    if (event.type === 'pointercancel') {
+    if (event.type === 'pointercancel' || event.clientY - current.y < 48 ||
+        event.clientY - current.y < Math.abs(event.clientX - current.x) * 1.25) {
       tab.tear.resolve(false);
       tab.tear = null;
       tab.button.classList.remove('is-tearing');
