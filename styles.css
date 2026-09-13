@@ -1545,14 +1545,16 @@ html.is-pf-modal-open body {
 
 .mobile-nav-toggle-icon {
   display: grid;
-  width: 16px;
-  gap: 4px;
+  grid-template-rows: repeat(3, 1.5px);
+  width: 13px;
+  height: 10.5px;
+  gap: 3px;
 }
 
 .mobile-nav-toggle-icon span {
   display: block;
   width: 100%;
-  height: 2px;
+  height: 1.5px;
   border-radius: 999px;
   background: currentColor;
   transform-origin: center;
@@ -1560,7 +1562,7 @@ html.is-pf-modal-open body {
 }
 
 .mobile-nav-toggle[aria-expanded="true"] .mobile-nav-toggle-icon span:first-child {
-  transform: translateY(6px) rotate(45deg);
+  transform: translateY(4.5px) rotate(45deg);
 }
 
 .mobile-nav-toggle[aria-expanded="true"] .mobile-nav-toggle-icon span:nth-child(2) {
@@ -1568,7 +1570,7 @@ html.is-pf-modal-open body {
 }
 
 .mobile-nav-toggle[aria-expanded="true"] .mobile-nav-toggle-icon span:last-child {
-  transform: translateY(-6px) rotate(-45deg);
+  transform: translateY(-4.5px) rotate(-45deg);
 }
 
 .mobile-nav-panel {
@@ -1627,7 +1629,7 @@ html.is-pf-modal-open body {
   padding: 4px;
   border: 0;
   border-radius: 999px;
-  background: var(--toggle-bg);
+  background: transparent;
   color: var(--text);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
@@ -4243,7 +4245,7 @@ body {
   }
 
   .index-page .theme-toggle {
-    right: 60px;
+    right: 58px;
   }
 
   .mobile-nav {
