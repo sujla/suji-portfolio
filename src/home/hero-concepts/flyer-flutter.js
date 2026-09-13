@@ -66,6 +66,7 @@ export function mountFlyerFlutter(group) {
   const header = group.closest('.tear-flyer')?.querySelector('.flyer-body');
   const headerEdge = group.closest('.flyer-stage')?.querySelector('[data-flyer-tear-edge]');
   let headerHeight = header?.offsetHeight || 410;
+  let tabHeight = buttons[0]?.offsetHeight || 160;
   let previousHeaderPath = '';
   let headerOuterStart = '';
   let headerOuterEnd = '';
@@ -105,7 +106,7 @@ export function mountFlyerFlutter(group) {
     const canvas = document.createElement('canvas');
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
-    const geometry = new THREE.PlaneGeometry(1, 160, columns, rows);
+    const geometry = new THREE.PlaneGeometry(1, tabHeight, columns, rows);
     const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, vertexColors: true, transparent: true, depthTest: false, depthWrite: false });
     // Draw rows from the pinned edge to the curled tip in one pass. The default
     // back-then-front passes would paint the front over the overlapping white tip.
@@ -153,27 +154,27 @@ export function mountFlyerFlutter(group) {
     const scale = 2;
     const { canvas, button } = tab;
     canvas.width = Math.max(1, Math.round(tab.width * scale));
-    canvas.height = 160 * scale;
+    canvas.height = tabHeight * scale;
     const ctx = canvas.getContext('2d');
     ctx.scale(scale, scale);
     const paperStyle = getComputedStyle(group);
     // Sample the same full-sheet gradient used by the body, before adding texture.
-    const gradient = ctx.createLinearGradient(0, -headerHeight, 0, 160);
+    const gradient = ctx.createLinearGradient(0, -headerHeight, 0, tabHeight);
     gradient.addColorStop(0, paperStyle.getPropertyValue('--flyer-gradient-start').trim());
     gradient.addColorStop(.7, paperStyle.getPropertyValue('--flyer-paper-color').trim());
     gradient.addColorStop(1, paperStyle.getPropertyValue('--flyer-gradient-end').trim());
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, tab.width, 160);
+    ctx.fillRect(0, 0, tab.width, tabHeight);
     if (paperImage.complete && paperImage.naturalWidth && width) {
-      const sheetHeight = headerHeight + 160;
+      const sheetHeight = headerHeight + tabHeight;
       ctx.globalCompositeOperation = 'multiply';
       ctx.globalAlpha = .65;
       ctx.drawImage(paperImage,
         tab.left / width * paperImage.naturalWidth,
         headerHeight / sheetHeight * paperImage.naturalHeight,
         tab.width / width * paperImage.naturalWidth,
-        160 / sheetHeight * paperImage.naturalHeight,
-        0, 0, tab.width, 160);
+        tabHeight / sheetHeight * paperImage.naturalHeight,
+        0, 0, tab.width, tabHeight);
       ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'source-over';
     }
@@ -203,10 +204,13 @@ export function mountFlyerFlutter(group) {
     ctx.textBaseline = 'middle';
     ctx.fillStyle = '#171717';
     const isVertical = style.writingMode.startsWith('vertical');
+    const labelCenterY = window.matchMedia('(max-width: 600px)').matches
+      ? 80
+      : (isVertical ? 84 : 88);
     ctx.globalCompositeOperation = 'color-burn';
     if (isVertical) {
       ctx.save();
-      ctx.translate(tab.width / 2, 84);
+      ctx.translate(tab.width / 2, labelCenterY);
       ctx.rotate(Math.PI / 2);
       const lines = label.innerText.split('\n').map(line => line.trim()).filter(Boolean);
       const lineHeight = parseFloat(style.lineHeight);
@@ -230,7 +234,7 @@ export function mountFlyerFlutter(group) {
         if (line) lines.push(line.trim());
       }
       const lineHeight = parseFloat(style.lineHeight);
-      lines.forEach((text, i) => ctx.fillText(text, tab.width / 2, 88 + (i - (lines.length - 1) / 2) * lineHeight));
+      lines.forEach((text, i) => ctx.fillText(text, tab.width / 2, labelCenterY + (i - (lines.length - 1) / 2) * lineHeight));
     }
     ctx.globalCompositeOperation = 'source-over';
     tab.baseCanvas.width = canvas.width;
@@ -289,7 +293,8 @@ export function mountFlyerFlutter(group) {
     if (!layoutWidth) return;
     width = layoutWidth;
     headerHeight = header?.offsetHeight || 410;
-    group.closest('.tear-flyer')?.style.setProperty('--flyer-paper-height', `${headerHeight + 160}px`);
+    tabHeight = buttons[0]?.offsetHeight || 160;
+    group.closest('.tear-flyer')?.style.setProperty('--flyer-paper-height', `${headerHeight + tabHeight}px`);
     group.style.setProperty('--flyer-paper-width', `${width}px`);
     headerFibers.width = Math.round(width * 2);
     headerFibers.height = 32;
@@ -317,9 +322,9 @@ export function mountFlyerFlutter(group) {
       tab.width = tab.button.offsetWidth;
       tab.button.style.setProperty('--flyer-paper-left', `${-tab.left}px`);
       tab.edgeLeft = Float32Array.from({ length: rows + 1 }, (_, row) =>
-        paperEdgeAt(headerHeight + row / rows * 160, tab.index === 0 ? 100 : 500 + tab.index) * (tab.index === 0 ? 1 : .25));
+        paperEdgeAt(headerHeight + row / rows * tabHeight, tab.index === 0 ? 100 : 500 + tab.index) * (tab.index === 0 ? 1 : .25));
       tab.edgeRight = Float32Array.from({ length: rows + 1 }, (_, row) =>
-        paperEdgeAt(headerHeight + row / rows * 160, tab.index === tabs.length - 1 ? 200 : 501 + tab.index) * (tab.index === tabs.length - 1 ? 1 : .25));
+        paperEdgeAt(headerHeight + row / rows * tabHeight, tab.index === tabs.length - 1 ? 200 : 501 + tab.index) * (tab.index === tabs.length - 1 ? 1 : .25));
       tab.edgeBottom = Float32Array.from({ length: columns + 1 }, (_, col) =>
         paperEdgeAt(tab.left + col / columns * tab.width, 300));
       paint(tab);
@@ -331,7 +336,7 @@ export function mountFlyerFlutter(group) {
     const positions = tab.geometry.attributes.position;
     const colors = tab.geometry.attributes.color;
     const paperReverse = tab.geometry.attributes.paperReverse;
-    const step = 160 / rows;
+    const step = tabHeight / rows;
     const tipLift = THREE.MathUtils.clamp((tab.bend - .025) / .925, 0, 1) * (1 - tearProgress);
     const steadyCompactHover = sequentialPreviewMedia.matches && tearProgress === 0;
     let y = 0;
