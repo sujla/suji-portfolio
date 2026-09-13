@@ -42,8 +42,8 @@
       href="https://fonts.googleapis.com/css2?family=Fjord+One&family=Google+Sans+Code:wght@400;500&family=Host+Grotesk:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../../styles.css?v=exploration-rotation-progress" />
-    <link rel="stylesheet" href="../../detail-styles.css?v=goals-particles-v3" />
+    <link rel="stylesheet" href="../../styles.css?v=finder-evidence-journey" />
+    <link rel="stylesheet" href="../../detail-styles.css?v=finder-evidence-journey" />
   </head>
   <body class="detail-page" data-project-slug="store-finder-renewal">
     <nav class="detail-gnb" aria-label="Project navigation"></nav>
@@ -52,8 +52,10 @@
       <aside class="detail-toc" aria-label="Project sections">
         <ul>
           <li><a href="#project-overview" aria-current="true"><span class="detail-toc-label">Overview</span></a></li>
-          <li><a href="#problem"><span class="detail-toc-label">Problem</span></a></li>
-          <li><a href="#why-it-mattered"><span class="detail-toc-label">Why It Mattered</span></a></li>
+          <li><a href="#context"><span class="detail-toc-label">Context</span></a></li>
+          <li><a href="#problem"><span class="detail-toc-label">Technical Problem</span></a></li>
+          <li><a href="#evidence"><span class="detail-toc-label">Operational Problem</span></a></li>
+          <li><a href="#customer-journey"><span class="detail-toc-label">Customer Journey</span></a></li>
           <li><a href="#users"><span class="detail-toc-label">Key User Groups</span></a></li>
           <li><a href="#goals"><span class="detail-toc-label">Goals</span></a></li>
           <li><a href="#success-metrics"><span class="detail-toc-label">Success Metrics</span></a></li>
@@ -69,7 +71,7 @@
           <section class="detail-title-section">
             <div class="detail-title-inner">
               <header class="detail-header">
-                <h1 class="display-title">Store Finder Renewal<br />for Business Impact</h1>
+                <h1 class="display-title">Store Finder Renewal <br class="desktop-break" />for Business Impact</h1>
                 <div class="detail-keywords" aria-label="Keywords">
                   <span class="detail-keyword">E-commerce</span>
                   <span class="detail-keyword-dot" aria-hidden="true">•</span>
@@ -120,11 +122,20 @@
               </section>
             </section>
           </div>
-          <div class="detail-content" aria-label="Problem" id="problem">
+          <div class="detail-content" aria-label="Context" id="context">
             <div class="title-gap">
-              <p class="label">Problem</p>
+              <p class="label">Context</p>
               <div class="detail-body-props">
-                <h2>The old store finder was outdated, fragmented, and unclear.</h2>
+                <h2>Olive Young wanted to better connect <br class="desktop-break" />online and offline shopping.</h2>
+                <p>But the existing store finder mainly provided static store information. Real-time stock checks and individual store pages were difficult to reach, and store finder was not connected to pickup ordering. The opportunity was to turn store information into a path customers could act on.</p>
+              </div>
+            </div>
+          </div>
+          <div class="detail-content" aria-label="Technical Problem" id="problem">
+            <div class="title-gap">
+              <p class="label">Technical Problem</p>
+              <div class="detail-body-props">
+                <h2>The old store finder made stock <br class="desktop-break" />availability hard to confirm.</h2>
               </div>
             </div>
             <div class="problem-findings">
@@ -146,8 +157,8 @@
                   <figcaption class="problem-finding-label">Store Info</figcaption>
                 </figure>
                 <div class="problem-finding-copy">
-                  <p class="label-strong">Outdated</p>
-                  <p>The store finder had not evolved for years, leaving its UI, usability, and design system alignment behind the rest of the app.</p>
+                  <p class="label-strong">Static information</p>
+                  <p>Basic store details offered a starting point, but individual store pages and real-time inventory checks were difficult to reach.</p>
                 </div>
               </article>
               <article class="problem-finding problem-finding--fragmented">
@@ -169,7 +180,7 @@
                 </figure>
                 <div class="problem-finding-copy">
                   <p class="label-strong">Fragmented</p>
-                  <p>Store information was scattered across screens, with no clear connection between discovery, inventory, and pickup.</p>
+                  <p>Store discovery and inventory checks were separated, and store finder offered no connected path to a pickup order.</p>
                 </div>
               </article>
               <article class="problem-finding problem-finding--unclear">
@@ -189,11 +200,31 @@
               </article>
             </div>
           </div>
-          <div class="detail-content" aria-label="Why It Mattered" id="why-it-mattered">
+          <div class="detail-content" aria-label="Operational Problem" id="evidence">
             <div class="title-gap">
-              <p class="label">Why It Mattered</p>
+              <p class="label">Operational Problem</p>
               <div class="detail-body-props">
-                <h2>The old store finder turned<br />uncertainty into operational friction.</h2>
+                <h2>Customers called stores, adding repeated operational workload.</h2>
+                <p>In interviews with store staff, these simple inquiries were described as a recurring interruption to store operations and helping customers in person.</p>
+              </div>
+            </div>
+            <div class="finder-evidence-grid">
+              <article class="finder-evidence-card">
+                <h3>Dozens of stock calls a day, <br class="desktop-break" />by their estimate</h3>
+                <p>Staff felt they could work much more efficiently without repeated inventory inquiries.</p>
+              </article>
+              <article class="finder-evidence-card">
+                <h3>Repeated requests to hide <br class="desktop-break" />the store phone number</h3>
+                <p>Staff felt customers were calling because the phone number was so prominently displayed.</p>
+              </article>
+            </div>
+          </div>
+          <div class="detail-content" aria-label="Customer Journey" id="customer-journey">
+            <div class="title-gap">
+              <p class="label">Customer Journey</p>
+              <div class="detail-body-props">
+                <h2>How unclear stock information became operational burden.</h2>
+                <p>Imagine a customer who wants to buy a beauty product at a nearby store today. This hypothetical journey illustrates the gaps in the old experience; it is not an observed customer session.</p>
               </div>
             </div>
             <div class="why-mattered-frame">
@@ -231,12 +262,14 @@
                 </div>
               </div>
             </div>
+            <p class="finder-journey-takeaway">Design implication: bring store discovery, stock visibility, and pickup into one connected flow, so customers can take the next step themselves.</p>
           </div>
           <div class="detail-content" aria-label="Users" id="users">
             <div class="title-gap">
               <p class="label">Key user groups</p>
               <div class="detail-body-props">
-                <h2>Who needed clear<br />store availability most</h2>
+                <h2>Who needed clear <br class="desktop-break" />store availability most</h2>
+                <p>These groups frame the two sides of the problem: customers needing stock information and staff handling their inquiries. The existing page-view metric alone did not establish a demographic usage pattern, but interviews with 10 staff members from representative Olive Young stores informed this focus: they reported frequent cosmetics stock inquiries from women in their 20s and 30s.</p>
               </div>
             </div>
             <div class="user-profile-content">
@@ -251,7 +284,7 @@
                   </div>
                   <figcaption class="affected-user-card-copy">
                     <div class="affected-user-profile-heading">
-                      <h3>Female customers, 20s–30s</h3>
+                      <h3>Customers checking nearby stock</h3>
                     </div>
                     <div class="affected-user-card-lists">
                       <ul class="affected-user-profile-detail">
@@ -272,11 +305,11 @@
                   </div>
                   <figcaption class="affected-user-card-copy">
                     <div class="affected-user-profile-heading">
-                      <h3>Store staff in busy, understaffed locations</h3>
+                      <h3>Store staff handling stock inquiries</h3>
                     </div>
                     <div class="affected-user-card-lists">
                       <ul class="affected-user-profile-detail">
-                        <li>Already check and update inventory daily</li>
+                        <li>Balance store operations and service</li>
                         <li>Still handle repeated stock calls</li>
                         <li>Need to focus on in-store customers</li>
                       </ul>
@@ -284,14 +317,13 @@
                   </figcaption>
                 </figure>
               </div>
-              <p class="users-section-intro">* Data and store feedback showed strong usage patterns among local Korean customers, especially women in their 20s and 30s searching for cosmetics availability.</p>
             </div>
           </div>
           <div class="detail-content" aria-label="Goals" id="goals">
             <div class="title-gap">
               <p class="label">Goals</p>
               <div class="detail-body-props">
-                <h2>Turning store finder into<br />business value</h2>
+                <h2>Turning store finder into <br class="desktop-break" />business value</h2>
               </div>
             </div>
             <div class="goals-cards" aria-label="Business goals">
@@ -377,7 +409,7 @@
                 <div class="title-gap">
                   <p class="label">Design Explorations</p>
                   <div class="detail-body-props">
-                    <h2>From design options<br />to product decisions</h2>
+                    <h2>From design options <br class="desktop-break" />to product decisions</h2>
                     <p>I explored multiple UX directions based on the user, service, and business goals, then validated the options through user testing. The selected direction best supported location-based discovery, clearer stock visibility, and pickup decisions in one coherent flow.</p>
                   </div>
                 </div>
@@ -546,8 +578,8 @@
             <div class="title-gap">
               <p class="label">Early Impact</p>
               <div class="detail-body-props">
-                <h2>Establishing a foundation for measurement</h2>
-                <p>Previously, only page views were tracked. The renewal laid the foundation for measuring user flows and conversions.</p>
+                <h2>Establishing a foundation <br class="desktop-break" />for measurement</h2>
+                <p>Previously, only Available Stores page views were tracked. The renewal established a tracking foundation for future evaluation of user flows and conversions.</p>
               </div>
             </div>
             <div class="impact-points impact-points--early opportunity-cards" aria-label="Early impact cards">
@@ -564,12 +596,13 @@
                 </div>
               </article>
             </div>
+            <p class="finder-impact-note">The page-view increase is a usage signal, not proof of fewer calls or higher pickup conversion. No measured call reduction or pickup conversion result is reported here.</p>
           </div>
           <div class="detail-content reflection-section" aria-label="Reflection" id="reflection">
             <div class="title-gap">
               <p class="label">Reflection</p>
               <div class="detail-body-props">
-                <h2>Managing complexity<br>beyond the interface</h2>
+                <h2>Managing complexity <br class="desktop-break" />beyond the interface</h2>
               </div>
             </div>
             <div class="reflection-grid">

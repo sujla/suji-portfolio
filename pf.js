@@ -1216,7 +1216,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         <div class="pf-featured-sticky">
           <div class="pf-featured-viewport">
             <div class="pf-featured-grid">
-              <div class="pf-featured-intro"><span>Case Studies 01—03</span><h2>Selected<br>work</h2><p>Product design with<br>measurable impact.</p></div>
+              <div class="pf-featured-intro"><span>Case Studies 01—03</span><h2>Selected<br>work</h2><p>Product design with <br>measurable impact.</p></div>
               ${pfProjects.filter((project) => project.cta).map(renderCaseStudyCard).join("")}
             </div>
           </div>
