@@ -1264,115 +1264,26 @@ const setupDesignExplorationMedia = () => {
 };
 
 const setupAvailabilityExploration = () => {
-  const sequence = document.querySelector("[data-design-exploration-sequence]");
-  if (!sequence) return;
+  document.querySelectorAll("[data-exploration-controls]").forEach((panel) => {
+    const buttons = [...panel.querySelectorAll("[data-exploration-view]")];
+    if (!buttons.length) return;
 
-  const stage = sequence.querySelector(".design-exploration-sequence-stage");
-  const panels = [...sequence.querySelectorAll("[data-design-exploration-panel]")];
-  if (!stage || panels.length < 2) return;
+    const setView = (view) => {
+      panel.dataset.explorationState = view;
+      panel.classList.toggle("is-availability-option-selected", view === "final");
+      buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.explorationView === view));
+      });
+      panel.querySelectorAll("[data-exploration-option-label]").forEach((label) => {
+        label.textContent = label.dataset[`${view}Label`] || label.dataset.mapLabel;
+      });
+    };
 
-  const totalDuration = 10000;
-  const selectedOptionTime = 7000;
-  const feedbackCompleteProgress = 0.92;
-  const postFeedbackHoldProgress = 0.15;
-  const pinDistanceMultiplier = feedbackCompleteProgress / (1 - postFeedbackHoldProgress);
-  const transitionDistanceRatio = 1.16;
-  const panelDistanceMultipliers = [1, 1.5];
-  const imageSwapStartProgress = 0.4;
-  const imageSwapDurationProgress = 0.06;
-  let animationDistance = 1;
-  let panelDistance = 1;
-  let transitionDistance = 1;
-  let sequenceDistance = 1;
-  let pinStartLine = window.innerHeight * -0.11;
-  let scrollFrameId;
-
-  const clampProgress = (value) => Math.min(1, Math.max(0, value));
-  const smoothProgress = (value) => {
-    const progress = clampProgress(value);
-    return progress * progress * (3 - 2 * progress);
-  };
-
-  const syncPinDistance = () => {
-    animationDistance = Math.max(1, stage.offsetHeight);
-    panelDistance = animationDistance * pinDistanceMultiplier;
-    transitionDistance = animationDistance * transitionDistanceRatio;
-    sequenceDistance = panelDistanceMultipliers.reduce(
-      (distance, multiplier) => distance + panelDistance * multiplier,
-      transitionDistance,
-    );
-    pinStartLine = Number.parseFloat(getComputedStyle(stage).top);
-    sequence.style.setProperty("--design-exploration-sequence-distance", `${sequenceDistance}px`);
-  };
-
-  const syncPanelAnimation = (panel, panelScrollDistance, distanceMultiplier, swapsImages = false) => {
-    const progress = clampProgress(panelScrollDistance / (panelDistance * distanceMultiplier));
-    const animationProgress = clampProgress(panelScrollDistance / (animationDistance * distanceMultiplier));
-    const imageSwapProgress = swapsImages
-      ? clampProgress((animationProgress - imageSwapStartProgress) / imageSwapDurationProgress)
-      : 0;
-    const isOptionSelected = animationProgress * totalDuration >= selectedOptionTime;
-    const optionLabelState = isOptionSelected ? "final" : imageSwapProgress >= 0.5 ? "list" : "map";
-
-    panel.classList.toggle("is-availability-option-selected", isOptionSelected);
-    panel.querySelectorAll("[data-exploration-option-label]").forEach((label) => {
-      const nextLabel = label.dataset[`${optionLabelState}Label`];
-      if (nextLabel && label.textContent !== nextLabel) label.textContent = nextLabel;
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => setView(button.dataset.explorationView));
     });
-    panel.style.setProperty("--availability-scroll-progress", progress.toFixed(4));
-    panel.style.setProperty("--availability-scrub-time", `${animationProgress * -totalDuration}ms`);
-    panel.style.setProperty("--design-exploration-image-swap-progress", imageSwapProgress.toFixed(4));
-  };
-
-  const syncScrollProgress = () => {
-    scrollFrameId = undefined;
-
-    const rect = sequence.getBoundingClientRect();
-    const scrollDistance = pinStartLine - rect.top;
-    const transitionProgress = clampProgress((scrollDistance - panelDistance) / transitionDistance);
-    const firstPanelMotion = smoothProgress(transitionProgress / 0.72);
-    const firstPanelFade = smoothProgress((transitionProgress - 0.18) / 0.54);
-    const secondPanelMotion = smoothProgress((transitionProgress - 0.25) / 0.75);
-    const secondPanelFade = smoothProgress((transitionProgress - 0.28) / 0.5);
-    const secondPanelStart = panelDistance + transitionDistance;
-
-    syncPanelAnimation(panels[0], scrollDistance, panelDistanceMultipliers[0]);
-    syncPanelAnimation(panels[1], scrollDistance - secondPanelStart, panelDistanceMultipliers[1], true);
-
-    panels[0].style.setProperty("--design-exploration-panel-opacity", (1 - firstPanelFade).toFixed(4));
-    panels[0].style.setProperty("--design-exploration-panel-shift", `${firstPanelMotion * -88}px`);
-    panels[0].style.setProperty("--design-exploration-panel-scale", (1 - firstPanelMotion * 0.18).toFixed(4));
-    panels[1].style.setProperty("--design-exploration-panel-opacity", secondPanelFade.toFixed(4));
-    panels[1].style.setProperty("--design-exploration-panel-shift", `${(1 - secondPanelMotion) * 96}px`);
-    panels[1].style.setProperty("--design-exploration-panel-scale", (0.82 + secondPanelMotion * 0.18).toFixed(4));
-    panels[0].classList.toggle("is-design-exploration-panel-current", transitionProgress < 0.5);
-    panels[1].classList.toggle("is-design-exploration-panel-current", transitionProgress >= 0.5);
-  };
-
-  const requestScrollProgressSync = () => {
-    if (scrollFrameId !== undefined) return;
-
-    scrollFrameId = window.requestAnimationFrame(syncScrollProgress);
-  };
-
-  panels.forEach((panel) => panel.classList.add("is-availability-scroll-scrubbing"));
-  sequence.classList.add("is-design-exploration-sequence-ready");
-  syncPinDistance();
-  window.addEventListener("scroll", requestScrollProgressSync, { passive: true });
-  window.addEventListener("resize", () => {
-    syncPinDistance();
-    requestScrollProgressSync();
+    setView(buttons[0].dataset.explorationView);
   });
-
-  if ("ResizeObserver" in window) {
-    const resizeObserver = new ResizeObserver(() => {
-      syncPinDistance();
-      requestScrollProgressSync();
-    });
-    resizeObserver.observe(stage);
-  }
-
-  syncScrollProgress();
 };
 
 const setupsolutionShowcase = () => {

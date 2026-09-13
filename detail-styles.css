@@ -17,11 +17,11 @@ html.detail-root.is-overview-snapping {
 }
 
 :root[data-theme="dark"] body.detail-page ::selection {
-  background: rgba(198, 198, 247, 0.4);
+  background: var(--selection-bg);
 }
 
 :root[data-theme="light"] body.detail-page ::selection {
-  background: rgba(214, 214, 249, 0.4);
+  background: var(--selection-bg);
 }
 
 li::marker {
@@ -3667,4 +3667,56 @@ html.detail-root.is-theme-switching-lines::before {
   .desktop-break {
     display: none;
   }
+}
+
+/* Exploration views are selected explicitly; both studies stay in document flow. */
+.design-exploration-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0 0;
+}
+
+.design-exploration-view-button {
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 240ms ease, color 240ms ease, border-color 240ms ease;
+}
+
+.design-exploration-view-button[aria-pressed="true"] {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+[data-exploration-controls] .design-exploration-option--muted,
+[data-exploration-controls] .design-exploration-option-image img {
+  transition: opacity 360ms ease;
+}
+
+[data-exploration-controls] .design-exploration-feedback {
+  transition: opacity 360ms ease, transform 360ms ease;
+}
+
+[data-exploration-state="final"] .design-exploration-option--muted {
+  opacity: 0.12;
+}
+
+[data-exploration-state="final"] .design-exploration-feedback {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+[data-exploration-state="list"] img[data-exploration-image-next],
+[data-exploration-state="final"] img[data-exploration-image-next],
+[data-exploration-state="final"] img[data-exploration-final-image] {
+  opacity: 1;
 }
