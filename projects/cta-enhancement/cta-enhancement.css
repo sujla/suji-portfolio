@@ -1,4 +1,5 @@
 /* CTA case study additions to the shared Store Finder detail layout. */
+[data-project-slug="cta-enhancement"] .detail-media { aspect-ratio: 4 / 3; }
 [data-project-slug="cta-enhancement"] .detail-body-props > p { max-width: 800px; }
 [data-project-slug="cta-enhancement"] #hypotheses h2 { max-width: none; }
 [data-project-slug="cta-enhancement"] .cta-insight-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }

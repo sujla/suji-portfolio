@@ -25,7 +25,7 @@ export const pfProjects = [
     companyLabel: "CJ Olive Young",
     year: 2025,
     deviceType: "mobile",
-    projectMedia: "./assets/cta-enhancement/cta-enhancement-main.avif",
+    projectMedia: "./assets/cta-enhancement/cement-stairs.webp",
     cta: {
       label: "View Case Study",
       href: "./projects/cta-enhancement/",
