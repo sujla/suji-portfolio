@@ -201,7 +201,7 @@ li::marker {
   display: grid;
   width: min(100%, 1156px);
   margin: 0 auto;
-  padding-top: 96px;
+  padding-top: clamp(96px, 13vw, 114px);
   padding-bottom: clamp(56px, 8.8vw, 72px);
   box-sizing: border-box;
 }
