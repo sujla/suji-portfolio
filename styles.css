@@ -4170,7 +4170,7 @@ body {
 
 .pf-work-grid .pf-work-meta h2 {
   min-width: 0;
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 400;
 }
 
@@ -4545,6 +4545,7 @@ body {
 
 .pf-work-group--secondary {
   margin-top: clamp(72px, 8vw, 114px);
+  padding-inline: 32px;
   padding-bottom: 100px;
   border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
 }
@@ -4557,7 +4558,7 @@ body {
 .pf-work-group--secondary .pf-group-heading {
   justify-content: center;
   text-align: center;
-  margin-bottom: 44px;
+  margin-bottom: 0;
 }
 
 .pf-work-group--secondary .pf-group-heading h2 {
@@ -4571,11 +4572,18 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 32px 24px;
+  margin-top: 44px;
 }
 
 .pf-work-collection .pf-secondary-grid .pf-work {
-  width: calc((100% - 48px) / 3);
+  width: calc((100% - 24px) / 2);
+  max-width: 640px;
   grid-column: auto;
+}
+
+.pf-work-collection.is-single-result .pf-secondary-grid .pf-work:not([hidden]) {
+  width: min(100%, 640px);
+  max-width: 640px;
 }
 
 .pf-secondary-grid .pf-work-meta {
