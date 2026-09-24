@@ -15,7 +15,10 @@
 
       if (!isLocalEnvironment) {
         window.dataLayer = window.dataLayer || [];
-        window.gtag = (...args) => window.dataLayer.push(args);
+        // Google tag commands require an Arguments object, not an Array.
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
         window.gtag("js", new Date());
         window.gtag("config", "G-ZYEBT08N8L", {
           page_title: document.title,

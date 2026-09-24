@@ -1,5 +1,38 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Article Studio — Live prototype</title>  <script type="module" crossorigin src="/suji-portfolio/assets/editorialPrototype-rAmudMr5.js"></script>
-  <link rel="modulepreload" crossorigin href="/suji-portfolio/assets/index-BvyVWk2v.js">
-  <link rel="stylesheet" crossorigin href="/suji-portfolio/assets/editorialPrototype-BhbLNtBm.css">
-</head><body><div id="root"></div></body></html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Article Studio — Live prototype</title>
+    <!-- Google tag (gtag.js) -->
+    <script>
+      const hostname = window.location.hostname;
+      const isPrivateNetwork =
+        /^(192\.168\.|10\.|127\.)/.test(hostname) ||
+        /^172\.(1[6-9]|2\d|3[0-1])\./.test(hostname);
+      const isLocalEnvironment =
+        ["localhost", "0.0.0.0", "::1", "[::1]"].includes(hostname) || isPrivateNetwork;
+
+      if (!isLocalEnvironment) {
+        window.dataLayer = window.dataLayer || [];
+        // Google tag commands require an Arguments object, not an Array.
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+        window.gtag("js", new Date());
+        window.gtag("config", "G-ZYEBT08N8L");
+
+        const googleTagScript = document.createElement("script");
+        googleTagScript.async = true;
+        googleTagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-ZYEBT08N8L";
+        document.head.append(googleTagScript);
+      }
+    </script>
+    <script type="module" crossorigin src="/suji-portfolio/assets/editorialPrototype-rAmudMr5.js"></script>
+    <link rel="modulepreload" crossorigin href="/suji-portfolio/assets/index-BvyVWk2v.js">
+    <link rel="stylesheet" crossorigin href="/suji-portfolio/assets/editorialPrototype-BhbLNtBm.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
