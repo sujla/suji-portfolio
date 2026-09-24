@@ -33,7 +33,7 @@ export function TearOffFlyer() {
           </clipPath>
         </defs>
       </svg>
-      <h1 className="flyer-side-copy flyer-side-copy--role" id="hero-title">Senior Product Designer</h1>
+      <h1 className="flyer-side-copy flyer-side-copy--role" id="hero-title">Lead Product Designer</h1>
       <div className="flyer-stack">
         <article className="tear-flyer">
           <div className="flyer-header" onPointerMove={liftHeader} onPointerLeave={settleHeader} onPointerCancel={settleHeader}>
