@@ -243,7 +243,7 @@ const experiences = [
   {
     company: "Taurus Labs",
     period: "2025 – Now",
-    role: "Sr. Product Designer",
+    role: "Lead Product Designer",
     logo: "./assets/logo/logo_tauruslabs.svg",
     theme: "taurus",
   },
