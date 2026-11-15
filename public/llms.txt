@@ -20,7 +20,7 @@
 ## Case studies
 
 - [Store Finder Renewal for Business Impact](https://sujla.github.io/suji-portfolio/projects/store-finder-renewal/): Redesign of Olive Young's store finder into a map-based shopping tool that connects nearby stores, product availability and pickup. Availability page views increased by 32.9%. Role: Product Design Lead, CJ Olive Young, Mar – Nov 2024.
-- [Pickup Order UX Enhancement](https://sujla.github.io/suji-portfolio/projects/cta-enhancement/): Data-driven redesign of pickup CTAs and store-card logic for Olive Young. Page pickup conversion increased by 326.2%, with total pickup orders up 132.6%. Role: Product Design Lead, CJ Olive Young, Dec 2024 – Jan 2025.
+- [Pickup Order UX Enhancement](https://sujla.github.io/suji-portfolio/projects/cta-enhancement/): Data-driven redesign of pickup CTAs and store-card logic for Olive Young. Page pickup conversion increased by 226.2%, with total pickup orders up 32.6%. Role: Product Design Lead, CJ Olive Young, Dec 2024 – Jan 2025.
 - [Editorial Workflow Revamp](https://sujla.github.io/suji-portfolio/projects/modular-editorial-system/): A modular publishing system that lets Olive Young content editors create and publish articles independently, cutting production time from 2 weeks to 20 minutes. Role: Product Design Lead, CJ Olive Young, Nov 2023 – Mar 2024.
 
 ## More work

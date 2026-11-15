@@ -58,7 +58,7 @@ export const projects = [
       "Identified pickup friction through funnel and event-stream data",
       "Redesigned pickup CTAs and store-card logic by availability",
       "Clarified pickup and in-store-only purchase states",
-      "Increased pickup conversion on the available-stores page by 326.2% compared with before the redesign, with total pickup orders up 132.6%",
+      "Increased pickup conversion on the available-stores page by 226.2% compared with before the redesign, with total pickup orders up 32.6%",
     ],
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",

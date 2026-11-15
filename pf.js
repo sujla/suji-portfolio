@@ -191,11 +191,11 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           <div class="pf-modal-result">
             <div class="pf-modal-result-metrics pf-modal-result-metrics--summary pf-modal-result-metrics--cta inner-shadow-md">
               <div class="pf-modal-result-metric pf-modal-result-metric--summary">
-                <strong class="pf-modal-result-value--increase">326.2%</strong>
+                <strong class="pf-modal-result-value--increase">226.2%</strong>
                 <p class="pf-modal-result-label">Pickup Conversion</p>
               </div>
               <div class="pf-modal-result-metric pf-modal-result-metric--summary">
-                <strong class="pf-modal-result-value--increase">132.6%</strong>
+                <strong class="pf-modal-result-value--increase">32.6%</strong>
                 <p class="pf-modal-result-label">Total Pickup Orders</p>
               </div>
             </div>

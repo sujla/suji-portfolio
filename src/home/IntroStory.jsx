@@ -16,7 +16,7 @@ const introSentences = [
     " and ",
     { mark: "15M+ members" },
     ", I led redesigns that increased ",
-    { mark: "pickup conversion by 326.2%" },
+    { mark: "pickup conversion by 226.2%" },
     " and cut editorial ",
     { mark: "production time from 2 weeks to 20 minutes" },
     ".",
