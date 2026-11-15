@@ -3,6 +3,8 @@ import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
+import { projects } from "./data/projects.js";
+
 const fromRoot = (path) => fileURLToPath(new URL(path, import.meta.url));
 
 // Site-only plugins: skipped for the SSR build that feeds scripts/prerender.mjs.
@@ -15,6 +17,35 @@ const copyRuntimeAssets = {
     await cp(fromRoot("./assets"), fromRoot("./docs/assets"), {
       recursive: true,
     });
+  },
+};
+
+const escapeHtml = (value) =>
+  String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+// Case-study pages read their Contributions (and company name) from
+// data/projects.js at runtime. Writing them into the HTML here keeps that single
+// source while making the text readable without JavaScript.
+const inlineDetailProjectData = {
+  name: "inline-detail-project-data",
+  transformIndexHtml(html) {
+    const slug = html.match(/<body[^>]*data-project-slug="([^"]+)"/)?.[1];
+    const project = projects.find((item) => item.slug === slug);
+    if (!project) return html;
+
+    const contributions = (project.contribution || [])
+      .map((item) => `<li>${escapeHtml(item)}</li>`)
+      .join("");
+
+    return html
+      .replace(
+        /(<ul\b[^>]*data-contribution-list[^>]*>)\s*(<\/ul>)/,
+        (_match, open, close) => `${open}${contributions}${close}`,
+      )
+      .replace(
+        /(<[a-z0-9]+\b[^>]*data-company-name[^>]*>)\s*(<\/[a-z0-9]+>)/,
+        (_match, open, close) => `${open}${escapeHtml(project.company || "")}${close}`,
+      );
   },
 };
 
@@ -76,7 +107,7 @@ const emitLegacyProjectRedirects = {
 
 export default defineConfig({
   base: "/suji-portfolio/",
-  plugins: [react(), copyRuntimeAssets, emitLegacyProjectRedirects],
+  plugins: [react(), inlineDetailProjectData, copyRuntimeAssets, emitLegacyProjectRedirects],
   build: {
     outDir: "docs",
     rollupOptions: {

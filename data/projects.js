@@ -30,7 +30,7 @@ export const projects = [
     contribution: [
       "Led the end-to-end redesign of Olive Young’s store finder experience",
       "Integrated store info, inventory, and pickup flows into a map-based finder built around real shopping behavior",
-      "Increased availability page views by 32.9% and established an event logging foundation for future improvements",
+      "Increased availability page views by 32.9% compared with before the renewal, and established an event logging foundation for future improvements",
     ],
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
@@ -58,7 +58,7 @@ export const projects = [
       "Identified pickup friction through funnel and event-stream data",
       "Redesigned pickup CTAs and store-card logic by availability",
       "Clarified pickup and in-store-only purchase states",
-      "Increased page pickup conversion by 326.2%, with total pickup orders up 132.6%",
+      "Increased pickup conversion on the available-stores page by 326.2% compared with before the redesign, with total pickup orders up 132.6%",
     ],
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",
@@ -86,7 +86,7 @@ export const projects = [
       "Led UI/UX design for Olive Young’s modular editorial system",
       "Built reusable content modules with standardized editing controls",
       "Enabled content editors to create and publish articles independently",
-      "Cut production time from 2 weeks to 20 minutes",
+      "Cut article production time from 2 weeks to 20 minutes per article",
     ],
     mediaShadow: {
       dark: "0 24px 56px rgba(0, 0, 0, 0.24)",

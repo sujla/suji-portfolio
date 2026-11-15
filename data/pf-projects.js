@@ -73,7 +73,7 @@ export const pfProjects = [
     year: 2025,
     deviceType: "mobile",
     modalDescription:
-      "I redesigned the trading and wallet experience to streamline key workflows, helping users act with greater speed and confidence while improving portfolio visibility and transaction clarity.",
+      "As the sole designer on a perpetual futures trading platform, I led the rebrand and designed its native mobile app from scratch, extending an existing web and mobile-web product. I also shipped feature enhancements such as stop-loss / take-profit and multi-wallet management, working with four engineers (one also acting as PM) and two marketers through launch.",
   },
   {
     id: "investor-reporting",

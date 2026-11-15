@@ -4,8 +4,11 @@ import { DetailApp } from "./DetailApp.jsx";
 
 const navRoot = document.querySelector(".detail-gnb");
 const detailShell = document.querySelector(".detail-shell");
-const companyRoot = document.querySelector("[data-company-name]");
-const contributionRoot = document.querySelector("[data-contribution-list]");
+// The build writes the company name and contributions into the HTML
+// (inlineDetailProjectData in vite.config.js); only render them here when missing.
+const emptyOrNull = (element) => (element && !element.hasChildNodes() ? element : null);
+const companyRoot = emptyOrNull(document.querySelector("[data-company-name]"));
+const contributionRoot = emptyOrNull(document.querySelector("[data-contribution-list]"));
 let titleRoot = null;
 
 if (detailShell && !detailShell.querySelector(".detail-title-section")) {
