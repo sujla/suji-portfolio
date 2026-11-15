@@ -191,9 +191,13 @@ export function HomePage() {
       <section className="intro-section" aria-label="Summary">
         <p className="intro-summary">
           Lead Product Designer with 10 years of experience across e-commerce, fintech,
-          B2B SaaS and mobility. Currently leading product design at Taurus Labs in
-          Singapore. At Olive Young, I led redesigns that increased pickup conversion by
-          326.2% and cut editorial production time from 2 weeks to 20 minutes.
+          B2B SaaS and mobility. Currently leading product design at Taurus Labs, a design
+          and software agency in Singapore, where I own product design process and
+          decisions for client products. At Olive Young, Korea&apos;s largest health and
+          beauty retailer with 1,350+ stores and 15M+ members, I led redesigns that
+          increased pickup conversion by 326.2% and cut editorial production time from 2
+          weeks to 20 minutes. I also led three early-career designers and initiated a
+          design system task force with four engineers and a designer.
         </p>
       </section>
 
