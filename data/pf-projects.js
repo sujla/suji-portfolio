@@ -69,4 +69,17 @@ export const pfProjects = [
     modalDescription:
       "I redesigned the trading and wallet experience to streamline key workflows, helping users act with greater speed and confidence while improving portfolio visibility and transaction clarity.",
   },
+  {
+    id: "investor-reporting",
+    type: "enterprise",
+    title: "Streamlining Investor Reporting",
+    companyLabel: "QuotaBook",
+    year: 2022,
+    modalDescription:
+      "Startups submit recurring reports to every investor, each in a different format. I led the design from user interviews to launch, reducing repetitive reporting work so startups can focus more on their core business.",
+    slides: Array.from(
+      { length: 17 },
+      (_, index) => `./assets/investor-reporting/slide-${String(index + 1).padStart(2, "0")}.webp`,
+    ),
+  },
 ];

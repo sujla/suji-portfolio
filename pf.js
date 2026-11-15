@@ -49,6 +49,15 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   };
 
   const getWorkMedia = (project) => {
+    if (project.slides?.length) {
+      return `
+        <div class="pf-slide-deck-cover" aria-hidden="true">
+          <img class="pf-slide-deck-cover-sheet pf-slide-deck-cover-sheet--back" src="${project.slides[1]}" alt="" loading="lazy" decoding="async" />
+          <img class="pf-slide-deck-cover-sheet" src="${project.slides[0]}" alt="" loading="lazy" decoding="async" />
+        </div>
+      `;
+    }
+
     if (project.deviceType === "web") {
       return `
         <div class="pf-project-mockups pf-project-mockups--web" aria-hidden="true">
@@ -593,6 +602,125 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     });
   };
 
+  const formatSlideNumber = (number) => String(number).padStart(2, "0");
+
+  const renderSlideDeck = (project) => `
+    <section class="pf-modal-slides" aria-roledescription="carousel" aria-label="${getPlainTitle(project.title)} slides">
+      <div class="pf-modal-slides-viewport" data-slides-viewport>
+        <div class="pf-modal-slides-track" data-slides-track>
+          ${project.slides
+            .map(
+              (source, index) => `
+                <figure class="pf-modal-slide" aria-roledescription="slide" aria-label="${index + 1} of ${project.slides.length}"${index ? ' aria-hidden="true"' : ""}>
+                  <img src="${source}" alt="" loading="${index < 2 ? "eager" : "lazy"}" decoding="async" draggable="false" />
+                </figure>
+              `,
+            )
+            .join("")}
+        </div>
+      </div>
+      <button class="pf-modal-slides-nav pf-modal-slides-nav--prev" type="button" aria-label="Previous slide" data-slides-prev></button>
+      <button class="pf-modal-slides-nav pf-modal-slides-nav--next" type="button" aria-label="Next slide" data-slides-next></button>
+      <div class="pf-modal-slides-status">
+        <span class="pf-modal-slides-counter" aria-live="polite" data-slides-counter>01 / ${formatSlideNumber(project.slides.length)}</span>
+        <span class="pf-modal-slides-progress" aria-hidden="true"><span data-slides-progress></span></span>
+      </div>
+    </section>
+  `;
+
+  const initializeSlideDeck = (modal) => {
+    const deck = modal.querySelector(".pf-modal-slides");
+    if (!deck) return null;
+
+    const viewport = deck.querySelector("[data-slides-viewport]");
+    const track = deck.querySelector("[data-slides-track]");
+    const slides = [...deck.querySelectorAll(".pf-modal-slide")];
+    const prevButton = deck.querySelector("[data-slides-prev]");
+    const nextButton = deck.querySelector("[data-slides-next]");
+    const counter = deck.querySelector("[data-slides-counter]");
+    const progress = deck.querySelector("[data-slides-progress]");
+    const total = slides.length;
+    let currentIndex = 0;
+    let dragStartX = null;
+    let dragDeltaX = 0;
+    let wheelLockedUntil = 0;
+
+    const render = () => {
+      track.style.transform = `translate3d(${-currentIndex * 100}%, 0, 0)`;
+      slides.forEach((slide, index) => {
+        slide.toggleAttribute("aria-hidden", index !== currentIndex);
+        // Warm up the neighbours so the next slide is ready before it slides in.
+        if (Math.abs(index - currentIndex) <= 1) slide.querySelector("img").loading = "eager";
+      });
+      prevButton.disabled = currentIndex === 0;
+      nextButton.disabled = currentIndex === total - 1;
+      counter.textContent = `${formatSlideNumber(currentIndex + 1)} / ${formatSlideNumber(total)}`;
+      progress.style.transform = `scaleX(${(currentIndex + 1) / total})`;
+    };
+
+    const goTo = (index) => {
+      const nextIndex = Math.min(total - 1, Math.max(0, index));
+      if (nextIndex === currentIndex) return;
+      currentIndex = nextIndex;
+      render();
+    };
+
+    const finishDrag = () => {
+      if (dragStartX === null) return;
+      const threshold = Math.min(80, viewport.clientWidth * 0.12);
+      track.classList.remove("is-dragging");
+      dragStartX = null;
+      if (dragDeltaX <= -threshold) goTo(currentIndex + 1);
+      else if (dragDeltaX >= threshold) goTo(currentIndex - 1);
+      else render();
+      dragDeltaX = 0;
+    };
+
+    prevButton.addEventListener("click", () => goTo(currentIndex - 1));
+    nextButton.addEventListener("click", () => goTo(currentIndex + 1));
+    viewport.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      dragStartX = event.clientX;
+      dragDeltaX = 0;
+      viewport.setPointerCapture(event.pointerId);
+      track.classList.add("is-dragging");
+    });
+    viewport.addEventListener("pointermove", (event) => {
+      if (dragStartX === null) return;
+      const atEdge =
+        (currentIndex === 0 && event.clientX > dragStartX) ||
+        (currentIndex === total - 1 && event.clientX < dragStartX);
+      dragDeltaX = (event.clientX - dragStartX) * (atEdge ? 0.3 : 1);
+      track.style.transform = `translate3d(calc(${-currentIndex * 100}% + ${dragDeltaX}px), 0, 0)`;
+    });
+    viewport.addEventListener("pointerup", finishDrag);
+    viewport.addEventListener("pointercancel", finishDrag);
+    viewport.addEventListener(
+      "wheel",
+      (event) => {
+        if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+        event.preventDefault();
+        if (Math.abs(event.deltaX) < 24 || performance.now() < wheelLockedUntil) return;
+        // One trackpad swipe emits many wheel events; treat it as a single step.
+        wheelLockedUntil = performance.now() + 640;
+        goTo(currentIndex + Math.sign(event.deltaX));
+      },
+      { passive: false },
+    );
+
+    render();
+
+    return {
+      focusables: [prevButton, nextButton],
+      handleKeydown: (event) => {
+        if (event.key === "ArrowRight") goTo(currentIndex + 1);
+        else if (event.key === "ArrowLeft") goTo(currentIndex - 1);
+        else return false;
+        return true;
+      },
+    };
+  };
+
   const renderWorkCard = (project, isClone = false) => {
     const projectTypes = project.types?.length
       ? project.types
@@ -797,7 +925,8 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       `;
     const bentoAccessibilityAttribute =
       isPerpDexProject || isPublicTransportProject ? "" : ' aria-hidden="true"';
-    const bentoMarkup = `
+    const hasSlideDeck = Boolean(project.slides?.length);
+    const bentoMarkup = hasSlideDeck ? renderSlideDeck(project) : `
       <section class="pf-modal-bento-section${isWebProject ? " pf-modal-bento-section--web" : ""}${usesThreePartBento ? " pf-modal-bento-section--three-up" : ""}${usesFourPartBento ? " pf-modal-bento-section--four-up" : ""}${isPerpDexProject ? " pf-modal-bento-section--perp-dex" : ""}"${bentoAccessibilityAttribute}>
         ${bentoFeatureMarkup}
         ${bentoSideMarkup}
@@ -806,7 +935,9 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const skeletonFeatureMarkup = isPerpDexProject
       ? ""
       : '<div class="pf-modal-bento-feature pf-modal-bento-skeleton"></div>';
-    const skeletonMarkup = `
+    const skeletonMarkup = hasSlideDeck
+      ? '<div class="pf-modal-slides pf-modal-bento-skeleton" aria-hidden="true"></div>'
+      : `
       <section class="pf-modal-bento-section pf-modal-bento-section--skeleton${isWebProject ? " pf-modal-bento-section--web" : ""}${usesThreePartBento ? " pf-modal-bento-section--three-up" : ""}${usesFourPartBento ? " pf-modal-bento-section--four-up" : ""}${isPerpDexProject ? " pf-modal-bento-section--perp-dex" : ""}" aria-hidden="true">
         ${skeletonFeatureMarkup}
         ${skeletonSideMarkup}
@@ -816,7 +947,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     layer.className = "pf-modal-layer";
     backdrop.className = "pf-modal-backdrop";
     backdrop.style.opacity = "0";
-    modal.className = `pf-work-modal pf-work--${project.id}${descriptionMarkup ? " pf-work-modal--has-description" : ""}${ctaMarkup ? "" : " pf-work-modal--no-cta"}`;
+    modal.className = `pf-work-modal pf-work--${project.id}${hasSlideDeck ? " pf-work-modal--slides" : ""}${descriptionMarkup ? " pf-work-modal--has-description" : ""}${ctaMarkup ? "" : " pf-work-modal--no-cta"}`;
     modal.setAttribute("role", "dialog");
     modal.setAttribute("aria-modal", "true");
     modal.setAttribute("aria-labelledby", titleId);
@@ -879,6 +1010,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     const cardContent = modal.querySelector(".pf-modal-card-content");
     const scrollIndicator = modal.querySelector(".pf-modal-scroll-indicator");
     let hasMountedBento = false;
+    let slideDeck = null;
     let isClosing = false;
     let scrollIndicatorFrame = 0;
 
@@ -937,6 +1069,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       initializeSegmentVideos(modal);
       initializePerpDexMediaPlayback(modal);
       initializePublicTransportMediaPlayback(modal);
+      slideDeck = initializeSlideDeck(modal);
       cardContent
         .querySelectorAll(".pf-modal-bento-section")
         .forEach((section) => contentResizeObserver?.observe(section));
@@ -1101,9 +1234,16 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         return;
       }
 
+      if (slideDeck?.handleKeydown(event)) {
+        event.preventDefault();
+        return;
+      }
+
       if (event.key !== "Tab") return;
 
-      const focusable = [closeButton, cta].filter(Boolean);
+      const focusable = [closeButton, ...(slideDeck?.focusables ?? []), cta].filter(
+        (element) => element && !element.disabled,
+      );
       const currentIndex = focusable.indexOf(document.activeElement);
       const nextIndex = event.shiftKey
         ? (currentIndex - 1 + focusable.length) % focusable.length
