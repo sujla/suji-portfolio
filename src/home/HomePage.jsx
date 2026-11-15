@@ -5,6 +5,14 @@ import { SiteFooter } from "../components/SiteFooter.jsx";
 import { ThemeToggle } from "../components/ThemeToggle.jsx";
 import { AboutPaperContact } from "./hero-concepts/AboutPaperContact.jsx";
 import { TearOffFlyer } from "./hero-concepts/TearOffFlyer.jsx";
+import { pfProjects } from "../../data/pf-projects.js";
+import { renderPfMarkup } from "../../pf-markup.js";
+
+// Rendered into the static HTML at build time so the Work section is readable
+// without JavaScript; pf.js attaches the interactions to this same markup.
+const pfMarkup = {
+  __html: renderPfMarkup(pfProjects, (title) => title.split("|").join(" ")),
+};
 
 const mobileNavItems = [
   ["Work", "#work"],
@@ -180,7 +188,13 @@ export function HomePage() {
         <TearOffFlyer />
       </section>
 
-      <section className="pf-section" id="work" data-pf />
+      <section
+        className="pf-section"
+        id="work"
+        data-pf
+        dangerouslySetInnerHTML={pfMarkup}
+        suppressHydrationWarning
+      />
 
       <ExperienceSection />
 
