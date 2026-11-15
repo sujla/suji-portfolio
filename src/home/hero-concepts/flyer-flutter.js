@@ -40,6 +40,8 @@ const fiberDepthAt = (u) => {
   return 2 + THREE.MathUtils.lerp(fiberNoise(i + 200), fiberNoise(i + 201), sample - i) * 2.6;
 };
 
+const TEAR_DURATION = 560;
+
 export async function playFlyerTear(button) {
   if (button.classList.contains('is-torn')) return true;
   const handler = tearHandlers.get(button.closest('.flyer-tabs'));
@@ -52,7 +54,7 @@ export async function playFlyerTear(button) {
       { transform: 'rotateX(0) translateY(0)', opacity: 1 },
       { transform: 'rotateX(-12deg) rotate(-3deg) translateY(8px)', opacity: 1, offset: .55 },
       { transform: finalTransform, opacity: 1 },
-    ], { duration: 820, easing: 'ease-in-out', fill: 'none' }).finished;
+    ], { duration: 520, easing: 'ease-in-out', fill: 'none' }).finished;
     button.classList.add('is-torn');
     return true;
   } catch { return false; }
@@ -463,7 +465,7 @@ export function mountFlyerFlutter(group) {
       moving ||= Math.abs(tab.placedX - tab.dragX) + Math.abs(tab.placedY - tab.dragY) + Math.abs(tab.dragVX) + Math.abs(tab.dragVY) > .02;
       const torn = tab.button.classList.contains('is-torn');
       if (tab.tear) {
-        if (!tab.tear.dragging) tab.separation = Math.min(1, (now - tab.tear.started) / 900);
+        if (!tab.tear.dragging) tab.separation = Math.min(1, (now - tab.tear.started) / TEAR_DURATION);
         tab.separationVelocity = 0;
       } else {
         tab.separationVelocity += (((torn ? 1 : 0) - tab.separation) * 85 - tab.separationVelocity * 19) * dt;
@@ -678,7 +680,7 @@ export function mountFlyerFlutter(group) {
       return;
     }
     tab.tear.dragging = false;
-    tab.tear.started = performance.now() - tab.separation * 900;
+    tab.tear.started = performance.now() - tab.separation * TEAR_DURATION;
     suppressedClick = tab.button;
     // Route release through the same filter handler, even outside the original tab.
     // Its pending tear promise finishes the remaining movement before filtering.
