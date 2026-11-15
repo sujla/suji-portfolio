@@ -5,6 +5,14 @@ import { SiteFooter } from "../components/SiteFooter.jsx";
 import { ThemeToggle } from "../components/ThemeToggle.jsx";
 import { AboutPaperContact } from "./hero-concepts/AboutPaperContact.jsx";
 import { TearOffFlyer } from "./hero-concepts/TearOffFlyer.jsx";
+import { pfProjects } from "../../data/pf-projects.js";
+import { renderPfMarkup } from "../../pf-markup.js";
+
+// Rendered into the static HTML at build time so the Work section is readable
+// without JavaScript; pf.js attaches the interactions to this same markup.
+const pfMarkup = {
+  __html: renderPfMarkup(pfProjects, (title) => title.split("|").join(" ")),
+};
 
 const mobileNavItems = [
   ["Work", "#work"],
@@ -180,7 +188,26 @@ export function HomePage() {
         <TearOffFlyer />
       </section>
 
-      <section className="pf-section" id="work" data-pf />
+      <section className="intro-section" aria-label="Summary">
+        <p className="intro-summary">
+          Lead Product Designer with 10 years of experience across e-commerce, fintech,
+          B2B SaaS and mobility. Currently leading product design at Taurus Labs, a design
+          and software agency in Singapore, where I own product design process and
+          decisions for client products. At Olive Young, Korea&apos;s largest health and
+          beauty retailer with 1,350+ stores and 15M+ members, I led redesigns that
+          increased pickup conversion by 326.2% and cut editorial production time from 2
+          weeks to 20 minutes. I also led three early-career designers and initiated a
+          design system task force with four engineers and a designer.
+        </p>
+      </section>
+
+      <section
+        className="pf-section"
+        id="work"
+        data-pf
+        dangerouslySetInnerHTML={pfMarkup}
+        suppressHydrationWarning
+      />
 
       <ExperienceSection />
 

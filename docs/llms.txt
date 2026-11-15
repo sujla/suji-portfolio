@@ -1,0 +1,36 @@
+# Suji Kweon
+
+> Lead Product Designer based in Singapore with 10 years of experience. Designs enterprise and consumer products across e-commerce, fintech, B2B SaaS, mobility and AI, with a focus on measurable impact.
+
+- Current role: Lead Product Designer at Taurus Labs (2025 – now), a design and software agency, owning product design process and decisions for client products
+- Leadership: at Olive Young (1,350+ stores, 15M+ members), led three early-career designers and initiated a design system task force with four engineers and a designer
+- Location: Singapore
+- Contact: kweonsuji@gmail.com
+- LinkedIn: https://www.linkedin.com/in/suji-kweon/
+- GitHub: https://github.com/sujla
+
+## Experience
+
+- Taurus Labs: Lead Product Designer, 2025 – now
+- Olive Young: Sr. UI/UX Designer, 2023 – 2025
+- QuotaBook: Product Designer, 2019 – 2023
+- Bitberry: UI/UX Designer, 2018 – 2019
+- Kakao: UI/UX Designer, 2016 – 2018
+
+## Case studies
+
+- [Store Finder Renewal for Business Impact](https://sujla.github.io/suji-portfolio/projects/store-finder-renewal/): Redesign of Olive Young's store finder into a map-based shopping tool that connects nearby stores, product availability and pickup. Availability page views increased by 32.9%. Role: Product Design Lead, CJ Olive Young, Mar – Nov 2024.
+- [Pickup Order UX Enhancement](https://sujla.github.io/suji-portfolio/projects/cta-enhancement/): Data-driven redesign of pickup CTAs and store-card logic for Olive Young. Page pickup conversion increased by 326.2%, with total pickup orders up 132.6%. Role: Product Design Lead, CJ Olive Young, Dec 2024 – Jan 2025.
+- [Editorial Workflow Revamp](https://sujla.github.io/suji-portfolio/projects/modular-editorial-system/): A modular publishing system that lets Olive Young content editors create and publish articles independently, cutting production time from 2 weeks to 20 minutes. Role: Product Design Lead, CJ Olive Young, Nov 2023 – Mar 2024.
+
+## More work
+
+- Clearer Control for Perp Trading (Fintech, Taurus Labs, 2025): I redesigned the trading and wallet experience to streamline key workflows, helping users act with greater speed and confidence while improving portfolio visibility and transaction clarity.
+- Public Transport App in SG (AI, Mobility, 2026): Finding the right MRT exit and exploring transit routes on a full-screen map still felt harder than it should be. I built BusMrtSG to solve those transit-specific problems using AI coding tools and a serverless architecture.
+- Streamlining Investor Reporting (Enterprise/SaaS, QuotaBook, 2022): Startups submit recurring reports to every investor, each in a different format. I led the design from user interviews to launch, reducing repetitive reporting work so startups can focus more on their core business.
+
+## About
+
+I've lived across Korea, India, the U.S., and Singapore, and designed across mobility, fintech, B2B SaaS, e-commerce, and internal tools. That range taught me to find patterns in complexity, turn ambiguity into clear product direction, and design with measurable impact in mind.
+
+Portfolio: https://sujla.github.io/suji-portfolio/

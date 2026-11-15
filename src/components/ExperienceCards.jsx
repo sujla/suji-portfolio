@@ -307,7 +307,9 @@ export function StickyCard_001({ experience, index, progress, range, targetScale
         }}
       >
         <h3 className="experience-card-company">
-          <img src={experience.logo} alt={experience.company} />
+          {/* The company name is real text for crawlers and screen readers; the logo is its visual form. */}
+          <img src={experience.logo} alt="" />
+          <span className="visually-hidden">{experience.company}</span>
         </h3>
         <div className="experience-card-meta">
           <p>{experience.period}</p>

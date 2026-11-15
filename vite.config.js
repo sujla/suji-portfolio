@@ -5,9 +5,12 @@ import { defineConfig } from "vite";
 
 const fromRoot = (path) => fileURLToPath(new URL(path, import.meta.url));
 
+// Site-only plugins: skipped for the SSR build that feeds scripts/prerender.mjs.
+const clientBuildOnly = (_config, { command, isSsrBuild }) => command === "build" && !isSsrBuild;
+
 const copyRuntimeAssets = {
   name: "copy-runtime-assets",
-  apply: "build",
+  apply: clientBuildOnly,
   async closeBundle() {
     await cp(fromRoot("./assets"), fromRoot("./docs/assets"), {
       recursive: true,
@@ -59,7 +62,7 @@ const createLegacyRedirectHtml = ({ target, label }) => `<!doctype html>
 
 const emitLegacyProjectRedirects = {
   name: "emit-legacy-project-redirects",
-  apply: "build",
+  apply: clientBuildOnly,
   generateBundle() {
     legacyProjectRedirects.forEach((redirect) => {
       this.emitFile({
