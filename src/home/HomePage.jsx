@@ -188,6 +188,15 @@ export function HomePage() {
         <TearOffFlyer />
       </section>
 
+      <section className="intro-section" aria-label="Summary">
+        <p className="intro-summary">
+          Lead Product Designer with 10 years of experience across e-commerce, fintech,
+          B2B SaaS and mobility. Currently leading product design at Taurus Labs in
+          Singapore. At Olive Young, I led redesigns that increased pickup conversion by
+          326.2% and cut editorial production time from 2 weeks to 20 minutes.
+        </p>
+      </section>
+
       <section
         className="pf-section"
         id="work"

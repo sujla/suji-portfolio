@@ -23,6 +23,15 @@ export const renderWorkMetaLine = (project, isCaseStudy = false) => {
   return metaItems.length ? `<span>${metaItems.join(" · ")}</span>` : "";
 };
 
+// Each card's description is otherwise only reachable by opening its modal or
+// case study, so it is kept in the markup as visually hidden text.
+const renderHiddenSummary = (project) => {
+  const description = project.summary || project.modalDescription;
+  if (!description) return "";
+  const company = project.cta ? "" : project.companyLabel;
+  return `<p class="visually-hidden">${[company, description].filter(Boolean).join(". ")}</p>`;
+};
+
 export const getWorkMedia = (project) => {
   if (project.deviceType === "web") {
     return `
@@ -92,6 +101,7 @@ export const renderWorkCard = (project, getPlainTitle, isClone = false) => {
     <div class="pf-work-meta">
       <h2>${project.title}</h2>
       ${renderWorkMetaLine(project)}
+      ${renderHiddenSummary(project)}
     </div>
   `;
 
@@ -119,6 +129,7 @@ export const renderCaseStudyCard = (project) => `
       <div class="pf-featured-copy">
         <h2>${project.title}</h2>
         ${renderWorkMetaLine(project, true)}
+        ${renderHiddenSummary(project)}
       </div>
     </div>
   </a>
