@@ -1173,7 +1173,9 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
 
   const mobilePfMedia = window.matchMedia("(max-width: 600px)");
   const typeFilter = document.querySelector("[data-pf-type-filter]");
-  const floatingFilterThreshold = 270;
+  // The filter appears once the Work section's top rises past this share of the
+  // viewport, so it stays out of the hero and the pinned intro story.
+  const floatingFilterEntryRatio = 0.85;
   const floatingFilterExitRatio = 0.36;
 
   if (typeFilter) {
@@ -1415,12 +1417,11 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   };
 
   const updateFloatingFilterVisibility = () => {
-    const pfBottom = pf.getBoundingClientRect().bottom;
+    const { top: pfTop, bottom: pfBottom } = pf.getBoundingClientRect();
+    const entryLine = window.innerHeight * floatingFilterEntryRatio;
     const exitLine = window.innerHeight * floatingFilterExitRatio;
 
-    setFloatingFilterVisibility(
-      window.scrollY > floatingFilterThreshold && pfBottom > exitLine,
-    );
+    setFloatingFilterVisibility(pfTop < entryLine && pfBottom > exitLine);
   };
 
   const scrollToFilteredWork = () => {

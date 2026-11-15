@@ -2479,14 +2479,115 @@ html.is-pf-modal-open body {
   padding: clamp(40px, 8vh, 96px) clamp(14px, 4.8vw, 66px);
 }
 
+.intro-sticky {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .intro-summary {
-  max-width: 720px;
+  max-width: 840px;
   margin: 0;
   color: var(--text);
-  font-size: clamp(18px, 2.2vw, 24px);
-  line-height: 1.45;
+  font-size: clamp(17px, 1.8vw, 23px);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
   text-wrap: pretty;
 }
+
+/* Metrics get a marker-style highlight in the floating filter's selected mint. */
+.intro-mark {
+  --intro-mark-bg: #b7ecd9;
+  padding: 0 0.14em;
+  background: var(--intro-mark-bg);
+  color: inherit;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+:root[data-theme="dark"] .intro-mark {
+  --intro-mark-bg: rgba(101, 255, 201, 0.24);
+}
+
+.intro-anchor {
+  white-space: nowrap;
+}
+
+/* Scroll story: the intro pins while each sentence takes its turn. JS adds
+   .is-story, so without JS (or with reduced motion) the paragraph reads as-is. */
+.intro-section.is-story {
+  display: block;
+  height: calc(100svh + var(--intro-steps, 4) * 55svh);
+  padding: 0;
+}
+
+/* The paragraph sits at the top of the frame and JS translates it so the
+   text revealed so far is centred; earlier sentences glide up as new ones arrive. */
+.intro-section.is-story .intro-sticky {
+  position: sticky;
+  top: 0;
+  box-sizing: border-box;
+  height: 100svh;
+  align-items: flex-start;
+  padding-inline: clamp(14px, 4.8vw, 66px);
+  overflow: clip;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
+}
+
+.intro-section.is-story .intro-summary {
+  will-change: transform;
+}
+
+/* --reveal (0 → 1) and --dim (0 → 1) are scrubbed from scroll in IntroStory.jsx:
+   transparent → active text → muted once the next sentence arrives. */
+.intro-section.is-story .intro-sentence {
+  --intro-sentence-color: color-mix(in srgb, var(--muted) calc(var(--dim, 0) * 100%), var(--text));
+  color: color-mix(in srgb, var(--intro-sentence-color) calc(var(--reveal, 1) * 100%), transparent);
+}
+
+.intro-section.is-story .intro-mark {
+  background: color-mix(
+    in srgb,
+    var(--intro-mark-bg) calc(var(--reveal, 1) * (100% - var(--dim, 0) * 55%)),
+    transparent
+  );
+}
+
+/* A landed hero label stays readable even before its sentence fills in. */
+.intro-section.is-story .intro-anchor {
+  color: var(--intro-sentence-color);
+}
+
+/* The hero label crossfades into this word once it lands (--absorb, 0 → 1). */
+.intro-section.is-story .intro-anchor {
+  opacity: var(--absorb, 0);
+}
+
+/* The hero labels keep their layout (and the h1 its semantics) while a fixed
+   copy does the moving; see IntroStory.jsx. */
+.flyer-side-copy.is-traveling {
+  opacity: 0;
+}
+
+.intro-travel-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.intro-travel-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  white-space: nowrap;
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+}
+
 
 .about-contact-link {
   align-self: flex-start;
