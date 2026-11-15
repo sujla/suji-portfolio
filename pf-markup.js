@@ -33,6 +33,15 @@ const renderHiddenSummary = (project) => {
 };
 
 export const getWorkMedia = (project) => {
+  if (project.slides?.length) {
+    return `
+      <div class="pf-slide-deck-cover" aria-hidden="true">
+        <img class="pf-slide-deck-cover-sheet pf-slide-deck-cover-sheet--back" src="${project.slides[1]}" alt="" loading="lazy" decoding="async" />
+        <img class="pf-slide-deck-cover-sheet" src="${project.slides[0]}" alt="" loading="lazy" decoding="async" />
+      </div>
+    `;
+  }
+
   if (project.deviceType === "web") {
     return `
       <div class="pf-project-mockups pf-project-mockups--web" aria-hidden="true">

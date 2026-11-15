@@ -27,6 +27,7 @@
 
 - Clearer Control for Perp Trading (Fintech, Taurus Labs, 2025): I redesigned the trading and wallet experience to streamline key workflows, helping users act with greater speed and confidence while improving portfolio visibility and transaction clarity.
 - Public Transport App in SG (AI, Mobility, 2026): Finding the right MRT exit and exploring transit routes on a full-screen map still felt harder than it should be. I built BusMrtSG to solve those transit-specific problems using AI coding tools and a serverless architecture.
+- Streamlining Investor Reporting (Enterprise/SaaS, QuotaBook, 2022): Startups submit recurring reports to every investor, each in a different format. I led the design from user interviews to launch, reducing repetitive reporting work so startups can focus more on their core business.
 
 ## About
 
