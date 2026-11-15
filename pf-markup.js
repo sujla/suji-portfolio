@@ -113,7 +113,7 @@ export const renderCaseStudyCard = (project) => `
      href="${project.href}" data-project-types="${(project.types || [project.type]).join(" ")}"
      data-cursor-label="View Case Study" draggable="false">
     <div class="pf-work-card pf-featured-image">
-      <img src="${project.projectMedia}" alt="" loading="lazy" decoding="async" />
+      <img src="${project.projectMedia}" alt="${project.projectMediaAlt || ""}" loading="lazy" decoding="async" />
     </div>
     <div class="pf-featured-caption">
       <div class="pf-featured-copy">

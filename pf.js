@@ -207,8 +207,8 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
         ? `
           <div class="pf-modal-modular-editorial-system-roller">
             <div class="pf-modal-modular-editorial-system-track">
-              <img src="./assets/modular-editorial-system/structure.png" alt="" />
-              <img src="./assets/modular-editorial-system/props.png" alt="" />
+              <img src="./assets/modular-editorial-system/structure.png" alt="Basic structure of an editorial module: props, content (image, text, product card), and container layers" />
+              <img src="./assets/modular-editorial-system/props.png" alt="Article Studio module options: image layout, text typography and alignment, and product card carousel" />
             </div>
             <div class="pf-modal-modular-editorial-system-carousel">
               <span class="pf-modal-modular-editorial-system-carousel-segment pf-modal-modular-editorial-system-carousel-segment--1"></span>
@@ -217,7 +217,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
           </div>
         `
         : project.id === "modular-editorial-system" && index === 1
-          ? `<img class="pf-modal-modular-editorial-system-interface" src="./assets/modular-editorial-system/interface.png" alt="" />`
+          ? `<img class="pf-modal-modular-editorial-system-interface" src="./assets/modular-editorial-system/interface.png" alt="Article Studio editing panels for image, text, and product card modules beside a live article preview" />`
           : "";
     const hasLargeInnerShadow =
       (index === 0 && ["cta-enhancement", "store-finder"].includes(project.id)) ||

@@ -10,6 +10,8 @@ export const pfProjects = [
     deviceType: "mobile",
     media: "store-finder-renewal",
     projectMedia: "./assets/common/store-finder-renewal-main.avif",
+    projectMediaAlt:
+      "Olive Young Store Finder Renewal: iPhone mockups showing the map-based store finder, store list with favorites, stock availability, and pickup cart",
     cta: {
       label: "View Case Study",
       href: "./projects/store-finder-renewal/",
@@ -26,6 +28,8 @@ export const pfProjects = [
     year: 2025,
     deviceType: "mobile",
     projectMedia: "./assets/cta-enhancement/cement-stairs.webp",
+    projectMediaAlt:
+      "Olive Young Pickup Order UX Enhancement: phone on cement stairs showing the Stores with Stock screen with stock levels and an Order Pickup button",
     cta: {
       label: "View Case Study",
       href: "./projects/cta-enhancement/",
@@ -42,6 +46,8 @@ export const pfProjects = [
     year: 2024,
     deviceType: "web",
     projectMedia: "./assets/common/modular-editorial-system-main.avif",
+    projectMediaAlt:
+      "Olive Young Editorial Workflow Revamp: laptop showing the Article Studio editor with a live mobile article preview and image module settings",
     cta: {
       label: "View Case Study",
       href: "./projects/modular-editorial-system/",
