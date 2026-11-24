@@ -163,7 +163,24 @@
       const isLocalEnvironment =
         ["localhost", "0.0.0.0", "::1", "[::1]"].includes(hostname) || isPrivateNetwork;
 
-      if (!isLocalEnvironment) {
+      // Visit any page with ?ga_optout=1 to stop counting this browser (?ga_optout=0 undoes it).
+      let isOwnerBrowser = false;
+      try {
+        const gaOptOutKey = "pf-ga-opt-out";
+        const pageUrl = new URL(window.location.href);
+        const gaOptOutParam = pageUrl.searchParams.get("ga_optout");
+        if (gaOptOutParam === "1") window.localStorage.setItem(gaOptOutKey, "1");
+        if (gaOptOutParam === "0") window.localStorage.removeItem(gaOptOutKey);
+        if (gaOptOutParam !== null) {
+          pageUrl.searchParams.delete("ga_optout");
+          window.history.replaceState(window.history.state, "", pageUrl);
+        }
+        isOwnerBrowser = window.localStorage.getItem(gaOptOutKey) === "1";
+      } catch (error) {
+        // Storage can be unavailable (private mode, blocked cookies); keep the default.
+      }
+
+      if (!isLocalEnvironment && !isOwnerBrowser) {
         window.dataLayer = window.dataLayer || [];
         // Google tag commands require an Arguments object, not an Array.
         window.gtag = function () {

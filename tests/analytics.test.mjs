@@ -11,21 +11,36 @@ const pages = [
   "projects/modular-editorial-system/prototype/index.html",
 ];
 
-function loadTag(path, hostname) {
+function createStorage(entries = {}) {
+  const values = new Map(Object.entries(entries));
+  return {
+    getItem: (key) => (values.has(key) ? values.get(key) : null),
+    setItem: (key, value) => values.set(key, String(value)),
+    removeItem: (key) => values.delete(key),
+  };
+}
+
+function loadTag(path, hostname, { search = "", storage } = {}) {
   const html = readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
   const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)]
     .map((match) => match[1])
     .filter((script) => script.includes("googletagmanager.com/gtag/js"));
   assert.equal(scripts.length, 1, "Each measured page must initialize one tag");
   const appended = [];
+  const replacedUrls = [];
   const window = { location: { hostname } };
+  if (storage) {
+    window.location.href = `https://${hostname}/suji-portfolio/${search}`;
+    window.localStorage = storage;
+    window.history = { state: null, replaceState: (state, title, url) => replacedUrls.push(String(url)) };
+  }
   const document = {
     title: html.match(/<title>(.*?)<\/title>/)[1],
     createElement: () => ({}),
     head: { append: (script) => appended.push(script) },
   };
-  runInNewContext(scripts[0], { window, document });
-  return { window, appended };
+  runInNewContext(scripts[0], { window, document, URL });
+  return { window, appended, replacedUrls };
 }
 
 for (const prefix of ["", "docs/"]) {
@@ -56,6 +71,29 @@ for (const prefix of ["", "docs/"]) {
         assert.equal(window.dataLayer, undefined, host);
         assert.equal(appended.length, 0, host);
       }
+    });
+
+    test(`${path}: ?ga_optout=1 stops collection in this browser and cleans the URL`, () => {
+      const storage = createStorage();
+      const optOut = loadTag(path, "sujla.github.io", { search: "?ga_optout=1&utm_source=resume", storage });
+      assert.equal(optOut.window.dataLayer, undefined);
+      assert.equal(optOut.appended.length, 0);
+      assert.deepEqual(optOut.replacedUrls, ["https://sujla.github.io/suji-portfolio/?utm_source=resume"]);
+
+      const laterVisit = loadTag(path, "sujla.github.io", { storage });
+      assert.equal(laterVisit.window.dataLayer, undefined);
+      assert.equal(laterVisit.appended.length, 0);
+      assert.deepEqual(laterVisit.replacedUrls, []);
+
+      const optIn = loadTag(path, "sujla.github.io", { search: "?ga_optout=0", storage });
+      assert.equal(optIn.appended.length, 1);
+      assert.equal(storage.getItem("pf-ga-opt-out"), null);
+    });
+
+    test(`${path}: unavailable storage still collects analytics`, () => {
+      const storage = { getItem() { throw new Error("blocked"); }, setItem() { throw new Error("blocked"); }, removeItem() {} };
+      const { appended } = loadTag(path, "sujla.github.io", { storage });
+      assert.equal(appended.length, 1);
     });
   }
 }
