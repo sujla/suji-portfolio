@@ -18,7 +18,12 @@ const fibers = edgePoints.map(({ x, y }, i) =>
 
 export function AboutPaperContact() {
   return (
-    <a className="about-paper-cta" href="mailto:kweonsuji@gmail.com" data-cursor-label="Email Suji">
+    <a
+      className="about-paper-cta"
+      href="mailto:kweonsuji@gmail.com"
+      data-cursor-label="Email Suji"
+      onClick={() => window.gtag?.("event", "contact_email_click", { link_location: "about" })}
+    >
       <svg className="about-contact-paper" viewBox="0 0 240 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
         <defs>
           <clipPath id="about-contact-paper-edge"><path d={paperOutline} /></clipPath>

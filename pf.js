@@ -20,6 +20,29 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     });
   };
 
+  const trackPfModalView = (project, visibleMs, closeReason) => {
+    window.gtag?.("event", "pf_modal_view", {
+      project_id: project.id,
+      project_title: project.title,
+      view_seconds: Math.round(visibleMs / 1000),
+      close_reason: closeReason,
+      // pagehide can be the last moment the page runs; send without waiting.
+      transport_type: "beacon",
+    });
+  };
+
+  const trackPfFilterClick = (button, projectType, isClearing) => {
+    window.gtag?.("event", "pf_filter_click", {
+      filter_type: projectType || "all",
+      filter_action: isClearing ? "clear" : "select",
+      filter_location: button.classList.contains("flyer-tab")
+        ? "flyer"
+        : floatingTypeFilter.contains(button)
+          ? "floating"
+          : "inline",
+    });
+  };
+
   const getModalHistoryProjectId = () =>
     window.history.state?.[modalHistoryStateKey] || "";
 
@@ -987,11 +1010,41 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       }
     };
 
+    // Count only the time the modal was actually on screen, so a viewer who
+    // switches tabs with the modal open does not inflate the reading time.
+    let modalVisibleMs = 0;
+    let modalVisibleSince = document.hidden ? null : performance.now();
+    let hasTrackedModalView = false;
+
+    const pauseModalViewClock = () => {
+      if (modalVisibleSince === null) return;
+      modalVisibleMs += performance.now() - modalVisibleSince;
+      modalVisibleSince = null;
+    };
+
+    const trackModalView = (closeReason) => {
+      if (hasTrackedModalView) return;
+      hasTrackedModalView = true;
+      pauseModalViewClock();
+      trackPfModalView(project, modalVisibleMs, closeReason);
+    };
+
+    const handleModalVisibilityChange = () => {
+      if (document.hidden) {
+        pauseModalViewClock();
+      } else if (modalVisibleSince === null) {
+        modalVisibleSince = performance.now();
+      }
+    };
+
     let hasDisposed = false;
 
-    const disposeModal = ({ restoreFocus = false } = {}) => {
+    const disposeModal = ({ restoreFocus = false, closeReason = "close" } = {}) => {
       if (hasDisposed) return;
       hasDisposed = true;
+
+      trackModalView(closeReason);
+      document.removeEventListener("visibilitychange", handleModalVisibilityChange);
 
       layer.getAnimations?.({ subtree: true })?.forEach((animation) => animation.cancel());
       layer.remove();
@@ -1137,6 +1190,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
     };
 
     activeModal = { layer, modal, projectId: project.id, closeModal, disposeModal };
+    document.addEventListener("visibilitychange", handleModalVisibilityChange);
     document.addEventListener("keydown", handleModalKeydown);
     window.addEventListener("resize", handleModalResize);
     closeButton.addEventListener("click", requestModalClose);
@@ -1503,6 +1557,7 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
       const projectType = button.dataset.projectTypeFilter;
       const shouldClearActiveFilter =
         !floatingTypeFilter.contains(button) && activeProjectType === projectType;
+      trackPfFilterClick(button, projectType, shouldClearActiveFilter);
       window.clearTimeout(filterScrollAnchorRestoreTimer);
       root.style.overflowAnchor = "none";
       applyProjectTypeFilter(shouldClearActiveFilter ? "" : projectType);
@@ -2116,7 +2171,8 @@ export const renderPf = (pf, pfProjects, getPlainTitle) => {
   window.addEventListener("popstate", syncModalWithHistory);
 
   return {
-    resetModal: () => activeModal?.disposeModal(),
+    // Called on pagehide: closing the tab or following a modal's case-study link.
+    resetModal: () => activeModal?.disposeModal({ closeReason: "page_exit" }),
     syncModalWithHistory,
   };
 };
