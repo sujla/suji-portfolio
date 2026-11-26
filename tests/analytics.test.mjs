@@ -20,7 +20,7 @@ function createStorage(entries = {}) {
   };
 }
 
-function loadTag(path, hostname, { search = "", storage } = {}) {
+function loadTag(path, hostname, { search = "", storage, navigationType } = {}) {
   const html = readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
   const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)]
     .map((match) => match[1])
@@ -33,6 +33,11 @@ function loadTag(path, hostname, { search = "", storage } = {}) {
     window.location.href = `https://${hostname}/suji-portfolio/${search}`;
     window.localStorage = storage;
     window.history = { state: null, replaceState: (state, title, url) => replacedUrls.push(String(url)) };
+  }
+  if (navigationType) {
+    window.performance = {
+      getEntriesByType: (type) => (type === "navigation" ? [{ type: navigationType }] : []),
+    };
   }
   const document = {
     title: html.match(/<title>(.*?)<\/title>/)[1],
@@ -54,6 +59,8 @@ for (const prefix of ["", "docs/"]) {
       assert.deepEqual(Array.from(window.dataLayer, (command) => command[0]), ["js", "config"]);
       assert.equal(window.dataLayer[1][1], "G-ZYEBT08N8L");
       assert.notEqual(window.dataLayer[1][2]?.send_page_view, false);
+      assert.equal(window.dataLayer[1][2].navigation_type, "unknown",
+        "Without the Navigation Timing API the page view is still sent");
       window.gtag("event", "pf_work_card_click", { project_id: "test" });
       for (const command of window.dataLayer) {
         assert.equal(Object.prototype.toString.call(command), "[object Arguments]",
@@ -88,6 +95,13 @@ for (const prefix of ["", "docs/"]) {
       const optIn = loadTag(path, "sujla.github.io", { search: "?ga_optout=0", storage });
       assert.equal(optIn.appended.length, 1);
       assert.equal(storage.getItem("pf-ga-opt-out"), null);
+    });
+
+    test(`${path}: page view records how the page was loaded`, () => {
+      for (const navigationType of ["navigate", "reload", "back_forward"]) {
+        const { window } = loadTag(path, "sujla.github.io", { navigationType });
+        assert.equal(window.dataLayer[1][2].navigation_type, navigationType);
+      }
     });
 
     test(`${path}: unavailable storage still collects analytics`, () => {

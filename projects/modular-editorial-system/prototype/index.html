@@ -37,7 +37,12 @@
           window.dataLayer.push(arguments);
         };
         window.gtag("js", new Date());
-        window.gtag("config", "G-ZYEBT08N8L");
+        // navigate (new visit or link), reload, or back_forward (e.g. returning from a case study).
+        const navigationType =
+          window.performance?.getEntriesByType?.("navigation")[0]?.type || "unknown";
+        window.gtag("config", "G-ZYEBT08N8L", {
+          navigation_type: navigationType,
+        });
 
         const googleTagScript = document.createElement("script");
         googleTagScript.async = true;
